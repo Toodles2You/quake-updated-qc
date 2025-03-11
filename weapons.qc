@@ -465,10 +465,10 @@ void() HIP_FireMjolnirLightning =
 	{
 		cells = self.ammo_cells;
 		self.ammo_cells = 0;
+		W_SetCurrentAmmo ();
 		discharged = 1;
 		T_RadiusDamage (self, self, 35*cells, world);
 		discharged = 0;
-		W_SetCurrentAmmo ();
 		return;
 	}
 
