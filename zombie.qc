@@ -293,7 +293,7 @@ void() zombie_missile =
 {
 	local float	r;
 	
-	droptofloor();
+	droptofloor(0, 0);
 	r = random();
 	
 	if (r < 0.3)
@@ -377,7 +377,7 @@ void() zombie_painc18	=[	$painc18,	zombie_run1	] {};
 void() zombie_paind1	=[	$paind1,	zombie_paind2	]
 {
 	sound (self, CHAN_VOICE, "zombie/z_pain.wav", 1, ATTN_NORM);
-	droptofloor();
+	droptofloor(0, 0);
 };
 void() zombie_paind2	=[	$paind2,	zombie_paind3	] {};
 void() zombie_paind3	=[	$paind3,	zombie_paind4	] {};
@@ -410,13 +410,13 @@ self.solid = SOLID_NOT;
 };
 void() zombie_paine11	=[	$paine11,	zombie_paine12	] 
 {	
-	droptofloor();
+	droptofloor(0, 0);
 	self.nextthink = self.nextthink + 5;
 	self.health = 60;
 };
 void() zombie_paine12	=[	$paine12,	zombie_paine13	]{
 // see if ok to stand up
-droptofloor();
+droptofloor(0, 0);
 self.health = 60;
 sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
@@ -584,7 +584,7 @@ void() zombie_escape16 = [ $cruc_16, zombie_run1 ]
 	self.health = 60;
 	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 
-	droptofloor();
+	droptofloor(0, 0);
 };
 
 void() zombie_escape = 

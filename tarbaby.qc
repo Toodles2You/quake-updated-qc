@@ -223,7 +223,7 @@ void() tbaby_checknew =
 	self.th_melee = tbaby_jump1;
 	self.th_die = tbaby_die1;       
 	self.origin_z = self.origin_z + 1;      // raise off floor a bit
-	droptofloor();
+	droptofloor(0, 0);
 
 	if (!walkmove(0,0))
 	{

@@ -19,7 +19,7 @@ void() tag_token_respawn =
 	tagToken.think = SUB_Null;
 	tagToken.owner = world;
 	tagToken.tag_frags = 0;
-	droptofloor();
+	droptofloor(0, 0);
 };
 
 // =======================================
@@ -29,7 +29,7 @@ void() tag_token_fall =
 	self.tag_frags = 0;
 	self.think = tag_token_respawn;
 	self.nextthink = time + 30;
-	droptofloor();
+	droptofloor(0, 0);
 };
 
 // =======================================

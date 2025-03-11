@@ -441,7 +441,7 @@ void() lavaman_awake =
 				self.enemy = activator;
 		}
 	}
-	droptofloor();
+	droptofloor(0, 0);
 
 	lavaman_rise1 ();
 };

@@ -1552,7 +1552,7 @@ void() place_flag = {
 	self.cnt = FLAG_AT_BASE;
 	self.mangle = self.angles;
 	self.effects = self.effects | EF_DIMLIGHT;
-	if (!droptofloor()) {
+	if (!droptofloor(0, 0)) {
 		dprint ("Flag fell out of level at ");
 		dprint (vtos(self.origin));
 		dprint ("\n");
@@ -1588,7 +1588,7 @@ void(entity flg, string cname) place_flagbase =
 		self.touch = TeamFlagBaseTouch;
 	} else
 		self.solid = SOLID_NOT;
-	if (!droptofloor()) {
+	if (!droptofloor(0, 0)) {
 		dprint ("Flagbase fell out of level at ");
 		dprint (vtos(self.origin));
 		dprint ("\n");
