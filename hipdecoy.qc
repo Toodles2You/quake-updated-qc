@@ -72,6 +72,11 @@ void()   decoy_walk1 =[  $rockrun1,  decoy_walk1  ]
 	self.walkframe = self.walkframe + 1;
 };
 
+void(entity attacker, float damage) decoy_pain =
+{
+	decoy_stand1 ();
+};
+
 void(entity decoy) setup_decoy =
 {
 	local entity pl;
@@ -90,7 +95,7 @@ void(entity decoy) setup_decoy =
 	decoy.th_walk = decoy_walk1;
 	decoy.th_run = decoy_walk1;
 	decoy.th_missile = decoy_stand1;
-	decoy.th_pain = decoy_stand1;
+	decoy.th_pain = decoy_pain;
 	decoy.th_die = decoy_stand1;
 
 	pl = find (world, classname, "player");

@@ -485,10 +485,15 @@ void(entity attacker, float take) zombie_pain =
 void() zombie_lay12   =[ $paine12,   zombie_paine13 ]
 	{self.th_pain = zombie_pain;};
 
+void(entity attacker, float damage) zombie_rise =
+{
+	zombie_lay12 ();
+};
+
 void() zombie_lay   =[ $paine11,   zombie_lay ]
 {
 	self.th_stand = zombie_stand1;
-	self.th_pain = zombie_lay12;
+	self.th_pain = zombie_rise;
 
 	self.nextthink = self.nextthink + 0.1;
 	self.health = 60;

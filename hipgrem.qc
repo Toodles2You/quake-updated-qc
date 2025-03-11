@@ -836,7 +836,7 @@ void(entity attacker, float damage) gremlin_pain =
 };
 
 void()	gremlin_spawn1 =[ $spawn1.asc,		gremlin_spawn2 ] {self.nextthink = time + 0.3;
-	self.th_pain = SUB_Null;
+	self.th_pain = SUB_null_pain;
 //	 sound (self, CHAN_VOICE, "grem/idle.wav", 1, ATTN_IDLE);
 };
 void()	gremlin_spawn2 =[ $spawn2.asc,		gremlin_spawn3 ] {self.nextthink = time + 0.3;};
