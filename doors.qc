@@ -596,7 +596,7 @@ void () fd_secret_use =
 	
 	if (!(self.spawnflags & SECRET_NO_SHOOT))
 	{
-		self.th_pain = 0;
+		self.th_pain = SUB_null_pain;
 		self.takedamage = DAMAGE_NO;
 	}
 	self.velocity = '0 0 0';

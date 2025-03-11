@@ -20,6 +20,8 @@
 
 void() SUB_Null = {};
 
+void(entity attacker, float damage) SUB_null_pain = {};
+
 void() SUB_Remove = {remove(self);};
 
 
