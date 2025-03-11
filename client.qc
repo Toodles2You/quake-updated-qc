@@ -40,6 +40,14 @@ float	modelindex_eyes, modelindex_player;
 
 float	intermission_running;
 float	intermission_exittime;
+float	restarting;
+
+void() restartlevel =
+{
+	serverflags = oldserverflags;
+	restarting = TRUE;
+	changelevel (mapname);
+};
 
 /*QUAKED info_intermission (1 0.5 0.5) (-16 -16 -16) (16 16 16)
 This is the camera point for the intermission.
@@ -53,6 +61,12 @@ void() info_intermission =
 
 void() SetChangeParms =
 {
+	if (restarting)
+	{
+		setspawnparms (self);
+		return;
+	}
+
 	if (self.health <= 0)
 	{
 		SetNewParms ();
@@ -449,7 +463,7 @@ void() respawn =
 	}
 	else
 	{	// restart the entire server
-		localcmd ("restart\n");
+		restartlevel ();
 	}
 };
 
