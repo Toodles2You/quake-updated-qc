@@ -500,7 +500,6 @@ void() morph_teleport =
 {
 	local entity    theDest;
 	local entity	theChild;
-	local entity	selfTemp;
 	
 	if (self.owner)
 		return;

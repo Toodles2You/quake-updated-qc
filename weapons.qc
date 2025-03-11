@@ -1619,8 +1619,6 @@ ImpulseCommands
 */
 void() ImpulseCommands =
 {
-	local entity takeThisOut;
-	
 	if (self.impulse >= 1 && self.impulse <= 8)
 		W_ChangeWeapon ();
 	else if (self.impulse >= 60 && self.impulse <= 64)

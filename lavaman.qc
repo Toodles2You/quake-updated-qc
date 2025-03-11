@@ -40,7 +40,7 @@ Returns FALSE if movement should continue
 */
 float() LavaManCheckAttack =
 {
-	local vector	spot1, spot2;	
+	local vector	spot1;	
 	local entity	targ;
 
 	ai_face();
@@ -344,7 +344,6 @@ void() lavaman_touch =
 void(float AttackNumber) lavaman_missile =
 {
 	local entity	fireball;
-	local vector	offang;
 	local vector	org, vec, d;
 	local float		t;
 

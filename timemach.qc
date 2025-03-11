@@ -136,7 +136,6 @@ void() time_crash =
 void(entity attacker, float take) time_pain =
 {	
 	local entity	painEnt;
-	local vector	painOrg;
 	local float 	painRnd;
 	
 	if ( self.health > 1100 )

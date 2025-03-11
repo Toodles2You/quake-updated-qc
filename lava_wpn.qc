@@ -30,7 +30,6 @@ void(vector org, vector dir) launch_lava_spike =
 void() W_FireSuperLavaSpikes =
 {
 	local vector	dir;
-	local entity	old;
 	
 	sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 	self.attack_finished = time + 0.2;
@@ -50,7 +49,6 @@ void() W_FireSuperLavaSpikes =
 void(float ox) W_FireLavaSpikes =
 {
 	local vector	dir;
-	local entity	old;
 	
 	makevectors (self.v_angle);
 	
@@ -83,7 +81,6 @@ void(float ox) W_FireLavaSpikes =
 
 void() lavaspike_touch =
 {
-local float rand;
 local float old_armortype;
 local float old_armorvalue;
 local float old_armormask;
@@ -145,7 +142,6 @@ local float old_armormask;
 
 void() superlavaspike_touch =
 {
-local float rand;
 local float old_armortype;
 //local float old_armorvalue;
 
