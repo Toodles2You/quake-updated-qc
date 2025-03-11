@@ -58,7 +58,7 @@ If targeted, it will toggle between on or off.
 */
 void() light =
 {
-	if (!self.targetname)
+	if (self.targetname == "")
 	{	// inert light
 		remove(self);
 		return;

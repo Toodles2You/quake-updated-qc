@@ -93,7 +93,7 @@ The number of seconds to spend standing or bowing for path_stand or path_bow
 
 void() movetarget_f =
 {
-	if (!self.targetname)
+	if (self.targetname == "")
 		objerror ("monster_movetarget: no targetname");
 		
 	self.solid = SOLID_TRIGGER;

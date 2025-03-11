@@ -356,7 +356,7 @@ void() LinkDoors =
 
 		if (self.health)
 			starte.health = self.health;
-		if (self.targetname)
+		if (self.targetname != "")
 			starte.targetname = self.targetname;
 		if (self.message != "")
 			starte.message = self.message;
@@ -373,7 +373,7 @@ void() LinkDoors =
 
 			if (self.health)
 				return;
-			if (self.targetname)
+			if (self.targetname != "")
 				return;
 			if (self.items)
 				return;
@@ -684,7 +684,7 @@ void () fd_secret_move6 =
 
 void () fd_secret_done =
 {
-	if (!self.targetname || self.spawnflags&SECRET_YES_SHOOT)
+	if (self.targetname == "" || self.spawnflags&SECRET_YES_SHOOT)
 	{
 		self.health = 10000;
 		self.takedamage = DAMAGE_YES;
@@ -717,7 +717,7 @@ void() secret_touch =
 
 	self.attack_finished = time + 2;
 	
-	if (self.message)
+	if (self.message != "")
 	{
 		centerprint (other, self.message);
 		sound (other, CHAN_BODY, "misc/talk.wav", 1, ATTN_NORM);
@@ -788,7 +788,7 @@ void () func_door_secret =
 	self.blocked = secret_blocked;
 	self.speed = 50;
 	self.use = fd_secret_use;
-	if ( !self.targetname || self.spawnflags&SECRET_YES_SHOOT)
+	if ( self.targetname == "" || self.spawnflags&SECRET_YES_SHOOT)
 	{
 		self.health = 10000;
 		self.takedamage = DAMAGE_YES;
