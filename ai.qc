@@ -1103,6 +1103,7 @@ The monster has an enemy it is trying to kill
 float RUN_STRAIGHT;
 void(float dist) ai_run =
 {
+	local float axis;
 	movedist = dist;
 // see if the enemy is dead
 	if (self.enemy.health <= 0 || (self.charmed && (self.charmer == self.enemy)))
