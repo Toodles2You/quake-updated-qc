@@ -165,8 +165,6 @@ Set "sounds" to one of the following:
 void() func_plat =
 
 {
-local entity t;
-
 	if (!self.t_length)
 		self.t_length = 80;
 	if (!self.t_width)
@@ -219,7 +217,7 @@ local entity t;
 
 	plat_spawn_inside_trigger ();	// the "start moving" trigger	
 
-	if (self.targetname)
+	if (self.targetname != "")
 	{
 		self.state = STATE_UP;
 		self.use = plat_use;
@@ -269,7 +267,7 @@ void() train_next =
 
 	targ = find (world, targetname, self.target);
 	self.target = targ.target;
-	if (!self.target)
+	if (self.target == "")
 		objerror ("train_next: no next target");
 	if (targ.wait)
 		self.wait = targ.wait;
@@ -287,7 +285,7 @@ void() func_train_find =
 	targ = find (world, targetname, self.target);
 	self.target = targ.target;
 	setorigin (self, targ.origin - self.mins);
-	if (!self.targetname)
+	if (self.targetname == "")
 	{	// not triggered, so start immediately
 		self.nextthink = self.ltime + 0.1;
 		self.think = train_next;
@@ -309,7 +307,7 @@ void() func_train =
 {	
 	if (!self.speed)
 		self.speed = 100;
-	if (!self.target)
+	if (self.target == "")
 		objerror ("func_train without a target");
 	if (!self.dmg)
 		self.dmg = 2;
@@ -354,7 +352,7 @@ void() misc_teleporttrain =
 {	
 	if (!self.speed)
 		self.speed = 100;
-	if (!self.target)
+	if (self.target == "")
 		objerror ("func_train without a target");
 
 	self.cnt = 1;

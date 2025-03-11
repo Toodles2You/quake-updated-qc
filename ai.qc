@@ -52,7 +52,7 @@ walkmove(angle, speed) primitive is all or nothing
 //
 // globals
 //
-float	current_yaw;
+// float	current_yaw;
 
 //
 // when a monster becomes angry at a player, that monster will be used
@@ -93,7 +93,7 @@ The number of seconds to spend standing or bowing for path_stand or path_bow
 
 void() movetarget_f =
 {
-	if (!self.targetname)
+	if (self.targetname == "")
 		objerror ("monster_movetarget: no targetname");
 		
 	self.solid = SOLID_TRIGGER;
@@ -322,8 +322,8 @@ local float	rsnd;
 	}
 	else if (self.classname == "monster_tarbaby")
 		sound (self, CHAN_VOICE, "blob/sight1.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_vomit")
-		sound (self, CHAN_VOICE, "vomitus/v_sight1.wav", 1, ATTN_NORM);
+	// else if (self.classname == "monster_vomit")
+	// 	sound (self, CHAN_VOICE, "vomitus/v_sight1.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_eel")
 		sound (self, CHAN_VOICE, "eel/eelc5.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_wrath")
@@ -394,7 +394,7 @@ float() FindTarget =
 	{
 		client = sight_entity;
 		if (client.enemy == self.enemy)
-			return;
+			return FALSE;
 	}
 	else
 	{
@@ -505,8 +505,6 @@ The monster is walking it's beat
 */
 void(float dist) ai_walk =
 {
-	local vector		mtemp;
-	
 	movedist = dist;
 	
 /* Dragon movement handled in dragon.qc.... this is legacy.
@@ -619,7 +617,7 @@ float()	DogCheckAttack;
 float() CheckAnyAttack =
 {
 	if (!enemy_vis)
-		return;
+		return FALSE;
 	if (self.classname == "monster_army")
 		return SoldierCheckAttack ();
 	if (self.classname == "monster_ogre")
@@ -711,10 +709,6 @@ The monster has an enemy it is trying to kill
 */
 void(float dist) ai_run =
 {
-	local	vector	delta;
-	local	float	axis;
-	local	float	direct, ang_rint, ang_floor, ang_ceil;
-	
 	movedist = dist;
 // see if the enemy is dead
 	if (self.enemy.health <= 0)

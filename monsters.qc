@@ -66,15 +66,13 @@ enemy as activator.
 */
 void() monster_death_use =
 {
-	local entity 	ent, otemp, stemp;
-
 // fall to ground
 	if (self.flags & FL_FLY)
 		self.flags = self.flags - FL_FLY;
 	if (self.flags & FL_SWIM)
 		self.flags = self.flags - FL_SWIM;
 
-	if (!self.target)
+	if (self.target == "")
 		return;
 
 	activator = self.enemy;
@@ -86,11 +84,8 @@ void() monster_death_use =
 
 void() walkmonster_start_go =
 {
-local string	stemp;
-local entity	etemp;
-
 	self.origin_z = self.origin_z + 1;	// raise off floor a bit
-	droptofloor();
+	droptofloor(0, 0);
 	
 	if (!walkmove(0,0))
 	{
@@ -111,7 +106,7 @@ local entity	etemp;
 	
 	self.flags = self.flags | FL_MONSTER;
 	
-	if (self.target)
+	if (self.target != "")
 	{
 		self.goalentity = self.movetarget = find(world, targetname, self.target);
 		self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
@@ -172,7 +167,7 @@ void() flymonster_start_go =
 		dprint ("\n");
 	}
 
-	if (self.target)
+	if (self.target != "")
 	{
 		self.goalentity = self.movetarget = find(world, targetname, self.target);
 		if (!self.movetarget)
@@ -224,7 +219,7 @@ void() swimmonster_start_go =
 	self.flags = self.flags | FL_SWIM;
 	self.flags = self.flags | FL_MONSTER;
 
-	if (self.target)
+	if (self.target != "")
 	{
 		self.goalentity = self.movetarget = find(world, targetname, self.target);
 		if (!self.movetarget)

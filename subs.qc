@@ -20,6 +20,8 @@
 
 void() SUB_Null = {};
 
+void(entity attacker, float damage) SUB_null_pain = {};
+
 void() SUB_Remove = {remove(self);};
 
 
@@ -27,7 +29,7 @@ void() SUB_Remove = {remove(self);};
 QuakeEd only writes a single float for angles (bad idea), so up and down are
 just constant angles.
 */
-vector() SetMovedir =
+void() SetMovedir =
 {
 	if (self.angles == '0 -1 0')
 		self.movedir = '0 0 1';
@@ -253,14 +255,14 @@ void() SUB_UseTargets =
 	if (activator.classname == "player" && self.message != "")
 	{
 		centerprint (activator, self.message);
-		if (!self.noise)
+		if (self.noise == "")
 			sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 	}
 
 //
 // kill the killtagets
 //
-	if (self.killtarget)
+	if (self.killtarget != "")
 	{
 		t = world;
 		do
@@ -275,7 +277,7 @@ void() SUB_UseTargets =
 //
 // fire targets
 //
-	if (self.target)
+	if (self.target != "")
 	{
 		act = activator;
 		t = world;
