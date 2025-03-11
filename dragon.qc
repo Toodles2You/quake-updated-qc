@@ -715,7 +715,7 @@ void() dragon_activate =
 		dprint ("\n");
 	}
 	
-	if (self.target)
+	if (self.target != "")
 	{
 		self.movetarget = find(world, targetname, self.target);
 		self.goalentity = self.movetarget;
@@ -727,7 +727,7 @@ void() dragon_activate =
 		}
 	}
 
-	if (self.targetname)
+	if (self.targetname != "")
 		self.use = dragon_use;
 	else
 		dragon_use();	
@@ -826,7 +826,7 @@ between rooms.
 */
 void() dragon_corner =
 {
-	if (!self.targetname)
+	if (self.targetname == "")
 		objerror ("dragon_corner: no targetname");
 
 	self.solid = SOLID_TRIGGER;

@@ -127,7 +127,7 @@ void() trigger_earthquake =
 	self.delay = 1;
 	self.touch = earthquake_touch;
 
-	if (self.targetname)
+	if (self.targetname != "")
 	{
 		self.use = earthquake_use;
 		self.delay = 0;

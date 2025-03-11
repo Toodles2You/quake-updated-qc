@@ -70,7 +70,7 @@ void() buzzsaw_touch =
 void() buzzsaw_use =
 {
 	self.touch = buzzsaw_touch;
-	if (self.target)
+	if (self.target != "")
 	{		
 		self.movetarget = find(world, targetname, self.target);
 		self.goalentity = self.movetarget;
@@ -132,7 +132,7 @@ void() buzzsaw =
 	
 	self.pain_finished = time + random()*2;
 	
-	if (!self.targetname)
+	if (self.targetname == "")
 	{
 		self.think = buzzsaw_use;
 		self.nextthink = time + 0.2;		

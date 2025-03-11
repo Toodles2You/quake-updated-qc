@@ -568,7 +568,7 @@ void() monster_morph =
 	precache_sound2 ("guard/see1.wav");
 	
 	total_monsters = total_monsters + 1;
-	if(self.targetname)
+	if(self.targetname != "")
 	{
 		self.use = morph_use;
 	}

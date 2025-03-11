@@ -100,7 +100,7 @@ void() rubble_generator =
 {
 	precache_model ("progs/rubble.mdl");
 	
-	if (!self.target)
+	if (self.target == "")
 		objerror ("rubble_generator has no target!");
 		
 	if (!self.delay)

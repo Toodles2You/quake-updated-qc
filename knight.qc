@@ -359,7 +359,7 @@ void() monster_knight =
 			self.frame = 44;
 		self.skin = 1;
 
-		if (!self.targetname)
+		if (self.targetname == "")
 		{
 			dprint ("statue not targeted\n");
 			dprint (self.classname);
