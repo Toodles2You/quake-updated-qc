@@ -183,7 +183,7 @@ void() t_followtarget =
 	local entity	targ;
 	local entity	client;
 
-	if (!other.flags & FL_MONSTER)
+	if (!(other.flags & FL_MONSTER))
 		return;
 	if (other.classname == "monster_decoy")
 		return;
