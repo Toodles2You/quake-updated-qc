@@ -261,6 +261,9 @@ void() armor_touch =
 	if (other.classname != "player")
 		return;
 
+	type = 0;
+	value = 0;
+	bit = 0;
 	if (self.classname == "item_armor1")
 	{
 		type = 0.3;
@@ -426,6 +429,7 @@ void() weapon_touch =
 	else
 		leave = 0;
 	
+	new = 0;
 	if (self.classname == "weapon_nailgun")
 	{
 		if (leave && (other.items & IT_NAILGUN) )

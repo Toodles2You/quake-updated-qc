@@ -964,6 +964,7 @@ void() W_ChangeWeapon =
 	
 	it = self.items;
 	am = 0;
+	fl = 0;
 	
 	if (self.impulse == 1)
 	{
