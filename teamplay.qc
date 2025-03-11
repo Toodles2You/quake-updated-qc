@@ -760,6 +760,7 @@ void() Team_weapon_touch =
 	best = W_BestWeapon();
 	self = stemp;
 
+	new = 0;
 	if (self.classname == "weapon_nailgun")
 		new = IT_NAILGUN;
 	else if (self.classname == "weapon_supernailgun")

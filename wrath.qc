@@ -283,6 +283,10 @@ void(float AttackNumber) WrathMissile =
 	{
 		org = self.origin + v_forward*20 + v_up*16;
 	}
+	else
+	{
+		org = '0 0 0';
+	}
 
 	setorigin ( missile, org );
 	missile.velocity = dir * 400;

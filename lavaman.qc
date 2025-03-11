@@ -361,6 +361,10 @@ void(float AttackNumber) lavaman_missile =
 //		org = self.origin - v_forward*40 - v_right*90 + v_up*110;
 		org = self.origin + v_forward*40 - v_right*75 + v_up*125;
 	}
+	else
+	{
+		org = '0 0 0';
+	}
 
 	d = self.enemy.origin;
 	t = vlen ( d - org );
