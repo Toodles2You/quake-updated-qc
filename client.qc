@@ -149,6 +149,7 @@ entity() FindIntermission =
 		return spot;
 	
 	objerror ("FindIntermission: no spot");
+	return spot;
 };
 
 
