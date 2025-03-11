@@ -23,11 +23,6 @@ DOG
 
 ==============================================================================
 */
-$cd id1/models/dog
-$origin 0 0 24
-$base base
-$skin skin
-
 $frame attack1 attack2 attack3 attack4 attack5 attack6 attack7 attack8
 
 $frame death1 death2 death3 death4 death5 death6 death7 death8 death9

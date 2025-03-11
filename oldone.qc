@@ -23,12 +23,6 @@ OLD ONE
 
 ==============================================================================
 */
-$cd id1/models/old_one
-$origin 0 0 24
-$base base
-$skin skin
-$scale 1
-
 void() finale_1;
 void() finale_2;
 void() finale_3;
