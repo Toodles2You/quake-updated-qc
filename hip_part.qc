@@ -22,7 +22,7 @@ void () particlefield_XZ =
 //	dprint( "XZ\n" );
 
 	self.ltime = time + 0.25;
-	if ( self.noise )
+	if ( self.noise != "" )
 	{
 		sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	}
@@ -67,7 +67,7 @@ void () particlefield_YZ =
 //	dprint( vtos( self.dest2 ) );
 //	dprint( "\n" );
 	self.ltime = time + 0.25;
-	if ( self.noise )
+	if ( self.noise != "" )
 	{
 		sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	}
@@ -108,7 +108,7 @@ void () particlefield_XY =
 
 //	dprint( "XY\n" );
 	self.ltime = time + 0.25;
-	if ( self.noise )
+	if ( self.noise != "" )
 	{
 		sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	}
@@ -229,7 +229,7 @@ void() func_particlefield =
 		}
 	}
 
-	if ( self.noise )
+	if ( self.noise != "" )
 	{
 		precache_sound( self.noise );
 	}
@@ -283,11 +283,11 @@ void() func_togglewall =
 	setorigin (self, self.origin);
 	self.touch = blocker_touch;
 	self.use = blocker_use;
-	if ( !self.noise )
+	if ( self.noise == "" )
 	{
 		self.noise = ("misc/null.wav");
 	}
-	if ( !self.noise1 )
+	if ( self.noise1 == "" )
 	{
 		self.noise1 = ("misc/null.wav");
 	}

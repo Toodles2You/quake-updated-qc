@@ -12,7 +12,7 @@ Places a sprite on a wall.  Angles should be opposite of face.
 */
 void() wallsprite =
 {
-	if ( !self.model )
+	if ( self.model == "" )
 	{
 		self.model = "progs/s_blood1.spr";
 	}

@@ -411,7 +411,7 @@ void() trap_lightning_use =
 		if (self.classname == "trap_lightning_triggered")
 			self.pausetime = time + 0.1;
 	}
-	if (self.target)
+	if (self.target != "")
 	{
 		p1 = self.origin;
 		p2 = self.enemy.origin;
@@ -510,7 +510,7 @@ void() lightning_think =
 void() lightning_firstthink =
 {
 	local entity targ;
-	if (self.target)
+	if (self.target != "")
 	{
 		targ = find(world,targetname,self.target);
 		self.dest = targ.origin;

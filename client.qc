@@ -1700,7 +1700,7 @@ void(entity targ, entity attacker) ClientObituary =
 			bprint (targ.netname);
 
 //JIM
-			if ( attacker.deathtype )
+			if ( attacker.deathtype != "" )
 			{
 				bprint( " " );
 				bprint ( attacker.deathtype );

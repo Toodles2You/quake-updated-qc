@@ -366,11 +366,11 @@ void() func_rotate_entity =
 */
 void() path_rotate =
 {
-	if ( self.noise )
+	if ( self.noise != "" )
 	{
 		precache_sound( self.noise );
 	}
-	if ( self.noise1 )
+	if ( self.noise1 != "" )
 	{
 		precache_sound( self.noise1 );
 	}
@@ -433,7 +433,7 @@ void() rotate_train_wait =
 {
 	self.state = STATE_WAIT;
 
-	if ( self.goalentity.noise )
+	if ( self.goalentity.noise != "" )
 	{
 		sound (self, CHAN_VOICE, self.goalentity.noise, 1, ATTN_NORM);
 	}
@@ -458,7 +458,7 @@ void() rotate_train_stop =
 {
 	self.state = STATE_STOP;
 
-	if ( self.goalentity.noise )
+	if ( self.goalentity.noise != "" )
 	{
 		sound (self, CHAN_VOICE, self.goalentity.noise, 1, ATTN_NORM);
 	}
@@ -495,7 +495,7 @@ void() rotate_train_next =
 	if ( targ.classname != "path_rotate" )
 		objerror( "Next target is not path_rotate" );
 
-	if ( self.goalentity.noise1 )
+	if ( self.goalentity.noise1 != "" )
 	{
 		self.noise1 = self.goalentity.noise1;
 	}
@@ -503,7 +503,7 @@ void() rotate_train_next =
 
 	self.goalentity = targ;
 	self.path = targ.target;
-	if (!self.path )
+	if (self.path == "" )
 		objerror ("rotate_train_next: no next target");
 
 	if ( targ.spawnflags & STOP )
@@ -519,7 +519,7 @@ void() rotate_train_next =
 		self.think1 = rotate_train_next;
 	}
 
-	if ( current.event )
+	if ( current.event != "" )
 	{
 		// Trigger any events that should happen at the corner.
 		temp = self.target;
@@ -670,7 +670,7 @@ void() rotate_train_find =
 	SetTargetOrigin();
 	RotateTargetsFinal();
 	self.think1 = rotate_train_next;
-	if (!self.targetname)
+	if (self.targetname == "")
 	{
 		// not triggered, so start immediately
 		self.endtime = self.ltime + 0.1;
@@ -723,10 +723,10 @@ void() func_rotate_train =
 {
 	if (!self.speed)
 		self.speed = 100;
-	if (!self.target)
+	if (self.target == "")
 		objerror ("rotate_train without a target");
 
-	if ( !self.noise )
+	if ( self.noise == "" )
 	{
 		if (self.sounds == 0)
 		{
@@ -738,7 +738,7 @@ void() func_rotate_train =
 			self.noise = ("plats/train2.wav");
 		}
 	}
-	if ( !self.noise1 )
+	if ( self.noise1 == "" )
 	{
 		if (self.sounds == 0)
 		{
@@ -986,7 +986,7 @@ void() rotate_door_group_reversedirection =
 	local string name;
 
 	// tell all associated rotaters to reverse direction
-	if ( self.group )
+	if ( self.group != "" )
 	{
 		name = self.group;
 		self = find( world, group, name);
@@ -1059,7 +1059,7 @@ once door from closing again when it's blocked.
 
 void() func_rotate_door =
 {
-	if (!self.target)
+	if (self.target == "")
 	{
 		objerror( "rotate_door without target." );
 	}

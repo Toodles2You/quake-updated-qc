@@ -140,7 +140,7 @@ local entity	temp;
 
 //dprint ("t_movetarget\n");
 //MED
-	if (other.target)
+	if (other.target != "")
 	{
 		self.goalentity = self.movetarget = find (world, targetname, other.target);
 		self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
@@ -250,7 +250,7 @@ void() t_followtarget =
 
 void() followtarget_f =
 {
-//	if (!self.targetname)
+//	if (self.targetname == "")
 //		objerror ("monster_followtarget: no targetname");
 
 	self.solid = SOLID_TRIGGER;

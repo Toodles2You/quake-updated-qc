@@ -198,7 +198,7 @@ void() trigger_setgravity =
 
 void() trigger_command_use =
 {
-	if ( self.message )
+	if ( self.message != "" )
 		localcmd( self.message );
 };
 

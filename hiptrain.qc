@@ -54,7 +54,7 @@ void() hip_train_next =
 	// Save the speed in cnt for later use
 	self.cnt = targ.speed;
 	self.target = targ.target;
-	if (!self.target)
+	if (self.target == "")
 		objerror ("hip_train_next: no next target");
 
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
@@ -69,7 +69,7 @@ void() hip_train_next =
 		self.think = hip_train_next;
 	}
 
-	if ( self.goalentity.event )
+	if ( self.goalentity.event != "" )
 	{
 		// Trigger any events that should happen at the corner.
 		temp = self.target;
@@ -115,7 +115,7 @@ void() hip_func_train_find =
 
 	self.target = targ.target;
 	setorigin (self, targ.origin - self.mins);
-	if (!self.targetname)
+	if (self.targetname == "")
 	{	// not triggered, so start immediately
 		self.nextthink = self.ltime + 0.1;
 		self.think = hip_train_next;
@@ -155,12 +155,12 @@ void() func_train2 =
 {
 	if (!self.speed)
 		self.speed = 100;
-	if (!self.target)
+	if (self.target == "")
 		objerror ("func_train without a target");
 	if (!self.dmg)
 		self.dmg = 2;
 
-	if ( !self.noise )
+	if ( self.noise == "" )
 	{
 		if (self.sounds == 0)
 		{
@@ -172,7 +172,7 @@ void() func_train2 =
 			self.noise = ("plats/train2.wav");
 		}
 	}
-	if ( !self.noise1 )
+	if ( self.noise1 == "" )
 	{
 		if (self.sounds == 0)
 		{
