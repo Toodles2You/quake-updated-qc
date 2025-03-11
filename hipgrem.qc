@@ -445,6 +445,7 @@ void(float dist) gremlin_run =
 
 						ang = vectoangles(d);
 						done = 0;
+						end = '0 0 0';
 						c = 0;
 						while (done == 0)
 						{
@@ -1654,6 +1655,7 @@ void() Gremlin_Split =
 		return;
 	done = 0;
 	c = 0;
+	pos = '0 0 0';
 	ang = self.angles;
 	while (done == 0)
 	{

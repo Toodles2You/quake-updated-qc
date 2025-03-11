@@ -435,6 +435,8 @@ void() ScourgeTriggerTouch =
 	if ((dir * normalize(other.velocity))<0.8)
 		return;
 
+	tempent = world;
+
 //	targ.think = targ.th_run;
 //	if (targ.flags & FL_ONGROUND)
 //	{

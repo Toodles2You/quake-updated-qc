@@ -599,6 +599,7 @@ void() trap_tesla_scan =
 
 	tesla_numtargets = 0;
 	head = findradius(self.origin, self.distance);
+	prev = world;
 	while(head)
 	{
 		if(!(head.flags & FL_NOTARGET) && (head.flags & self.cnt))
@@ -609,7 +610,7 @@ void() trap_tesla_scan =
 				{
 					tesla_target = head;
 				}
-				else
+				else if (prev)
 				{
 					prev.next_ent = head;
 				}

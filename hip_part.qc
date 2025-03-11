@@ -34,6 +34,7 @@ void () particlefield_XZ =
 
 	start = self.dest1 + self.origin;
 	end	= self.dest2 + self.origin;
+	pos_x = 0;
 	pos_y = start_y;
 	pos_z = start_z;
 	while( pos_z <= end_z )
@@ -79,6 +80,7 @@ void () particlefield_YZ =
 	start = self.dest1 + self.origin;
 	end	= self.dest2 + self.origin;
 	pos_x = start_x;
+	pos_y = 0;
 	pos_z = start_z;
 	while( pos_z < end_z )
 	{
@@ -120,6 +122,7 @@ void () particlefield_XY =
 	start = self.dest1 + self.origin;
 	end	= self.dest2 + self.origin;
 	pos_x = start_x;
+	pos_y = 0;
 	pos_z = start_z;
 	while( pos_x < end_x )
 	{
