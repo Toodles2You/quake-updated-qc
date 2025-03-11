@@ -173,6 +173,7 @@ void() main =
 };
 
 
+float oldserverflags;
 entity	lastspawn;
 
 //=======================
@@ -189,6 +190,7 @@ World Types:
 //=======================
 void() worldspawn =
 {
+	oldserverflags = serverflags;
 	lastspawn = world;
 	InitBodyQue ();
 
