@@ -11,7 +11,7 @@ float START_AT_TOP  = 8;
 float PLAT2			= 16;
 float PLAT2_BOTTOM  = 32;
 
-float ELV_BUTN_DIR	= 0;
+float ELV_BUTN_DIR;
 
 // ==================================
 // down N and wait code
