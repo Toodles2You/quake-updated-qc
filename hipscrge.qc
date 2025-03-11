@@ -27,18 +27,6 @@ $frame pain1.asc pain2.asc pain3.asc pain4.asc pain5.asc
 $frame death1.asc death2.asc death3.asc death4.asc death5.asc
 //
 
-$frame stand1.asc stand2.asc stand3.asc stand4.asc stand5.asc stand6.asc stand7.asc
-
-$frame sting1.asc sting2.asc sting3.asc sting4.asc sting5.asc sting6.asc sting7.asc sting8.asc
-$frame sting9.asc sting10.asc sting11.asc
-
-$frame walk1.asc walk2.asc walk3.asc walk4.asc walk5.asc walk6.asc
-
-$frame shoot1.asc shoot2.asc
-
-$frame pain1.asc pain2.asc pain3.asc pain4.asc pain5.asc
-
-$frame death1.asc death2.asc death3.asc death4.asc death5.asc death6.asc death7.asc
 /*
 ===========
 ScourgeCheckAttack
