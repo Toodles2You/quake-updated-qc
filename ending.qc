@@ -347,7 +347,7 @@ void(entity thePlayer) spawn_actor =
 		theActor.yaw_speed = 20;
 	theActor.view_ofs = '0 0 25';
 	theActor.flags = theActor.flags | FL_MONSTER;
-	actorStage == STAGE_START;
+	actorStage = STAGE_START;
 		
 	if ( pointcontents (theActor.origin) == CONTENT_LAVA )
 	{
