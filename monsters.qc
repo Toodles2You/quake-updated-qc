@@ -82,6 +82,15 @@ void() monster_death_use =
 
 //============================================================================
 
+void() monster_start_spread =
+{
+// spread think times so they don't all happen at same time
+	self.nextthink = self.nextthink + random()*0.5;
+
+	if (self.nextthink <= time)
+		self.think ();
+};
+
 void() walkmonster_start_go =
 {
 	self.origin_z = self.origin_z + 1;	// raise off floor a bit
@@ -127,18 +136,16 @@ void() walkmonster_start_go =
 		self.th_stand ();
 	}
 
-// spread think times so they don't all happen at same time
-	self.nextthink = self.nextthink + random()*0.5;
+	monster_start_spread ();
 };
 
 
 void() walkmonster_start =
 {
 // delay drop to floor to make sure all doors have been spawned
-// spread think times so they don't all happen at same time
-	self.nextthink = self.nextthink + random()*0.5;
 	self.think = walkmonster_start_go;
 	total_monsters = total_monsters + 1;
+	monster_start_spread ();
 };
 
 
@@ -188,10 +195,9 @@ void() flymonster_start_go =
 
 void() flymonster_start =
 {
-// spread think times so they don't all happen at same time
-	self.nextthink = self.nextthink + random()*0.5;
 	self.think = flymonster_start_go;
 	total_monsters = total_monsters + 1;
+	monster_start_spread ();
 };
 
 
@@ -227,16 +233,14 @@ void() swimmonster_start_go =
 		self.th_stand ();
 	}
 
-// spread think times so they don't all happen at same time
-	self.nextthink = self.nextthink + random()*0.5;
+	monster_start_spread ();
 };
 
 void() swimmonster_start =
 {
-// spread think times so they don't all happen at same time
-	self.nextthink = self.nextthink + random()*0.5;
 	self.think = swimmonster_start_go;
 	total_monsters = total_monsters + 1;
+	monster_start_spread ();
 };
 
 
