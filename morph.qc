@@ -295,7 +295,7 @@ void() morph_painB5 = [ $mfpbin05, morph_painB6 ] {};
 void() morph_painB6 = [ $mfpbin06, morph_painB7 ] {};
 void() morph_painB7 = [ $mfpbin07, morph_run1 ] {morph_teleport();};
 
-void() morph_pain =
+void(entity attacker, float damage) morph_pain =
 {
 	local float painChoice;
 

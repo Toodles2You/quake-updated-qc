@@ -205,7 +205,7 @@ void()	tbaby_die2	=[	$exp,		tbaby_run1	]
 };
 
 //=============================================================================
-void() tbaby_mitosis;
+void(entity attacker, float damage) tbaby_mitosis;
 
 void() tbaby_checknew =
 {
@@ -251,7 +251,7 @@ void() tbaby_checknew =
 	WriteLong (MSG_BROADCAST, total_monsters);
 };
 
-void() tbaby_mitosis =
+void(entity attacker, float damage) tbaby_mitosis =
 {
 	local entity    newSpawn;
 	
@@ -268,7 +268,7 @@ void() tbaby_mitosis =
 			newSpawn.health = 100;
 
 		newSpawn.owner = self;
-		self.th_pain = SUB_Null;
+		self.th_pain = SUB_null_pain;
 		
 		setmodel (newSpawn, "progs/tarbaby.mdl");
 		newSpawn.solid = SOLID_SLIDEBOX;

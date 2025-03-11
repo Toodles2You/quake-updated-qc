@@ -144,7 +144,7 @@ void()	wrath_pn_b10	=[	$wrthpb10,	wrath_pn_b11	] {};
 void()	wrath_pn_b11	=[	$wrthpb11,	wrath_run01		] {};
 
 
-void() wrath_pain = 
+void(entity attacker, float damage) wrath_pain = 
 {
 	local float r;
 

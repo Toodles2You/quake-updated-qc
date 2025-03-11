@@ -265,7 +265,7 @@ void() lavaman_shocka8 =[ $shocka8, lavaman_shocka9 ] {};
 void() lavaman_shocka9 =[ $shocka9, lavaman_shocka10 ] {};
 void() lavaman_shocka10 =[ $shocka10, lavaman_run1 ] {};
 
-void() lavaman_pain =
+void(entity attacker, float damage) lavaman_pain =
 {
 	if ( self.pain_finished > time )
 		return;

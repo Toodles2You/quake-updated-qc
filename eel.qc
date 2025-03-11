@@ -182,6 +182,11 @@ void() eel_pain5  =[	$eeldth3, eel_pain6 ] {};
 void() eel_pain6  =[	$eeldth2, eel_pain7 ] {};
 void() eel_pain7  =[	$eeldth1, eel_run1 ] {};
 
+void(entity attacker, float damage) eel_pain =
+{
+	eel_pain1 ();
+};
+
 /*QUAKED monster_eel (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 */
 void() monster_eel =
@@ -213,7 +218,7 @@ void() monster_eel =
 	self.th_walk = eel_walk1;
 	self.th_run = eel_run1;
 	self.th_die = eel_death;
-	self.th_pain = eel_pain1;
+	self.th_pain = eel_pain;
 	self.th_melee = eel_attack1;
 
 	self.delay = time + random() * 6;

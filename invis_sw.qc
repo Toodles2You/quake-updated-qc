@@ -133,13 +133,13 @@ void() sword_pause =
 	self.delay = 0;
 };
 
-void() sword_pain = 
+void(entity attacker, float damage) sword_pain = 
 {
 	self.th_run = sword_run1; 
 	self.think = sword_run1;
 	self.nextthink = time + 0.1;
 	self.delay = 0;
-	self.th_pain = SUB_Null;
+	self.th_pain = SUB_null_pain;
 };
 
 /*QUAKED monster_sword (1 0 0) (-16 -16 -24) (16 16 40) Ambush

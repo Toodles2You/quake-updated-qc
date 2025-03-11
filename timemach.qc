@@ -163,11 +163,16 @@ void(entity attacker, float take) time_pain =
 	if ( self.health < 1000 )
 	{
 		self.pain_finished = 0;
-		self.th_pain = SUB_Null;
+		self.th_pain = SUB_null_pain;
 		self.th_die = SUB_Null;
 		cutscene_running = 1;
 		return;
 	}
+};
+
+void() time_die =
+{
+	time_pain (world, 0);
 };
 
 //(-16 -16 -32) (16 16 0)
@@ -197,7 +202,7 @@ void() item_time_machine =
 	self.th_stand = SUB_Null;
 	self.th_walk = SUB_Null;
 	self.th_run = SUB_Null;
-	self.th_die = time_pain;
+	self.th_die = time_die;
 	self.th_missile = SUB_Null;
 	self.th_pain = time_pain;
 	

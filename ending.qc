@@ -209,10 +209,15 @@ void() actor_run =
 	self.nextthink = time + 0.1;
 };
 
+void(entity attacker, float damage) time_crash_pain =
+{
+	time_crash ();
+};
+
 void() actor_fire1 =[$rockatt1, actor_fire2 ] 
 	{ 
 		self.goalentity = theMachine;
-		theMachine.th_pain = time_crash;
+		theMachine.th_pain = time_crash_pain;
 		theMachine.th_die = time_crash;
 		theMachine.health = 1;
 		

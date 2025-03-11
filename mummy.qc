@@ -441,6 +441,11 @@ void() mummy_wake =
 	mummy_paine12();
 };
 
+void(entity attacker, float damage) mummy_wake_pain =
+{
+	mummy_wake ();
+};
+
 //============================================================================
 
 float MUMMY_STRONG = 4;
@@ -498,7 +503,7 @@ void() monster_mummy =
 		self.th_stand = mummy_sleep;
 		self.th_run = mummy_wake;
 		self.th_walk = mummy_wake;
-		self.th_pain = mummy_wake;
+		self.th_pain = mummy_wake_pain;
 		self.th_missile = mummy_wake;
 		walkmonster_start();
 	}

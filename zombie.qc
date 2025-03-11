@@ -541,6 +541,11 @@ void() zombie_wake =
 	zombie_paine12();
 };
 
+void(entity attacker, float damage) zombie_wake_pain =
+{
+	zombie_wake();
+};
+
 void() zombie_escape1=[ $cruc_1, zombie_escape2 ] {self.nextthink=time+0.20;};
 void() zombie_escape2=[ $cruc_2, zombie_escape3 ] {self.nextthink=time+0.20;};
 void() zombie_escape3=[ $cruc_3, zombie_escape4 ] {self.nextthink=time+0.20;};
@@ -590,6 +595,11 @@ void() zombie_escape =
 	}
 	self.think = zombie_cruc1;
 	self.nextthink = time + 0.1;
+};
+
+void(entity attacker, float damage) zombie_escape_pain =
+{
+	zombie_escape();
 };
 
 //============================================================================
@@ -652,7 +662,7 @@ void() monster_zombie =
 		self.th_stand = zombie_sleep;
 		self.th_run = zombie_wake;
 		self.th_walk = zombie_wake;
-		self.th_pain = zombie_wake;
+		self.th_pain = zombie_wake_pain;
 		self.th_missile = zombie_wake;
 		setsize (self, '-16 -16 -24', '16 16 -16');
 
@@ -669,7 +679,7 @@ void() monster_zombie =
 		self.th_stand = zombie_cruc1;
 		self.th_run = zombie_escape;
 		self.th_walk = zombie_escape;
-		self.th_pain = zombie_escape;
+		self.th_pain = zombie_escape_pain;
 		self.th_missile = zombie_escape;
 
 		if (!self.delay)
