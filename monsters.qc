@@ -85,7 +85,7 @@ void() monster_death_use =
 void() walkmonster_start_go =
 {
 	self.origin_z = self.origin_z + 1;	// raise off floor a bit
-	droptofloor();
+	droptofloor(0, 0);
 	
 	if (!walkmove(0,0))
 	{
