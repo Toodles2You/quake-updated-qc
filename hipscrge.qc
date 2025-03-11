@@ -40,7 +40,6 @@ float() ScourgeCheckAttack =
 	local vector	spot1, spot2;
 	local entity	targ;
 	local float		chance;
-	local float		enemy_yaw;
 
 	targ = self.enemy;
 // see if any entities are in the way of the shot
@@ -384,8 +383,6 @@ void() scourge_die =
 //
 void() scourge_melee =
 {
-	local float chance;
-
 //	chance = random();
 //	if (chance < 0.5 )
 //	{
@@ -466,8 +463,6 @@ void() ScourgeTriggerTouch =
 */
 void() monster_scourge =
 {
-	local entity trig;
-
 	if (deathmatch)
 	{
 		remove(self);

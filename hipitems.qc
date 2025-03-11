@@ -19,9 +19,6 @@ HIPNOTIC ITEMS
 //
 void() hip_powerup_touch =
 {
-local entity	stemp;
-local float		best;
-
 	if (other.classname != "player")
 		return;
 	if (other.health <= 0)
@@ -97,9 +94,6 @@ void() item_artifact_wetsuit =
 
 void() horn_touch =
 {
-	local	float amount;
-	local float value;
-
 	if (other.classname != "player")
 		return;
 

@@ -119,7 +119,6 @@ void() monster_decoy =
 
 void(string targ, vector orig) become_decoy =
 {
-	local entity pl;
 	local entity decoy;
 	local entity temp;
 

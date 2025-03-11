@@ -346,7 +346,6 @@ The monster has an enemy it is trying to kill
 */
 void(float dist) gremlin_run =
 {
-	local entity oldtarget;
 	local float r;
 	local vector d;
 
@@ -1098,7 +1097,6 @@ entity() GremlinFindVictim =
 	local entity selected;
 	local float dist;
 	local float head_dist;
-	local float decision;
 
 	self.search_time = time + 1.0;
 // look in our immediate vicinity
@@ -1142,7 +1140,7 @@ fire a rocket
 */
 void() Gremlin_FireRocket =
 {
-	local	entity missile, mpuff;
+	local	entity missile;
 	local vector dir;
 
 	self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
@@ -1394,11 +1392,6 @@ void()	gremlin_rocket1;
 
 float() GremlinWeaponAttack =
 {
-	local	float	r;
-	local entity targ;
-	local vector vec;
-
-
 	if (!GremlinCheckNoAmmo ())
 		return FALSE;
 
@@ -1806,8 +1799,6 @@ void(float side)  Gremlin_Gorge =
 
 void()	Gremlin_JumpTouch =
 {
-	local	float	ldmg;
-
 	if (self.health <= 0)
 		return;
 
@@ -1839,8 +1830,6 @@ void()	Gremlin_JumpTouch =
 
 void()	Gremlin_FlipTouch =
 {
-	local	float	ldmg;
-
 	if (!checkbottom(self))
 	{
 		if (self.flags & FL_ONGROUND)

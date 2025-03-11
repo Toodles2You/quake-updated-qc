@@ -38,7 +38,6 @@ void() HIP_LaserTouch =
 	local vector org;
 	local vector spot1,spot2;
 	local vector oldvel;
-	local float mag;
 	local float r;
 
 	self.owner = world;
@@ -102,9 +101,6 @@ void() HIP_LaserTouch =
 };
 void() HIP_LaserThink =
 {
-	local float delta;
-
-
 	if (time>self.attack_finished)
 	{
 		remove(self);
@@ -354,7 +350,7 @@ void() HIP_LightningThink =
 		}
 		else
 		{
-			local vector	org,end;
+			local vector	end;
 
 			makevectors(self.v_angle);
 			org = self.owner.origin;
@@ -462,7 +458,6 @@ void() HIP_SpawnMjolnirBase =
 
 void() HIP_FireMjolnirLightning =
 {
-	local vector	org;
 	local	float		cells;
 
 // explode if under water
@@ -492,10 +487,8 @@ void() HIP_FireMjolnirLightning =
 void() HIP_FireMjolnir =
 {
 	local vector	org;
-	local	float		cells;
 	local float	 damage;
 	local vector	source;
-	local vector	ang;
 
 
 	self.attack_finished = time + 0.4;
@@ -1278,7 +1271,7 @@ W_FireProximityGrenade
 */
 void() W_FireProximityGrenade =
 {
-	local entity missile, mpuff;
+	local entity missile;
 
 	NumProximityGrenades = NumProximityGrenades + 1;
 	self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
