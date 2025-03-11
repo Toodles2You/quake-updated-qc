@@ -17,8 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-entity stemp, otemp, s, old;
-
 
 void() trigger_reactivate =
 {
@@ -60,7 +58,7 @@ void() multi_trigger =
 		WriteByte (MSG_ALL, SVC_FOUNDSECRET);
 	}
 
-	if (self.noise)
+	if (self.noise != "")
 		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 
 // don't trigger again until reset
@@ -231,7 +229,7 @@ void() trigger_secret =
 {
 	total_secrets = total_secrets + 1;
 	self.wait = -1;
-	if (!self.message)
+	if (self.message == "")
 		self.message = "You found a secret area!";
 	if (!self.sounds)
 		self.sounds = 1;
@@ -255,8 +253,6 @@ void() trigger_secret =
 
 void() counter_use =
 {
-	local string junk;
-
 	self.count = self.count - 1;
 	if (self.count < 0)
 		return;
@@ -336,6 +332,8 @@ void() play_teleport =
 
 void(vector org) spawn_tfog =
 {
+	local entity s;
+
 	s = spawn ();
 	s.origin = org;
 	s.nextthink = time + 0.2;
@@ -398,7 +396,7 @@ void() teleport_touch =
 local entity	t;
 local vector	org;
 
-	if (self.targetname)
+	if (self.targetname != "")
 	{
 		if (self.nextthink < time)
 		{
@@ -463,7 +461,7 @@ void() info_teleport_destination =
 	self.angles = '0 0 0';
 	self.model = "";
 	self.origin = self.origin + '0 0 27';
-	if (!self.targetname)
+	if (self.targetname == "")
 		objerror ("no targetname");
 };
 
@@ -486,7 +484,7 @@ void() trigger_teleport =
 	InitTrigger ();
 	self.touch = teleport_touch;
 	// find the destination 
-	if (!self.target)
+	if (self.target == "")
 		objerror ("no target");
 	self.use = teleport_use;
 

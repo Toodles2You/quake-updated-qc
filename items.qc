@@ -62,7 +62,7 @@ void() PlaceItem =
 	self.velocity = '0 0 0';
 	self.origin_z = self.origin_z + 6;
 	oldz = self.origin_z;
-	if (!droptofloor())
+	if (!droptofloor(0, 0))
 	{
 		dprint ("Bonus item fell out of level at ");
 		dprint (vtos(self.origin));
@@ -167,7 +167,6 @@ void() item_health =
 
 void() health_touch =
 {
-	local	float amount;
 	local	string	s;
 	
 	if (other.classname != "player")
@@ -264,6 +263,9 @@ void() armor_touch =
 	if (other.classname != "player")
 		return;
 
+	type = 0;
+	value = 0;
+	bit = 0;
 	if (self.classname == "item_armor1")
 	{
 		type = 0.3;
@@ -436,6 +438,7 @@ void() weapon_touch =
 	else
 		leave = 0;
 	
+	new = 0;
 	if (self.classname == "weapon_nailgun")
 	{
 		if (leave && (other.items & IT_NAILGUN) )
@@ -922,9 +925,6 @@ KEYS
 
 void() key_touch =
 {
-local entity	stemp;
-local float		best;
-
 	if (other.classname != "player")
 		return;
 	if (other.health <= 0)
@@ -1058,9 +1058,6 @@ END OF LEVEL RUNES
 
 void() sigil_touch =
 {
-local entity	stemp;
-local float		best;
-
 	if (other.classname != "player")
 		return;
 	if (other.health <= 0)
@@ -1131,9 +1128,6 @@ void() powerup_touch;
 
 void() powerup_touch =
 {
-local entity	stemp;
-local float		best;
-
 	if (other.classname != "player")
 		return;
 	if (other.health <= 0)

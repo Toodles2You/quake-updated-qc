@@ -434,7 +434,7 @@ void()	player_hampain4 =  [  21,	player_hampain5 ] {};
 void()	player_hampain5 =  [  22,	player_hampain6 ] {};
 void()	player_hampain6 =  [  23,	player_run  ] {};
 
-void() player_pain =
+void(entity attacker, float damage) player_pain =
 {
 	if (self.weaponframe)
 		return;

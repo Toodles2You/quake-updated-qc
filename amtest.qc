@@ -32,7 +32,7 @@ void() test_teleport =
 	self.touch = test_teleport_touch;
 	self.solid = 1;
 	
-	if (!self.target)
+	if (self.target == "")
 		objerror ("no target\n");
 };
 
