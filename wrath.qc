@@ -19,8 +19,6 @@
 
 // wrath.qc
 
-$skin wrthskin
-
 $frame wrthfrme
 
 $frame wrthwk01 wrthwk02 wrthwk03 wrthwk04 wrthwk05 wrthwk06

@@ -17,11 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-$cd /qwork/xpack/models/eel
-$origin 0 0 0
-$scale .12
-$base eelrest3
-$skin eelfin
 $frame eelswim1 eelswim2 eelswim3 eelswim4 eelswim5 eelswim6
 $frame eeldth1 eeldth2 eeldth3 eeldth4 eeldth5
 $frame eeldth6 eeldth7 eeldth8 eeldth9 eeldth10

@@ -19,7 +19,6 @@
 
 // buzzsaw.qc
 
-$skin buzzsaw
 $frame buzzsaw
 $frame bzzrot01 bzzrot02 bzzrot03 bzzrot04 bzzrot05 bzzrot06
 

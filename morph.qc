@@ -19,11 +19,6 @@
 
 // morph.qc
 
-$skin aztec
-$skin pharoah
-$skin roman
-$skin florskin
-
 $frame mfstand1 
 //$frame mfup01 mfup02 mfup03 mfup04 mfup05 mfup06
 //$frame mfup07 mfup08 mfup09 mfup10 mfup11 mfup12

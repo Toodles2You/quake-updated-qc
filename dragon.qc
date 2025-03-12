@@ -19,9 +19,6 @@
 
 // dragon.qc
 
-$base dragrest
-$skin dragskin
-
 $frame dragon6
 
 $frame drgfly01 drgfly02 drgfly03 drgfly04 

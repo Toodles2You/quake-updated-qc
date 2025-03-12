@@ -1555,10 +1555,6 @@ void() TeamFlagStatusReport =
 
 /////////////////////////////////////////////////////////////////////////
 
-$cd id1/models/flag
-$base base
-$skin skin
-
 void() place_flag = {
 	self.mdl = self.model;		// so it can be restored on respawn
 	self.flags = FL_ITEM;		// make extra wide

@@ -19,7 +19,6 @@
 
 // overlord.qc
 
-$skin s_wrtrst
 $frame s_wrtfrm
 
 // walk
