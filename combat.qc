@@ -38,36 +38,36 @@ explosions and melee attacks.
 */
 float(entity targ, entity inflictor) CanDamage =
 {
-// bmodels need special checking because their origin is 0,0,0
+	// bmodels need special checking because their origin is 0,0,0
 	if (targ.movetype == MOVETYPE_PUSH)
 	{
-		traceline(inflictor.origin, 0.5 * (targ.absmin + targ.absmax), TRUE, self);
+		traceline (inflictor.origin, 0.5 * (targ.absmin + targ.absmax), TRUE,
+				  self);
 		if (trace_fraction == 1)
 			return TRUE;
 		if (trace_ent == targ)
 			return TRUE;
 		return FALSE;
 	}
-	
-	traceline(inflictor.origin, targ.origin, TRUE, self);
+
+	traceline (inflictor.origin, targ.origin, TRUE, self);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline(inflictor.origin, targ.origin + '15 15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '15 15 0', TRUE, self);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline(inflictor.origin, targ.origin + '-15 -15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '-15 -15 0', TRUE, self);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline(inflictor.origin, targ.origin + '-15 15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '-15 15 0', TRUE, self);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline(inflictor.origin, targ.origin + '15 -15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '15 -15 0', TRUE, self);
 	if (trace_fraction == 1)
 		return TRUE;
 
 	return FALSE;
 };
-
 
 /*
 ============
@@ -80,12 +80,13 @@ void(entity targ, entity attacker) Killed =
 
 	oself = self;
 	self = targ;
-	
-	if (self.health < -99)
-		self.health = -99;		// don't let sbar look bad if a player
 
-	if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE)
-	{	// doors, triggers, etc
+	if (self.health < -99)
+		self.health = -99;  // don't let sbar look bad if a player
+
+	if (self.movetype == MOVETYPE_PUSH ||
+		self.movetype == MOVETYPE_NONE)
+		{  // doors, triggers, etc
 		self.th_die ();
 		self = oself;
 		return;
@@ -93,7 +94,7 @@ void(entity targ, entity attacker) Killed =
 
 	self.enemy = attacker;
 
-// bump the monster counter
+	// bump the monster counter
 	if (self.flags & FL_MONSTER)
 	{
 		killed_monsters = killed_monsters + 1;
@@ -108,14 +109,14 @@ void(entity targ, entity attacker) Killed =
 
 // PGM - gravity fix!
 	self.gravity = 1.0;
-	ClientObituary(self, attacker);
-	
+	ClientObituary (self, attacker);
+
 	self.takedamage = DAMAGE_NO;
 	self.touch = SUB_Null;
 
-	monster_death_use();
+	monster_death_use ();
 	self.th_die ();
-	
+
 	self = oself;
 };
 
@@ -132,12 +133,12 @@ The damage is coming from inflictor, but get mad at attacker
 This should be the only function that ever reduces health.
 ============
 */
-void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
+void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 {
-	local	vector	dir;
-	local	entity	oldself;
-	local	float	save;
-	local	float	take;
+	local vector dir;
+	local entity oldself;
+	local float save;
+	local float take;
 
 	if (!targ.takedamage)
 		return;
@@ -157,17 +158,17 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 			return;
 	}
 
-// used by buttons and triggers to set activator for target firing
+	// used by buttons and triggers to set activator for target firing
 	damage_attacker = attacker;
 
-// check for quad damage powerup on the attacker
+	// check for quad damage powerup on the attacker
 	if (attacker.super_damage_finished > time)
 		damage = damage * 4;
 // rune power up (Black Magic)
 	if (deathmatch)
 		damage = RuneApplyBlack(damage, attacker);
 
-// save damage based on the target's armor level
+	// save damage based on the target's armor level
 
 //ZOID--
 	if (TeamArmorDam(targ, inflictor, attacker, damage))
@@ -179,16 +180,16 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 	if (save >= targ.armorvalue)
 	{
 		save = targ.armorvalue;
-		targ.armortype = 0;	// lost all armor
+		targ.armortype = 0;  // lost all armor
 		targ.items2 = targ.items2 - (targ.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3));
 	}
-	
-	targ.armorvalue = targ.armorvalue - save;
-	take = ceil(damage-save);
 
-// add to the damage total for clients, which will be sent as a single
-// message at the end of the frame
-// FIXME: remove after combining shotgun blasts?
+	targ.armorvalue = targ.armorvalue - save;
+	take = ceil (damage - save);
+
+	// add to the damage total for clients, which will be sent as a single
+	// message at the end of the frame
+	// FIXME: remove after combining shotgun blasts?
 	if (targ.flags & FL_CLIENT)
 	{
 		targ.dmg_take = targ.dmg_take + take;
@@ -196,15 +197,15 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 		targ.dmg_inflictor = inflictor;
 	}
 
-// figure momentum add
-	if ( (inflictor != world) && (targ.movetype == MOVETYPE_WALK) )
+	// figure momentum add
+	if ((inflictor != world) && (targ.movetype == MOVETYPE_WALK))
 	{
 		dir = targ.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
-		dir = normalize(dir);
-		targ.velocity = targ.velocity + dir*damage*8;
+		dir = normalize (dir);
+		targ.velocity = targ.velocity + dir * damage * 8;
 	}
 
-// check for godmode or invincibility
+	// check for godmode or invincibility
 	if (targ.flags & FL_GODMODE)
 		return;
 	if (targ.invincible_finished >= time)
@@ -218,7 +219,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 	}
 
 // team play damage avoidance
-//	if ( (teamplay == 1) && (targ.team > 0)&&(targ.team == attacker.team) )
+//	if ((teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team))
 //		return;
 //ZOID--
 	if (!TeamHealthDam(targ, inflictor, attacker, damage))
@@ -228,28 +229,28 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 // rune power up (Earth Magic)
 	if (deathmatch)
 		take = RuneApplyEarth(take, targ);
-		
-// do the damage
+
+	// do the damage
 	targ.health = targ.health - take;
-			
+
 	if (targ.health <= 0)
 	{
 		Killed (targ, attacker);
 		return;
 	}
 
-// react to the damage
+	// react to the damage
 	oldself = self;
 	self = targ;
 
-	if ( (self.flags & FL_MONSTER) && attacker != world)
+	if ((self.flags & FL_MONSTER) && attacker != world)
 	{
-	// get mad unless of the same class (except for soldiers)
+		// get mad unless of the same class (except for soldiers)
 		if (self != attacker && attacker != self.enemy)
 		{
-			if ( (self.classname != attacker.classname) 
-			|| (self.classname == "monster_army" ) )
-			{
+			if ((self.classname != attacker.classname) ||
+				(self.classname == "monster_army"))
+				{
 				if ( self.classname != "monster_dragon")
 				{
 					if (self.enemy.classname == "player")
@@ -264,9 +265,9 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 	if (self.th_pain)
 	{
 		self.th_pain (attacker, take);
-	// nightmare mode monsters don't go into pain frames often
+		// nightmare mode monsters don't go into pain frames often
 		if (skill == 3)
-			self.pain_finished = time + 5;		
+			self.pain_finished = time + 5;
 	}
 
 	self = oldself;
@@ -324,18 +325,19 @@ void(entity inflictor, entity attacker, float damage) T_EELZap =
 T_RadiusDamage
 ============
 */
-void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDamage =
+void(entity inflictor, entity attacker, float damage, entity ignore)
+	T_RadiusDamage =
 {
-	local	float 	points;
-	local	entity	head;
-	local	vector	org;
-	local	float	radius;
+	local float points;
+	local entity head;
+	local vector org;
+	local float radius;
 
 	IsExplosionDamage = 1;
 
-	radius = damage+40;
+	radius = damage + 40;
 	head = nextent (world);
-	
+
 	while (head)
 	{
 		if (head.solid)
@@ -344,11 +346,11 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 			{
 				if (head.takedamage)
 				{
-					org = head.origin + (head.mins + head.maxs)*0.5;
+					org = head.origin + (head.mins + head.maxs) * 0.5;
 					points = vlen (inflictor.origin - org);
 					if (points <= radius)
 					{
-						points = 0.5*points;
+						points = 0.5 * points;
 						if (points < 0)
 							points = 0;
 						points = damage - points;
@@ -356,10 +358,13 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 							points = points * 0.5;
 						if (points > 0)
 						{
-							if (CanDamage (head, inflictor))
-							{	// shambler takes half damage from all explosions
+							if (CanDamage (
+									head,
+									inflictor))
+									{  // shambler takes half damage
+												   // from all explosions
 								if (head.classname == "monster_shambler")
-									points = points*0.5;						
+									points = points * 0.5;
 								T_Damage (head, inflictor, attacker, points);
 							}
 						}
@@ -370,4 +375,3 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 		head = nextent (head);
 	}
 };
-
