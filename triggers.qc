@@ -17,7 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-
 void() trigger_reactivate =
 {
 	self.solid = SOLID_TRIGGER;
@@ -25,8 +24,8 @@ void() trigger_reactivate =
 
 //=============================================================================
 
-float	SPAWNFLAG_NOMESSAGE = 1;
-float	SPAWNFLAG_NOTOUCH = 1;
+float SPAWNFLAG_NOMESSAGE = 1;
+float SPAWNFLAG_NOTOUCH = 1;
 
 // the wait time has passed, so set back up for another activation
 void() multi_wait =
@@ -39,7 +38,6 @@ void() multi_wait =
 	}
 };
 
-
 // the trigger was just touched/killed/used
 // self.enemy should be set to the activator so it can be held through a delay
 // so wait for the delay time before firing
@@ -47,7 +45,7 @@ void() multi_trigger =
 {
 	if (self.nextthink > time)
 	{
-		return;		// allready been triggered
+		return;  // allready been triggered
 	}
 
 	if (self.classname == "trigger_secret")
@@ -61,20 +59,21 @@ void() multi_trigger =
 	if (self.noise != "")
 		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 
-// don't trigger again until reset
+	// don't trigger again until reset
 	self.takedamage = DAMAGE_NO;
 
 	activator = self.enemy;
-	
-	SUB_UseTargets();
 
-	if (self.wait > 0)	
+	SUB_UseTargets ();
+
+	if (self.wait > 0)
 	{
 		self.think = multi_wait;
 		self.nextthink = time + self.wait;
 	}
 	else
-	{	// we can't just remove (self) here, because this is a touch function
+	{  // we can't just remove (self) here, because this is a touch
+			  // function
 		// called wheil C code is looping through area links...
 		self.touch = SUB_Null;
 		self.nextthink = time + 0.1;
@@ -96,45 +95,40 @@ void() multi_trigger =
 void() multi_killed =
 {
 	self.enemy = damage_attacker;
-	multi_trigger();
+	multi_trigger ();
 };
 
 void() multi_use =
 {
 	self.enemy = activator;
-	multi_trigger();
+	multi_trigger ();
 };
 
 void() multi_touch =
 {
 	if (other.classname != "player")
 		return;
-	
-// if the trigger has an angles field, check player's facing direction
+
+	// if the trigger has an angles field, check player's facing direction
 	if (self.movedir != '0 0 0')
 	{
 		makevectors (other.angles);
 		if (v_forward * self.movedir < 0)
-			return;		// not facing the right way
+			return;  // not facing the right way
 	}
-	
+
 	self.enemy = other;
 	multi_trigger ();
 };
 
 //MED 12/01/96 added count field
 /*QUAKED trigger_multiple (.5 .5 .5) ? notouch
-Variable sized repeatable trigger.  Must be targeted at one or more entities.  If "health" is set, the trigger must be killed to activate each time.
-If "delay" is set, the trigger waits some time after activating before firing.
-"wait" : Seconds between triggerings. (.2 default)
-"cnt" how many times it can be triggered (infinite default)
-If notouch is set, the trigger is only fired by other entities, not by touching.
-NOTOUCH has been obsoleted by trigger_relay!
-sounds
-1)	secret
-2)	beep beep
-3)	large switch
-4)
+Variable sized repeatable trigger.  Must be targeted at one or more entities. If
+"health" is set, the trigger must be killed to activate each time. If "delay" is
+set, the trigger waits some time after activating before firing. "wait" :
+Seconds between triggerings. (.2 default) If notouch is set, the trigger is only
+fired by other entities, not by touching. NOTOUCH has been obsoleted by
+trigger_relay! sounds 1)	secret 2)	beep beep 3)	large switch 4)
 set "message" to text string
 */
 void() trigger_multiple =
@@ -154,7 +148,7 @@ void() trigger_multiple =
 		precache_sound ("misc/trigger1.wav");
 		self.noise = "misc/trigger1.wav";
 	}
-	
+
 	if (!self.wait)
 		self.wait = 0.2;
 	self.use = multi_use;
@@ -169,11 +163,11 @@ void() trigger_multiple =
 		self.th_die = multi_killed;
 		self.takedamage = DAMAGE_YES;
 		self.solid = SOLID_BBOX;
-		setorigin (self, self.origin);	// make sure it links into the world
+		setorigin (self, self.origin);  // make sure it links into the world
 	}
 	else
 	{
-		if ( !(self.spawnflags & SPAWNFLAG_NOTOUCH) )
+		if (!(self.spawnflags & SPAWNFLAG_NOTOUCH))
 		{
 			self.touch = multi_touch;
 		}
@@ -183,13 +177,14 @@ void() trigger_multiple =
 		self.cnt = -1;
 };
 
-
 /*QUAKED trigger_once (.5 .5 .5) ? notouch
-Variable sized trigger. Triggers once, then removes itself.  You must set the key "target" to the name of another object in the level that has a matching
+Variable sized trigger. Triggers once, then removes itself.  You must set the
+key "target" to the name of another object in the level that has a matching
 "targetname".  If "health" is set, the trigger must be killed to activate.
 If notouch is set, the trigger is only fired by other entities, not by touching.
-if "killtarget" is set, any objects that have a matching "target" will be removed when the trigger is fired.
-if "angle" is set, the trigger will only fire when someone is facing the direction of the angle.  Use "360" for an angle of 0.
+if "killtarget" is set, any objects that have a matching "target" will be
+removed when the trigger is fired. if "angle" is set, the trigger will only fire
+when someone is facing the direction of the angle.  Use "360" for an angle of 0.
 sounds
 1)	secret
 2)	beep beep
@@ -200,19 +195,19 @@ set "message" to text string
 void() trigger_once =
 {
 	self.wait = -1;
-	trigger_multiple();
+	trigger_multiple ();
 };
 
 //=============================================================================
 
 /*QUAKED trigger_relay (.5 .5 .5) (-8 -8 -8) (8 8 8)
-This fixed size trigger cannot be touched, it can only be fired by other events.  It can contain killtargets, targets, delays, and messages.
+This fixed size trigger cannot be touched, it can only be fired by other events.
+It can contain killtargets, targets, delays, and messages.
 */
 void() trigger_relay =
 {
 	self.use = SUB_UseTargets;
 };
-
 
 //=============================================================================
 
@@ -233,7 +228,7 @@ void() trigger_secret =
 		self.message = "You found a secret area!";
 	if (!self.sounds)
 		self.sounds = 1;
-	
+
 	if (self.sounds == 1)
 	{
 		precache_sound ("misc/secret.wav");
@@ -250,18 +245,17 @@ void() trigger_secret =
 
 //=============================================================================
 
-
 void() counter_use =
 {
 	self.count = self.count - 1;
 	if (self.count < 0)
 		return;
-	
+
 	if (self.count != 0)
 	{
-		if (activator.classname == "player"
-		&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		{
+		if (activator.classname == "player" &&
+			(self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
+			{
 			if (self.count >= 4)
 				centerprint (activator, "There are more to go...");
 			else if (self.count == 3)
@@ -273,10 +267,10 @@ void() counter_use =
 		}
 		return;
 	}
-	
-	if (activator.classname == "player"
-	&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		centerprint(activator, "Sequence completed!");
+
+	if (activator.classname == "player" &&
+		(self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
+		centerprint (activator, "Sequence completed!");
 	self.enemy = activator;
 	multi_trigger ();
 };
@@ -284,9 +278,11 @@ void() counter_use =
 /*QUAKED trigger_counter (.5 .5 .5) ? nomessage
 Acts as an intermediary for an action that takes multiple inputs.
 
-If nomessage is not set, t will print "1 more.. " etc when triggered and "sequence complete" when finished.
+If nomessage is not set, t will print "1 more.. " etc when triggered and
+"sequence complete" when finished.
 
-After the counter has been triggered "count" times (default 2), it will fire all of it's targets and remove itself.
+After the counter has been triggered "count" times (default 2), it will fire all
+of it's targets and remove itself.
 */
 void() trigger_counter =
 {
@@ -297,7 +293,6 @@ void() trigger_counter =
 	self.use = counter_use;
 };
 
-
 /*
 ==============================================================================
 
@@ -306,15 +301,15 @@ TELEPORT TRIGGERS
 ==============================================================================
 */
 
-float	PLAYER_ONLY	= 1;
-float	SILENT = 2;
+float PLAYER_ONLY = 1;
+float SILENT = 2;
 
 void() play_teleport =
 {
-	local	float v;
-	local	string tmpstr;
+	local float v;
+	local string tmpstr;
 
-	v = random() * 5;
+	v = random () * 5;
 	if (v < 1)
 		tmpstr = "misc/r_tele1.wav";
 	else if (v < 2)
@@ -346,23 +341,21 @@ void(vector org) spawn_tfog =
 	WriteCoord (MSG_BROADCAST, org_z);
 };
 
-
 void() tdeath_touch =
 {
 	if (other == self.owner)
 		return;
 
-// frag anyone who teleports in on top of an invincible player
+	// frag anyone who teleports in on top of an invincible player
 	if (other.classname == "player")
 	{
 		if (other.invincible_finished > time)
 			self.classname = "teledeath2";
 		if (self.owner.classname != "player")
-		{	// other monsters explode themselves
+		{  // other monsters explode themselves
 			T_Damage (self.owner, self, self, 50000);
 			return;
 		}
-		
 	}
 
 	if (other.health)
@@ -371,12 +364,11 @@ void() tdeath_touch =
 	}
 };
 
-
 void(vector org, entity death_owner) spawn_tdeath =
 {
-local entity	death;
+	local entity death;
 
-	death = spawn();
+	death = spawn ();
 	death.classname = "teledeath";
 	death.movetype = MOVETYPE_NONE;
 	death.solid = SOLID_TRIGGER;
@@ -387,20 +379,20 @@ local entity	death;
 	death.nextthink = time + 0.2;
 	death.think = SUB_Remove;
 	death.owner = death_owner;
-	
-	force_retouch = 2;		// make sure even still objects get hit
+
+	force_retouch = 2;  // make sure even still objects get hit
 };
 
 void() teleport_touch =
 {
-local entity	t;
-local vector	org;
+	local entity t;
+	local vector org;
 
 	if (self.targetname != "")
 	{
 		if (self.nextthink < time)
 		{
-			return;		// not fired yet
+			return;  // not fired yet
 		}
 	}
 
@@ -410,31 +402,32 @@ local vector	org;
 			return;
 	}
 
-// only teleport living creatures
+	// only teleport living creatures
 	if (other.health <= 0 || other.solid != SOLID_SLIDEBOX)
 		return;
 
 	SUB_UseTargets ();
 
-// put a tfog where the player was
+	// put a tfog where the player was
 	spawn_tfog (other.origin);
 
 	t = find (world, targetname, self.target);
 	if (!t)
 		objerror ("couldn't find target");
-		
-// spawn a tfog flash in front of the destination
+
+	// spawn a tfog flash in front of the destination
 	makevectors (t.mangle);
 	org = t.origin + 32 * v_forward;
 
 	spawn_tfog (org);
-	spawn_tdeath(t.origin, other);
+	spawn_tdeath (t.origin, other);
 
-// move the player and lock him down for a little while
+	// move the player and lock him down for a little while
 	if (!other.health)
 	{
 		other.origin = t.origin;
-		other.velocity = (v_forward * other.velocity_x) + (v_forward * other.velocity_y);
+		other.velocity =
+			(v_forward * other.velocity_x) + (v_forward * other.velocity_y);
 		return;
 	}
 
@@ -442,7 +435,7 @@ local vector	org;
 	other.angles = t.mangle;
 	if (other.classname == "player")
 	{
-		other.fixangle = 1;		// turn this way immediately
+		other.fixangle = 1;  // turn this way immediately
 		other.teleport_time = time + 0.7;
 		if (other.flags & FL_ONGROUND)
 			other.flags = other.flags - FL_ONGROUND;
@@ -452,11 +445,12 @@ local vector	org;
 };
 
 /*QUAKED info_teleport_destination (.5 .5 .5) (-8 -8 -8) (8 8 32)
-This is the destination marker for a teleporter.  It should have a "targetname" field with the same value as a teleporter's "target" field.
+This is the destination marker for a teleporter.  It should have a "targetname"
+field with the same value as a teleporter's "target" field.
 */
 void() info_teleport_destination =
 {
-// this does nothing, just serves as a target spot
+	// this does nothing, just serves as a target spot
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
 	self.model = "";
@@ -468,14 +462,17 @@ void() info_teleport_destination =
 void() teleport_use =
 {
 	self.nextthink = time + 0.2;
-	force_retouch = 2;		// make sure even still objects get hit
+	force_retouch = 2;  // make sure even still objects get hit
 	self.think = SUB_Null;
 };
 
 /*QUAKED trigger_teleport (.5 .5 .5) ? PLAYER_ONLY SILENT
-Any object touching this will be transported to the corresponding info_teleport_destination entity. You must set the "target" field, and create an object with a "targetname" field that matches.
+Any object touching this will be transported to the corresponding
+info_teleport_destination entity. You must set the "target" field, and create an
+object with a "targetname" field that matches.
 
-If the trigger_teleport has a targetname, it will only teleport entities when it has been fired.
+If the trigger_teleport has a targetname, it will only teleport entities when it
+has been fired.
 */
 void() trigger_teleport =
 {
@@ -483,7 +480,7 @@ void() trigger_teleport =
 
 	InitTrigger ();
 	self.touch = teleport_touch;
-	// find the destination 
+	// find the destination
 	if (self.target == "")
 		objerror ("no target");
 	self.use = teleport_use;
@@ -491,8 +488,8 @@ void() trigger_teleport =
 	if (!(self.spawnflags & SILENT))
 	{
 		precache_sound ("ambience/hum1.wav");
-		o = (self.mins + self.maxs)*0.5;
-		ambientsound (o, "ambience/hum1.wav",0.5 , ATTN_STATIC);
+		o = (self.mins + self.maxs) * 0.5;
+		ambientsound (o, "ambience/hum1.wav", 0.5, ATTN_STATIC);
 	}
 };
 
@@ -508,7 +505,7 @@ void() trigger_skill_touch =
 {
 	if (other.classname != "player")
 		return;
-		
+
 	cvar_set ("skill", self.message);
 };
 
@@ -521,7 +518,6 @@ void() trigger_setskill =
 	InitTrigger ();
 	self.touch = trigger_skill_touch;
 };
-
 
 /*
 ==============================================================================
@@ -539,7 +535,7 @@ void() trigger_onlyregistered_touch =
 		return;
 
 	self.attack_finished = time + 2;
-	if (cvar("registered"))
+	if (cvar ("registered"))
 	{
 		self.message = "";
 		SUB_UseTargets ();
@@ -651,9 +647,8 @@ void() trigger_push_touch =
 		}
 	}
 	if (self.spawnflags & PUSH_ONCE)
-		remove(self);
+		remove (self);
 };
-
 
 /*QUAKED trigger_push (.5 .5 .5) ? PUSH_ONCE
 Pushes the player
@@ -671,16 +666,16 @@ void() trigger_push =
 
 void() trigger_monsterjump_touch =
 {
-	if ( other.flags & (FL_MONSTER | FL_FLY | FL_SWIM) != FL_MONSTER )
+	if (other.flags & (FL_MONSTER | FL_FLY | FL_SWIM) != FL_MONSTER)
 		return;
 
-// set XY even if not on ground, so the jump will clear lips
+	// set XY even if not on ground, so the jump will clear lips
 	other.velocity_x = self.movedir_x * self.speed;
 	other.velocity_y = self.movedir_y * self.speed;
-	
-	if ( !(other.flags & FL_ONGROUND) )
+
+	if (!(other.flags & FL_ONGROUND))
 		return;
-	
+
 	other.flags = other.flags - FL_ONGROUND;
 
 	other.velocity_z = self.height;
@@ -699,10 +694,9 @@ void() trigger_monsterjump_touch =
 
 //MED 12/01/96 added count field
 /*QUAKED trigger_monsterjump (.5 .5 .5) ?
-Walking monsters that touch this will jump in the direction of the trigger's angle
-"speed" default to 200, the speed thrown forward
-"height" default to 200, the speed thrown upwards
-"cnt" default infinite, how many times to trigger
+Walking monsters that touch this will jump in the direction of the trigger's
+angle "speed" default to 200, the speed thrown forward "height" default to 200,
+the speed thrown upwards
 */
 void() trigger_monsterjump =
 {
@@ -718,4 +712,3 @@ void() trigger_monsterjump =
 	InitTrigger ();
 	self.touch = trigger_monsterjump_touch;
 };
-
