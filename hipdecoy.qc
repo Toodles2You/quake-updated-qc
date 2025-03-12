@@ -25,11 +25,6 @@ PLAYER decoy
 ==============================================================================
 */
 
-$cd id1/models/player_4
-$origin 0 -6 24
-$base base
-$skin skin
-
 //
 // running
 //

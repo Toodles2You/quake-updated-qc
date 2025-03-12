@@ -25,12 +25,6 @@ SCOURGE
 ==============================================================================
 */
 
-$cd hipwork\models\scourge
-$origin 0 0 23
-$base scorbase.asc
-
-$skin skin
-
 $frame stand1.asc stand2.asc stand3.asc stand4.asc stand5.asc stand6.asc
 $frame stand7.asc stand8.asc stand9.asc stand10.asc stand11.asc stand12.asc
 

@@ -26,12 +26,6 @@ armagon
 */
 
 
-$cd hipwork\models\armagon
-$origin 0 0 24
-$base bodybase.asc
-
-$skin armab
-
 $frame lwalk1.asc lwalk2.asc lwalk3.asc lwalk4.asc lwalk5.asc lwalk6.asc lwalk7.asc
 $frame lwalk8.asc lwalk9.asc lwalk10.asc lwalk11.asc lwalk12.asc 
 
