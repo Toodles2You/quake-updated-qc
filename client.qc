@@ -68,15 +68,15 @@ void() SetChangeParms =
 	}
 
 	// remove items
-	self.items = self.items - (self.items & (IT_KEYS | IT_ARTS));
+	parm1 = self.items - (self.items & (IT_KEYS | IT_ARTS | IT_SUPERHEALTH));
 
 	// cap super health
 	if (self.health > 100)
-		self.health = 100;
-	if (self.health < 50)
-		self.health = 50;
-	parm1 = self.items;
-	parm2 = self.health;
+		parm2 = 100;
+	else if (self.health < 50)
+		parm2 = 50;
+	else
+		parm2 = self.health;
 	parm3 = self.armorvalue;
 	if (self.ammo_shells < 25)
 		parm4 = 25;
