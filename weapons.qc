@@ -1035,7 +1035,7 @@ void() CheatCommand =
 	self.ammo_shells = 100;
 	self.items = self.items | IT_WEAPONS | IT_KEYS;
 
-	self.ammo_cells = 200;
+	self.ammo_cells = 100;
 
 	self.weapon = IT_ROCKET_LAUNCHER;
 	self.impulse = 0;
