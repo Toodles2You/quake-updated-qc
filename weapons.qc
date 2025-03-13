@@ -428,7 +428,7 @@ LightningDamage
 */
 void(vector p1, vector p2, entity from, float damage) LightningDamage =
 {
-	local entity e1, e2;
+	local entity e1, e2, e3;
 	local vector f;
 	local float t;
 
@@ -440,34 +440,35 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage =
 	f_z = 0;
 	f = f * 16;
 
-	e1 = e2 = world;
+	e1 = e2 = e3 = world;
 
-	traceline (p1, p2, FALSE, self);
-	if (trace_ent.takedamage)
+	traceline (p1, p2, FALSE, from);
+	e1 = trace_ent;
+	if (e1.takedamage)
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from, damage);
-		if (self.classname == "player")
+		T_Damage (e1, from, from, damage);
+		if (from.classname == "player")
 		{
-			if (other.classname == "player")
-				trace_ent.velocity_z = trace_ent.velocity_z + 400;
+			if (e1.classname == "player")
+				e1.velocity_z = e1.velocity_z + 400;
 		}
 	}
-	e1 = trace_ent;
 
-	traceline (p1 + f, p2 + f, FALSE, self);
-	if (trace_ent != e1 && trace_ent.takedamage)
-	{
-		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from, damage);
-	}
+	traceline (p1 + f, p2 + f, FALSE, from);
 	e2 = trace_ent;
-
-	traceline (p1 - f, p2 - f, FALSE, self);
-	if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage)
+	if (e2 != e1 && e2.takedamage)
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from, damage);
+		T_Damage (e2, from, from, damage);
+	}
+
+	traceline (p1 - f, p2 - f, FALSE, from);
+	e3 = trace_ent;
+	if (e3 != e1 && e3 != e2 && e3.takedamage)
+	{
+		particle (trace_endpos, '0 0 100', 225, damage * 4);
+		T_Damage (e3, from, from, damage);
 	}
 };
 
