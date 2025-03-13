@@ -1302,7 +1302,7 @@ void() CheatCommand =
 	self.ammo_lava_nails = 200;
 	self.ammo_multi_rockets = 100;
 	self.ammo_plasma = 100;
-	self.ammo_cells1 = 200;
+	self.ammo_cells1 = 100;
 
 	self.weapon = IT_ROCKET_LAUNCHER;
 	self.impulse = 0;

@@ -1512,7 +1512,7 @@ void(entity targ, entity attacker) ClientObituary =
 						bprint (" tried to change teams\n");
 				}
 				//--ZOID
-				else if (rnum < 0.9)
+				else if (rnum > 0.4)
 					bprint (" becomes bored with life\n");
 				else
 					bprint (" checks if his weapon is loaded\n");
