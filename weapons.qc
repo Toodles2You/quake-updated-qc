@@ -430,11 +430,13 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage =
 {
 	local entity e1, e2;
 	local vector f;
+	local float t;
 
 	f = p2 - p1;
-	normalize (f);
+	f = normalize (f);
+	t = f_x;
 	f_x = 0 - f_y;
-	f_y = f_x;
+	f_y = t;
 	f_z = 0;
 	f = f * 16;
 
