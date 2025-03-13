@@ -39,12 +39,6 @@ void() MOTD =
 		}
 		self.motd_time = time + 1;
 		self.motd_count = self.motd_count + 1;
-/*
-		if (teamplay == TEAM_NORMAL_NODAMAGE)
-			centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nTeam play: No Friendly Fire\n");
-		else if (teamplay == TEAM_NORMAL_DAMAGE)
-			centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nTeam play: Friendly Fire\n");
-*/
 		if (teamplay == TEAM_DMATCH_TAG)
 			centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nDeathmatch Tag!\n");
 		else if (teamplay == TEAM_CTF)

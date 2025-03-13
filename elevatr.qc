@@ -56,7 +56,8 @@ void() elvtr_button_return =
 		self.takedamage = DAMAGE_YES;  // can be shot again
 };
 
-void() elvtr_button_blocked{
+void() elvtr_button_blocked =
+{
 	// do nothing, just don't ome all the way back out
 };
 
@@ -117,6 +118,8 @@ position where it can be triggered again.
 */
 void() func_elvtr_button =
 {
+	local float dist;
+
 	if (self.sounds == 0)
 	{
 		precache_sound ("buttons/airbut1.wav");
@@ -166,6 +169,8 @@ void() func_elvtr_button =
 	self.state = STATE_BOTTOM;
 
 	self.pos1 = self.origin;
-	self.pos2 =
-		self.pos1 + self.movedir * (fabs (self.movedir * self.size) - self.lip);
+
+	dist = fabs (self.movedir * self.size) - self.lip;
+
+	self.pos2 = self.pos1 + self.movedir * dist;
 };

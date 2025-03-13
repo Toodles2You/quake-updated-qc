@@ -365,14 +365,6 @@ void() monster_knight =
 		self.th_stand = knight_pause1;
 		self.th_walk = knight_pause1;
 		self.th_run = knight_pause1;
-		/*
-						self.th_stand = knight_pause1;
-						self.th_walk = knight_pause;
-						self.th_run = knight_pause;
-						self.th_melee = knight_atk1;
-						self.th_pain = knight_pause;
-						self.th_die = knight_die;
-		*/
 		walkmonster_start ();
 	}
 	else

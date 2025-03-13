@@ -478,7 +478,6 @@ one of the following: 1) base fast 2) chain slow
 
 void() func_new_plat =
 {
-	// local entity t;
 	local float negativeHeight;
 
 	negativeHeight = 0;

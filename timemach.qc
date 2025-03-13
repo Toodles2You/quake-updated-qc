@@ -173,8 +173,8 @@ void(entity attacker, float take) time_pain =
 		else if (painRnd < 0.66)
 			painEnt.origin = self.origin + v_right * 80 - v_up * 24;
 		else
-			painEnt.origin =
-				self.origin + v_forward * 64 - v_up * 48 - v_right * 48;
+			painEnt.origin = self.origin + v_forward * 64 - v_up * 48
+						   - v_right * 48;
 		painEnt.target = self.target;
 		painEnt.owner = self;
 		painEnt.think = time_boom;

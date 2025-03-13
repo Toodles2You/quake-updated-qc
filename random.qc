@@ -23,11 +23,6 @@
 // Random Items!
 // =======================================================
 
-// equal divisions of 1:
-// 5: 0.2, 0.4, 0.6, 0.8, 1
-// 6: 0.16, 0.33, 0.48, 0.66, 0.83, 1
-// 7: 0.14, 0.28, 0.43, 0.56, 0.71, 0.86, 1
-// 8: 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1
 void() random_pick_type =
 {
 	local float randItem;
@@ -45,8 +40,6 @@ void() random_pick_type =
 		self.netname = "Power Shield";
 		self.items = 0;
 		self.items2 = IT2_SHIELD;
-		//		if (norandom == 1)
-		//			self.classname = "item_powerup_shield";
 	}
 	else if (randItem < 0.4)
 	{
@@ -56,8 +49,6 @@ void() random_pick_type =
 		self.netname = "Anti-Grav Belt";
 		self.items = 0;
 		self.items2 = IT2_ANTIGRAV;
-		//		if (norandom == 1)
-		//			self.classname = "item_powerup_belt";
 	}
 	else if (randItem < 0.6)
 	{
@@ -66,9 +57,6 @@ void() random_pick_type =
 		self.netname = "Pentagram of Protection";
 		self.items = IT_INVULNERABILITY;
 		self.items2 = 0;
-		//		if (norandom == 1)
-		//			self.classname =
-		//"item_artifact_invulnerability";
 	}
 	else if (randItem < 0.8)
 	{
@@ -77,8 +65,6 @@ void() random_pick_type =
 		self.netname = "Ring of Shadows";
 		self.items = IT_INVISIBILITY;
 		self.items2 = 0;
-		//		if (norandom == 1)
-		//			self.classname = "item_artifact_invisibility";
 	}
 	else
 	{
@@ -87,8 +73,6 @@ void() random_pick_type =
 		self.netname = "Quad Damage";
 		self.items = IT_QUAD;
 		self.items2 = 0;
-		//		if (norandom == 1)
-		//			self.classname = "item_artifact_super_damage";
 	}
 };
 

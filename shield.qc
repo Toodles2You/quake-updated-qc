@@ -67,7 +67,6 @@ void(entity shieldOwner, vector dir) shield_spawn =
 	newShield.classname = "power_shield";
 
 	// time for shield to live
-	//	shieldOwner.shield_death_time = time + 0.5;
 	shieldOwner.shield_death_time = time + 0.3;
 	shieldOwner.shield_entity = newShield;
 

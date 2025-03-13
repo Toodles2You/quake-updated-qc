@@ -261,7 +261,6 @@ void() eel_death =
 	self.flags = self.flags + FL_SWIM;
 	setsize (self, '0 0 0', '0 0 0');
 
-	//	self.skin = 1;		// change to bloody eel skin!
 	if (self.health < -12)
 	{
 		self.skin = 0;

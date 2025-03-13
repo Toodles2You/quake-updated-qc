@@ -63,8 +63,6 @@ $frame paine29 paine30
 
 //=============================================================================
 
-.float inpain;
-
 void() mummy_stand1 = [$stand1, mummy_stand2] { ai_stand (); };
 void() mummy_stand2 = [$stand2, mummy_stand3] { ai_stand (); };
 void() mummy_stand3 = [$stand3, mummy_stand4] { ai_stand (); };

@@ -428,13 +428,7 @@ void(float dist) ai_walk =
 {
 	movedist = dist;
 
-	/* Dragon movement handled in dragon.qc.... this is legacy.
-	if (self.classname == "monster_dragon")
-	{
-		movetogoal (dist);
-		return;
-	}
-	*/
+	/* Dragon movement handled in dragon.qc.... this is legacy. */
 
 	// check for noticing a player
 	if (FindTarget ())

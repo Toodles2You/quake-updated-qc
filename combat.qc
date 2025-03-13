@@ -182,8 +182,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	{
 		save = targ.armorvalue;
 		targ.armortype = 0;  // lost all armor
-		targ.items2 = targ.items2 -
-					  (targ.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3));
+		targ.items2 = targ.items2 - (targ.items2 & IT2_ARMOR);
 	}
 
 	targ.armorvalue = targ.armorvalue - save;
@@ -221,12 +220,10 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	}
 
 	// team play damage avoidance
-	//	if ((teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team))
-	//		return;
 	// ZOID--
 	if (!TeamHealthDam (targ, inflictor, attacker, damage))
 		return;  // same team
-				 //--ZOID
+	//--ZOID
 
 	// rune power up (Earth Magic)
 	if (deathmatch)
@@ -312,7 +309,9 @@ void(entity inflictor, entity attacker, float damage) T_EELZap =
 						{  // eels take no damage from this attack
 							if (head.classname != "monster_eel" &&
 								(head.flags & FL_INWATER))
+							{
 								T_Damage (head, inflictor, attacker, points);
+							}
 						}
 					}
 				}

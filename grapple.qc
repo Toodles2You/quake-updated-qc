@@ -81,8 +81,6 @@ void() GrappleTrack =
 		// we need this to make the sound come from the right spot
 		setorigin (self, self.enemy.origin);
 
-		//		sound (self, CHAN_WEAPON, "blob/land1.wav", 1,
-		//ATTN_NORM);
 		sound (self, CHAN_WEAPON, "pendulum/hit.wav", 1, ATTN_NORM);
 		T_Damage (self.enemy, self, self.owner, 1);
 		makevectors (self.v_angle);
@@ -102,87 +100,6 @@ void() GrappleTrack =
 
 	self.nextthink = time + 0.1;
 };
-
-/*
-entity(float head) GrappleMakeLink
-{
-		newmis = spawn ();
-
-		newmis.movetype = MOVETYPE_FLYMISSILE;
-		newmis.solid = SOLID_NOT;
-		newmis.owner = self;// SELF is the hook!
-
-		newmis.avelocity = '200 200 200';
-
-		setmodel (newmis, "progs/bit.mdl");
-		setorigin (newmis, self.origin);
-		setsize (newmis, '0 0 0' , '0 0 0');
-
-		return  newmis;
-};
-*/
-
-// Removes all chain link entities; this is a separate function because CLIENT
-// also needs to be able to remove the chain. Only one function required to
-// remove all links.
-/*
-void() GrappleRemoveChain
-{
-		self.think = SUB_Remove;
-		self.nextthink = time;
-
-		if (self.goalentity)
-		{
-				self.goalentity.think = SUB_Remove;
-				self.goalentity.nextthink = time;
-				if (self.goalentity.goalentity)
-				{
-						self.goalentity.goalentity.think = SUB_Remove;
-						self.goalentity.goalentity.nextthink = time;
-				}
-		}
-};
-*/
-
-// Repositions the chain links each frame. This single function maintains the
-// positions of all of the links. Only one link is thinking every frame.
-/*
-void() GrappleUpdateChain
-{
-		local   vector  temp;
-
-		if (!self.owner.hook_out)
-		{
-				GrappleRemoveChain ();
-				return;
-		}
-
-		temp = (self.owner.hook.origin - self.owner.origin);
-
-		// These numbers are correct assuming 3 links.
-		// 4 links would be *20 *40 *60 and *80
-		setorigin (self, self.owner.origin + temp * 0.25);
-		setorigin (self.goalentity, self.owner.origin + temp * 0.5);
-		setorigin (self.goalentity.goalentity, self.owner.origin + temp * 0.75);
-		self.nextthink = time + 0.1;
-};
-*/
-
-//
-// Build_Chain - Builds the chain (linked list)
-//
-/*
-void() GrappleBuildChain
-{
-		self.goalentity = GrappleMakeLink ();
-		self.goalentity.think = GrappleUpdateChain;
-		self.goalentity.nextthink = time + 0.1;
-		self.goalentity.owner = self.owner;
-
-		self.goalentity.goalentity = GrappleMakeLink ();
-		self.goalentity.goalentity.goalentity = GrappleMakeLink ();
-};
-*/
 
 // Tries to anchor the grapple to whatever it touches
 void() GrappleAnchor =
@@ -268,7 +185,6 @@ void() W_FireGrapple =
 
 	makevectors (self.v_angle);
 	newmis.velocity = v_forward * 800;
-	//	newmis.avelocity = '0 0 -500';
 	newmis.angles = vectoangles (v_forward);
 
 	newmis.touch = GrappleAnchor;
@@ -301,7 +217,7 @@ void() GrappleService =
 	// drop the hook if player lets go of button
 	if ((!self.button0 && self.weapon == IT_GRAPPLE) ||
 		self.teleport_time > time)
-		{  // release when we get 'ported
+	{  // release when we get 'ported
 		self = self.hook;
 		GrappleReset ();
 		return;
@@ -325,14 +241,6 @@ void() GrappleService =
 	{
 		if (self.lefty)
 		{  // cancel chain sound
-			// If there is a chain, ditch it now. We're
-			// close enough. Having extra entities lying around
-			// is never a good idea.
-			//			if (self.hook.goalentity) ()
-			//					self.hook.goalentity.think =
-			//GrappleRemoveChain; 					self.hook.goalentity.nextthink = time;
-			//			}
-
 			self.lefty = FALSE;  // we've reset the sound channel.
 		}
 	}

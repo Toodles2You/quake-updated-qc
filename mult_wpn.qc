@@ -145,8 +145,8 @@ void() W_FireMultiGrenade =
 	// set missile speed
 	makevectors (self.v_angle);
 	if (self.v_angle_x)
-		missile.velocity = v_forward * 600 + v_up * 200 +
-						   crandom () * v_right * 10 + crandom () * v_up * 10;
+		missile.velocity = v_forward * 600 + v_up * 200
+						 + crandom () * v_right * 10 + crandom () * v_up * 10;
 	else
 	{
 		missile.velocity = aim (self, 10000);
@@ -177,9 +177,6 @@ void() MultiRocketExplode =
 {
 	local float damg;
 
-	//	Stock Single Rocket Damage...
-	//	damg = 100 + random ()*20;
-
 	damg = 60 + random () * 15;
 
 	if (other.health)
@@ -190,11 +187,6 @@ void() MultiRocketExplode =
 			damg = damg * 0.5;  // mostly immune
 		T_Damage (other, self, self.owner, damg);
 	}
-
-	// don't do radius damage to the other, because all the damage
-	// was done in the impact
-	//	Stock single rocket damage.
-	//	T_RadiusDamage (self, self.owner, 120, other);
 
 	T_RadiusDamage (self, self.owner, 75, other);
 
@@ -363,45 +355,7 @@ void() W_FireMultiRocket =
 //=============================================================================
 void(vector p1, vector p2, entity from, float damage) PlasmaDamage =
 {
-	local entity e1, e2;
-	local vector f;
-
-	f = p2 - p1;
-	normalize (f);
-	f_x = 0 - f_y;
-	f_y = f_x;
-	f_z = 0;
-	f = f * 16;
-
-	e1 = e2 = world;
-
-	traceline (p1, p2, FALSE, self);
-	if (trace_ent.takedamage)
-	{
-		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from.owner, damage);
-		if (self.classname == "player")
-		{
-			if (other.classname == "player")
-				trace_ent.velocity_z = trace_ent.velocity_z + 400;
-		}
-	}
-	e1 = trace_ent;
-
-	traceline (p1 + f, p2 + f, FALSE, self);
-	if (trace_ent != e1 && trace_ent.takedamage)
-	{
-		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from.owner, damage);
-	}
-	e2 = trace_ent;
-
-	traceline (p1 - f, p2 - f, FALSE, self);
-	if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage)
-	{
-		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from.owner, damage);
-	}
+	LightningDamage (p1, p2, from, damage);
 };
 
 //================================

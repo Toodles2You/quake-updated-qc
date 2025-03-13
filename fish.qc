@@ -164,7 +164,6 @@ void(entity attacker, float damage) fish_pain =
 	f_pain1 ();
 };
 
-//(-16 -16 -24) (16 16 24)
 /*QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 */
 void() monster_fish =
@@ -185,7 +184,6 @@ void() monster_fish =
 
 	setmodel (self, "progs/fish.mdl");
 
-//	setsize (self, '-16 -16 -24', '16 16 24');
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.health = 25;
 

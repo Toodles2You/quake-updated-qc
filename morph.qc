@@ -20,8 +20,6 @@
 // morph.qc
 
 $frame mfstand1
-//$frame mfup01 mfup02 mfup03 mfup04 mfup05 mfup06
-//$frame mfup07 mfup08 mfup09 mfup10 mfup11 mfup12
 
 $frame start01 start02 start03 start04 start05 start06
 $frame start07 start08 start09 start10 start11 start12
@@ -74,48 +72,31 @@ void() morph_stand1 = [$mfstand1, morph_stand1] { ai_stand (); };
 // ========================
 // movement
 // ========================
-// 3 2 1 1 0 1 2 3 4 5 4 2 1 0
-// 3 2 1 2 3 4 4 3 2 1 2 3 3
-// 2 4 4 4 3 3 2 2 4 4 3 2 1
-// 4 5 5 4 3 2 2 4 5 4 3 2 2
 void() morph_walk1 = [$mfwlk01, morph_walk2] { ai_walk (3); };
 void() morph_walk2 = [$mfwlk02, morph_walk3] { ai_walk (2); };
 void() morph_walk3 = [$mfwlk03, morph_walk4] { ai_walk (4); };
 void() morph_walk4 = [$mfwlk04, morph_walk5] { ai_walk (5); };
 void() morph_walk5 = [$mfwlk05, morph_walk6] { ai_walk (5); };
 void() morph_walk6 = [$mfwlk06, morph_walk7] { ai_walk (4); };
-// 1
 void() morph_walk7 = [$mfwlk07, morph_walk8] { ai_walk (2); };
-// 1
 void() morph_walk8 = [$mfwlk08, morph_walk9] { ai_walk (3); };
 void() morph_walk9 = [$mfwlk09, morph_walk10] { ai_walk (4); };
 void() morph_walk10 = [$mfwlk10, morph_walk11] { ai_walk (5); };
 void() morph_walk11 = [$mfwlk11, morph_walk12] { ai_walk (5); };
 void() morph_walk12 = [$mfwlk12, morph_walk13] { ai_walk (4); };
 void() morph_walk13 = [$mfwlk13, morph_walk1] { ai_walk (3); };
-// 1
 
-// 8 6 4 10 13 13 11 10
-// 11 15 10 10 8 15 10 8 8 8 8
-// 6 9 13 13 9 6 9 13 15 13 9
 void() morph_run1 = [$mfrun01, morph_run2] { ai_run (7); };
-// 33
 void() morph_run2 = [$mfrun02, morph_run3] { ai_run (11); };
 void() morph_run3 = [$mfrun03, morph_run4] { ai_run (16); };
 void() morph_run4 = [$mfrun04, morph_run5] { ai_run (16); };
-// 36
 void() morph_run5 = [$mfrun05, morph_run6] { ai_run (11); };
 void() morph_run6 = [$mfrun06, morph_run7] { ai_run (7); };
-// 38
 void() morph_run7 = [$mfrun07, morph_run8] { ai_run (11); };
 void() morph_run8 = [$mfrun08, morph_run9] { ai_run (15); };
-// 40
 void() morph_run9 = [$mfrun09, morph_run10] { ai_run (19); };
-
 void() morph_run10 = [$mfrun10, morph_run11] { ai_run (15); };
-
 void() morph_run11 = [$mfrun11, morph_run1] { ai_run (11); };
-// 43
 
 // ========================
 // new attack code
@@ -340,26 +321,26 @@ void(entity attacker, float damage) morph_pain =
 // ========================
 // die
 // ========================
-void() morph_die1 = [$mfdth01, morph_die2] {};  // 122
+void() morph_die1 = [$mfdth01, morph_die2] {};
 void() morph_die2 = [$mfdth02, morph_die3] {};
 void() morph_die3 = [$mfdth03, morph_die4] {};
 void() morph_die4 = [$mfdth04, morph_die5] {};
-void() morph_die5 = [$mfdth05, morph_die6] {};  // 126
+void() morph_die5 = [$mfdth05, morph_die6] {};
 void() morph_die6 = [$mfdth06, morph_die7] {};
 void() morph_die7 = [$mfdth07, morph_die8] {};
-void() morph_die8 = [$mfdth08, morph_die9] {};  // 129
+void() morph_die8 = [$mfdth08, morph_die9] {};
 void() morph_die9 = [$mfdth09, morph_die10] { self.skin = self.skin + 1; };
 void() morph_die10 = [$mfdth10, morph_die11] {};
 void() morph_die11 = [$mfdth11, morph_die12] {};
-void() morph_die12 = [$mfdth12, morph_die13] {};  // 132
+void() morph_die12 = [$mfdth12, morph_die13] {};
 void() morph_die13 = [$mfdth13, morph_die14] {};
 void() morph_die14 = [$mfdth14, morph_die15] {};
 void() morph_die15 = [$mfdth15, morph_die16] {};
-void() morph_die16 = [$mfdth16, morph_die17] {};  // 136
+void() morph_die16 = [$mfdth16, morph_die17] {};
 void() morph_die17 = [$mfdth17, morph_die18] {};
 void() morph_die18 = [$mfdth18, morph_die19] {};
 void() morph_die19 = [$mfdth19, morph_die20] {};
-void() morph_die20 = [$mfdth20, morph_die21] {};  // 140
+void() morph_die20 = [$mfdth20, morph_die21] {};
 void() morph_die21 = [$mfdth21, morph_die21] { remove (self); };
 
 void() morph_die =
@@ -378,9 +359,6 @@ void() morph_wake1 = [$start01, morph_wake2]
 	sound (self, CHAN_VOICE, "guard/see1.wav", 1, ATTN_NORM);
 	if (self.owner)
 	{
-		//		self.solid = SOLID_SLIDEBOX;
-		//		self.takedamage = DAMAGE_NO;
-
 		total_monsters = total_monsters + 1;
 
 		self.owner.childrenSpawned = self.owner.childrenSpawned + 1;
@@ -407,8 +385,6 @@ void() morph_wake15 = [$start15, morph_wake16] { self.skin = 1; };
 void() morph_wake16 = [$start16, morph_wake17] {};
 void() morph_wake17 = [$start17, morph_wake18] {};
 void() morph_wake18 = [$start18, morph_wake20] {};
-// void() morph_wake18 = [$start18, morph_wake19 ] {};
-// void() morph_wake19 = [$start19, morph_wake20 ] {};
 void() morph_wake20 = [$start20, morph_wake21] {};
 void() morph_wake21 = [$start21, morph_wake22] {};
 void() morph_wake22 = [$start22, morph_wake23] {};
@@ -468,7 +444,6 @@ void(entity theMorph) morph_setup =
 		theMorph.health = 2000;
 	}
 
-	//	theMorph.frame = $start01;
 	theMorph.skin = 2;
 };
 
@@ -554,8 +529,7 @@ void() monster_morph =
 		precache_model ("progs/morph_az.mdl");
 		self.model = "progs/morph_az.mdl";
 	}
-	else if (self.spawnflags & MORPH_EGYPT)
-	// Egyptian
+	else if (self.spawnflags & MORPH_EGYPT) // Egyptian
 	{
 		precache_model ("progs/morph_eg.mdl");
 		self.model = "progs/morph_eg.mdl";

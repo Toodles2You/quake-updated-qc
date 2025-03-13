@@ -18,7 +18,7 @@
 */
 
 // ending.qc
-//    code to handle big ending of Xpack.
+// code to handle big ending of Xpack.
 // ------------------------------------------------
 $frame axrun1 axrun2 axrun3 axrun4 axrun5 axrun6
 $frame rockrun1 rockrun2 rockrun3 rockrun4 rockrun5 rockrun6
@@ -220,8 +220,6 @@ void() actor_run =
 		self.frame = 6;
 
 	dist = self.goalentity.origin - self.origin;
-	//	self.ideal_yaw = vectoyaw ( dist );
-	//	ChangeYaw ();
 
 	movetogoal (15);
 	self.think = actor_run;
@@ -248,7 +246,6 @@ void() actor_fire1 = [$rockatt1, actor_fire2]
 
 	// start the end text
 	WriteByte (MSG_ALL, SVC_FINALE);
-
 	WriteString (MSG_ALL, "\nFinally, Quake's Temporal Teleporter\nyields to your assault. A high\npitched scream emits from the\ndevastated device as stressed steel\nblasts outward to rock the cavern.\nThe machine is devoured by molten lava.\n\nThe ground shudders as reality shifts\nback to its predestined path.\n\nYou run to enter the charged time pod,\nscrambling in as the chamber closes.\nYour consciousness fades as you realize\nyou have halted Quake's plans for...\n\nThe Dissolution of Eternity.");
 };
 void() actor_fire2 = [$rockatt2, actor_fire3]

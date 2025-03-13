@@ -187,7 +187,7 @@ void(entity attacker, float damage) tbaby_mitosis;
 
 void() tbaby_checknew =
 {
-	if (!walkmove (0,0))
+	if (!walkmove (0, 0))
 	{
 		remove (self);
 		return;
@@ -203,7 +203,7 @@ void() tbaby_checknew =
 	self.origin_z = self.origin_z + 1;      // raise off floor a bit
 	droptofloor (0, 0);
 
-	if (!walkmove (0,0))
+	if (!walkmove (0, 0))
 	{
 		self.owner.th_pain = tbaby_mitosis;
 		remove (self);
@@ -231,9 +231,9 @@ void() tbaby_checknew =
 
 void(entity attacker, float damage) tbaby_mitosis =
 {
-	local entity    newSpawn;
+	local entity newSpawn;
 	
-	if ( random () < 0.35 )
+	if (random () < 0.35)
 	{
 		newSpawn = spawn ();
 		newSpawn.classname = self.classname;
@@ -260,16 +260,16 @@ void(entity attacker, float damage) tbaby_mitosis =
 	}
 };
 
-/*QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) Ambush Blue Green Spots
-The Spawn (and hellspawn)
+/*QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) Ambush Blue Green
+Spots The Spawn (and hellspawn)
 
 The spawn type is random by default.
 If you want a specific type, select "Blue", "Green", or "Spots".
 */
 void() monster_tarbaby =
 {
-	local float     myRand;
-	local float     skillLevel;
+	local float myRand;
+	local float skillLevel;
 
 	if (deathmatch)
 	{
@@ -317,7 +317,7 @@ void() monster_tarbaby =
 	}
 	else
 	{
-		skillLevel = cvar ( "skill" );
+		skillLevel = cvar ("skill");
 		myRand = skillLevel * 0.2;
 		myRand = myRand + random ();
 	

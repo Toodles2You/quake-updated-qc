@@ -283,9 +283,7 @@ void() armor_touch =
 
 	other.armortype = type;
 	other.armorvalue = value;
-	other.items2 = other.items2 -
-				   (other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3)) +
-				   bit;
+	other.items2 = other.items2 - (other.items2 & IT2_ARMOR) + bit;
 
 	self.solid = SOLID_NOT;
 	self.model = string_null;
@@ -1308,28 +1306,24 @@ void() powerup_touch =
 	self.model = string_null;
 
 	// do the apropriate action
-	//	if (self.classname == "item_artifact_envirosuit")
 	if (self.netname == "Biosuit")
 	{
 		other.rad_time = 1;
 		other.radsuit_finished = time + 30;
 	}
 
-	//	if (self.classname == "item_artifact_invulnerability")
 	if (self.netname == "Pentagram of Protection")
 	{
 		other.invincible_time = 1;
 		other.invincible_finished = time + 30;
 	}
 
-	//	if (self.classname == "item_artifact_invisibility")
 	if (self.netname == "Ring of Shadows")
 	{
 		other.invisible_time = 1;
 		other.invisible_finished = time + 30;
 	}
 
-	//	if (self.classname == "item_artifact_super_damage")
 	if (self.netname == "Quad Damage")
 	{
 		other.super_time = 1;
@@ -1436,7 +1430,7 @@ void() BackpackTouch =
 		return;
 
 	// ZOID--
-	//  Don't let the owner pick up his own backpack for a second.
+	// Don't let the owner pick up his own backpack for a second.
 	if ((other == self.owner) && ((self.nextthink - time) > 119))
 		return;
 	//--ZOID
@@ -1466,8 +1460,7 @@ void() BackpackTouch =
 	other.ammo_cells1 = other.ammo_cells1 + self.ammo_cells1;
 
 	other.ammo_lava_nails = other.ammo_lava_nails + self.ammo_lava_nails;
-	other.ammo_multi_rockets =
-		other.ammo_multi_rockets + self.ammo_multi_rockets;
+	other.ammo_multi_rockets = other.ammo_multi_rockets + self.ammo_multi_rockets;
 	other.ammo_plasma = other.ammo_plasma + self.ammo_plasma;
 
 	new = self.items;
@@ -1560,7 +1553,6 @@ void() BackpackTouch =
 	else
 		Deathmatch_Weapon (old, new);
 
-	//	EnableComboWeapons ( self );
 	UpdateAmmoCounts (self);
 
 	W_SetCurrentAmmo ();

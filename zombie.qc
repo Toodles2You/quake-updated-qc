@@ -562,10 +562,6 @@ void() zombie_wake =
 	self.th_run = zombie_run1;
 	self.th_missile = zombie_missile;
 
-	//	paine12 will handle setting solid, just make the size box correct.
-	//	self.solid = SOLID_SLIDEBOX;
-	//	setsize (self, '-16 -16 -24', '16 16 40');
-
 	zombie_paine12 ();
 };
 

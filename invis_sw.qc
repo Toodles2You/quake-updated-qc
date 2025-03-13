@@ -26,32 +26,11 @@ SWORD
 */
 
 $frame stand1
-//$stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
+
 $frame runb1 runb2 runb3 runb4 runb5 runb6 runb7 runb8
-
-// frame runc1 runc2 runc3 runc4 runc5 runc6
-
-//$frame runattack1 runattack2 runattack3 runattack4 runattack5
-//$frame runattack6 runattack7 runattack8 runattack9 runattack10
-//$frame runattack11
-
-//$frame pain1 pain2 pain3
-
-//$frame painb1 painb2 painb3 painb4 painb5 painb6 painb7 painb8 painb9
-//$frame painb10 painb11
-
-// frame attack1 attack2 attack3 attack4 attack5 attack6 attack7
-// frame attack8 attack9 attack10 attack11
 
 $frame attackb1 attackb2 attackb3 attackb4 attackb5
 $frame attackb6 attackb7 attackb8 attackb9 attackb10
-
-//$frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9
-//$frame walk10 walk11 walk12 walk13 walk14
-
-//$frame kneel1 kneel2 kneel3 kneel4 kneel5
-
-//$frame standing2 standing3 standing4 standing5
 
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10
@@ -60,23 +39,6 @@ $frame deathb1 deathb2 deathb3 deathb4 deathb5 deathb6 deathb7 deathb8
 $frame deathb9 deathb10 deathb11
 
 void() sword_stand1 = [$stand1, sword_stand1] { ai_stand (); };
-
-/*
-void()	sword_walk1 =[$walk1, sword_walk2	] {ai_walk (4);};
-void()	sword_walk2	=[$walk2, sword_walk3	] {ai_walk (4);};
-void()	sword_walk3	=[$walk3, sword_walk4	] {ai_walk (4);};
-void()	sword_walk4	=[$walk4, sword_walk5	] {ai_walk (4);};
-void()	sword_walk5	=[$walk5, sword_walk6	] {ai_walk (4);};
-void()	sword_walk6	=[$walk6, sword_walk7	] {ai_walk (4);};
-void()	sword_walk7	=[$walk7, sword_walk8	] {ai_walk (4);};
-void()	sword_walk8	=[$walk8, sword_walk9	] {ai_walk (4);};
-void()	sword_walk9	=[$walk9, sword_walk10 ] {ai_walk (4);};
-void()	sword_walk10 =[$walk10, sword_walk11 ] {ai_walk (4);};
-void()	sword_walk11 =[$walk11, sword_walk12 ] {ai_walk (4);};
-void()	sword_walk12 =[$walk12, sword_walk13 ] {ai_walk (4);};
-void()	sword_walk13 =[$walk13, sword_walk14 ] {ai_walk (4);};
-void()	sword_walk14 =[$walk14, sword_walk1 ] {ai_walk (4);};
-*/
 
 void() sword_run1 = [$runb1, sword_run2]
 {
@@ -189,13 +151,12 @@ void() monster_sword =
 	setmodel (self, "progs/sword.mdl");
 
 	setsize (self, '-16 -16 -24', '16 16 40');
-	self.health = 150;  // 75;
+	self.health = 150;
 
 	if (!self.delay)
 		self.delay = 10;
 
 	self.th_stand = sword_stand1;
-	//	self.th_walk = sword_walk1;
 	self.th_walk = sword_stand1;
 	self.th_run = sword_pause;
 	self.th_melee = sword_atk1;

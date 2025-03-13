@@ -139,7 +139,6 @@ void() sphere_spawn =
 
 	missile = spawn ();
 	missile.movetype = MOVETYPE_FLYMISSILE;
-	//	missile.solid = SOLID_BBOX;
 	missile.solid = SOLID_NOT;
 	missile.classname = "Vengeance";
 	missile.owner = other;

@@ -197,7 +197,6 @@ void() overlord_teleport =
 	if (chance > 0.75)
 		return;
 
-	//    theDest = overlord_find_dest ();
 	theDest = overlord_find_dest3 ();
 	if (theDest == world)
 		return;
@@ -215,6 +214,7 @@ void() overlord_teleport =
 	setorigin (self, theDest.origin);
 	self.flags = self.flags - self.flags & FL_ONGROUND;
 };
+
 // =======================================================
 
 void() overlord_stand1 = [$s_wtwk01, overlord_stand1] { ai_stand (); };
@@ -595,8 +595,6 @@ void() monster_super_wrath =
 	self.health = 1000;
 	self.pain_finished = 0;
 
-	//    if (self.spawnflags & 2)
-	//       self.items2 = IT2_SHIELD;
 	self.th_stand = overlord_stand1;
 	self.th_walk = overlord_walk01;
 	self.th_run = overlord_run01;

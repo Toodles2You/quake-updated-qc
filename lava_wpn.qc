@@ -59,8 +59,6 @@ void() W_FireSuperLavaSpikes =
 	launch_lava_spike (self.origin + '0 0 16', dir);
 	newmis.touch = superlavaspike_touch;
 
-	//	setmodel (newmis, "progs/lspike.mdl");
-
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	self.punchangle_x = -2;
 };
@@ -124,8 +122,7 @@ void() lavaspike_touch =
 		{
 			old_armortype = other.armortype;
 			old_armorvalue = other.armorvalue;
-			old_armormask =
-				other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3);
+			old_armormask = other.items2 & IT2_ARMOR;
 			other.armortype = 0;
 			other.armorvalue = 0;
 			T_Damage (other, self, self.owner, 9);
@@ -195,8 +192,6 @@ void() superlavaspike_touch =
 			if (other.armortype != 0)
 			{
 				other.armortype = old_armortype;
-				//				other.armorvalue =
-				//old_armorvalue;
 			}
 		}
 		else  // is a monster, do 50% more damage

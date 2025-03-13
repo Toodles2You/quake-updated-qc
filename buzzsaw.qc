@@ -22,17 +22,17 @@
 $frame buzzsaw
 $frame bzzrot01 bzzrot02 bzzrot03 bzzrot04 bzzrot05 bzzrot06
 
-	void() buzzsaw_stand1 = [$buzzsaw, buzzsaw_stand1]
+void() buzzsaw_stand1 = [$buzzsaw, buzzsaw_stand1]
 {
-		if (self.pain_finished < time)
-		{
-			sound (self, CHAN_VOICE, "buzz/buzz1.wav", 0.2, ATTN_NORM);
-			self.pain_finished = time + 1;
-		}
+	if (self.pain_finished < time)
+	{
+		sound (self, CHAN_VOICE, "buzz/buzz1.wav", 0.2, ATTN_NORM);
+		self.pain_finished = time + 1;
+	}
 
-		self.angles_x = self.angles_x - 60;
-		self.avelocity_x = 60;
-	};
+	self.angles_x = self.angles_x - 60;
+	self.avelocity_x = 60;
+};
 
 void() buzzsaw_fly =
 {
@@ -51,15 +51,6 @@ void() buzzsaw_fly =
 	self.angles_x = self.angles_x - 60;
 	self.avelocity_x = 60;
 };
-
-/*
-void() buzzsaw_fly1 = [$bzzrot01, buzzsaw_fly2 ] { buzzsaw_fly (); };
-void() buzzsaw_fly2 = [$bzzrot02, buzzsaw_fly3 ] { buzzsaw_fly (); };
-void() buzzsaw_fly3 = [$bzzrot03, buzzsaw_fly4 ] { buzzsaw_fly (); };
-void() buzzsaw_fly4 = [$bzzrot04, buzzsaw_fly5 ] { buzzsaw_fly (); };
-void() buzzsaw_fly5 = [$bzzrot05, buzzsaw_fly6 ] { buzzsaw_fly (); };
-void() buzzsaw_fly6 = [$bzzrot06, buzzsaw_fly1 ] { buzzsaw_fly (); };
-*/
 
 void() buzzsaw_fly1 = [$bzzrot01, buzzsaw_fly1] { buzzsaw_fly (); };
 

@@ -117,7 +117,6 @@ void() dragon_check_attack =
 		makevectors (self.angles);
 		vec = normalize (self.enemy.origin - self.origin);
 		dot = vec * v_forward;
-		//        if ( dot > 0.55 )
 		if (dot > 0.3)
 		{
 			traceline (self.origin, self.enemy.origin, TRUE, world);
@@ -136,8 +135,6 @@ void() dragon_check_attack =
 					self.think = self.th_missile;
 				}
 			}
-			//			else
-			//				bprint ("can't see player!\n");
 		}
 	}
 };
@@ -158,7 +155,7 @@ void(float dist) dragon_move =
 		return;
 	}
 
-	if (self.dragonAttacking == FALSE)  // && self.dragonInTransit == FALSE)
+	if (self.dragonAttacking == FALSE)
 		dragon_check_attack ();
 
 	oldEnemy = self.enemy;
@@ -238,7 +235,6 @@ void(float dist) dragon_move =
 
 	if (moveAngles == self.origin)
 	{
-		//        bprint ( "Cannot move smoothly. movetogoal..\n");
 		movetogoal (dist);
 	}
 	self.enemy = oldEnemy;
@@ -247,10 +243,7 @@ void(float dist) dragon_move =
 // ===================================
 // movement
 // ===================================
-void() dragon_stand1 = [$drgfly01, dragon_walk1]
-{
-	//		bprint ( "dragon_stand1: ERROR - got to stand frame!\n");
-};
+void() dragon_stand1 = [$drgfly01, dragon_walk1] {};
 
 // attack A: start - walk1  stop - walk 5
 // ================
@@ -438,11 +431,10 @@ void() FireballTouch =
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteByte (MSG_BROADCAST, 228);  // 247
+	WriteByte (MSG_BROADCAST, 228);
 	WriteByte (MSG_BROADCAST, 5);
 
 	remove (self);
-	//	BecomeExplosion ();
 };
 
 void(vector org, vector dir) launch_fireball =
@@ -655,7 +647,6 @@ void() dragon_boom2 =
 void() dragon_boom1 =
 {
 	if (self.dragonDeathState > DDIE_STOPPED)
-		//		objerror ( "dragon_boom1");
 		return;
 
 	self.dragonDeathState = DDIE_EXPLODED;
@@ -670,7 +661,6 @@ void() dragon_boom1 =
 void() dragon_explode =
 {
 	if (self.dragonDeathState > DDIE_FALLING)
-		//		objerror ( "dragon_explode");
 		return;
 
 	if (vlen (self.velocity) < 100 || self.flags & FL_INWATER)
@@ -703,7 +693,6 @@ void() dragon_squish =
 void() dragon_death1 = [$drgdth01, dragon_death2]
 {
 	if (self.dragonDeathState > 0)
-		//		objerror ( "dragon_death1");
 		return;
 
 	self.dragonDeathState = DDIE_FALLING;

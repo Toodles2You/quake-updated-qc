@@ -32,11 +32,11 @@
 .float ctf_lastreturnedflag;    // when we returned the flag
 .float ctf_lastfraggedcarrier;  // when we last fragged the carrier
 
-float TEAM1 = 5;  // color of team1 (red), note that this is self.team which
-				  // is one more than the color setting, so 'color 4' is red.
+float TEAM1 = 5;   // color of team1 (red), note that this is self.team which
+				   // is one more than the color setting, so 'color 4' is red.
 float TEAM2 = 14;  // color of team2 (blue), note that this is self.team which
 				   // is one more than the color setting, so 'color 13' is blue.
-float TEAM3 = 1;  // color of team3 (grey) in alt CTF
+float TEAM3 = 1;   // color of team3 (grey) in alt CTF
 
 entity team1_lastspawn;  // last spawn spot for team1
 entity team2_lastspawn;  // last spawn spot for team2
@@ -53,47 +53,36 @@ float TEAM_CTF_ALT = 6;          // alternate CTF (three teams)
 
 // gamecfg cvar fields
 
-float GAMECFG_ENABLE_RUNES = 1;  // enable runes (default is disabled)
-float GAMECFG_TEAM_ARMOR_DMG =
-	2;  // 2 team damage affects armor (default is not)
-float GAMECFG_TEAM_HEALTH_DMG =
-	4;                        // 4 team damage affects health (default is not)
-float GAMECFG_USE_COLOR = 8;  // use color player joins as (if you join and
-							  // start with blue, you will go
-//    to blue team, same with red/green.  If you are an illegal color, you'll
-//    get assigned).
-float GAMECFG_ALLOW_CHG = 16;  // allow people to change teams
+float GAMECFG_ENABLE_RUNES = 1;    // enable runes (default is disabled)
 
-float CTF_CAPTURE_BONUS = 15;     // what you get for capture
-float CTF_TEAM_BONUS = 10;        // what your team gets for capture
-float CTF_ALT_CAPTURE_BONUS = 8;  // what you get for capture
-float CTF_ALT_TEAM_BONUS = 4;     // what your team gets for capture
-float CTF_RECOVERY_BONUS = 1;     // what you get for recovery
-float CTF_FLAG_BONUS = 0;         // what you get for picking up enemy flag
-float CTF_FRAG_CARRIER_BONUS =
-	2;  // what you get for fragging enemy flag carrier
-float CTF_FLAG_RETURN_TIME = 40;  // seconds until auto return
-float CTF_CARRIER_DANGER_PROTECT_BONUS =
-	2;  // bonus for fraggin someone
-		// who has recently hurt your flag carrier
-float CTF_CARRIER_PROTECT_BONUS =
-	1;  // bonus for fraggin someone while
-		// either you or your target are near your flag carrier
-float CTF_FLAG_DEFENSE_BONUS =
-	1;  // bonus for fraggin someone while
-		// either you or your target are near your flag
-float CTF_RETURN_FLAG_ASSIST_BONUS =
-	1;  // awarded for returning a flag that causes a
-		// capture to happen almost immediately
-float CTF_FRAG_CARRIER_ASSIST_BONUS =
-	2;  // award for fragging a flag carrier if a
-		// capture happens almost immediately
-float CTF_TARGET_PROTECT_RADIUS =
-	400;  // the radius around an object being
-		  // defended where a target will be worth extra frags
-float CTF_ATTACKER_PROTECT_RADIUS =
-	400;  // the radius around an object being
-		  // defended where an attacker will get extra frags when making kills
+float GAMECFG_TEAM_ARMOR_DMG = 2;  // 2 team damage affects armor
+                                   // (default is not)
+
+float GAMECFG_TEAM_HEALTH_DMG = 4; // 4 team damage affects health
+                                   // (default is not)
+
+float GAMECFG_USE_COLOR = 8;       // use color player joins as (if you join and
+                                   // start with blue, you will go to blue team,
+							       // same with red/green.  If you are an
+								   // illegal color, you'll get assigned).
+
+float GAMECFG_ALLOW_CHG = 16;      // allow people to change teams
+
+float CTF_CAPTURE_BONUS = 15;                // what you get for capture
+float CTF_TEAM_BONUS = 10;                   // what your team gets for capture
+float CTF_ALT_CAPTURE_BONUS = 8;             // what you get for capture
+float CTF_ALT_TEAM_BONUS = 4;                // what your team gets for capture
+float CTF_RECOVERY_BONUS = 1;                // what you get for recovery
+float CTF_FLAG_BONUS = 0;                    // what you get for picking up enemy flag
+float CTF_FRAG_CARRIER_BONUS = 2;            // what you get for fragging enemy flag carrier
+float CTF_FLAG_RETURN_TIME = 40;             // seconds until auto return
+float CTF_CARRIER_DANGER_PROTECT_BONUS = 2;  // bonus for fraggin someone who has recently hurt your flag carrier
+float CTF_CARRIER_PROTECT_BONUS = 1;         // bonus for fraggin someone while either you or your target are near your flag carrier
+float CTF_FLAG_DEFENSE_BONUS = 1;            // bonus for fraggin someone while either you or your target are near your flag
+float CTF_RETURN_FLAG_ASSIST_BONUS = 1;      // awarded for returning a flag that causes a capture to happen almost immediately
+float CTF_FRAG_CARRIER_ASSIST_BONUS = 2;     // award for fragging a flag carrier if a capture happens almost immediately
+float CTF_TARGET_PROTECT_RADIUS = 400;       // the radius around an object being defended where a target will be worth extra frags
+float CTF_ATTACKER_PROTECT_RADIUS = 400;     // the radius around an object being defended where an attacker will get extra frags when making kills
 float CTF_CARRIER_DANGER_PROTECT_TIMEOUT = 4;
 float CTF_CARRIER_FLAG_SINCE_TIMEOUT = 2;
 float CTF_FRAG_CARRIER_ASSIST_TIMEOUT = 6;
@@ -172,18 +161,16 @@ Return TRUE if the target's armor can take damage from this attacker.
 ================
 */
 
-float(entity targ, entity inflictor, entity attacker, float damage)
-	TeamArmorDam =
+float(entity targ, entity inflictor, entity attacker, float damage) TeamArmorDam =
 {
 	if (teamplay <= 0)
 		return TRUE;  // PGM bug? fix
 
 	// teamplay modes 4,5,6 protect armor
 	if ((teamplay == TEAM_CTF || teamplay == TEAM_CTF_ONEFLAG ||
-		 teamplay == TEAM_CTF_ALT) &&
-		attacker.steam == targ.steam && attacker != targ &&
-		!(cvar ("gamecfg") & GAMECFG_TEAM_ARMOR_DMG))
-		{
+		teamplay == TEAM_CTF_ALT) && attacker.steam == targ.steam &&
+		attacker != targ && !(cvar ("gamecfg") & GAMECFG_TEAM_ARMOR_DMG))
+	{
 		// Armor is protected
 		return FALSE;
 	}
@@ -198,8 +185,7 @@ Return TRUE if the target can take health damage from this attacker.
 ================
 */
 
-float(entity targ, entity inflictor, entity attacker, float damage)
-	TeamHealthDam =
+float(entity targ, entity inflictor, entity attacker, float damage) TeamHealthDam =
 {
 	if (teamplay <= 0)
 		return TRUE;
@@ -209,10 +195,9 @@ float(entity targ, entity inflictor, entity attacker, float damage)
 
 	// teamplay modes 4,5,6 protect health
 	if ((teamplay == TEAM_CTF || teamplay == TEAM_CTF_ONEFLAG ||
-		 teamplay == TEAM_CTF_ALT) &&
-		attacker.steam == targ.steam && attacker != targ &&
-		!(cvar ("gamecfg") & GAMECFG_TEAM_HEALTH_DMG))
-		{
+		teamplay == TEAM_CTF_ALT) && attacker.steam == targ.steam &&
+		attacker != targ && !(cvar ("gamecfg") & GAMECFG_TEAM_HEALTH_DMG))
+	{
 		// Health is protected
 		return FALSE;
 	}
@@ -291,10 +276,9 @@ void(entity targ, entity attacker) TeamAssists =
 	// get a string for the attacker's team now, for later announcements
 	s = GetCTFTeam (attacker.steam);
 
-	if ((targ.ctf_lasthurtcarrier + CTF_CARRIER_DANGER_PROTECT_TIMEOUT >
-		 time) &&
+	if ((targ.ctf_lasthurtcarrier + CTF_CARRIER_DANGER_PROTECT_TIMEOUT > time) &&
 		!(attacker.ctf_flags & (CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2)))
-		{
+	{
 		// a player on the same team as the flag carrier killed
 		// someone who recently shot the flag carrier
 		attacker.frags = attacker.frags + CTF_CARRIER_DANGER_PROTECT_BONUS;
@@ -326,9 +310,8 @@ void(entity targ, entity attacker) TeamAssists =
 		{
 			if ((head.steam == attacker.steam) &&
 				(head.ctf_flags & (CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2)) &&
-				(head != attacker) &&  // self defense
-				(!flag_carrier_radius))
-				{
+				(head != attacker) && (!flag_carrier_radius))  // self defense
+			{
 				// attacker was near his own flag carrier
 				attacker.frags = attacker.frags + CTF_CARRIER_PROTECT_BONUS;
 				flag_carrier_radius = 1;
@@ -341,7 +324,7 @@ void(entity targ, entity attacker) TeamAssists =
 		if ((attacker.steam == TEAM1 && head.classname == "item_flag_team1") ||
 			(attacker.steam == TEAM2 && head.classname == "item_flag_team2") ||
 			head.classname == "item_flag")
-			{  // one flag mode
+		{  // one flag mode
 			// attacker was near his own flag
 			attacker.frags = attacker.frags + CTF_FLAG_DEFENSE_BONUS;
 			flag_radius = 1;
@@ -365,9 +348,8 @@ void(entity targ, entity attacker) TeamAssists =
 		{
 			if ((head.steam == attacker.steam) &&
 				(head.ctf_flags & (CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2)) &&
-				(head != attacker) &&
-				(!flag_carrier_radius))
-				{  // prevents redundant points awarded
+				(head != attacker) && (!flag_carrier_radius))
+			{  // prevents redundant points awarded
 				// target was near attacker's flag carrier
 				attacker.frags = attacker.frags + CTF_CARRIER_PROTECT_BONUS;
 				flag_carrier_radius = 1;
@@ -379,9 +361,8 @@ void(entity targ, entity attacker) TeamAssists =
 		}
 		if ((attacker.steam == TEAM1 && head.classname == "item_flag_team1") ||
 			(attacker.steam == TEAM2 && head.classname == "item_flag_team2") ||
-			head.classname == "item_flag" &&  // one flag mode
-				(!flag_radius))
-				{  // prevents redundant points awarded
+			head.classname == "item_flag" && (!flag_radius))  // one flag mode
+		{  // prevents redundant points awarded
 			// target was near attacker's flag
 			attacker.frags = attacker.frags + CTF_FLAG_DEFENSE_BONUS;
 			flag_radius = 1;
@@ -444,29 +425,6 @@ void() TeamSetSkin =
 		if (teamplay >= TEAM_CTF)
 			self.skin = 1;
 	}
-	/*
-			if ( deathmatch )
-			{
-					if ( teamplay >= TEAM_CTF )
-					{
-	//			if (self.team == TEAM3)
-	//				self.skin = 2;
-	//			else
-									self.skin = 1;
-					}
-					if ( teamplay < TEAM_CTF )
-							self.skin = 1;
-					else
-					{
-							if (self.team == TEAM1)
-									self.skin = 2;
-							else if (self.team == TEAM2)
-									self.skin = 3;
-							else if (self.team == TEAM3)
-									self.skin = 4;
-					}
-			}
-	*/
 };
 
 /*
@@ -593,9 +551,7 @@ void() TeamCheckLock =
 					// times, kick him off the server.
 					if (self.suicide_count > 3)
 					{
-						sprint (self,
-							   "You were told you can't change teams.\nGo play "
-							   "color games somewhere else.\n");
+						sprint (self, "You were told you can't change teams.\nGo play color games somewhere else.\n");
 						stuffcmd (self, "disconnect\n");
 						bprint (self.netname);
 						bprint (" has bad color sense\n");
@@ -631,7 +587,7 @@ void() TeamCheckLock =
 				self.ctf_killed = 2;
 			T_Damage (self, self, self, 1000);  // Kill the player
 		}
-		self.frags = 0;   // Zero out frags
+		self.frags = 0;  // Zero out frags
 		TeamCheckTeam ();  // re-assignment
 	}
 };
@@ -701,7 +657,7 @@ void() TossBackpack =
 	// See if we are using the lava nailguns
 	if ((self.weapon == IT_LAVA_NAILGUN) ||
 		(self.weapon == IT_LAVA_SUPER_NAILGUN))
-		{
+	{
 		if (self.ammo_lava_nails >= 20)
 		{
 			item.ammo_lava_nails = 20;
@@ -743,7 +699,7 @@ void() TossBackpack =
 	// See if we are using a grenade or rocket launcher
 	if ((self.weapon == IT_GRENADE_LAUNCHER) ||
 		(self.weapon == IT_ROCKET_LAUNCHER))
-		{
+	{
 		if (self.ammo_rockets1 >= 10)
 		{
 			item.ammo_rockets1 = 10;
@@ -774,7 +730,7 @@ void() TossBackpack =
 	// See if we have neither the Grenade or rocket launcher
 	if (!(self.items & IT_GRENADE_LAUNCHER) &&
 		!(self.items & IT_ROCKET_LAUNCHER))
-		{
+	{
 		if (self.ammo_rockets1 >= 10)
 		{
 			item.ammo_rockets1 = 10;
@@ -852,11 +808,10 @@ void() TossBackpack =
 		}
 	}
 
-	if (item.ammo_shells1 + item.ammo_nails1 + item.ammo_lava_nails +
-			item.ammo_rockets1 + item.ammo_multi_rockets + item.ammo_cells1 +
-			item.ammo_plasma ==
-		0)
-		{
+	if (!item.ammo_shells1 && !item.ammo_nails1 && !item.ammo_lava_nails &&
+		!item.ammo_rockets1 && !item.ammo_multi_rockets && !item.ammo_cells1 &&
+		!item.ammo_plasma)
+	{
 		sprint (self, "No ammo available!\n");
 		remove (item);
 		return;
@@ -996,8 +951,8 @@ void() TossWeapon =
 		item.weapon = IT_SUPER_NAILGUN;
 		item.netname = "Super Nailgun";
 		item.classname = "weapon_supernailgun";
-		self.items = self.items -
-					 (self.items & (IT_SUPER_NAILGUN | IT_LAVA_SUPER_NAILGUN));
+		self.items = self.items
+				   - (self.items & (IT_SUPER_NAILGUN | IT_LAVA_SUPER_NAILGUN));
 	}
 
 	if (self.weapon == IT_GRENADE_LAUNCHER || self.weapon == IT_MULTI_GRENADE)
@@ -1006,8 +961,8 @@ void() TossWeapon =
 		item.weapon = IT_GRENADE_LAUNCHER;
 		item.netname = "Grenade Launcher";
 		item.classname = "weapon_grenadelauncher";
-		self.items = self.items -
-					 (self.items & (IT_GRENADE_LAUNCHER | IT_MULTI_GRENADE));
+		self.items = self.items
+				   - (self.items & (IT_GRENADE_LAUNCHER | IT_MULTI_GRENADE));
 	}
 
 	if (self.weapon == IT_ROCKET_LAUNCHER || self.weapon == IT_MULTI_ROCKET)
@@ -1016,8 +971,8 @@ void() TossWeapon =
 		item.weapon = IT_ROCKET_LAUNCHER;
 		item.netname = "Rocket Launcher";
 		item.classname = "weapon_rocketlauncher";
-		self.items =
-			self.items - (self.items & (IT_ROCKET_LAUNCHER | IT_MULTI_ROCKET));
+		self.items = self.items
+				   - (self.items & (IT_ROCKET_LAUNCHER | IT_MULTI_ROCKET));
 	}
 
 	if (self.weapon == IT_LIGHTNING || self.weapon == IT_PLASMA_GUN)
@@ -1041,8 +996,8 @@ void(entity flg) RegenFlag =
 {
 	flg.movetype = MOVETYPE_TOSS;
 	flg.solid = SOLID_TRIGGER;
-	sound (flg, CHAN_VOICE, "items/itembk2.wav", 1,
-		  ATTN_NORM);  // play respawn sound
+	// play respawn sound
+	sound (flg, CHAN_VOICE, "items/itembk2.wav", 1, ATTN_NORM);
 	setorigin (flg, flg.oldorigin);
 	flg.angles = flg.mangle;
 	flg.cnt = FLAG_AT_BASE;  // it's at home base
@@ -1146,9 +1101,8 @@ void(entity player) TeamDropFlagOfPlayer =
 		kn = "item_flag_team2";
 	else
 		return;  // doesn't have a flg
-	player.ctf_flags =
-		player.ctf_flags -
-		(player.ctf_flags & (CTF_FLAG_FLAG | CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2));
+	player.ctf_flags = player.ctf_flags - (player.ctf_flags
+					 & (CTF_FLAG_FLAG | CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2));
 	e = find (world, classname, kn);
 	if (e != world)
 		TeamDropFlag (e);
@@ -1183,7 +1137,6 @@ void() TeamFlagTouch =
 		bprint (" ��� the flag!\n");
 		if (CTF_FLAG_BONUS)
 			other.frags = other.frags + CTF_FLAG_BONUS;
-		// centerprint (other, "YOU GOT THE FLAG\n\nTAKE IT TO ENEMY BASE\n");
 		centerprint (other, "��� ��� ��� ����\n\n���� �� �� ����� ����\n");
 
 		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
@@ -1222,7 +1175,7 @@ void() TeamFlagTouch =
 			// flag, he's just won!
 			if ((self.team == TEAM1 && (other.ctf_flags & CTF_FLAG_TEAM2)) ||
 				(self.team == TEAM2 && (other.ctf_flags & CTF_FLAG_TEAM1)))
-				{
+			{
 				bprint (other.netname);
 				if (other.team == TEAM1)
 					bprint (" �������� the ���� flag!\n");  // blue
@@ -1262,10 +1215,8 @@ void() TeamFlagTouch =
 						// done to all players on the capturing team
 						centerprint (self, "Your team captured the flag!\n");
 						// award extra points for capture assists
-						if (self.ctf_lastreturnedflag +
-								CTF_RETURN_FLAG_ASSIST_TIMEOUT >
-							time)
-							{
+						if (self.ctf_lastreturnedflag + CTF_RETURN_FLAG_ASSIST_TIMEOUT > time)
+						{
 							bprint (self.netname);
 							if (self.team == TEAM1)
 								bprint (
@@ -1275,24 +1226,19 @@ void() TeamFlagTouch =
 								bprint (
 									" gets an assist for returning the ���� "
 									"flag!\n");
-							self.frags =
-								self.frags + CTF_RETURN_FLAG_ASSIST_BONUS;
+							self.frags = self.frags + CTF_RETURN_FLAG_ASSIST_BONUS;
 						}
-						if (self.ctf_lastfraggedcarrier +
-								CTF_FRAG_CARRIER_ASSIST_TIMEOUT >
-							time)
-							{
+						if (self.ctf_lastfraggedcarrier + CTF_FRAG_CARRIER_ASSIST_TIMEOUT > time)
+						{
 							bprint (self.netname);
 							bprint (
 								" gets an assist for fragging the flag "
 								"carrier!\n");
-							self.frags =
-								self.frags + CTF_FRAG_CARRIER_ASSIST_BONUS;
+							self.frags = self.frags + CTF_FRAG_CARRIER_ASSIST_BONUS;
 						}
 					}
-					self.ctf_flags =
-						self.ctf_flags -
-						(self.ctf_flags & (CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2));
+					self.ctf_flags = self.ctf_flags - (self.ctf_flags
+								   & (CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2));
 					p = find (p, classname, "player");
 				}
 				// respawn flags
@@ -1329,15 +1275,10 @@ void() TeamFlagTouch =
 	// if in three team, messages are a little different
 	if (other.team == TEAM3)
 	{
-		//		centerprint (other, "YOU GOT THE ENEMY FLAG\n\nRETURN IT
-		//TO THE OTHER BASE!\n");
-		centerprint (other,
-					"��� ��� ��� ����� ����\n\n������ �� �� ��� ����� ����\n");
+		centerprint (other, "��� ��� ��� ����� ����\n\n������ �� �� ��� ����� ����\n");
 	}
 	else
 	{
-		//		centerprint (other, "YOU GOT THE ENEMY FLAG!\n\nRETURN TO
-		//BASE!\n");
 		centerprint (other, "��� ��� ��� ����� ����\n\n������ �� ����\n");
 	}
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
@@ -1410,9 +1351,9 @@ void() TeamFlagBaseTouch =
 		// ok, if they guy touching it has the flag and this is his
 		// base, capture!
 		if (((self.team == TEAM1 && other.steam == TEAM2) ||
-			 (self.team == TEAM2 && other.steam == TEAM1)) &&
+			(self.team == TEAM2 && other.steam == TEAM1)) &&
 			(other.ctf_flags & CTF_FLAG_FLAG))
-			{
+		{
 			// he just touched enemy base, capture it
 			bprint (other.netname);
 			bprint (" �������� the flag!\n");  // blue
@@ -1436,13 +1377,10 @@ void() TeamFlagBaseTouch =
 				else if (self.team == other.team)
 				{
 					// award extra points for capture assists
-					if (self.ctf_lastfraggedcarrier +
-							CTF_FRAG_CARRIER_ASSIST_TIMEOUT >
-						time)
-						{
+					if (self.ctf_lastfraggedcarrier + CTF_FRAG_CARRIER_ASSIST_TIMEOUT > time)
+					{
 						bprint (self.netname);
-						bprint (
-							" gets an assist for fragging the flag carrier!\n");
+						bprint (" gets an assist for fragging the flag carrier!\n");
 						self.frags = self.frags + CTF_FRAG_CARRIER_ASSIST_BONUS;
 					}
 				}
@@ -1462,7 +1400,7 @@ void() TeamFlagBaseTouch =
 
 	if (((other.ctf_flags & CTF_FLAG_TEAM1) && (self.team == TEAM2)) ||
 		((other.ctf_flags & CTF_FLAG_TEAM2) && (self.team == TEAM1)))
-		{
+	{
 		// third team captured
 
 		bprint (other.netname);
@@ -1516,8 +1454,8 @@ void() TeamFlagBaseTouch =
 			if (f != world)
 				RegenFlag (f);
 		}
-		other.ctf_flags = other.ctf_flags -
-						  (other.ctf_flags & (CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2));
+		other.ctf_flags = other.ctf_flags - (other.ctf_flags
+						& (CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2));
 		return;
 	}
 };
@@ -1558,7 +1496,7 @@ void() TeamFlagThink =
 	// must be TEAM_CTF or TEAM_CTF_ALT
 	if ((!(e.ctf_flags & CTF_FLAG_TEAM1) && self.team == TEAM1) ||
 		(!(e.ctf_flags & CTF_FLAG_TEAM2) && self.team == TEAM2))
-		{
+	{
 		TeamDropFlag (self);
 		return;
 	}
@@ -1628,7 +1566,7 @@ void() TeamFlagStatusReport =
 
 	if (teamplay != TEAM_CTF && teamplay != TEAM_CTF_ONEFLAG &&
 		teamplay != TEAM_CTF_ALT)
-		{
+	{
 		sprint (self, "Capture the Flag is not enabled.\n");
 		return;
 	}
@@ -1826,7 +1764,6 @@ void(entity flg, string cname) place_flagbase =
 	setmodel (self, "progs/ctfbase.mdl");
 	self.skin = flg.skin;
 	self.team = flg.team;
-	//	setsize (self, '-8 -8 -4', '8 8 4');
 	setsize (self, '-8 -8 0', '8 8 8');
 	self.flags = FL_ITEM;  // make extra wide
 	self.movetype = MOVETYPE_TOSS;
@@ -1973,8 +1910,6 @@ void() item_flag =
 	}
 	self.team = 0;  // no team
 	self.items = IT_KEY1 | IT_KEY2;
-	//	precache_model ("progs/flag.mdl");
-	//	setmodel (self, "progs/flag.mdl");
 	precache_model ("progs/ctfmodel.mdl");  // PGM 01/18/97
 	setmodel (self, "progs/ctfmodel.mdl");  // PGM 01/18/97
 	self.skin = 2;
@@ -2025,7 +1960,7 @@ void() TeamCheckUpdate =
 
 	if (teamplay == TEAM_CTF || teamplay == TEAM_CTF_ALT ||
 		teamplay == TEAM_CTF_ONEFLAG)
-		{
+	{
 		p = find (world, classname, "player");
 		while (p != world)
 		{
@@ -2157,7 +2092,7 @@ void() func_ctf_wall =
 	teamplay = cvar ("teamplay");
 	if (teamplay == TEAM_CTF || teamplay == TEAM_CTF_ONEFLAG ||
 		teamplay == TEAM_CTF_ALT)
-		{
+	{
 		self.angles = '0 0 0';
 		self.movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
 		self.solid = SOLID_BSP;

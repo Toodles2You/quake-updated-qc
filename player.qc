@@ -206,12 +206,9 @@ void() player_grapple1 = [$axattd1, player_grapple2]
 	self.weaponframe = 1;
 	W_FireGrapple ();
 };
-//	{ self.weaponframe=2; W_FireGrapple (); };
 void() player_grapple2 = [$axattd2, player_grapple3] { self.weaponframe = 2; };
-//	{ self.weaponframe=3; };
 void() player_grapple3 = [$axattd3, player_grapple3]
 {
-	//		self.weaponframe=3;
 	self.weaponframe = 2;
 	if (!self.hook_out)
 	{
@@ -229,7 +226,6 @@ void() player_grapple3 = [$axattd3, player_grapple3]
 };
 void() player_grapple4 = [$deathc4, player_grapple4]
 {
-	//		self.weaponframe=4;
 	self.weaponframe = 2;
 	if (!self.hook_out)
 	{
@@ -242,9 +238,7 @@ void() player_grapple4 = [$deathc4, player_grapple4]
 		return;
 	}
 };
-void() player_grapple5 = [$axattd4, player_run]
-//	{self.weaponframe=5;};
-{ self.weaponframe = 1; };
+void() player_grapple5 = [$axattd4, player_run] { self.weaponframe = 1; };
 //--ZOID
 //============================================================================
 
@@ -861,8 +855,6 @@ void() player_touch =
 
 			if (doDamage)
 				T_Damage (other, self.shield_entity, self.shield_entity, 15);
-
-			//			self.shield_death_time = time + 0.5;
 		}
 	}
 };

@@ -73,9 +73,7 @@ void() SetChangeParms =
 
 	// remove items
 	parm1 = self.items - (self.items & (IT_KEYS | IT_ARTS));
-
-	self.items2 = self.items2 -
-				  (self.items2 & (IT2_ANTIGRAV | IT2_SHIELD | IT2_SUPERHEALTH));
+	parm10 = self.items2 - (self.items2 & (IT2_ARTS | IT2_SUPERHEALTH));
 	self.gravity = 1.0;
 
 	// cap super health
@@ -298,7 +296,6 @@ void() ExitIntermission =
 		else if (world.model == "maps/r1m7.bsp")
 		{
 			WriteByte (MSG_ALL, SVC_FINALE);
-//-------------------------------------   end here
 			WriteString (MSG_ALL, "Victory! The Overlord's mangled\nremains are the evidence.  His evil\nWrath army?  Cast out to wander\naimlessly throughout time.\n\nAs the Slipgate fog surrounds you,\nthoughts rage into your consciousness:\nHas Quake's oppressive reign ended?\nIs it Salvation, or Damnation, which\nwaits beyond the Vortex?\n\nAnother thought, not quite your own,\nrazors through the haze.  \"Forgiveness\ncan yet be granted; Our Master remains\nto absolve your sins against his Chosen.\nFall down upon your knees-pray for\nQuake's mercy.\"");
 			return;
 		}
@@ -768,32 +765,6 @@ void() NextLevel =
 
 	if (mapname == "start")
 	{
-		/*
-		if (!cvar ("registered"))
-		{
-			mapname = "e1m1";
-		}
-		else if (!(serverflags & 1))
-		{
-			mapname = "e1m1";
-			serverflags = serverflags | 1;
-		}
-		else if (!(serverflags & 2))
-		{
-			mapname = "e2m1";
-			serverflags = serverflags | 2;
-		}
-		else if (!(serverflags & 4))
-		{
-			mapname = "e3m1";
-			serverflags = serverflags | 4;
-		}
-		else if (!(serverflags & 8))
-		{
-			mapname = "e4m1";
-			serverflags = serverflags - 7;
-		}
-		*/
 		// PGM 03/02/97 - make it always go to rogue level1 when in our progs
 		mapname = "r1m1";
 
@@ -855,7 +826,7 @@ void() CheckRules =
 	}
 
 	// ZOID--
-	//  update team scores?
+	// update team scores?
 	TeamCheckUpdate ();
 	//--ZOID
 };
@@ -1071,7 +1042,7 @@ void() PlayerPreThink =
 	if (intermission_running)
 	{
 		IntermissionThink ();  // otherwise a button could be missed between
-		return;               // the think tics
+		return;                // the think tics
 	}
 
 	if (self.view_ofs == '0 0 0')
@@ -1081,23 +1052,23 @@ void() PlayerPreThink =
 	{
 		if (self.flags & FL_ONGROUND)
 		{
-			self.velocity_x = self.velocity_x +
-							  (random () * earthquake_intensity * 2) -
-							  earthquake_intensity;
-			self.velocity_y = self.velocity_y +
-							  (random () * earthquake_intensity * 2) -
-							  earthquake_intensity;
-			self.velocity_z = self.velocity_z +
-							  (random () * earthquake_intensity * 2) -
-							  earthquake_intensity;
+			self.velocity_x = self.velocity_x
+							+ (random () * earthquake_intensity * 2)
+							- earthquake_intensity;
+			self.velocity_y = self.velocity_y
+							+ (random () * earthquake_intensity * 2)
+							- earthquake_intensity;
+			self.velocity_z = self.velocity_z
+							+ (random () * earthquake_intensity * 2)
+							- earthquake_intensity;
 		}
 	}
 
 	makevectors (self.v_angle);  // is this still used
 
 	// ZOID--
-	//  TeamCheckLock performs all necessary teamlock checking, and performs all
-	//  actions needed.
+	// TeamCheckLock performs all necessary teamlock checking, and performs all
+	// actions needed.
 	TeamCheckLock ();
 	//--ZOID
 

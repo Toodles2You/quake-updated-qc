@@ -227,14 +227,12 @@ SOURCE FOR ENTVARS_T C STRUCTURE
 void end_sys_fields;  // flag for structure dumping
 //================================================
 
-.float		items2;
-//.float		new_weapon;
-//.float		new_items;
-.float		ammo_shells1, ammo_nails1, ammo_rockets1, ammo_cells1;
-.float		ammo_lava_nails;
-.float		ammo_multi_rockets;
-.float		ammo_plasma;
-.float		gravity;
+.float items2;
+.float ammo_shells1, ammo_nails1, ammo_rockets1, ammo_cells1;
+.float ammo_lava_nails;
+.float ammo_multi_rockets;
+.float ammo_plasma;
+.float gravity;
 
 /*
 ==============================================================================
@@ -306,25 +304,25 @@ float DAMAGE_YES = 1;
 float DAMAGE_AIM = 2;
 
 // items
-float IT_AXE = 2048;		// 1
+float IT_AXE = 2048;
 float IT_SHOTGUN = 1;
 float IT_SUPER_SHOTGUN = 2;
 float IT_NAILGUN = 4;
 float IT_SUPER_NAILGUN = 8;
 float IT_GRENADE_LAUNCHER = 16;
 float IT_ROCKET_LAUNCHER = 32;
-float IT_LIGHTNING = 64;			// 8
+float IT_LIGHTNING = 64;
 
 float IT_SHELLS = 128;
 float IT_NAILS = 256;
 float IT_ROCKETS = 512;
 float IT_CELLS = 1024;
 
-float IT_LAVA_NAILGUN = 4096;		
-float IT_LAVA_SUPER_NAILGUN = 8192;			
-float IT_MULTI_GRENADE = 16384;		//15
+float IT_LAVA_NAILGUN = 4096;
+float IT_LAVA_SUPER_NAILGUN = 8192;
+float IT_MULTI_GRENADE = 16384;
 float IT_MULTI_ROCKET = 32768;
-float IT_PLASMA_GUN = 65536;	
+float IT_PLASMA_GUN = 65536;
 
 float IT_KEY1 = 131072;
 float IT_KEY2 = 262144;
@@ -332,27 +330,31 @@ float IT_KEY2 = 262144;
 float IT_INVISIBILITY = 524288;
 float IT_INVULNERABILITY = 1048576;
 float IT_SUIT = 2097152;
-float IT_QUAD = 4194304;		//23
+float IT_QUAD = 4194304;
 //ZOID --
-float	IT_GRAPPLE				= 8388608;		// grapple overload, hope it
-//-- ZOID										// doesn't mess things up!
+float IT_GRAPPLE = 8388608;  // grapple overload, hope it
+//-- ZOID                    // doesn't mess things up!
 
-float IT_WEAPONS = 4223;
-float IT_AMMO = 3840;
+float IT_WEAPONS = 129151;
+float IT_AMMO = 1920;
 float IT_KEYS = 393216;
 float IT_ARTS = 7864320;
 
-float	IT2_ARMOR1				= 1;			//24
-float	IT2_ARMOR2				= 2;
-float	IT2_ARMOR3				= 4;
-float	IT2_LAVA_NAILS			= 8;
-float	IT2_PLASMA_AMMO			= 16;
-float	IT2_MULTI_ROCKETS		= 32;			//29
-float 	IT2_SHIELD				= 64;
-float 	IT2_ANTIGRAV			= 128;
-float	IT2_SUPERHEALTH			= 256;			//32
-float	IT2_EARTHQUAKE			= 512;			
-float	IT2_V_SPHERE			= 1024;
+float IT2_ARMOR1 = 1;
+float IT2_ARMOR2 = 2;
+float IT2_ARMOR3 = 4;
+float IT2_LAVA_NAILS = 8;
+float IT2_PLASMA_AMMO = 16;
+float IT2_MULTI_ROCKETS = 32;
+float IT2_SHIELD = 64;
+float IT2_ANTIGRAV = 128;
+float IT2_SUPERHEALTH = 256;
+float IT2_EARTHQUAKE = 512;
+float IT2_V_SPHERE = 1024;
+
+float IT2_ARMOR = 7;
+float IT2_AMMO = 56;
+float IT2_ARTS = 1728;
 
 // point content values
 
@@ -376,7 +378,7 @@ vector VEC_HULL2_MIN = '-32 -32 -24';
 vector VEC_HULL2_MAX = '32 32 64';
 
 // protocol bytes
-float	SVC_UPDATESTAT		= 3;		// pgm black magic
+float SVC_UPDATESTAT = 3;  // pgm black magic
 float SVC_TEMPENTITY = 23;
 float SVC_KILLEDMONSTER = 27;
 float SVC_FOUNDSECRET = 28;
@@ -384,9 +386,9 @@ float SVC_INTERMISSION = 30;
 float SVC_FINALE = 31;
 float SVC_CDTRACK = 32;
 float SVC_SELLSCREEN = 33;
-float	SVC_CUTSCENE		= 34;
+float SVC_CUTSCENE = 34;
 
-float	STAT_TOTALMONSTERS	= 12;		// pgm black magic
+float STAT_TOTALMONSTERS = 12;  // pgm black magic
 
 float TE_SPIKE = 0;
 float TE_SUPERSPIKE = 1;
@@ -400,8 +402,8 @@ float TE_KNIGHTSPIKE = 8;
 float TE_LIGHTNING3 = 9;
 float TE_LAVASPLASH = 10;
 float TE_TELEPORT = 11;
-float   TE_EXPLOSION2   = 12;
-float	TE_BEAM			= 13;  			
+float TE_EXPLOSION2 = 12;
+float TE_BEAM = 13;
 
 // sound channels
 // channel 0 never willingly overrides
@@ -457,10 +459,10 @@ float framecount;
 float skill;
 
 // rogue globals!
-float 	earthquake_active;
-float	earthquake_intensity;
-float	cutscene_running;
-entity  tag_token_owner;
+float earthquake_active;
+float earthquake_intensity;
+float cutscene_running;
+entity tag_token_owner;
 
 //================================================
 
@@ -525,9 +527,9 @@ float AS_MISSILE = 4;
 .float rad_time;
 .float fly_sound;
 
-.float		shield_finished, antigrav_finished;
-.float		shield_time, antigrav_time;
-.entity		shield_entity;
+.float shield_finished, antigrav_finished;
+.float shield_time, antigrav_time;
+.entity shield_entity;
 
 .float axhitme;
 
@@ -607,27 +609,27 @@ float AS_MISSILE = 4;
 // elevator fields
 //
 
-.float 		elevatorLastUse;
-.float		elevatorOnFloor;
-.float		elevatorToFloor;
-.vector		elevatorDestination; 
+.float elevatorLastUse;
+.float elevatorOnFloor;
+.float elevatorToFloor;
+.vector elevatorDestination;
 
 //
 // plat2 fields
 //
-.float		plat2Called;
-.float		plat2LastMove;
-.float		plat2GoTime;
-.float		plat2GoTo;
+.float plat2Called;
+.float plat2LastMove;
+.float plat2GoTime;
+.float plat2GoTo;
 
 //
 // new AI fields
 //
-.float		orbitPosition;
+.float orbitPosition;
 
 //
 // dragon specific fields
-// 
+//
 .float playerInRoom;
 .float playerInTransit;
 .float dragonInRoom;
@@ -639,15 +641,15 @@ float AS_MISSILE = 4;
 //
 // Other Rogue Fields
 //
-.float		AGping;
-.float		childrenSpawned;
-.float		ltrailLastUsed;
-.float		shield_death_time;
-.float		shieldSoundTime;
-.float		dragonDeathState;
+.float AGping;
+.float childrenSpawned;
+.float ltrailLastUsed;
+.float shield_death_time;
+.float shieldSoundTime;
+.float dragonDeathState;
 
-.float		tag_frags;
-.float		tag_message_time;
+.float tag_frags;
+.float tag_message_time;
 
 //===========================================================================
 
@@ -787,7 +789,7 @@ float(entity e, float healamount, float ignore) T_Heal;  // health function
 
 float(entity targ, entity inflictor) CanDamage;
 
-// 
+//
 // new_items.qc
 //
 void(entity theEntity) UpdateAmmoCounts;

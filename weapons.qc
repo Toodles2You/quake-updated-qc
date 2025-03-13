@@ -42,12 +42,8 @@ void() W_Precache =
 	precache_sound ("weapons/shotgn2.wav");  // super shotgun
 
 	// ZOID--
-	//  grapple
+	// grapple
 	precache_sound ("weapons/chain1.wav");
-	//	precache_sound ("weapons/chain2.wav");
-	//	precache_sound ("weapons/chain3.wav");
-	//	precache_sound ("weapons/bounce2.wav");
-	//	precache_sound ("blob/land1.wav");
 	precache_sound ("pendulum/hit.wav");
 	//--ZOID
 
@@ -788,9 +784,7 @@ void() W_SetCurrentAmmo =
 	player_run ();  // get out of any weapon firing states
 
 	self.items = self.items - (self.items & IT_AMMO);
-	self.items2 =
-		self.items2 -
-		(self.items2 & (IT2_LAVA_NAILS | IT2_PLASMA_AMMO | IT2_MULTI_ROCKETS));
+	self.items2 = self.items2 - (self.items2 & IT2_AMMO);
 
 	if (self.weapon == IT_AXE)
 	{
@@ -907,22 +901,19 @@ float() W_BestWeapon =
 	it = self.items;
 
 	// pgm - fix for sandy. will not change to plasma gun
-
-	//	if (self.waterlevel <= 1 && self.ammo_plasma >= 1 && (it &
-	//IT_PLASMA_GUN)) 		return IT_PLASMA_GUN; 	else
 	if (self.waterlevel <= 1 && self.ammo_cells1 >= 1 && (it & IT_LIGHTNING))
 		return IT_LIGHTNING;
-	else if (self.ammo_lava_nails >= 2 && (it & IT_LAVA_SUPER_NAILGUN))
+	if (self.ammo_lava_nails >= 2 && (it & IT_LAVA_SUPER_NAILGUN))
 		return IT_LAVA_SUPER_NAILGUN;
-	else if (self.ammo_nails1 >= 2 && (it & IT_SUPER_NAILGUN))
+	if (self.ammo_nails1 >= 2 && (it & IT_SUPER_NAILGUN))
 		return IT_SUPER_NAILGUN;
-	else if (self.ammo_lava_nails >= 1 && (it & IT_LAVA_NAILGUN))
+	if (self.ammo_lava_nails >= 1 && (it & IT_LAVA_NAILGUN))
 		return IT_LAVA_NAILGUN;
-	else if (self.ammo_nails1 >= 1 && (it & IT_NAILGUN))
+	if (self.ammo_nails1 >= 1 && (it & IT_NAILGUN))
 		return IT_NAILGUN;
-	else if (self.ammo_shells1 >= 2 && (it & IT_SUPER_SHOTGUN))
+	if (self.ammo_shells1 >= 2 && (it & IT_SUPER_SHOTGUN))
 		return IT_SUPER_SHOTGUN;
-	else if (self.ammo_shells1 >= 1 && (it & IT_SHOTGUN))
+	if (self.ammo_shells1 >= 1 && (it & IT_SHOTGUN))
 		return IT_SHOTGUN;
 
 	return IT_AXE;
@@ -982,7 +973,7 @@ void() W_Attack =
 
 	// ZOID--
 	RuneApplyBlackNoise (self);  // make rune noise
-								//--ZOID
+	//--ZOID
 
 	if (self.weapon == IT_AXE)
 	{
@@ -1124,7 +1115,7 @@ void() W_ChangeWeapon =
 	{
 		if ((self.items & IT_LAVA_NAILGUN) &&
 			(self.weapon == IT_NAILGUN || self.ammo_nails1 < 1))
-			{
+		{
 			fl = IT_LAVA_NAILGUN;
 			if (self.ammo_lava_nails < 1)
 				am = 1;
@@ -1140,7 +1131,7 @@ void() W_ChangeWeapon =
 	{
 		if ((self.items & IT_LAVA_SUPER_NAILGUN) &&
 			(self.weapon == IT_SUPER_NAILGUN || self.ammo_nails1 < 2))
-			{
+		{
 			fl = IT_LAVA_SUPER_NAILGUN;
 			if (self.ammo_lava_nails < 2)
 				am = 1;
@@ -1156,7 +1147,7 @@ void() W_ChangeWeapon =
 	{
 		if ((self.items & IT_MULTI_GRENADE) &&
 			(self.weapon == IT_GRENADE_LAUNCHER || self.ammo_rockets1 < 1))
-			{
+		{
 			fl = IT_MULTI_GRENADE;
 			if (self.ammo_multi_rockets < 1)
 				am = 1;
@@ -1172,7 +1163,7 @@ void() W_ChangeWeapon =
 	{
 		if ((self.items & IT_MULTI_ROCKET) &&
 			(self.weapon == IT_ROCKET_LAUNCHER || self.ammo_rockets1 < 1))
-			{
+		{
 			fl = IT_MULTI_ROCKET;
 			if (self.ammo_multi_rockets < 1)
 				am = 1;
@@ -1188,7 +1179,7 @@ void() W_ChangeWeapon =
 	{
 		if ((self.items & IT_PLASMA_GUN) &&
 			(self.weapon == IT_LIGHTNING || self.ammo_cells1 < 1))
-			{
+		{
 			fl = IT_PLASMA_GUN;
 			if (self.ammo_plasma < 1)
 				am = 1;
@@ -1249,7 +1240,7 @@ void() W_ChangeWeapon =
 	{
 		if (self.weapon == IT_LAVA_NAILGUN ||
 			self.weapon == IT_LAVA_SUPER_NAILGUN)
-			{
+		{
 			if (fl == IT_NAILGUN || fl == IT_SUPER_NAILGUN)
 				sprint (self, "Normal Nails\n");
 		}
@@ -1306,9 +1297,7 @@ void() CheatCommand =
 	self.ammo_rockets1 = 100;
 	self.ammo_nails1 = 200;
 	self.ammo_shells1 = 100;
-	self.items = self.items | IT_WEAPONS | IT_KEYS | IT_LAVA_NAILGUN
-			   | IT_LAVA_SUPER_NAILGUN | IT_MULTI_GRENADE | IT_MULTI_ROCKET
-			   | IT_PLASMA_GUN;
+	self.items = self.items | IT_WEAPONS | IT_KEYS;
 
 	self.ammo_lava_nails = 200;
 	self.ammo_multi_rockets = 100;
@@ -1613,7 +1602,6 @@ void() ImpulseCommands =
 	else if (self.impulse == 23)
 		TeamFlagStatusReport ();
 	//--ZOID
-
 	else if (self.impulse == 255)
 		QuadCheat ();
 

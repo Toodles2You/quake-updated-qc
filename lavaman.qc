@@ -434,12 +434,8 @@ void() lavaman_awake =
 		self.yaw_speed = 20;
 
 	setmodel (self, "progs/lavaman.mdl");
-	//	setsize (self, '-64 -64 -12', '64 64 128');
-	//	setsize (self, '-32 -32 0', '32 32 120');
 	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
 	self.view_ofs = '0 0 48';
-
-	//    self.health = 1500;
 
 	self.health = 1250 + (250 * cvar ("skill"));
 
