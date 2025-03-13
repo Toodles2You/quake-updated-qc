@@ -1237,8 +1237,10 @@ void(entity targ, entity attacker) ClientObituary =
 				}
 				if (targ.weapon == IT_GRENADE_LAUNCHER)
 					bprint (" tries to put the pin back in\n");
-				else
+				else if (rnum < 0.9)
 					bprint (" becomes bored with life\n");
+				else
+					bprint (" checks if his weapon is loaded\n");
 				return;
 			}
 			else if ((teamplay == 2) && (targ.team > 0) &&
