@@ -25,19 +25,19 @@ SCOURGE
 ==============================================================================
 */
 
-$frame stand1.asc stand2.asc stand3.asc stand4.asc stand5.asc stand6.asc
-$frame stand7.asc stand8.asc stand9.asc stand10.asc stand11.asc stand12.asc
+$frame stand1 stand2 stand3 stand4 stand5 stand6
+$frame stand7 stand8 stand9 stand10 stand11 stand12
 
-$frame walk1.asc walk2.asc walk3.asc walk4.asc walk5.asc walk6.asc
+$frame walk1 walk2 walk3 walk4 walk5 walk6
 
-$frame shoot1.asc shoot2.asc
+$frame shoot1 shoot2
 
-$frame sting1.asc sting2.asc sting3.asc sting4.asc sting5.asc sting6.asc
-$frame sting7.asc sting8.asc sting9.asc sting10.asc sting11.asc
+$frame sting1 sting2 sting3 sting4 sting5 sting6
+$frame sting7 sting8 sting9 sting10 sting11
 
-$frame pain1.asc pain2.asc pain3.asc pain4.asc pain5.asc
+$frame pain1 pain2 pain3 pain4 pain5
 
-$frame death1.asc death2.asc death3.asc death4.asc death5.asc
+$frame death1 death2 death3 death4 death5
 //
 
 /*
@@ -188,80 +188,80 @@ void(float dist) ai_left =
 //============================================================================
 
 // void() scourge_wake1;
-void() scourge_stand1 = [$stand1.asc, scourge_stand2]
+void() scourge_stand1 = [$stand1, scourge_stand2]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand2 = [$stand2.asc, scourge_stand3]
+void() scourge_stand2 = [$stand2, scourge_stand3]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand3 = [$stand3.asc, scourge_stand4]
+void() scourge_stand3 = [$stand3, scourge_stand4]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand4 = [$stand4.asc, scourge_stand5]
+void() scourge_stand4 = [$stand4, scourge_stand5]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand5 = [$stand5.asc, scourge_stand6]
+void() scourge_stand5 = [$stand5, scourge_stand6]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand6 = [$stand6.asc, scourge_stand7]
+void() scourge_stand6 = [$stand6, scourge_stand7]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand7 = [$stand7.asc, scourge_stand8]
+void() scourge_stand7 = [$stand7, scourge_stand8]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand8 = [$stand8.asc, scourge_stand9]
+void() scourge_stand8 = [$stand8, scourge_stand9]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand9 = [$stand9.asc, scourge_stand10]
+void() scourge_stand9 = [$stand9, scourge_stand10]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand10 = [$stand10.asc, scourge_stand11]
+void() scourge_stand10 = [$stand10, scourge_stand11]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand11 = [$stand11.asc, scourge_stand12]
+void() scourge_stand11 = [$stand11, scourge_stand12]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
-void() scourge_stand12 = [$stand12.asc, scourge_stand1]
+void() scourge_stand12 = [$stand12, scourge_stand1]
 {
 	self.spawnsilent = 0;
 	ai_stand ();
 	scourge_think ();
 };
 
-void() scourge_walk1 = [$walk1.asc, scourge_walk2]
+void() scourge_walk1 = [$walk1, scourge_walk2]
 {
 	if (random () < 0.1)
 		sound (self, CHAN_VOICE, "scourge/idle.wav", 1, ATTN_IDLE);
@@ -269,13 +269,13 @@ void() scourge_walk1 = [$walk1.asc, scourge_walk2]
 	scourge_think ();
 	ai_walk (8);
 };
-void() scourge_walk2 = [$walk2.asc, scourge_walk3] { ai_walk (8); };
-void() scourge_walk3 = [$walk3.asc, scourge_walk4] { ai_walk (8); };
-void() scourge_walk4 = [$walk4.asc, scourge_walk5] { ai_walk (8); };
-void() scourge_walk5 = [$walk5.asc, scourge_walk6] { ai_walk (8); };
-void() scourge_walk6 = [$walk6.asc, scourge_walk1] { ai_walk (8); };
+void() scourge_walk2 = [$walk2, scourge_walk3] { ai_walk (8); };
+void() scourge_walk3 = [$walk3, scourge_walk4] { ai_walk (8); };
+void() scourge_walk4 = [$walk4, scourge_walk5] { ai_walk (8); };
+void() scourge_walk5 = [$walk5, scourge_walk6] { ai_walk (8); };
+void() scourge_walk6 = [$walk6, scourge_walk1] { ai_walk (8); };
 
-void() scourge_run1 = [$walk1.asc, scourge_run2]
+void() scourge_run1 = [$walk1, scourge_run2]
 {
 	if (random () < 0.1)
 		sound (self, CHAN_VOICE, "scourge/idle.wav", 1, ATTN_IDLE);
@@ -283,78 +283,78 @@ void() scourge_run1 = [$walk1.asc, scourge_run2]
 	scourge_think ();
 	ai_run (18);
 };
-void() scourge_run2 = [$walk2.asc, scourge_run3]
+void() scourge_run2 = [$walk2, scourge_run3]
 {
 	scourge_think ();
 	ai_run (14);
 };
-void() scourge_run3 = [$walk3.asc, scourge_run4] { ai_run (14); };
-void() scourge_run4 = [$walk4.asc, scourge_run5] { ai_run (14); };
-void() scourge_run5 = [$walk5.asc, scourge_run6] { ai_run (14); };
-void() scourge_run6 = [$walk6.asc, scourge_run1] { ai_run (14); };
+void() scourge_run3 = [$walk3, scourge_run4] { ai_run (14); };
+void() scourge_run4 = [$walk4, scourge_run5] { ai_run (14); };
+void() scourge_run5 = [$walk5, scourge_run6] { ai_run (14); };
+void() scourge_run6 = [$walk6, scourge_run1] { ai_run (14); };
 
-void() scourge_strafeleft1 = [$walk1.asc, scourge_strafeleft2]
+void() scourge_strafeleft1 = [$walk1, scourge_strafeleft2]
 {
 	self.spawnsilent = 1;
 	scourge_think ();
 	ai_left (20);
 };
-void() scourge_strafeleft2 = [$walk2.asc, scourge_strafeleft3] { ai_left (20); };
-void() scourge_strafeleft3 = [$walk3.asc, scourge_strafeleft4] { ai_left (20); };
-void() scourge_strafeleft4 = [$walk4.asc, scourge_strafeleft5] { ai_left (14); };
-void() scourge_strafeleft5 = [$walk5.asc, scourge_strafeleft6] { ai_left (14); };
-void() scourge_strafeleft6 = [$walk6.asc, scourge_run1] { ai_left (14); };
+void() scourge_strafeleft2 = [$walk2, scourge_strafeleft3] { ai_left (20); };
+void() scourge_strafeleft3 = [$walk3, scourge_strafeleft4] { ai_left (20); };
+void() scourge_strafeleft4 = [$walk4, scourge_strafeleft5] { ai_left (14); };
+void() scourge_strafeleft5 = [$walk5, scourge_strafeleft6] { ai_left (14); };
+void() scourge_strafeleft6 = [$walk6, scourge_run1] { ai_left (14); };
 
-void() scourge_straferight1 = [$walk1.asc, scourge_straferight2]
+void() scourge_straferight1 = [$walk1, scourge_straferight2]
 {
 	self.spawnsilent = 1;
 	scourge_think ();
 	ai_right (20);
 };
-void() scourge_straferight2 = [$walk2.asc, scourge_straferight3]
+void() scourge_straferight2 = [$walk2, scourge_straferight3]
 {
 	ai_right (20);
 };
-void() scourge_straferight3 = [$walk3.asc, scourge_straferight4]
+void() scourge_straferight3 = [$walk3, scourge_straferight4]
 {
 	ai_right (20);
 };
-void() scourge_straferight4 = [$walk4.asc, scourge_straferight5]
+void() scourge_straferight4 = [$walk4, scourge_straferight5]
 {
 	ai_right (14);
 };
-void() scourge_straferight5 = [$walk5.asc, scourge_straferight6]
+void() scourge_straferight5 = [$walk5, scourge_straferight6]
 {
 	ai_right (14);
 };
-void() scourge_straferight6 = [$walk6.asc, scourge_run1] { ai_right (14); };
+void() scourge_straferight6 = [$walk6, scourge_run1] { ai_right (14); };
 
 /*
-void()	scourge_wake1  =[ $stand2.asc, scourge_wake2  ] {self.spawnsilent =
-0;scourge_think ();}; void()	scourge_wake2  =[ $stand3.asc, scourge_wake3  ]
-{}; void()	scourge_wake3  =[ $stand4.asc, scourge_wake4  ] {}; void()
-scourge_wake4  =[ $stand5.asc, scourge_wake5  ] {}; void()	scourge_wake5 =[
-$stand6.asc, scourge_wake6  ] {}; void()	scourge_wake6  =[ $stand7.asc,
+void()	scourge_wake1  =[ $stand2, scourge_wake2  ] {self.spawnsilent =
+0;scourge_think ();}; void()	scourge_wake2  =[ $stand3, scourge_wake3  ]
+{}; void()	scourge_wake3  =[ $stand4, scourge_wake4  ] {}; void()
+scourge_wake4  =[ $stand5, scourge_wake5  ] {}; void()	scourge_wake5 =[
+$stand6, scourge_wake6  ] {}; void()	scourge_wake6  =[ $stand7,
 scourge_run1  ]
 {
 		SUB_AttackFinished (1);
 };
-//void()	scourge_wake7  =[ $stand7.asc, scourge_run1	] {};
+//void()	scourge_wake7  =[ $stand7, scourge_run1	] {};
 */
 
-void() scourge_turn1 = [$walk1.asc, scourge_turn2]
+void() scourge_turn1 = [$walk1, scourge_turn2]
 {
 	self.spawnsilent = 1;
 	scourge_think ();
 	ai_turn_in_place ();
 };
-void() scourge_turn2 = [$walk2.asc, scourge_turn3] { ai_turn_in_place (); };
-void() scourge_turn3 = [$walk3.asc, scourge_turn4] { ai_turn_in_place (); };
-void() scourge_turn4 = [$walk4.asc, scourge_turn5] { ai_turn_in_place (); };
-void() scourge_turn5 = [$walk5.asc, scourge_turn6] { ai_turn_in_place (); };
-void() scourge_turn6 = [$walk6.asc, scourge_turn1] { ai_turn_in_place (); };
+void() scourge_turn2 = [$walk2, scourge_turn3] { ai_turn_in_place (); };
+void() scourge_turn3 = [$walk3, scourge_turn4] { ai_turn_in_place (); };
+void() scourge_turn4 = [$walk4, scourge_turn5] { ai_turn_in_place (); };
+void() scourge_turn5 = [$walk5, scourge_turn6] { ai_turn_in_place (); };
+void() scourge_turn6 = [$walk6, scourge_turn1] { ai_turn_in_place (); };
 
-void() scourge_atk1 = [$shoot1.asc, scourge_atk2]
+void() scourge_atk1 = [$shoot1, scourge_atk2]
 {
 	self.spawnsilent = 0;
 	scourge_think ();
@@ -362,43 +362,43 @@ void() scourge_atk1 = [$shoot1.asc, scourge_atk2]
 	SCOURGE_FireSpikes (40);
 	//	SCOURGE_FireSpikes (-40);
 };
-void() scourge_atk2 = [$shoot2.asc, scourge_atk3]
+void() scourge_atk2 = [$shoot2, scourge_atk3]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	//	SCOURGE_FireSpikes (56);
 	SCOURGE_FireSpikes (-56);
 };
-void() scourge_atk3 = [$shoot1.asc, scourge_atk4]
+void() scourge_atk3 = [$shoot1, scourge_atk4]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	//	SCOURGE_FireSpikes (40);
 	SCOURGE_FireSpikes (-40);
 };
-void() scourge_atk4 = [$shoot2.asc, scourge_atk5]
+void() scourge_atk4 = [$shoot2, scourge_atk5]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	SCOURGE_FireSpikes (56);
 	//	SCOURGE_FireSpikes (-56);
 };
-void() scourge_atk5 = [$shoot1.asc, scourge_atk6]
+void() scourge_atk5 = [$shoot1, scourge_atk6]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	SCOURGE_FireSpikes (40);
 	//	SCOURGE_FireSpikes (-40);
 };
-void() scourge_atk6 = [$shoot2.asc, scourge_atk7]
+void() scourge_atk6 = [$shoot2, scourge_atk7]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	//	SCOURGE_FireSpikes (56);
 	SCOURGE_FireSpikes (-56);
 };
-void() scourge_atk7 = [$shoot1.asc, scourge_atk8]
+void() scourge_atk7 = [$shoot1, scourge_atk8]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	//	SCOURGE_FireSpikes (40);
 	SCOURGE_FireSpikes (-40);
 };
-void() scourge_atk8 = [$shoot2.asc, scourge_run1]
+void() scourge_atk8 = [$shoot2, scourge_run1]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	SCOURGE_FireSpikes (56);
@@ -406,40 +406,40 @@ void() scourge_atk8 = [$shoot2.asc, scourge_run1]
 	SUB_AttackFinished (4 * random ());
 };
 
-void() scourge_melee1 = [$sting1.asc, scourge_melee2]
+void() scourge_melee1 = [$sting1, scourge_melee2]
 {
 	self.spawnsilent = 0;
 	scourge_think ();
 	ai_charge (3);
 };
-void() scourge_melee2 = [$sting2.asc, scourge_melee3] { ai_charge (3); };
-void() scourge_melee3 = [$sting3.asc, scourge_melee4] { ai_charge (2); };
-void() scourge_melee4 = [$sting4.asc, scourge_melee5] { ai_charge (2); };
-void() scourge_melee5 = [$sting5.asc, scourge_melee6]
+void() scourge_melee2 = [$sting2, scourge_melee3] { ai_charge (3); };
+void() scourge_melee3 = [$sting3, scourge_melee4] { ai_charge (2); };
+void() scourge_melee4 = [$sting4, scourge_melee5] { ai_charge (2); };
+void() scourge_melee5 = [$sting5, scourge_melee6]
 {
 	sound (self, CHAN_WEAPON, "scourge/tailswng.wav", 1, ATTN_NORM);
 	ai_charge (3);
 };
-void() scourge_melee6 = [$sting6.asc, scourge_melee7] { ai_charge (1); };
-void() scourge_melee7 = [$sting7.asc, scourge_melee8] { Attack_With_Tail (); };
-void() scourge_melee8 = [$sting8.asc, scourge_melee9] { ai_face (); };
-void() scourge_melee9 = [$sting9.asc, scourge_melee10] { ai_face (); };
-void() scourge_melee10 = [$sting10.asc, scourge_melee11] { ai_face (); };
-void() scourge_melee11 = [$sting11.asc, scourge_run1]
+void() scourge_melee6 = [$sting6, scourge_melee7] { ai_charge (1); };
+void() scourge_melee7 = [$sting7, scourge_melee8] { Attack_With_Tail (); };
+void() scourge_melee8 = [$sting8, scourge_melee9] { ai_face (); };
+void() scourge_melee9 = [$sting9, scourge_melee10] { ai_face (); };
+void() scourge_melee10 = [$sting10, scourge_melee11] { ai_face (); };
+void() scourge_melee11 = [$sting11, scourge_run1]
 {
 	ai_face ();
 	SUB_CheckRefire (scourge_melee1);
 };
 
-void() scourge_pain1 = [$pain1.asc, scourge_pain2]
+void() scourge_pain1 = [$pain1, scourge_pain2]
 {
 	self.spawnsilent = 0;
 	scourge_think ();
 };
-void() scourge_pain2 = [$pain2.asc, scourge_pain3] {};
-void() scourge_pain3 = [$pain3.asc, scourge_pain4] {};
-void() scourge_pain4 = [$pain4.asc, scourge_pain5] {};
-void() scourge_pain5 = [$pain5.asc, scourge_run1] {};
+void() scourge_pain2 = [$pain2, scourge_pain3] {};
+void() scourge_pain3 = [$pain3, scourge_pain4] {};
+void() scourge_pain4 = [$pain4, scourge_pain5] {};
+void() scourge_pain5 = [$pain5, scourge_run1] {};
 
 void(entity attacker, float damage) scourge_pain =
 {
@@ -460,15 +460,15 @@ void(entity attacker, float damage) scourge_pain =
 
 //============================================================================
 
-void() scourge_die1 = [$death1.asc, scourge_die2]
+void() scourge_die1 = [$death1, scourge_die2]
 {
 	self.spawnsilent = 0;
 	scourge_think ();
 };
-void() scourge_die2 = [$death2.asc, scourge_die3] {};
-void() scourge_die3 = [$death3.asc, scourge_die4] { self.solid = SOLID_NOT; };
-void() scourge_die4 = [$death4.asc, scourge_die5] {};
-void() scourge_die5 = [$death5.asc, scourge_die5] {};
+void() scourge_die2 = [$death2, scourge_die3] {};
+void() scourge_die3 = [$death3, scourge_die4] { self.solid = SOLID_NOT; };
+void() scourge_die4 = [$death4, scourge_die5] {};
+void() scourge_die5 = [$death5, scourge_die5] {};
 
 void() scourge_die =
 {

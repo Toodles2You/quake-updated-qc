@@ -25,52 +25,52 @@ gremlin
 ==============================================================================
 */
 
-$frame stand1.asc stand2.asc stand3.asc stand4.asc stand5.asc stand6.asc
-$frame stand7.asc stand8.asc stand9.asc stand10.asc stand11.asc stand12.asc
-$frame stand13.asc stand14.asc stand15.asc stand16.asc stand17.asc
+$frame stand1 stand2 stand3 stand4 stand5 stand6
+$frame stand7 stand8 stand9 stand10 stand11 stand12
+$frame stand13 stand14 stand15 stand16 stand17
 
-$frame walk1.asc walk2.asc walk3.asc walk4.asc walk5.asc walk6.asc
-$frame walk7.asc walk8.asc walk9.asc walk10.asc walk11.asc walk12.asc
+$frame walk1 walk2 walk3 walk4 walk5 walk6
+$frame walk7 walk8 walk9 walk10 walk11 walk12
 
-$frame run1.asc run2.asc run3.asc run4.asc run5.asc run6.asc run7.asc run8.asc
-$frame run9.asc run10.asc run11.asc run12.asc run13.asc run14.asc run15.asc
+$frame run1 run2 run3 run4 run5 run6 run7 run8
+$frame run9 run10 run11 run12 run13 run14 run15
 
-$frame jump1.asc jump2.asc jump3.asc jump4.asc jump5.asc jump6.asc jump7.asc
-$frame jump8.asc jump9.asc jump10.asc jump11.asc jump12.asc jump13.asc jump14.asc
-$frame jump15.asc jump16.asc
+$frame jump1 jump2 jump3 jump4 jump5 jump6 jump7
+$frame jump8 jump9 jump10 jump11 jump12 jump13 jump14
+$frame jump15 jump16
 
-$frame attk1.asc attk2.asc attk3.asc attk4.asc attk5.asc attk6.asc
-$frame attk7.asc attk8.asc attk9.asc attk10.asc attk11.asc
+$frame attk1 attk2 attk3 attk4 attk5 attk6
+$frame attk7 attk8 attk9 attk10 attk11
 
-$frame maul1.asc maul2.asc maul3.asc maul4.asc maul5.asc maul6.asc
-$frame maul7.asc maul8.asc maul9.asc maul10.asc maul11.asc maul12.asc maul13.asc
+$frame maul1 maul2 maul3 maul4 maul5 maul6
+$frame maul7 maul8 maul9 maul10 maul11 maul12 maul13
 
-$frame spawn1.asc spawn2.asc spawn3.asc spawn4.asc spawn5.asc spawn6.asc
+$frame spawn1 spawn2 spawn3 spawn4 spawn5 spawn6
 
-$frame look1.asc look2.asc look3.asc look4.asc look5.asc look6.asc look7.asc
-$frame look8.asc look9.asc look10.asc
+$frame look1 look2 look3 look4 look5 look6 look7
+$frame look8 look9 look10
 
-$frame pain1.asc pain2.asc pain3.asc pain4.asc
+$frame pain1 pain2 pain3 pain4
 
-$frame death1.asc death2.asc death3.asc death4.asc death5.asc death6.asc death7.asc
-$frame death8.asc death9.asc death10.asc death11.asc death12.asc
+$frame death1 death2 death3 death4 death5 death6 death7
+$frame death8 death9 death10 death11 death12
 
-$frame flip1.asc flip2.asc flip3.asc flip4.asc flip5.asc flip6.asc flip7.asc
-$frame flip8.asc
+$frame flip1 flip2 flip3 flip4 flip5 flip6 flip7
+$frame flip8
 
-$frame lunge1.asc lunge2.asc lunge3.asc lunge4.asc lunge5.asc lunge6.asc lunge7.asc
-$frame lunge8.asc lunge9.asc lunge10.asc lunge11.asc
+$frame lunge1 lunge2 lunge3 lunge4 lunge5 lunge6 lunge7
+$frame lunge8 lunge9 lunge10 lunge11
 
-$frame gfire1.asc gfire2.asc gfire3.asc gfire4.asc gfire5.asc gfire6.asc
+$frame gfire1 gfire2 gfire3 gfire4 gfire5 gfire6
 
-$frame glook1.asc glook2.asc glook3.asc glook4.asc glook5.asc glook6.asc glook7.asc
-$frame glook8.asc glook9.asc glook10.asc glook11.asc glook12.asc glook13.asc
-$frame glook14.asc glook15.asc glook16.asc glook17.asc glook18.asc glook19.asc glook20.asc
+$frame glook1 glook2 glook3 glook4 glook5 glook6 glook7
+$frame glook8 glook9 glook10 glook11 glook12 glook13
+$frame glook14 glook15 glook16 glook17 glook18 glook19 glook20
 
-$frame gpain1.asc gpain2.asc gpain3.asc
+$frame gpain1 gpain2 gpain3
 
-$frame grun1.asc grun2.asc grun3.asc grun4.asc grun5.asc grun6.asc grun7.asc
-$frame grun8.asc grun9.asc grun10.asc grun11.asc grun12.asc grun13.asc grun14.asc grun15.asc
+$frame grun1 grun2 grun3 grun4 grun5 grun6 grun7
+$frame grun8 grun9 grun10 grun11 grun12 grun13 grun14 grun15
 
 	//============================================================================
 
@@ -370,7 +370,7 @@ void(float dist) gremlin_run =
 	}
 	movedist = dist;
 	if (self.stoleweapon)
-		self.frame = self.frame + $grun1.asc - $run1.asc;
+		self.frame = self.frame + $grun1 - $run1;
 
 	if (self.gorging)
 	{
@@ -505,136 +505,136 @@ void() Gremlin_FlipTouch;
 void(float side) Gremlin_Melee;
 void(float side) Gremlin_Gorge;
 
-void() gremlin_stand1 = [$stand1.asc, gremlin_stand2]
+void() gremlin_stand1 = [$stand1, gremlin_stand2]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand2 = [$stand2.asc, gremlin_stand3]
+void() gremlin_stand2 = [$stand2, gremlin_stand3]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand3 = [$stand3.asc, gremlin_stand4]
+void() gremlin_stand3 = [$stand3, gremlin_stand4]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand4 = [$stand4.asc, gremlin_stand5]
+void() gremlin_stand4 = [$stand4, gremlin_stand5]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand5 = [$stand5.asc, gremlin_stand6]
+void() gremlin_stand5 = [$stand5, gremlin_stand6]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand6 = [$stand6.asc, gremlin_stand7]
+void() gremlin_stand6 = [$stand6, gremlin_stand7]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand7 = [$stand7.asc, gremlin_stand8]
+void() gremlin_stand7 = [$stand7, gremlin_stand8]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand8 = [$stand8.asc, gremlin_stand9]
+void() gremlin_stand8 = [$stand8, gremlin_stand9]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand9 = [$stand9.asc, gremlin_stand10]
+void() gremlin_stand9 = [$stand9, gremlin_stand10]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand10 = [$stand10.asc, gremlin_stand11]
+void() gremlin_stand10 = [$stand10, gremlin_stand11]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand11 = [$stand11.asc, gremlin_stand12]
+void() gremlin_stand11 = [$stand11, gremlin_stand12]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand12 = [$stand12.asc, gremlin_stand13]
+void() gremlin_stand12 = [$stand12, gremlin_stand13]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand13 = [$stand13.asc, gremlin_stand14]
+void() gremlin_stand13 = [$stand13, gremlin_stand14]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand14 = [$stand14.asc, gremlin_stand15]
+void() gremlin_stand14 = [$stand14, gremlin_stand15]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand15 = [$stand15.asc, gremlin_stand16]
+void() gremlin_stand15 = [$stand15, gremlin_stand16]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand16 = [$stand16.asc, gremlin_stand17]
+void() gremlin_stand16 = [$stand16, gremlin_stand17]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
-void() gremlin_stand17 = [$stand17.asc, gremlin_stand1]
+void() gremlin_stand17 = [$stand17, gremlin_stand1]
 {
 	gremlin_stand ();
 	self.nextthink = time + 0.2;
 };
 
-void() gremlin_walk1 = [$walk1.asc, gremlin_walk2]
+void() gremlin_walk1 = [$walk1, gremlin_walk2]
 {
 	if (random () < 0.1)
 		sound (self, CHAN_VOICE, "grem/idle.wav", 1, ATTN_IDLE);
 	gremlin_walk (8);
 };
-void() gremlin_walk2 = [$walk2.asc, gremlin_walk3] { gremlin_walk (8); };
-void() gremlin_walk3 = [$walk3.asc, gremlin_walk4] { gremlin_walk (8); };
-void() gremlin_walk4 = [$walk4.asc, gremlin_walk5] { gremlin_walk (8); };
-void() gremlin_walk5 = [$walk5.asc, gremlin_walk6] { gremlin_walk (8); };
-void() gremlin_walk6 = [$walk6.asc, gremlin_walk7] { gremlin_walk (8); };
-void() gremlin_walk7 = [$walk7.asc, gremlin_walk8] { gremlin_walk (8); };
-void() gremlin_walk8 = [$walk8.asc, gremlin_walk9] { gremlin_walk (8); };
-void() gremlin_walk9 = [$walk9.asc, gremlin_walk10] { gremlin_walk (8); };
-void() gremlin_walk10 = [$walk10.asc, gremlin_walk11] { gremlin_walk (8); };
-void() gremlin_walk11 = [$walk11.asc, gremlin_walk12] { gremlin_walk (8); };
-void() gremlin_walk12 = [$walk12.asc, gremlin_walk1] { gremlin_walk (8); };
+void() gremlin_walk2 = [$walk2, gremlin_walk3] { gremlin_walk (8); };
+void() gremlin_walk3 = [$walk3, gremlin_walk4] { gremlin_walk (8); };
+void() gremlin_walk4 = [$walk4, gremlin_walk5] { gremlin_walk (8); };
+void() gremlin_walk5 = [$walk5, gremlin_walk6] { gremlin_walk (8); };
+void() gremlin_walk6 = [$walk6, gremlin_walk7] { gremlin_walk (8); };
+void() gremlin_walk7 = [$walk7, gremlin_walk8] { gremlin_walk (8); };
+void() gremlin_walk8 = [$walk8, gremlin_walk9] { gremlin_walk (8); };
+void() gremlin_walk9 = [$walk9, gremlin_walk10] { gremlin_walk (8); };
+void() gremlin_walk10 = [$walk10, gremlin_walk11] { gremlin_walk (8); };
+void() gremlin_walk11 = [$walk11, gremlin_walk12] { gremlin_walk (8); };
+void() gremlin_walk12 = [$walk12, gremlin_walk1] { gremlin_walk (8); };
 
-void() gremlin_run1 = [$run1.asc, gremlin_run2]
+void() gremlin_run1 = [$run1, gremlin_run2]
 {
 	if (random () < 0.1)
 		sound (self, CHAN_VOICE, "grem/idle.wav", 1, ATTN_IDLE);
 	gremlin_run (0);
 };
-void() gremlin_run2 = [$run2.asc, gremlin_run3] { gremlin_run (8); };
-void() gremlin_run3 = [$run3.asc, gremlin_run4] { gremlin_run (12); };
-void() gremlin_run4 = [$run4.asc, gremlin_run5] { gremlin_run (16); };
-void() gremlin_run5 = [$run5.asc, gremlin_run6] { gremlin_run (16); };
-void() gremlin_run6 = [$run6.asc, gremlin_run7] { gremlin_run (12); };
-void() gremlin_run7 = [$run7.asc, gremlin_run8] { gremlin_run (8); };
-void() gremlin_run8 = [$run8.asc, gremlin_run9] { gremlin_run (0); };
-void() gremlin_run9 = [$run9.asc, gremlin_run10] { gremlin_run (8); };
-void() gremlin_run10 = [$run10.asc, gremlin_run11] { gremlin_run (12); };
-void() gremlin_run11 = [$run11.asc, gremlin_run12] { gremlin_run (16); };
-void() gremlin_run12 = [$run12.asc, gremlin_run1] { gremlin_run (16); };
-void() gremlin_run13 = [$run13.asc, gremlin_run14] { gremlin_run (12); };
-void() gremlin_run14 = [$run14.asc, gremlin_run15] { gremlin_run (8); };
-void() gremlin_run15 = [$run15.asc, gremlin_run1] { gremlin_run (0); };
+void() gremlin_run2 = [$run2, gremlin_run3] { gremlin_run (8); };
+void() gremlin_run3 = [$run3, gremlin_run4] { gremlin_run (12); };
+void() gremlin_run4 = [$run4, gremlin_run5] { gremlin_run (16); };
+void() gremlin_run5 = [$run5, gremlin_run6] { gremlin_run (16); };
+void() gremlin_run6 = [$run6, gremlin_run7] { gremlin_run (12); };
+void() gremlin_run7 = [$run7, gremlin_run8] { gremlin_run (8); };
+void() gremlin_run8 = [$run8, gremlin_run9] { gremlin_run (0); };
+void() gremlin_run9 = [$run9, gremlin_run10] { gremlin_run (8); };
+void() gremlin_run10 = [$run10, gremlin_run11] { gremlin_run (12); };
+void() gremlin_run11 = [$run11, gremlin_run12] { gremlin_run (16); };
+void() gremlin_run12 = [$run12, gremlin_run1] { gremlin_run (16); };
+void() gremlin_run13 = [$run13, gremlin_run14] { gremlin_run (12); };
+void() gremlin_run14 = [$run14, gremlin_run15] { gremlin_run (8); };
+void() gremlin_run15 = [$run15, gremlin_run1] { gremlin_run (0); };
 
-void() gremlin_jump1 = [$jump1.asc, gremlin_jump2] { ai_face (); };
-void() gremlin_jump2 = [$jump2.asc, gremlin_jump3] { ai_face (); };
-void() gremlin_jump3 = [$jump3.asc, gremlin_jump4] { ai_face (); };
-void() gremlin_jump4 = [$jump4.asc, gremlin_jump5] { ai_face (); };
-void() gremlin_jump5 = [$jump5.asc, gremlin_jump6]
+void() gremlin_jump1 = [$jump1, gremlin_jump2] { ai_face (); };
+void() gremlin_jump2 = [$jump2, gremlin_jump3] { ai_face (); };
+void() gremlin_jump3 = [$jump3, gremlin_jump4] { ai_face (); };
+void() gremlin_jump4 = [$jump4, gremlin_jump5] { ai_face (); };
+void() gremlin_jump5 = [$jump5, gremlin_jump6]
 {
 	ai_face ();
 
@@ -651,222 +651,222 @@ void() gremlin_jump5 = [$jump5.asc, gremlin_jump6]
 		gremlin_run1 ();
 	}
 };
-void() gremlin_jump6 = [$jump6.asc, gremlin_jump7] {};
-void() gremlin_jump7 = [$jump7.asc, gremlin_jump8] {};
-void() gremlin_jump8 = [$jump8.asc, gremlin_jump9] {};
-void() gremlin_jump9 = [$jump9.asc, gremlin_jump10] {};
-void() gremlin_jump10 = [$jump10.asc, gremlin_jump11] {};
-void() gremlin_jump11 = [$jump11.asc, gremlin_jump1]
+void() gremlin_jump6 = [$jump6, gremlin_jump7] {};
+void() gremlin_jump7 = [$jump7, gremlin_jump8] {};
+void() gremlin_jump8 = [$jump8, gremlin_jump9] {};
+void() gremlin_jump9 = [$jump9, gremlin_jump10] {};
+void() gremlin_jump10 = [$jump10, gremlin_jump11] {};
+void() gremlin_jump11 = [$jump11, gremlin_jump1]
 {
 	self.nextthink = time + 3;
 	// if three seconds pass, assume gremlin is stuck and jump again
 };
 
-void() gremlin_jump12 = [$jump12.asc, gremlin_jump13] {};
-void() gremlin_jump13 = [$jump13.asc, gremlin_jump14] {};
-void() gremlin_jump14 = [$jump14.asc, gremlin_jump15] {};
-void() gremlin_jump15 = [$jump15.asc, gremlin_jump16] {};
-void() gremlin_jump16 = [$jump16.asc, gremlin_run1] {};
+void() gremlin_jump12 = [$jump12, gremlin_jump13] {};
+void() gremlin_jump13 = [$jump13, gremlin_jump14] {};
+void() gremlin_jump14 = [$jump14, gremlin_jump15] {};
+void() gremlin_jump15 = [$jump15, gremlin_jump16] {};
+void() gremlin_jump16 = [$jump16, gremlin_run1] {};
 
-void() gremlin_shot1 = [$gfire1.asc, gremlin_shot2]
+void() gremlin_shot1 = [$gfire1, gremlin_shot2]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 };
-void() gremlin_shot2 = [$gfire2.asc, gremlin_shot3] {};
-void() gremlin_shot3 = [$gfire3.asc, gremlin_shot4] {};
-void() gremlin_shot4 = [$gfire4.asc, gremlin_shot5] {};
-void() gremlin_shot5 = [$gfire5.asc, gremlin_shot6] {};
-void() gremlin_shot6 = [$gfire6.asc, gremlin_run1] {};
+void() gremlin_shot2 = [$gfire2, gremlin_shot3] {};
+void() gremlin_shot3 = [$gfire3, gremlin_shot4] {};
+void() gremlin_shot4 = [$gfire4, gremlin_shot5] {};
+void() gremlin_shot5 = [$gfire5, gremlin_shot6] {};
+void() gremlin_shot6 = [$gfire6, gremlin_run1] {};
 
 //============================================================================
 void(float ox) Gremlin_FireNailGun;
 
-void() gremlin_nail1 = [$gfire1.asc, gremlin_nail2]
+void() gremlin_nail1 = [$gfire1, gremlin_nail2]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireNailGun (4);
 };
-void() gremlin_nail2 = [$gfire1.asc, gremlin_nail3]
+void() gremlin_nail2 = [$gfire1, gremlin_nail3]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireNailGun (4);
 };
-void() gremlin_nail3 = [$gfire1.asc, gremlin_nail4]
+void() gremlin_nail3 = [$gfire1, gremlin_nail4]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireNailGun (4);
 };
-void() gremlin_nail4 = [$gfire1.asc, gremlin_nail5]
+void() gremlin_nail4 = [$gfire1, gremlin_nail5]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireNailGun (4);
 };
-void() gremlin_nail5 = [$gfire1.asc, gremlin_nail6]
+void() gremlin_nail5 = [$gfire1, gremlin_nail6]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireNailGun (4);
 };
-void() gremlin_nail6 = [$gfire1.asc, gremlin_nail7]
+void() gremlin_nail6 = [$gfire1, gremlin_nail7]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireNailGun (4);
 };
-void() gremlin_nail7 = [$gfire1.asc, gremlin_run1] {};
+void() gremlin_nail7 = [$gfire1, gremlin_run1] {};
 
 void(float ox) Gremlin_FireLaserGun;
 
-void() gremlin_laser1 = [$gfire1.asc, gremlin_laser2]
+void() gremlin_laser1 = [$gfire1, gremlin_laser2]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireLaserGun (4);
 };
-void() gremlin_laser2 = [$gfire1.asc, gremlin_laser3]
+void() gremlin_laser2 = [$gfire1, gremlin_laser3]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireLaserGun (4);
 };
-void() gremlin_laser3 = [$gfire1.asc, gremlin_laser4]
+void() gremlin_laser3 = [$gfire1, gremlin_laser4]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireLaserGun (4);
 };
-void() gremlin_laser4 = [$gfire1.asc, gremlin_laser5]
+void() gremlin_laser4 = [$gfire1, gremlin_laser5]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireLaserGun (4);
 };
-void() gremlin_laser5 = [$gfire1.asc, gremlin_laser6]
+void() gremlin_laser5 = [$gfire1, gremlin_laser6]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireLaserGun (4);
 };
-void() gremlin_laser6 = [$gfire1.asc, gremlin_laser7]
+void() gremlin_laser6 = [$gfire1, gremlin_laser7]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	Gremlin_FireLaserGun (4);
 };
-void() gremlin_laser7 = [$gfire1.asc, gremlin_run1] {};
+void() gremlin_laser7 = [$gfire1, gremlin_run1] {};
 
 //============================================================================
 
 void() Gremlin_FireLightningGun;
-void() gremlin_light1 = [$gfire1.asc, gremlin_light2]
+void() gremlin_light1 = [$gfire1, gremlin_light2]
 {
 	Gremlin_FireLightningGun ();
 };
-void() gremlin_light2 = [$gfire1.asc, gremlin_light3]
+void() gremlin_light2 = [$gfire1, gremlin_light3]
 {
 	Gremlin_FireLightningGun ();
 };
-void() gremlin_light3 = [$gfire1.asc, gremlin_light4]
+void() gremlin_light3 = [$gfire1, gremlin_light4]
 {
 	Gremlin_FireLightningGun ();
 };
-void() gremlin_light4 = [$gfire1.asc, gremlin_light5]
+void() gremlin_light4 = [$gfire1, gremlin_light5]
 {
 	Gremlin_FireLightningGun ();
 };
-void() gremlin_light5 = [$gfire1.asc, gremlin_run1] {};
+void() gremlin_light5 = [$gfire1, gremlin_run1] {};
 
 //============================================================================
 
-void() gremlin_rocket1 = [$gfire1.asc, gremlin_rocket2]
+void() gremlin_rocket1 = [$gfire1, gremlin_rocket2]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 };
-void() gremlin_rocket2 = [$gfire2.asc, gremlin_rocket3] {};
-void() gremlin_rocket3 = [$gfire3.asc, gremlin_rocket4] {};
-void() gremlin_rocket4 = [$gfire4.asc, gremlin_rocket5] {};
-void() gremlin_rocket5 = [$gfire5.asc, gremlin_rocket6] {};
-void() gremlin_rocket6 = [$gfire6.asc, gremlin_run1] {};
+void() gremlin_rocket2 = [$gfire2, gremlin_rocket3] {};
+void() gremlin_rocket3 = [$gfire3, gremlin_rocket4] {};
+void() gremlin_rocket4 = [$gfire4, gremlin_rocket5] {};
+void() gremlin_rocket5 = [$gfire5, gremlin_rocket6] {};
+void() gremlin_rocket6 = [$gfire6, gremlin_run1] {};
 
-void() gremlin_lunge1 = [$lunge1.asc, gremlin_lunge2] { ai_charge (0); };
-void() gremlin_lunge2 = [$lunge2.asc, gremlin_lunge3] { ai_charge (0); };
-void() gremlin_lunge3 = [$lunge3.asc, gremlin_lunge4] { ai_charge (0); };
-void() gremlin_lunge4 = [$lunge4.asc, gremlin_lunge5] { ai_charge (0); };
-void() gremlin_lunge5 = [$lunge5.asc, gremlin_lunge6] { ai_charge (0); };
-void() gremlin_lunge6 = [$lunge6.asc, gremlin_lunge7] { ai_charge (0); };
-void() gremlin_lunge7 = [$lunge7.asc, gremlin_lunge8] { ai_charge (15); };
-void() gremlin_lunge8 = [$lunge8.asc, gremlin_lunge9]
+void() gremlin_lunge1 = [$lunge1, gremlin_lunge2] { ai_charge (0); };
+void() gremlin_lunge2 = [$lunge2, gremlin_lunge3] { ai_charge (0); };
+void() gremlin_lunge3 = [$lunge3, gremlin_lunge4] { ai_charge (0); };
+void() gremlin_lunge4 = [$lunge4, gremlin_lunge5] { ai_charge (0); };
+void() gremlin_lunge5 = [$lunge5, gremlin_lunge6] { ai_charge (0); };
+void() gremlin_lunge6 = [$lunge6, gremlin_lunge7] { ai_charge (0); };
+void() gremlin_lunge7 = [$lunge7, gremlin_lunge8] { ai_charge (15); };
+void() gremlin_lunge8 = [$lunge8, gremlin_lunge9]
 {
 	ai_charge (0);
 	Gremlin_Melee (0);
 };
-void() gremlin_lunge9 = [$lunge9.asc, gremlin_lunge10] { ai_charge (0); };
-void() gremlin_lunge10 = [$lunge10.asc, gremlin_lunge11] { ai_charge (0); };
-void() gremlin_lunge11 = [$lunge11.asc, gremlin_run1] { ai_charge (0); };
+void() gremlin_lunge9 = [$lunge9, gremlin_lunge10] { ai_charge (0); };
+void() gremlin_lunge10 = [$lunge10, gremlin_lunge11] { ai_charge (0); };
+void() gremlin_lunge11 = [$lunge11, gremlin_run1] { ai_charge (0); };
 
-void() gremlin_claw1 = [$attk1.asc, gremlin_claw2] { ai_charge (0); };
-void() gremlin_claw2 = [$attk2.asc, gremlin_claw3] { ai_charge (0); };
-void() gremlin_claw3 = [$attk3.asc, gremlin_claw4] { ai_charge (0); };
-void() gremlin_claw4 = [$attk4.asc, gremlin_claw5] { ai_charge (0); };
-void() gremlin_claw5 = [$attk5.asc, gremlin_claw6] { ai_charge (0); };
-void() gremlin_claw6 = [$attk6.asc, gremlin_claw7]
+void() gremlin_claw1 = [$attk1, gremlin_claw2] { ai_charge (0); };
+void() gremlin_claw2 = [$attk2, gremlin_claw3] { ai_charge (0); };
+void() gremlin_claw3 = [$attk3, gremlin_claw4] { ai_charge (0); };
+void() gremlin_claw4 = [$attk4, gremlin_claw5] { ai_charge (0); };
+void() gremlin_claw5 = [$attk5, gremlin_claw6] { ai_charge (0); };
+void() gremlin_claw6 = [$attk6, gremlin_claw7]
 {
 	ai_charge (0);
 	Gremlin_Melee (200);
 };
-void() gremlin_claw7 = [$attk7.asc, gremlin_claw8] { ai_charge (15); };
-void() gremlin_claw8 = [$attk8.asc, gremlin_claw9] { ai_charge (0); };
-void() gremlin_claw9 = [$attk9.asc, gremlin_claw10] { ai_charge (0); };
-void() gremlin_claw10 = [$attk10.asc, gremlin_claw11] { ai_charge (0); };
-void() gremlin_claw11 = [$attk11.asc, gremlin_run1] { ai_charge (0); };
+void() gremlin_claw7 = [$attk7, gremlin_claw8] { ai_charge (15); };
+void() gremlin_claw8 = [$attk8, gremlin_claw9] { ai_charge (0); };
+void() gremlin_claw9 = [$attk9, gremlin_claw10] { ai_charge (0); };
+void() gremlin_claw10 = [$attk10, gremlin_claw11] { ai_charge (0); };
+void() gremlin_claw11 = [$attk11, gremlin_run1] { ai_charge (0); };
 
-void() gremlin_gorge1 = [$maul1.asc, gremlin_gorge2] { ai_charge (1); };
-void() gremlin_gorge2 = [$maul2.asc, gremlin_gorge3] { ai_charge (1); };
-void() gremlin_gorge3 = [$maul3.asc, gremlin_gorge4] { ai_charge (2); };
-void() gremlin_gorge4 = [$maul4.asc, gremlin_gorge5] { ai_charge (0); };
-void() gremlin_gorge5 = [$maul5.asc, gremlin_gorge6] { ai_charge (0); };
-void() gremlin_gorge6 = [$maul6.asc, gremlin_gorge7]
+void() gremlin_gorge1 = [$maul1, gremlin_gorge2] { ai_charge (1); };
+void() gremlin_gorge2 = [$maul2, gremlin_gorge3] { ai_charge (1); };
+void() gremlin_gorge3 = [$maul3, gremlin_gorge4] { ai_charge (2); };
+void() gremlin_gorge4 = [$maul4, gremlin_gorge5] { ai_charge (0); };
+void() gremlin_gorge5 = [$maul5, gremlin_gorge6] { ai_charge (0); };
+void() gremlin_gorge6 = [$maul6, gremlin_gorge7]
 {
 	ai_charge (0);
 	Gremlin_Gorge (200);
 };
-void() gremlin_gorge7 = [$maul7.asc, gremlin_gorge8] { ai_charge (0); };
-void() gremlin_gorge8 = [$maul8.asc, gremlin_gorge9]
+void() gremlin_gorge7 = [$maul7, gremlin_gorge8] { ai_charge (0); };
+void() gremlin_gorge8 = [$maul8, gremlin_gorge9]
 {
 	ai_charge (0);
 	Gremlin_Gorge (-200);
 };
-void() gremlin_gorge9 = [$maul9.asc, gremlin_gorge10] { ai_charge (0); };
-void() gremlin_gorge10 = [$maul10.asc, gremlin_gorge11] { ai_charge (0); };
-void() gremlin_gorge11 = [$maul11.asc, gremlin_gorge12] { ai_charge (0); };
-void() gremlin_gorge12 = [$maul12.asc, gremlin_gorge13] { ai_charge (0); };
-void() gremlin_gorge13 = [$maul13.asc, gremlin_gorge1] { ai_charge (0); };
+void() gremlin_gorge9 = [$maul9, gremlin_gorge10] { ai_charge (0); };
+void() gremlin_gorge10 = [$maul10, gremlin_gorge11] { ai_charge (0); };
+void() gremlin_gorge11 = [$maul11, gremlin_gorge12] { ai_charge (0); };
+void() gremlin_gorge12 = [$maul12, gremlin_gorge13] { ai_charge (0); };
+void() gremlin_gorge13 = [$maul13, gremlin_gorge1] { ai_charge (0); };
 
-void() gremlin_look1 = [$look1.asc, gremlin_look2]
+void() gremlin_look1 = [$look1, gremlin_look2]
 {
 	self.nextthink = time + 0.2;
 };
-void() gremlin_look2 = [$look2.asc, gremlin_look3]
+void() gremlin_look2 = [$look2, gremlin_look3]
 {
 	self.nextthink = time + 0.2;
 };
-void() gremlin_look3 = [$look3.asc, gremlin_look4]
+void() gremlin_look3 = [$look3, gremlin_look4]
 {
 	self.nextthink = time + 0.2;
 };
-void() gremlin_look4 = [$look4.asc, gremlin_look5]
+void() gremlin_look4 = [$look4, gremlin_look5]
 {
 	self.nextthink = time + 0.2;
 };
-void() gremlin_look5 = [$look5.asc, gremlin_look6]
+void() gremlin_look5 = [$look5, gremlin_look6]
 {
 	self.nextthink = time + 0.2;
 };
-void() gremlin_look6 = [$look6.asc, gremlin_look7]
+void() gremlin_look6 = [$look6, gremlin_look7]
 {
 	self.nextthink = time + 0.2;
 };
-void() gremlin_look7 = [$look7.asc, gremlin_look8]
+void() gremlin_look7 = [$look7, gremlin_look8]
 {
 	self.nextthink = time + 0.2;
 };
-void() gremlin_look8 = [$look8.asc, gremlin_look9]
+void() gremlin_look8 = [$look8, gremlin_look9]
 {
 	self.nextthink = time + 0.2;
 };
-void() gremlin_look9 = [$look9.asc, gremlin_run1]
+void() gremlin_look9 = [$look9, gremlin_run1]
 {
 	if (self.oldenemy.health > 0)
 	{
@@ -883,26 +883,26 @@ void() gremlin_look9 = [$look9.asc, gremlin_run1]
 };
 
 void() GremlinDropBackpack;
-void() gremlin_glook1 = [$glook1.asc, gremlin_glook2] {};
-void() gremlin_glook2 = [$glook2.asc, gremlin_glook3] {};
-void() gremlin_glook3 = [$glook3.asc, gremlin_glook4] {};
-void() gremlin_glook4 = [$glook4.asc, gremlin_glook5] {};
-void() gremlin_glook5 = [$glook5.asc, gremlin_glook6] {};
-void() gremlin_glook6 = [$glook6.asc, gremlin_glook7] {};
-void() gremlin_glook7 = [$glook7.asc, gremlin_glook8] {};
-void() gremlin_glook8 = [$glook8.asc, gremlin_glook9] {};
-void() gremlin_glook9 = [$glook9.asc, gremlin_glook10] {};
-void() gremlin_glook10 = [$glook10.asc, gremlin_glook11] {};
-void() gremlin_glook11 = [$glook11.asc, gremlin_glook12] {};
-void() gremlin_glook12 = [$glook12.asc, gremlin_glook13] {};
-void() gremlin_glook13 = [$glook13.asc, gremlin_glook14] {};
-void() gremlin_glook14 = [$glook14.asc, gremlin_glook15] {};
-void() gremlin_glook15 = [$glook15.asc, gremlin_glook16] {};
-void() gremlin_glook16 = [$glook16.asc, gremlin_glook17] {};
-void() gremlin_glook17 = [$glook17.asc, gremlin_glook18] {};
-void() gremlin_glook18 = [$glook18.asc, gremlin_glook19] {};
-void() gremlin_glook19 = [$glook19.asc, gremlin_glook20] {};
-void() gremlin_glook20 = [$glook20.asc, gremlin_glook20]
+void() gremlin_glook1 = [$glook1, gremlin_glook2] {};
+void() gremlin_glook2 = [$glook2, gremlin_glook3] {};
+void() gremlin_glook3 = [$glook3, gremlin_glook4] {};
+void() gremlin_glook4 = [$glook4, gremlin_glook5] {};
+void() gremlin_glook5 = [$glook5, gremlin_glook6] {};
+void() gremlin_glook6 = [$glook6, gremlin_glook7] {};
+void() gremlin_glook7 = [$glook7, gremlin_glook8] {};
+void() gremlin_glook8 = [$glook8, gremlin_glook9] {};
+void() gremlin_glook9 = [$glook9, gremlin_glook10] {};
+void() gremlin_glook10 = [$glook10, gremlin_glook11] {};
+void() gremlin_glook11 = [$glook11, gremlin_glook12] {};
+void() gremlin_glook12 = [$glook12, gremlin_glook13] {};
+void() gremlin_glook13 = [$glook13, gremlin_glook14] {};
+void() gremlin_glook14 = [$glook14, gremlin_glook15] {};
+void() gremlin_glook15 = [$glook15, gremlin_glook16] {};
+void() gremlin_glook16 = [$glook16, gremlin_glook17] {};
+void() gremlin_glook17 = [$glook17, gremlin_glook18] {};
+void() gremlin_glook18 = [$glook18, gremlin_glook19] {};
+void() gremlin_glook19 = [$glook19, gremlin_glook20] {};
+void() gremlin_glook20 = [$glook20, gremlin_glook20]
 {
 	GremlinDropBackpack ();
 	self.stoleweapon = FALSE;
@@ -920,14 +920,14 @@ void() gremlin_glook20 = [$glook20.asc, gremlin_glook20]
 	}
 };
 
-void() gremlin_pain1 = [$pain1.asc, gremlin_pain2] { ai_back (4); };
-void() gremlin_pain2 = [$pain2.asc, gremlin_pain3] { ai_back (4); };
-void() gremlin_pain3 = [$pain3.asc, gremlin_pain4] { ai_back (2); };
-void() gremlin_pain4 = [$pain4.asc, gremlin_run1] {};
+void() gremlin_pain1 = [$pain1, gremlin_pain2] { ai_back (4); };
+void() gremlin_pain2 = [$pain2, gremlin_pain3] { ai_back (4); };
+void() gremlin_pain3 = [$pain3, gremlin_pain4] { ai_back (2); };
+void() gremlin_pain4 = [$pain4, gremlin_run1] {};
 
-void() gremlin_gunpain1 = [$gpain1.asc, gremlin_gunpain2] { ai_back (4); };
-void() gremlin_gunpain2 = [$gpain2.asc, gremlin_gunpain3] { ai_back (2); };
-void() gremlin_gunpain3 = [$gpain3.asc, gremlin_run1] {};
+void() gremlin_gunpain1 = [$gpain1, gremlin_gunpain2] { ai_back (4); };
+void() gremlin_gunpain2 = [$gpain2, gremlin_gunpain3] { ai_back (2); };
+void() gremlin_gunpain3 = [$gpain3, gremlin_run1] {};
 
 void(entity attacker, float damage) gremlin_pain =
 {
@@ -967,48 +967,48 @@ void(entity attacker, float damage) gremlin_pain =
 	}
 };
 
-void() gremlin_spawn1 = [$spawn1.asc, gremlin_spawn2]
+void() gremlin_spawn1 = [$spawn1, gremlin_spawn2]
 {
 	self.nextthink = time + 0.3;
 	self.th_pain = SUB_null_pain;
 	//	 sound (self, CHAN_VOICE, "grem/idle.wav", 1, ATTN_IDLE);
 };
-void() gremlin_spawn2 = [$spawn2.asc, gremlin_spawn3]
+void() gremlin_spawn2 = [$spawn2, gremlin_spawn3]
 {
 	self.nextthink = time + 0.3;
 };
-void() gremlin_spawn3 = [$spawn3.asc, gremlin_spawn4]
+void() gremlin_spawn3 = [$spawn3, gremlin_spawn4]
 {
 	self.nextthink = time + 0.3;
 };
-void() gremlin_spawn4 = [$spawn4.asc, gremlin_spawn5]
+void() gremlin_spawn4 = [$spawn4, gremlin_spawn5]
 {
 	self.nextthink = time + 0.3;
 };
-void() gremlin_spawn5 = [$spawn5.asc, gremlin_spawn6]
+void() gremlin_spawn5 = [$spawn5, gremlin_spawn6]
 {
 	self.nextthink = time + 0.3;
 };
-void() gremlin_spawn6 = [$spawn6.asc, gremlin_run1]
+void() gremlin_spawn6 = [$spawn6, gremlin_run1]
 {
 	self.th_pain = gremlin_pain;
 };
 
-void() gremlin_die1 = [$death1.asc, gremlin_die2]
+void() gremlin_die1 = [$death1, gremlin_die2]
 {
 	sound (self, CHAN_VOICE, "grem/death.wav", 1, ATTN_NORM);
 };
-void() gremlin_die2 = [$death2.asc, gremlin_die3] { ai_forward (2); };
-void() gremlin_die3 = [$death3.asc, gremlin_die4] { ai_forward (1); };
-void() gremlin_die4 = [$death4.asc, gremlin_die5] { ai_forward (2); };
-void() gremlin_die5 = [$death5.asc, gremlin_die6] { ai_forward (1); };
-void() gremlin_die6 = [$death6.asc, gremlin_die7] { self.solid = SOLID_NOT; };
-void() gremlin_die7 = [$death7.asc, gremlin_die8] { ai_forward (2); };
-void() gremlin_die8 = [$death8.asc, gremlin_die9] { ai_forward (1); };
-void() gremlin_die9 = [$death9.asc, gremlin_die10] { ai_forward (2); };
-void() gremlin_die10 = [$death10.asc, gremlin_die11] { ai_forward (1); };
-void() gremlin_die11 = [$death11.asc, gremlin_die12] { ai_forward (2); };
-void() gremlin_die12 = [$death12.asc, gremlin_die12] {};
+void() gremlin_die2 = [$death2, gremlin_die3] { ai_forward (2); };
+void() gremlin_die3 = [$death3, gremlin_die4] { ai_forward (1); };
+void() gremlin_die4 = [$death4, gremlin_die5] { ai_forward (2); };
+void() gremlin_die5 = [$death5, gremlin_die6] { ai_forward (1); };
+void() gremlin_die6 = [$death6, gremlin_die7] { self.solid = SOLID_NOT; };
+void() gremlin_die7 = [$death7, gremlin_die8] { ai_forward (2); };
+void() gremlin_die8 = [$death8, gremlin_die9] { ai_forward (1); };
+void() gremlin_die9 = [$death9, gremlin_die10] { ai_forward (2); };
+void() gremlin_die10 = [$death10, gremlin_die11] { ai_forward (1); };
+void() gremlin_die11 = [$death11, gremlin_die12] { ai_forward (2); };
+void() gremlin_die12 = [$death12, gremlin_die12] {};
 
 void() gremlin_gib =
 {
@@ -1019,7 +1019,7 @@ void() gremlin_gib =
 	ThrowGib ("progs/gib1.mdl", -35);
 };
 
-void() gremlin_flip1 = [$flip1.asc, gremlin_flip2]
+void() gremlin_flip1 = [$flip1, gremlin_flip2]
 {
 	ai_face ();
 	makevectors (self.angles);
@@ -1029,20 +1029,20 @@ void() gremlin_flip1 = [$flip1.asc, gremlin_flip2]
 		self.flags = self.flags - FL_ONGROUND;
 	sound (self, CHAN_VOICE, "grem/death.wav", 1, ATTN_NORM);
 };
-void() gremlin_flip2 = [$flip2.asc, gremlin_flip3] { ai_face (); };
-void() gremlin_flip3 = [$flip3.asc, gremlin_flip4] {};
-void() gremlin_flip4 = [$flip4.asc, gremlin_flip5] {};
-void() gremlin_flip5 = [$flip5.asc, gremlin_flip6] {};
-void() gremlin_flip6 = [$flip6.asc, gremlin_flip7]
+void() gremlin_flip2 = [$flip2, gremlin_flip3] { ai_face (); };
+void() gremlin_flip3 = [$flip3, gremlin_flip4] {};
+void() gremlin_flip4 = [$flip4, gremlin_flip5] {};
+void() gremlin_flip5 = [$flip5, gremlin_flip6] {};
+void() gremlin_flip6 = [$flip6, gremlin_flip7]
 {
 	self.touch = Gremlin_FlipTouch;
 };
-void() gremlin_flip7 = [$flip7.asc, gremlin_gib]
+void() gremlin_flip7 = [$flip7, gremlin_gib]
 {
 	self.nextthink = time + 3;
 	// if three seconds pass, assume gremlin is stuck and jump again
 };
-void() gremlin_flip8 = [$flip8.asc, gremlin_flip8] { self.solid = SOLID_NOT; };
+void() gremlin_flip8 = [$flip8, gremlin_flip8] { self.solid = SOLID_NOT; };
 
 /*
 ===============
