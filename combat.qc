@@ -41,7 +41,7 @@ float(entity targ, entity inflictor) CanDamage =
 	if (targ.movetype == MOVETYPE_PUSH)
 	{
 		center = 0.5 * (targ.absmin + targ.absmax);
-		traceline (inflictor.origin, center, TRUE, self);
+		traceline (inflictor.origin, center, TRUE, inflictor);
 		if (trace_fraction == 1)
 			return TRUE;
 		if (trace_ent == targ)
@@ -49,19 +49,19 @@ float(entity targ, entity inflictor) CanDamage =
 		return FALSE;
 	}
 
-	traceline (inflictor.origin, targ.origin, TRUE, self);
+	traceline (inflictor.origin, targ.origin, TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '15 15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '15 15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '-15 -15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '-15 -15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '-15 15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '-15 15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '15 -15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '15 -15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
 
