@@ -192,9 +192,6 @@ void() Demon_MeleeAttack =
 	demon1_atta1 ();
 };
 
-/*QUAKED monster_demon1 (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-
-*/
 void() monster_demon1 =
 {
 	if (deathmatch)

@@ -143,19 +143,6 @@ void() plat_use =
 	plat_go_down ();
 };
 
-/*QUAKED func_plat (0 .5 .8) ? PLAT_LOW_TRIGGER
-speed	default 150
-
-Plats are always drawn in the extended position, so they will light correctly.
-
-If the plat is the target of another trigger or button, it will start out
-disabled in the extended position until it is trigger, when it will lower and
-become a normal plat.
-
-If the "height" key is set, that will determine the amount the plat moves,
-instead of being implicitly determined by the model's height. Set "sounds" to
-one of the following: 1) base fast 2) chain slow
-*/
 void() func_plat =
 {
 	if (!self.t_length)
@@ -282,15 +269,6 @@ void() func_train_find =
 	}
 };
 
-/*QUAKED func_train (0 .5 .8) ?
-Trains are moving platforms that players can ride.
-The targets origin specifies the min point of the train at each corner.
-The train spawns at the first target it is pointing at.
-If the train is the target of a button or trigger, it will not begin moving
-until activated. speed	default 100 dmg		default	2 sounds 1) ratchet
-metal
-
-*/
 void() func_train =
 {
 	if (!self.speed)
@@ -332,9 +310,6 @@ void() func_train =
 	self.think = func_train_find;
 };
 
-/*QUAKED misc_teleporttrain (0 .5 .8) (-8 -8 -8) (8 8 8)
-This is used for the final bos
-*/
 void() misc_teleporttrain =
 {
 	if (!self.speed)

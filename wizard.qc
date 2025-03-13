@@ -399,8 +399,6 @@ void() Wiz_Missile =
 	wiz_fast1 ();
 };
 
-/*QUAKED monster_wizard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-*/
 void() monster_wizard =
 {
 	if (deathmatch)

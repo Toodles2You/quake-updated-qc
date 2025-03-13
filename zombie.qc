@@ -532,10 +532,6 @@ void(entity attacker, float take) zombie_pain =
 
 //============================================================================
 
-/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified ambush
-
-If crucified, stick the bounding box 12 pixels back into a wall to look right.
-*/
 void() monster_zombie =
 {
 	if (deathmatch)

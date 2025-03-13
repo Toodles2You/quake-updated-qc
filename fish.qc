@@ -164,8 +164,6 @@ void(entity attacker, float damage) fish_pain =
 	f_pain1 ();
 };
 
-/*QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-*/
 void() monster_fish =
 {
 	if (deathmatch)

@@ -488,9 +488,6 @@ void() ogre_melee =
 		ogre_swing1 ();
 };
 
-/*QUAKED monster_ogre (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-
-*/
 void() monster_ogre =
 {
 	if (deathmatch)

@@ -17,8 +17,6 @@
     See file, 'COPYING', for details.
 */
 void() W_SetCurrentAmmo;
-/* ALL LIGHTS SHOULD BE 0 1 0 IN COLOR ALL OTHER ITEMS SHOULD
-BE .8 .3 .4 IN COLOR*/
 
 void() SUB_regen =
 {
@@ -29,9 +27,6 @@ void() SUB_regen =
 	setorigin (self, self.origin);
 };
 
-/*QUAKED noclass (0 0 0) (-8 -8 -8) (8 8 8)
-prints a warning message when spawned
-*/
 void() noclass =
 {
 	dprint ("noclass spawned at");
@@ -109,17 +104,11 @@ float(entity e, float healamount, float ignore) T_Heal =
 	return 1;
 };
 
-/*QUAKED item_health (.3 .3 1) (0 0 0) (32 32 32) rotten megahealth
-Health box. Normally gives 25 points.
-Rotten box heals 5-10 points,
-megahealth will add 100 health, then
-rot you down to your maximum health limit,
-one point per second.
-*/
-
 float H_ROTTEN = 1;
 float H_MEGA = 2;
+
 .float healamount, healtype;
+
 void() health_touch;
 void() item_megahealth_rot;
 
@@ -298,8 +287,6 @@ void() armor_touch =
 	SUB_UseTargets ();  // fire all targets / killtargets
 };
 
-/*QUAKED item_armor1 (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() item_armor1 =
 {
 	self.touch = armor_touch;
@@ -310,8 +297,6 @@ void() item_armor1 =
 	StartItem ();
 };
 
-/*QUAKED item_armor2 (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() item_armor2 =
 {
 	self.touch = armor_touch;
@@ -322,8 +307,6 @@ void() item_armor2 =
 	StartItem ();
 };
 
-/*QUAKED item_armorInv (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() item_armorInv =
 {
 	self.touch = armor_touch;
@@ -508,8 +491,6 @@ void() weapon_touch =
 	SUB_UseTargets ();  // fire all targets / killtargets
 };
 
-/*QUAKED weapon_supershotgun (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() weapon_supershotgun =
 {
 	precache_model ("progs/g_shot.mdl");
@@ -521,8 +502,6 @@ void() weapon_supershotgun =
 	StartItem ();
 };
 
-/*QUAKED weapon_nailgun (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() weapon_nailgun =
 {
 	precache_model ("progs/g_nail.mdl");
@@ -534,8 +513,6 @@ void() weapon_nailgun =
 	StartItem ();
 };
 
-/*QUAKED weapon_supernailgun (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() weapon_supernailgun =
 {
 	precache_model ("progs/g_nail2.mdl");
@@ -547,8 +524,6 @@ void() weapon_supernailgun =
 	StartItem ();
 };
 
-/*QUAKED weapon_grenadelauncher (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() weapon_grenadelauncher =
 {
 	precache_model ("progs/g_rock.mdl");
@@ -560,8 +535,6 @@ void() weapon_grenadelauncher =
 	StartItem ();
 };
 
-/*QUAKED weapon_rocketlauncher (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() weapon_rocketlauncher =
 {
 	precache_model ("progs/g_rock2.mdl");
@@ -573,8 +546,6 @@ void() weapon_rocketlauncher =
 	StartItem ();
 };
 
-/*QUAKED weapon_lightning (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() weapon_lightning =
 {
 	precache_model ("progs/g_light.mdl");
@@ -675,8 +646,6 @@ void() ammo_touch =
 
 float WEAPON_BIG2 = 1;
 
-/*QUAKED item_shells (0 .5 .8) (0 0 0) (32 32 32) big
-*/
 void() item_shells =
 {
 	self.touch = ammo_touch;
@@ -699,8 +668,6 @@ void() item_shells =
 	StartItem ();
 };
 
-/*QUAKED item_spikes (0 .5 .8) (0 0 0) (32 32 32) big
-*/
 void() item_spikes =
 {
 	self.touch = ammo_touch;
@@ -723,8 +690,6 @@ void() item_spikes =
 	StartItem ();
 };
 
-/*QUAKED item_rockets (0 .5 .8) (0 0 0) (32 32 32) big
-*/
 void() item_rockets =
 {
 	self.touch = ammo_touch;
@@ -747,8 +712,6 @@ void() item_rockets =
 	StartItem ();
 };
 
-/*QUAKED item_cells (0 .5 .8) (0 0 0) (32 32 32) big
-*/
 void() item_cells =
 {
 	self.touch = ammo_touch;
@@ -771,14 +734,11 @@ void() item_cells =
 	StartItem ();
 };
 
-/*QUAKED item_weapon (0 .5 .8) (0 0 0) (32 32 32) shotgun rocket spikes big
-DO NOT USE THIS!!!! IT WILL BE REMOVED!
-*/
-
 float WEAPON_SHOTGUN = 1;
 float WEAPON_ROCKET = 2;
 float WEAPON_SPIKES = 4;
 float WEAPON_BIG = 8;
+
 void() item_weapon =
 {
 	self.touch = ammo_touch;
@@ -895,16 +855,6 @@ void() key_setsounds =
 	}
 };
 
-/*QUAKED item_key1 (0 .5 .8) (-16 -16 -24) (16 16 32)
-SILVER key
-In order for keys to work
-you MUST set your maps
-worldtype to one of the
-following:
-0: medieval
-1: metal
-2: base
-*/
 void() item_key1 =
 {
 	if (world.worldtype == 0)
@@ -932,16 +882,6 @@ void() item_key1 =
 	StartItem ();
 };
 
-/*QUAKED item_key2 (0 .5 .8) (-16 -16 -24) (16 16 32)
-GOLD key
-In order for keys to work
-you MUST set your maps
-worldtype to one of the
-following:
-0: medieval
-1: metal
-2: base
-*/
 void() item_key2 =
 {
 	if (world.worldtype == 0)
@@ -997,9 +937,6 @@ void() sigil_touch =
 	SUB_UseTargets ();  // fire all targets / killtargets
 };
 
-/*QUAKED item_sigil (0 .5 .8) (-16 -16 -24) (16 16 32) E1 E2 E3 E4
-End of level sigil, pick up to end episode and return to jrstart.
-*/
 void() item_sigil =
 {
 	if (!self.spawnflags)
@@ -1103,9 +1040,6 @@ void() powerup_touch =
 	SUB_UseTargets ();  // fire all targets / killtargets
 };
 
-/*QUAKED item_artifact_invulnerability (0 .5 .8) (-16 -16 -24) (16 16 32)
-Player is invulnerable for 30 seconds
-*/
 void() item_artifact_invulnerability =
 {
 	self.touch = powerup_touch;
@@ -1122,9 +1056,6 @@ void() item_artifact_invulnerability =
 	StartItem ();
 };
 
-/*QUAKED item_artifact_envirosuit (0 .5 .8) (-16 -16 -24) (16 16 32)
-Player takes no damage from water or slime for 30 seconds
-*/
 void() item_artifact_envirosuit =
 {
 	self.touch = powerup_touch;
@@ -1140,9 +1071,6 @@ void() item_artifact_envirosuit =
 	StartItem ();
 };
 
-/*QUAKED item_artifact_invisibility (0 .5 .8) (-16 -16 -24) (16 16 32)
-Player is invisible for 30 seconds
-*/
 void() item_artifact_invisibility =
 {
 	self.touch = powerup_touch;
@@ -1159,9 +1087,6 @@ void() item_artifact_invisibility =
 	StartItem ();
 };
 
-/*QUAKED item_artifact_super_damage (0 .5 .8) (-16 -16 -24) (16 16 32)
-The next attack from the player will do 4x damage
-*/
 void() item_artifact_super_damage =
 {
 	self.touch = powerup_touch;

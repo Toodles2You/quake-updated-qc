@@ -256,8 +256,6 @@ void(entity attacker, float damage) nopain =
 
 //============================================================================
 
-/*QUAKED monster_oldone (1 0 0) (-16 -16 -24) (16 16 32)
-*/
 void() monster_oldone =
 {
 	if (deathmatch)

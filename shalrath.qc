@@ -217,8 +217,6 @@ void() ShalMissileTouch =
 
 //=================================================================
 
-/*QUAKED monster_shalrath (1 0 0) (-32 -32 -24) (32 32 48) Ambush
-*/
 void() monster_shalrath =
 {
 	if (deathmatch)

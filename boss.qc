@@ -276,8 +276,6 @@ void() boss_awake =
 	boss_rise1 ();
 };
 
-/*QUAKED monster_boss (1 0 0) (-128 -128 -24) (128 128 256)
-*/
 void() monster_boss =
 {
 	if (deathmatch)
@@ -388,9 +386,6 @@ void() lightning_use =
 	}
 };
 
-/*QUAKED event_lightning (0 1 1) (-16 -16 -16) (16 16 16)
-Just for boss level.
-*/
 void() event_lightning =
 {
 	self.use = lightning_use;
