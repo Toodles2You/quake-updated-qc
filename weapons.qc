@@ -999,8 +999,6 @@ void() W_ChangeWeapon =
 			am = 1;
 	}
 
-	self.impulse = 0;
-
 	if (!(self.items & fl))
 	{  // don't have the weapon or the ammo
 		sprint (self, "no weapon.\n");
@@ -1038,7 +1036,7 @@ void() CheatCommand =
 	self.ammo_cells = 100;
 
 	self.weapon = IT_ROCKET_LAUNCHER;
-	self.impulse = 0;
+
 	W_SetCurrentAmmo ();
 };
 
@@ -1054,7 +1052,6 @@ void() CycleWeaponCommand =
 	local float it, am;
 
 	it = self.items;
-	self.impulse = 0;
 
 	while (1)
 	{
@@ -1127,7 +1124,6 @@ void() CycleWeaponReverseCommand =
 	local float it, am;
 
 	it = self.items;
-	self.impulse = 0;
 
 	while (1)
 	{
@@ -1220,17 +1216,15 @@ void() ImpulseCommands =
 {
 	if (self.impulse >= 1 && self.impulse <= 8)
 		W_ChangeWeapon ();
-
 	if (self.impulse == 9)
 		CheatCommand ();
-	if (self.impulse == 10)
+	else if (self.impulse == 10)
 		CycleWeaponCommand ();
-	if (self.impulse == 11)
+	else if (self.impulse == 11)
 		ServerflagsCommand ();
-	if (self.impulse == 12)
+	else if (self.impulse == 12)
 		CycleWeaponReverseCommand ();
-
-	if (self.impulse == 255)
+	else if (self.impulse == 255)
 		QuadCheat ();
 
 	self.impulse = 0;
@@ -1248,7 +1242,8 @@ void() W_WeaponFrame =
 	if (time < self.attack_finished)
 		return;
 
-	ImpulseCommands ();
+	if (self.impulse)
+		ImpulseCommands ();
 
 	// check for attack
 	if (self.button0)
