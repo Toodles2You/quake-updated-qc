@@ -212,10 +212,10 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	// MED
 	if (targ.items2 & HIP_IT_EMPATHY_SHIELDS)
 	{
-		if (self.empathy_sound < time)
+		if (targ.empathy_sound < time)
 		{
 			sound (targ, CHAN_ITEM, "hipitems/empathy2.wav", 1, ATTN_NORM);
-			self.empathy_sound = time + 0.5;
+			targ.empathy_sound = time + 0.5;
 		}
 	}
 
