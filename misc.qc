@@ -24,8 +24,6 @@ void() info_null =
 
 void() info_notnull = {};
 
-//============================================================================
-
 float START_OFF = 1;
 
 void() light_use =
@@ -45,7 +43,7 @@ void() light_use =
 void() light =
 {
 	if (self.targetname == "")
-	{  // inert light
+	{ // inert light
 		remove (self);
 		return;
 	}
@@ -131,8 +129,6 @@ void() light_flame_small_white =
 	makestatic (self);
 };
 
-//============================================================================
-
 void() fire_fly;
 void() fire_touch;
 
@@ -174,8 +170,6 @@ void() fire_touch =
 	T_Damage (other, self, self, 20);
 	remove (self);
 };
-
-//============================================================================
 
 void() barrel_explode =
 {
@@ -240,8 +234,6 @@ void() misc_explobox2 =
 	}
 };
 
-//============================================================================
-
 float SPAWNFLAG_SUPERSPIKE = 1;
 float SPAWNFLAG_LASER = 2;
 
@@ -295,13 +287,6 @@ void() trap_shooter =
 	self.nextthink = self.nextthink + self.wait + self.ltime;
 	self.think = shooter_think;
 };
-
-/*
-===============================================================================
-
-
-===============================================================================
-*/
 
 void() make_bubbles;
 void() bubble_remove;
@@ -416,23 +401,15 @@ void() viewthing =
 	setmodel (self, "progs/player.mdl");
 };
 
-/*
-==============================================================================
-
-SIMPLE BMODELS
-
-==============================================================================
-*/
-
 void() func_wall_use =
-{  // change to alternate textures
+{ // change to alternate textures
 	self.frame = 1 - self.frame;
 };
 
 void() func_wall =
 {
 	self.angles = '0 0 0';
-	self.movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
+	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	self.use = func_wall_use;
 	setmodel (self, self.model);
@@ -450,10 +427,9 @@ void() func_illusionary =
 void() func_episodegate =
 {
 	if (!(serverflags & self.spawnflags))
-		return;  // can still enter episode
-
+		return;
 	self.angles = '0 0 0';
-	self.movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
+	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	self.use = func_wall_use;
 	setmodel (self, self.model);
@@ -462,15 +438,13 @@ void() func_episodegate =
 void() func_bossgate =
 {
 	if ((serverflags & 15) == 15)
-		return;  // all episodes completed
+		return;
 	self.angles = '0 0 0';
-	self.movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
+	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	self.use = func_wall_use;
 	setmodel (self, self.model);
 };
-
-//============================================================================
 
 void() ambient_suck_wind =
 {
@@ -525,8 +499,6 @@ void() ambient_swamp2 =
 	precache_sound ("ambience/swamp2.wav");
 	ambientsound (self.origin, "ambience/swamp2.wav", 0.5, ATTN_STATIC);
 };
-
-//============================================================================
 
 void() noise_think =
 {

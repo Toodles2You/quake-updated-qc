@@ -16,12 +16,13 @@
 
     See file, 'COPYING', for details.
 */
+
 void() W_SetCurrentAmmo;
 
 void() SUB_regen =
 {
-	self.model = self.mdl;       // restore original model
-	self.solid = SOLID_TRIGGER;  // allow it to be touched again
+	self.model = self.mdl; // restore original model
+	self.solid = SOLID_TRIGGER; // allow it to be touched again
 	// play respawn sound
 	sound (self, CHAN_VOICE, "items/itembk2.wav", 1, ATTN_NORM);
 	setorigin (self, self.origin);
@@ -35,19 +36,12 @@ void() noclass =
 	remove (self);
 };
 
-/*
-============
-PlaceItem
-
-plants the object on the floor
-============
-*/
 void() PlaceItem =
 {
 	local float oldz;
 
-	self.mdl = self.model;  // so it can be restored on respawn
-	self.flags = FL_ITEM;   // make extra wide
+	self.mdl = self.model; // so it can be restored on respawn
+	self.flags = FL_ITEM; // make extra wide
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_TOSS;
 	self.velocity = '0 0 0';
@@ -63,30 +57,14 @@ void() PlaceItem =
 	}
 };
 
-/*
-============
-StartItem
-
-Sets the clipping size and plants the object on the floor
-============
-*/
 void() StartItem =
 {
-	self.nextthink = time + 0.2;  // items start after other solids
+	self.nextthink = time + 0.2; // items start after other solids
 	self.think = PlaceItem;
 };
 
-/*
-=========================================================================
-
-HEALTH BOX
-
-=========================================================================
-*/
-//
 // T_Heal: add health to an entity, limiting health to max_health
 // "ignore" will ignore max_health limit
-//
 float(entity e, float healamount, float ignore) T_Heal =
 {
 	if (e.health <= 0)
@@ -155,7 +133,7 @@ void() health_touch =
 	if (other.classname != "player")
 		return;
 
-	if (self.healtype == 2)  // Megahealth?  Ignore max_health...
+	if (self.healtype == 2) // Megahealth?  Ignore max_health...
 	{
 		if (other.health >= 250)
 			return;
@@ -191,7 +169,7 @@ void() health_touch =
 	}
 	else
 	{
-		if (deathmatch != 2)  // deathmatch 2 is the silly old rules
+		if (deathmatch != 2) // deathmatch 2 is the silly old rules
 		{
 			if (deathmatch)
 				self.nextthink = time + 20;
@@ -200,7 +178,7 @@ void() health_touch =
 	}
 
 	activator = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets ();
 };
 
 void() item_megahealth_rot =
@@ -214,24 +192,14 @@ void() item_megahealth_rot =
 		return;
 	}
 
-	// it is possible for a player to die and respawn between rots, so don't
-	// just blindly subtract the flag off
 	other.items = other.items - (other.items & IT_SUPERHEALTH);
 
-	if (deathmatch == 1)  // deathmatch 2 is silly old rules
+	if (deathmatch == 1) // deathmatch 2 is silly old rules
 	{
 		self.nextthink = time + 20;
 		self.think = SUB_regen;
 	}
 };
-
-/*
-===============================================================================
-
-ARMOR
-
-===============================================================================
-*/
 
 void() armor_touch;
 
@@ -284,7 +252,7 @@ void() armor_touch =
 	stuffcmd (other, "bf\n");
 
 	activator = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets ();
 };
 
 void() item_armor1 =
@@ -317,14 +285,6 @@ void() item_armorInv =
 	StartItem ();
 };
 
-/*
-===============================================================================
-
-WEAPONS
-
-===============================================================================
-*/
-
 void() bound_other_ammo =
 {
 	if (other.ammo_shells > 100)
@@ -354,13 +314,6 @@ float(float w) RankForWeapon =
 	return 7;
 };
 
-/*
-=============
-Deathmatch_Weapon
-
-Deathmatch weapon change rules for picking up a weapon
-=============
-*/
 void(float old, float new) Deathmatch_Weapon =
 {
 	local float or, nr;
@@ -372,11 +325,6 @@ void(float old, float new) Deathmatch_Weapon =
 		self.weapon = new;
 };
 
-/*
-=============
-weapon_touch
-=============
-*/
 float() W_BestWeapon;
 
 void() weapon_touch =
@@ -488,7 +436,7 @@ void() weapon_touch =
 	self.think = SUB_regen;
 
 	activator = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets ();
 };
 
 void() weapon_supershotgun =
@@ -557,14 +505,6 @@ void() weapon_lightning =
 	StartItem ();
 };
 
-/*
-===============================================================================
-
-AMMO
-
-===============================================================================
-*/
-
 void() ammo_touch =
 {
 	local entity stemp;
@@ -583,25 +523,25 @@ void() ammo_touch =
 	self = stemp;
 
 	if (self.weapon == 1)
-	{  // shotgun
+	{ // shotgun
 		if (other.ammo_shells >= 100)
 			return;
 		other.ammo_shells = other.ammo_shells + self.aflag;
 	}
 	else if (self.weapon == 2)
-	{  // spikes
+	{ // spikes
 		if (other.ammo_nails >= 200)
 			return;
 		other.ammo_nails = other.ammo_nails + self.aflag;
 	}
 	else if (self.weapon == 3)
-	{  // rockets
+	{ // rockets
 		if (other.ammo_rockets >= 100)
 			return;
 		other.ammo_rockets = other.ammo_rockets + self.aflag;
 	}
 	else if (self.weapon == 4)
-	{  // cells
+	{ // cells
 		if (other.ammo_cells >= 100)
 			return;
 		other.ammo_cells = other.ammo_cells + self.aflag;
@@ -641,7 +581,7 @@ void() ammo_touch =
 	self.think = SUB_regen;
 
 	activator = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets ();
 };
 
 float WEAPON_BIG2 = 1;
@@ -801,14 +741,6 @@ void() item_weapon =
 	StartItem ();
 };
 
-/*
-===============================================================================
-
-KEYS
-
-===============================================================================
-*/
-
 void() key_touch =
 {
 	if (other.classname != "player")
@@ -833,7 +765,7 @@ void() key_touch =
 	}
 
 	activator = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets ();
 };
 
 void() key_setsounds =
@@ -909,14 +841,6 @@ void() item_key2 =
 	StartItem ();
 };
 
-/*
-===============================================================================
-
-END OF LEVEL RUNES
-
-===============================================================================
-*/
-
 void() sigil_touch =
 {
 	if (other.classname != "player")
@@ -931,10 +855,10 @@ void() sigil_touch =
 	self.solid = SOLID_NOT;
 	self.model = string_null;
 	serverflags = serverflags | (self.spawnflags & 15);
-	self.classname = "";  // so rune doors won't find it
+	self.classname = ""; // so rune doors won't find it
 
 	activator = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets ();
 };
 
 void() item_sigil =
@@ -970,14 +894,6 @@ void() item_sigil =
 	setsize (self, '-16 -16 -24', '16 16 32');
 	StartItem ();
 };
-
-/*
-===============================================================================
-
-POWERUPS
-
-===============================================================================
-*/
 
 void() powerup_touch;
 
@@ -1037,7 +953,7 @@ void() powerup_touch =
 	}
 
 	activator = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets ();
 };
 
 void() item_artifact_invulnerability =
@@ -1102,14 +1018,6 @@ void() item_artifact_super_damage =
 	setsize (self, '-16 -16 -24', '16 16 32');
 	StartItem ();
 };
-
-/*
-===============================================================================
-
-PLAYER BACKPACKS
-
-===============================================================================
-*/
 
 void() BackpackTouch =
 {
@@ -1210,11 +1118,6 @@ void() BackpackTouch =
 	W_SetCurrentAmmo ();
 };
 
-/*
-===============
-DropBackpack
-===============
-*/
 void() DropBackpack =
 {
 	local entity item;
@@ -1222,7 +1125,7 @@ void() DropBackpack =
 	if (!self.ammo_shells && !self.ammo_nails && !self.ammo_rockets &&
 		!self.ammo_cells)
 	{
-		return;  // nothing in it
+		return;
 	}
 
 	item = spawn ();
@@ -1264,6 +1167,6 @@ void() DropBackpack =
 	setsize (item, '-16 -16 0', '16 16 56');
 	item.touch = BackpackTouch;
 
-	item.nextthink = time + 120;  // remove after 2 minutes
+	item.nextthink = time + 120;
 	item.think = SUB_Remove;
 };

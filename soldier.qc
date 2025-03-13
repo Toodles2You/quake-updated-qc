@@ -16,13 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
-
-SOLDIER / PLAYER
-
-==============================================================================
-*/
 
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
 
@@ -49,12 +42,6 @@ $frame shoot1 shoot2 shoot3 shoot4 shoot5 shoot6 shoot7 shoot8 shoot9
 $frame prowl_1 prowl_2 prowl_3 prowl_4 prowl_5 prowl_6 prowl_7 prowl_8
 $frame prowl_9 prowl_10 prowl_11 prowl_12 prowl_13 prowl_14 prowl_15 prowl_16
 $frame prowl_17 prowl_18 prowl_19 prowl_20 prowl_21 prowl_22 prowl_23 prowl_24
-
-/*
-==============================================================================
-SOLDIER CODE
-==============================================================================
-*/
 
 void() army_fire;
 
@@ -249,7 +236,6 @@ void() army_cdie11 = [$deathc11, army_cdie11] {};
 
 void() army_die =
 {
-	// check for gib
 	if (self.health < -35)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -260,7 +246,6 @@ void() army_die =
 		return;
 	}
 
-	// regular death
 	sound (self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
 	if (random () < 0.5)
 		army_die1 ();
@@ -288,7 +273,7 @@ void() monster_army =
 	precache_sound ("soldier/sattck1.wav");
 	precache_sound ("soldier/sight1.wav");
 
-	precache_sound ("player/udeath.wav");  // gib death
+	precache_sound ("player/udeath.wav"); // gib death
 
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;

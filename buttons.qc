@@ -16,7 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-// button and multiple button
 
 void() button_wait;
 void() button_return;
@@ -28,7 +27,7 @@ void() button_wait =
 	self.think = button_return;
 	activator = self.enemy;
 	SUB_UseTargets ();
-	self.frame = 1;  // use alternate textures
+	self.frame = 1; // use alternate textures
 };
 
 void() button_done =
@@ -40,15 +39,12 @@ void() button_return =
 {
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos1, self.speed, button_done);
-	self.frame = 0;  // use normal textures
+	self.frame = 0; // use normal textures
 	if (self.health)
-		self.takedamage = DAMAGE_YES;  // can be shot again
+		self.takedamage = DAMAGE_YES; // can be shot again
 };
 
-void() button_blocked =
-{
-	// do nothing, just don't ome all the way back out
-};
+void() button_blocked = {};
 
 void() button_fire =
 {
@@ -79,7 +75,7 @@ void() button_killed =
 {
 	self.enemy = damage_attacker;
 	self.health = self.max_health;
-	self.takedamage = DAMAGE_NO;  // wil be reset upon return
+	self.takedamage = DAMAGE_NO; // wil be reset upon return
 	button_fire ();
 };
 

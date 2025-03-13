@@ -16,13 +16,7 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
 
-DOG
-
-==============================================================================
-*/
 $frame attack1 attack2 attack3 attack4 attack5 attack6 attack7 attack8
 
 $frame death1 death2 death3 death4 death5 death6 death7 death8 death9
@@ -43,16 +37,9 @@ $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8
 
-
 void() dog_leap1;
 void() dog_run1;
 
-/*
-================
-dog_bite
-
-================
-*/
 void() dog_bite =
 {
 	local vector delta;
@@ -94,12 +81,12 @@ void() Dog_JumpTouch =
 	if (!checkbottom (self))
 	{
 		if (self.flags & FL_ONGROUND)
-		{  // jump randomly to not get hung up
+		{ // jump randomly to not get hung up
 			self.touch = SUB_Null;
 			self.think = dog_leap1;
 			self.nextthink = time + 0.1;
 		}
-		return;  // not on ground yet
+		return;
 	}
 
 	self.touch = SUB_Null;
@@ -239,7 +226,6 @@ void() dog_dieb9 = [$deathb9, dog_dieb9] {};
 
 void() dog_die =
 {
-	// check for gib
 	if (self.health < -35)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -250,7 +236,6 @@ void() dog_die =
 		return;
 	}
 
-	// regular death
 	sound (self, CHAN_VOICE, "dog/ddeath.wav", 1, ATTN_NORM);
 	self.solid = SOLID_NOT;
 
@@ -260,31 +245,16 @@ void() dog_die =
 		dog_dieb1 ();
 };
 
-//============================================================================
-
-/*
-==============
-CheckDogMelee
-
-Returns TRUE if a melee attack would hit right now
-==============
-*/
 float() CheckDogMelee =
 {
 	if (enemy_range == RANGE_MELEE)
-	{  // FIXME: check canreach
+	{ // FIXME: check canreach
 		self.attack_state = AS_MELEE;
 		return TRUE;
 	}
 	return FALSE;
 };
 
-/*
-==============
-CheckDogJump
-
-==============
-*/
 float() CheckDogJump =
 {
 	local float feet;
@@ -330,8 +300,6 @@ float() DogCheckAttack =
 
 	return FALSE;
 };
-
-//===========================================================================
 
 void() monster_dog =
 {

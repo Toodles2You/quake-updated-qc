@@ -23,16 +23,6 @@ void(entity targ, entity attacker) ClientObituary;
 
 void() monster_death_use;
 
-//============================================================================
-
-/*
-============
-CanDamage
-
-Returns true if the inflictor can directly damage the target.  Used for
-explosions and melee attacks.
-============
-*/
 float(entity targ, entity inflictor) CanDamage =
 {
 	local vector center;
@@ -68,11 +58,6 @@ float(entity targ, entity inflictor) CanDamage =
 	return FALSE;
 };
 
-/*
-============
-Killed
-============
-*/
 void(entity targ, entity attacker) Killed =
 {
 	local entity oself;
@@ -81,11 +66,11 @@ void(entity targ, entity attacker) Killed =
 	self = targ;
 
 	if (self.health < -99)
-		self.health = -99;  // don't let sbar look bad if a player
+		self.health = -99; // don't let sbar look bad if a player
 
 	if (self.movetype == MOVETYPE_PUSH ||
 		self.movetype == MOVETYPE_NONE)
-		{  // doors, triggers, etc
+		{ // doors, triggers, etc
 		self.th_die ();
 		self = oself;
 		return;
@@ -112,12 +97,12 @@ void(entity targ, entity attacker) Killed =
 };
 
 /*
-============
+==============================================================================
 T_Damage
 
 The damage is coming from inflictor, but get mad at attacker
 This should be the only function that ever reduces health.
-============
+==============================================================================
 */
 void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 {
@@ -142,7 +127,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	if (save >= targ.armorvalue)
 	{
 		save = targ.armorvalue;
-		targ.armortype = 0;  // lost all armor
+		targ.armortype = 0; // lost all armor
 		targ.items = targ.items - (targ.items & IT_ARMOR);
 	}
 
@@ -224,11 +209,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	self = oldself;
 };
 
-/*
-============
-T_RadiusDamage
-============
-*/
 void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDamage =
 {
 	local float points;
@@ -260,7 +240,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 						if (points > 0)
 						{
 							if (CanDamage (head, inflictor))
-							{  // shambler takes half damage from all explosions
+							{ // shambler takes half damage from all explosions
 								if (head.classname == "monster_shambler")
 									points = points * 0.5;
 								T_Damage (head, inflictor, attacker, points);

@@ -16,13 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
-
-WIZARD
-
-==============================================================================
-*/
 
 $frame hover1 hover2 hover3 hover4 hover5 hover6 hover7 hover8
 $frame hover9 hover10 hover11 hover12 hover13 hover14 hover15
@@ -39,7 +32,6 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8
 
 /*
 ==============================================================================
-
 WIZARD
 
 If the player moves behind cover before the missile is launched, launch it
@@ -49,13 +41,13 @@ will duck back out and catch it.
 */
 
 /*
-=============
+==============================================================================
 LaunchMissile
 
 Sets the given entities velocity and angles so that it will hit self.enemy
 if self.enemy maintains it's current velocity
 0.1 is moderately accurate, 0.0 is totally accurate
-=============
+==============================================================================
 */
 void(entity missile, float mspeed, float accuracy) LaunchMissile =
 {
@@ -64,7 +56,6 @@ void(entity missile, float mspeed, float accuracy) LaunchMissile =
 
 	makevectors (self.angles);
 
-	// set missile speed
 	vec = self.enemy.origin + self.enemy.mins + self.enemy.size * 0.7;
 	vec = vec - missile.origin;
 
@@ -87,7 +78,6 @@ void(entity missile, float mspeed, float accuracy) LaunchMissile =
 	missile.angles = '0 0 0';
 	missile.angles_y = vectoyaw (missile.velocity);
 
-	// set missile duration
 	missile.nextthink = time + 5;
 	missile.think = SUB_Remove;
 };
@@ -95,11 +85,6 @@ void(entity missile, float mspeed, float accuracy) LaunchMissile =
 void() wiz_run1;
 void() wiz_side1;
 
-/*
-=================
-WizardCheckAttack
-=================
-*/
 float() WizardCheckAttack =
 {
 	local vector spot1, spot2;
@@ -130,7 +115,7 @@ float() WizardCheckAttack =
 	traceline (spot1, spot2, FALSE, self);
 
 	if (trace_ent != targ)
-	{  // don't have a clear shot, so move to a side
+	{ // don't have a clear shot, so move to a side
 		if (self.attack_state != AS_STRAIGHT)
 		{
 			self.attack_state = AS_STRAIGHT;
@@ -174,11 +159,6 @@ float() WizardCheckAttack =
 	return FALSE;
 };
 
-/*
-=================
-WizardAttackFinished
-=================
-*/
 void() WizardAttackFinished =
 {
 	if (enemy_range >= RANGE_MID || !enemy_vis)
@@ -192,14 +172,6 @@ void() WizardAttackFinished =
 		self.think = wiz_side1;
 	}
 };
-
-/*
-==============================================================================
-
-FAST ATTACKS
-
-==============================================================================
-*/
 
 void() Wiz_FastFire =
 {
@@ -371,7 +343,6 @@ void() wiz_death8 = [$death8, wiz_death8] {};
 
 void() wiz_die =
 {
-	// check for gib
 	if (self.health < -40)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -389,7 +360,7 @@ void(entity attacker, float damage) Wiz_Pain =
 {
 	sound (self, CHAN_VOICE, "wizard/wpain.wav", 1, ATTN_NORM);
 	if (random () * 70 > damage)
-		return;  // didn't flinch
+		return;
 
 	wiz_pain1 ();
 };
@@ -410,7 +381,7 @@ void() monster_wizard =
 	precache_model ("progs/h_wizard.mdl");
 	precache_model ("progs/w_spike.mdl");
 
-	precache_sound ("wizard/hit.wav");  // used by c code
+	precache_sound ("wizard/hit.wav"); // used by c code
 	precache_sound ("wizard/wattack.wav");
 	precache_sound ("wizard/wdeath.wav");
 	precache_sound ("wizard/widle1.wav");

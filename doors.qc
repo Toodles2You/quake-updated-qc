@@ -24,7 +24,6 @@ float DOOR_SILVER_KEY = 16;
 float DOOR_TOGGLE = 32;
 
 /*
-
 Doors are similar to buttons, but can spawn a fat trigger field around them
 to open without a touch, and they link together to form simultanious
 double/quad doors.
@@ -33,15 +32,6 @@ Door.owner is the master door.  If there is only one door, it points to itself.
 If multiple doors, all will point to a single one.
 
 Door.enemy chains from the master door through all doors linked in the chain.
-
-*/
-
-/*
-=============================================================================
-
-THINK FUNCTIONS
-
-=============================================================================
 */
 
 void() door_go_down;
@@ -51,8 +41,8 @@ void() door_blocked =
 {
 	T_Damage (other, self, self, self.dmg);
 
-	// if a door has a negative wait, it would never come back if blocked,
-	// so let it just squash the object to death real fast
+	// if a door has a negative wait, it would never come back if blocked, so
+	// let it just squash the object to death real fast
 	if (self.wait >= 0)
 	{
 		if (self.state == STATE_DOWN)
@@ -67,7 +57,7 @@ void() door_hit_top =
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.state = STATE_TOP;
 	if (self.spawnflags & DOOR_TOGGLE)
-		return;  // don't come down automatically
+		return;
 	self.think = door_go_down;
 	self.nextthink = self.ltime + self.wait;
 };
@@ -94,10 +84,10 @@ void() door_go_down =
 void() door_go_up =
 {
 	if (self.state == STATE_UP)
-		return;  // allready going up
+		return;
 
 	if (self.state == STATE_TOP)
-	{  // reset top wait time
+	{ // reset top wait time
 		self.nextthink = self.ltime + self.wait;
 		return;
 	}
@@ -108,14 +98,6 @@ void() door_go_up =
 
 	SUB_UseTargets ();
 };
-
-/*
-=============================================================================
-
-ACTIVATION FUNCTIONS
-
-=============================================================================
-*/
 
 void() door_fire =
 {
@@ -130,7 +112,7 @@ void() door_fire =
 	if (self.items)
 		sound (self, CHAN_VOICE, self.noise4, 1, ATTN_NORM);
 
-	self.message = string_null;  // no more message
+	self.message = string_null; // no more message
 	oself = self;
 
 	if (self.spawnflags & DOOR_TOGGLE)
@@ -160,7 +142,7 @@ void() door_use =
 {
 	local entity oself;
 
-	self.message = "";  // door message are for touch only
+	self.message = ""; // door message are for touch only
 	self.owner.message = "";
 	self.enemy.message = "";
 	oself = self;
@@ -191,18 +173,11 @@ void() door_killed =
 	oself = self;
 	self = self.owner;
 	self.health = self.max_health;
-	self.takedamage = DAMAGE_NO;  // wil be reset upon return
+	self.takedamage = DAMAGE_NO; // wil be reset upon return
 	door_use ();
 	self = oself;
 };
 
-/*
-================
-door_touch
-
-Prints messages and opens key doors
-================
-*/
 void() door_touch =
 {
 	if (other.classname != "player")
@@ -267,17 +242,9 @@ void() door_touch =
 	other.items = other.items - self.items;
 	self.touch = SUB_Null;
 	if (self.enemy)
-		self.enemy.touch = SUB_Null;  // get paired door
+		self.enemy.touch = SUB_Null; // get paired door
 	door_use ();
 };
-
-/*
-=============================================================================
-
-SPAWNING FUNCTIONS
-
-=============================================================================
-*/
 
 entity(vector fmins, vector fmaxs) spawn_field =
 {
@@ -313,24 +280,17 @@ float(entity e1, entity e2) EntitiesTouching =
 	return TRUE;
 };
 
-/*
-=============
-LinkDoors
-
-
-=============
-*/
 void() LinkDoors =
 {
 	local entity t, starte;
 	local vector cmins, cmaxs;
 
 	if (self.enemy)
-		return;  // already linked by another door
+		return; // already linked by another door
 	if (self.spawnflags & 4)
 	{
 		self.owner = self.enemy = self;
-		return;  // don't want to link this door
+		return; // don't want to link this door
 	}
 
 	cmins = self.mins;
@@ -340,7 +300,7 @@ void() LinkDoors =
 	t = self;
 
 	do {
-		self.owner = starte;  // master door
+		self.owner = starte; // master door
 
 		if (self.health)
 			starte.health = self.health;
@@ -352,10 +312,10 @@ void() LinkDoors =
 		t = find (t, classname, self.classname);
 		if (!t)
 		{
-			self.enemy = starte;  // make the chain a loop
+			self.enemy = starte; // make the chain a loop
 
-			// shootable, fired, or key doors just needed the
-			// owner/enemy links, they don't spawn a field
+			// shootable, fired, or key doors just needed the owner/enemy links,
+			// they don't spawn a field
 
 			self = self.owner;
 
@@ -492,8 +452,8 @@ void() func_door =
 
 	self.pos2 = self.pos1 + self.movedir * dist;
 
-// DOOR_START_OPEN is to allow an entity to be lighted in the closed position
-// but spawn in the open position
+	// DOOR_START_OPEN is to allow an entity to be lighted in the closed
+	// position but spawn in the open position
 	if (self.spawnflags & DOOR_START_OPEN)
 	{
 		setorigin (self, self.pos2);
@@ -514,19 +474,11 @@ void() func_door =
 
 	self.touch = door_touch;
 
-// LinkDoors can't be done until all of the doors have been spawned, so
-// the sizes can be detected properly.
+	// LinkDoors can't be done until all of the doors have been spawned, so the
+	// sizes can be detected properly.
 	self.think = LinkDoors;
 	self.nextthink = self.ltime + 0.1;
 };
-
-/*
-=============================================================================
-
-SECRET DOORS
-
-=============================================================================
-*/
 
 void() fd_secret_move1;
 void() fd_secret_move2;
@@ -536,11 +488,11 @@ void() fd_secret_move5;
 void() fd_secret_move6;
 void() fd_secret_done;
 
-float SECRET_OPEN_ONCE = 1;   // stays open
-float SECRET_1ST_LEFT = 2;    // 1st move is left of arrow
-float SECRET_1ST_DOWN = 4;    // 1st move is down from arrow
-float SECRET_NO_SHOOT = 8;    // only opened by trigger
-float SECRET_YES_SHOOT = 16;  // shootable even if targeted
+float SECRET_OPEN_ONCE = 1; // stays open
+float SECRET_1ST_LEFT = 2; // 1st move is left of arrow
+float SECRET_1ST_DOWN = 4; // 1st move is down from arrow
+float SECRET_NO_SHOOT = 8; // only opened by trigger
+float SECRET_YES_SHOOT = 16; // shootable even if targeted
 
 void() fd_secret_use =
 {
@@ -552,9 +504,9 @@ void() fd_secret_use =
 	if (self.origin != self.oldorigin)
 		return;
 
-	self.message = string_null;  // no more message
+	self.message = string_null; // no more message
 
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets ();
 
 	if (!(self.spawnflags & SECRET_NO_SHOOT))
 	{
@@ -568,7 +520,7 @@ void() fd_secret_use =
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.nextthink = self.ltime + 0.1;
 
-	temp = 1 - (self.spawnflags & SECRET_1ST_LEFT);  // 1 or -1
+	temp = 1 - (self.spawnflags & SECRET_1ST_LEFT); // 1 or -1
 	makevectors (self.mangle);
 
 	if (!self.t_width)
@@ -663,13 +615,6 @@ void() secret_blocked =
 	T_Damage (other, self, self, self.dmg);
 };
 
-/*
-================
-secret_touch
-
-Prints messages
-================
-*/
 void() secret_touch =
 {
 	if (other.classname != "player")
@@ -719,7 +664,6 @@ void() func_door_secret =
 	if (!self.dmg)
 		self.dmg = 2;
 
-	// Magic formula...
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
 	self.solid = SOLID_BSP;
@@ -741,5 +685,5 @@ void() func_door_secret =
 	}
 	self.oldorigin = self.origin;
 	if (!self.wait)
-		self.wait = 5;  // 5 seconds before closing
+		self.wait = 5;
 };

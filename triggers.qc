@@ -22,8 +22,6 @@ void() trigger_reactivate =
 	self.solid = SOLID_TRIGGER;
 };
 
-//=============================================================================
-
 float SPAWNFLAG_NOMESSAGE = 1;
 float SPAWNFLAG_NOTOUCH = 1;
 
@@ -45,7 +43,7 @@ void() multi_trigger =
 {
 	if (self.nextthink > time)
 	{
-		return;  // allready been triggered
+		return;
 	}
 
 	if (self.classname == "trigger_secret")
@@ -72,8 +70,8 @@ void() multi_trigger =
 		self.nextthink = time + self.wait;
 	}
 	else
-	{  // we can't just remove (self) here, because this is a touch function
-	   // called wheil C code is looping through area links...
+	{ // we can't just remove (self) here, because this is a touch function
+	 // called wheil C code is looping through area links...
 		self.touch = SUB_Null;
 		self.nextthink = time + 0.1;
 		self.think = SUB_Remove;
@@ -102,7 +100,7 @@ void() multi_touch =
 	{
 		makevectors (other.angles);
 		if (v_forward * self.movedir < 0)
-			return;  // not facing the right way
+			return;
 	}
 
 	self.enemy = other;
@@ -141,7 +139,7 @@ void() trigger_multiple =
 		self.th_die = multi_killed;
 		self.takedamage = DAMAGE_YES;
 		self.solid = SOLID_BBOX;
-		setorigin (self, self.origin);  // make sure it links into the world
+		setorigin (self, self.origin); // make sure it links into the world
 	}
 	else
 	{
@@ -158,14 +156,10 @@ void() trigger_once =
 	trigger_multiple ();
 };
 
-//=============================================================================
-
 void() trigger_relay =
 {
 	self.use = SUB_UseTargets;
 };
-
-//=============================================================================
 
 void() trigger_secret =
 {
@@ -189,8 +183,6 @@ void() trigger_secret =
 
 	trigger_multiple ();
 };
-
-//=============================================================================
 
 void() counter_use =
 {
@@ -230,14 +222,6 @@ void() trigger_counter =
 
 	self.use = counter_use;
 };
-
-/*
-==============================================================================
-
-TELEPORT TRIGGERS
-
-==============================================================================
-*/
 
 float PLAYER_ONLY = 1;
 float SILENT = 2;
@@ -290,7 +274,7 @@ void() tdeath_touch =
 		if (other.invincible_finished > time)
 			self.classname = "teledeath2";
 		if (self.owner.classname != "player")
-		{  // other monsters explode themselves
+		{ // other monsters explode themselves
 			T_Damage (self.owner, self, self, 50000);
 			return;
 		}
@@ -318,7 +302,7 @@ void(vector org, entity death_owner) spawn_tdeath =
 	death.think = SUB_Remove;
 	death.owner = death_owner;
 
-	force_retouch = 2;  // make sure even still objects get hit
+	force_retouch = 2; // make sure even still objects get hit
 };
 
 void() teleport_touch =
@@ -330,7 +314,7 @@ void() teleport_touch =
 	{
 		if (self.nextthink < time)
 		{
-			return;  // not fired yet
+			return; // not fired yet
 		}
 	}
 
@@ -373,7 +357,7 @@ void() teleport_touch =
 	other.angles = t.mangle;
 	if (other.classname == "player")
 	{
-		other.fixangle = 1;  // turn this way immediately
+		other.fixangle = 1;
 		other.teleport_time = time + 0.7;
 		if (other.flags & FL_ONGROUND)
 			other.flags = other.flags - FL_ONGROUND;
@@ -396,7 +380,7 @@ void() info_teleport_destination =
 void() teleport_use =
 {
 	self.nextthink = time + 0.2;
-	force_retouch = 2;  // make sure even still objects get hit
+	force_retouch = 2; // make sure even still objects get hit
 	self.think = SUB_Null;
 };
 
@@ -419,14 +403,6 @@ void() trigger_teleport =
 	}
 };
 
-/*
-==============================================================================
-
-trigger_setskill
-
-==============================================================================
-*/
-
 void() trigger_skill_touch =
 {
 	if (other.classname != "player")
@@ -440,14 +416,6 @@ void() trigger_setskill =
 	InitTrigger ();
 	self.touch = trigger_skill_touch;
 };
-
-/*
-==============================================================================
-
-ONLY REGISTERED TRIGGERS
-
-==============================================================================
-*/
 
 void() trigger_onlyregistered_touch =
 {
@@ -480,8 +448,6 @@ void() trigger_onlyregistered =
 	self.touch = trigger_onlyregistered_touch;
 };
 
-//============================================================================
-
 void() hurt_on =
 {
 	self.solid = SOLID_TRIGGER;
@@ -508,8 +474,6 @@ void() trigger_hurt =
 	if (!self.dmg)
 		self.dmg = 5;
 };
-
-//============================================================================
 
 float PUSH_ONCE = 1;
 
@@ -541,8 +505,6 @@ void() trigger_push =
 	if (!self.speed)
 		self.speed = 1000;
 };
-
-//============================================================================
 
 void() trigger_monsterjump_touch =
 {

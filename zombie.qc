@@ -16,13 +16,7 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
 
-ZOMBIE
-
-==============================================================================
-*/
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
 $frame stand9 stand10 stand11 stand12 stand13 stand14 stand15
 
@@ -62,8 +56,6 @@ $frame paine29 paine30
 $frame cruc_1 cruc_2 cruc_3 cruc_4 cruc_5 cruc_6
 
 float SPAWN_CRUCIFIED = 1;
-
-//=============================================================================
 
 .float inpain;
 
@@ -164,18 +156,10 @@ void() zombie_run18 = [$run18, zombie_run1]
 		sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
 };
 
-/*
-=============================================================================
-
-ATTACKS
-
-=============================================================================
-*/
-
 void() ZombieGrenadeTouch =
 {
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 	if (other.takedamage)
 	{
 		T_Damage (other, self, self.owner, 10);
@@ -183,18 +167,12 @@ void() ZombieGrenadeTouch =
 		remove (self);
 		return;
 	}
-	// bounce sound
 	sound (self, CHAN_WEAPON, "zombie/z_miss.wav", 1, ATTN_NORM);
 	self.velocity = '0 0 0';
 	self.avelocity = '0 0 0';
 	self.touch = SUB_Remove;
 };
 
-/*
-================
-ZombieFireGrenade
-================
-*/
 void(vector st) ZombieFireGrenade =
 {
 	local entity missile;
@@ -210,7 +188,6 @@ void(vector st) ZombieFireGrenade =
 	// calc org
 	org = self.origin + st_x * v_forward + st_y * v_right + (st_z - 24) * v_up;
 
-	// set missile speed
 
 	makevectors (self.angles);
 
@@ -222,7 +199,6 @@ void(vector st) ZombieFireGrenade =
 
 	missile.touch = ZombieGrenadeTouch;
 
-	// set missile duration
 	missile.nextthink = time + 2.5;
 	missile.think = SUB_Remove;
 
@@ -298,14 +274,6 @@ void() zombie_missile =
 	else
 		zombie_attc1 ();
 };
-
-/*
-=============================================================================
-
-PAIN
-
-=============================================================================
-*/
 
 void() zombie_paina1 = [$paina1, zombie_paina2]
 {
@@ -462,7 +430,7 @@ void() zombie_die =
 };
 
 /*
-=================
+==============================================================================
 zombie_pain
 
 Zombies can only be killed (gibbed) by doing 60 hit points of damage
@@ -478,19 +446,19 @@ fast pain frames.
 A hit of less than 10 points of damage (winged by a shotgun) will be ignored.
 
 FIXME: don't use pain_finished because of nightmare hack
-=================
+==============================================================================
 */
 void(entity attacker, float take) zombie_pain =
 {
 	local float r;
 
-	self.health = 60;  // allways reset health
+	self.health = 60; // allways reset health
 
 	if (take < 9)
-		return;  // totally ignore
+		return;
 
 	if (self.inpain == 2)
-		return;  // down on ground, so don't reset any counters
+		return; // down on ground, so don't reset any counters
 
 	// go down immediately if a big enough hit
 	if (take >= 25)
@@ -505,7 +473,7 @@ void(entity attacker, float take) zombie_pain =
 		// if hit again in next gre seconds while not in pain frames, definately
 		// drop
 		self.pain_finished = time + 3;
-		return;  // currently going through an animation, don't change
+		return;
 	}
 
 	if (self.pain_finished > time)
@@ -516,7 +484,6 @@ void(entity attacker, float take) zombie_pain =
 		return;
 	}
 
-	// gp into one of the fast pain animations
 	self.inpain = 1;
 
 	r = random ();
@@ -529,8 +496,6 @@ void(entity attacker, float take) zombie_pain =
 	else
 		zombie_paind1 ();
 };
-
-//============================================================================
 
 void() monster_zombie =
 {
