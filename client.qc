@@ -1269,27 +1269,27 @@ void(entity targ, entity attacker) ClientObituary =
 					deathstring = " was ax-murdered by ";
 					deathstring2 = "\n";
 				}
-				if (rnum == IT_SHOTGUN)
+				else if (rnum == IT_SHOTGUN)
 				{
 					deathstring = " chewed on ";
 					deathstring2 = "'s boomstick\n";
 				}
-				if (rnum == IT_SUPER_SHOTGUN)
+				else if (rnum == IT_SUPER_SHOTGUN)
 				{
 					deathstring = " ate 2 loads of ";
 					deathstring2 = "'s buckshot\n";
 				}
-				if (rnum == IT_NAILGUN)
+				else if (rnum == IT_NAILGUN)
 				{
 					deathstring = " was nailed by ";
 					deathstring2 = "\n";
 				}
-				if (rnum == IT_SUPER_NAILGUN)
+				else if (rnum == IT_SUPER_NAILGUN)
 				{
 					deathstring = " was punctured by ";
 					deathstring2 = "\n";
 				}
-				if (rnum == IT_GRENADE_LAUNCHER)
+				else if (rnum == IT_GRENADE_LAUNCHER)
 				{
 					deathstring = " eats ";
 					deathstring2 = "'s pineapple\n";
@@ -1299,7 +1299,7 @@ void(entity targ, entity attacker) ClientObituary =
 						deathstring2 = "'s grenade\n";
 					}
 				}
-				if (rnum == IT_ROCKET_LAUNCHER)
+				else if (rnum == IT_ROCKET_LAUNCHER)
 				{
 					deathstring = " rides ";
 					deathstring2 = "'s rocket\n";
@@ -1309,7 +1309,7 @@ void(entity targ, entity attacker) ClientObituary =
 						deathstring2 = "'s rocket\n";
 					}
 				}
-				if (rnum == IT_LIGHTNING)
+				else if (rnum == IT_LIGHTNING)
 				{
 					deathstring = " accepts ";
 					if (attacker.waterlevel > 1)
@@ -1334,35 +1334,35 @@ void(entity targ, entity attacker) ClientObituary =
 			{
 				if (attacker.classname == "monster_army")
 					bprint (" was shot by a Grunt\n");
-				if (attacker.classname == "monster_demon1")
+				else if (attacker.classname == "monster_demon1")
 					bprint (" was eviscerated by a Fiend\n");
-				if (attacker.classname == "monster_dog")
+				else if (attacker.classname == "monster_dog")
 					bprint (" was mauled by a Rottweiler\n");
-				if (attacker.classname == "monster_dragon")
+				else if (attacker.classname == "monster_dragon")
 					bprint (" was fried by a Dragon\n");
-				if (attacker.classname == "monster_enforcer")
+				else if (attacker.classname == "monster_enforcer")
 					bprint (" was blasted by an Enforcer\n");
-				if (attacker.classname == "monster_fish")
+				else if (attacker.classname == "monster_fish")
 					bprint (" was fed to the Rotfish\n");
-				if (attacker.classname == "monster_hell_knight")
+				else if (attacker.classname == "monster_hell_knight")
 					bprint (" was slain by a Death Knight\n");
-				if (attacker.classname == "monster_knight")
+				else if (attacker.classname == "monster_knight")
 					bprint (" was slashed by a Knight\n");
-				if (attacker.classname == "monster_ogre")
+				else if (attacker.classname == "monster_ogre")
 					bprint (" was destroyed by an Ogre\n");
-				if (attacker.classname == "monster_oldone")
+				else if (attacker.classname == "monster_oldone")
 					bprint (" became one with Shub-Niggurath\n");
-				if (attacker.classname == "monster_shalrath")
+				else if (attacker.classname == "monster_shalrath")
 					bprint (" was exploded by a Vore\n");
-				if (attacker.classname == "monster_shambler")
+				else if (attacker.classname == "monster_shambler")
 					bprint (" was smashed by a Shambler\n");
-				if (attacker.classname == "monster_tarbaby")
+				else if (attacker.classname == "monster_tarbaby")
 					bprint (" was slimed by a Spawn\n");
-				if (attacker.classname == "monster_vomit")
+				else if (attacker.classname == "monster_vomit")
 					bprint (" was vomited on by a Vomitus\n");
-				if (attacker.classname == "monster_wizard")
+				else if (attacker.classname == "monster_wizard")
 					bprint (" was scragged by a Scrag\n");
-				if (attacker.classname == "monster_zombie")
+				else if (attacker.classname == "monster_zombie")
 					bprint (" joins the Zombies\n");
 
 				return;

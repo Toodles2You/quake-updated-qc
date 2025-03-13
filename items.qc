@@ -611,33 +611,26 @@ void() ammo_touch =
 	best = W_BestWeapon ();
 	self = stemp;
 
-	// shotgun
 	if (self.weapon == 1)
-	{
+	{  // shotgun
 		if (other.ammo_shells >= 100)
 			return;
 		other.ammo_shells = other.ammo_shells + self.aflag;
 	}
-
-	// spikes
-	if (self.weapon == 2)
-	{
+	else if (self.weapon == 2)
+	{  // spikes
 		if (other.ammo_nails >= 200)
 			return;
 		other.ammo_nails = other.ammo_nails + self.aflag;
 	}
-
-	//	rockets
-	if (self.weapon == 3)
-	{
+	else if (self.weapon == 3)
+	{  // rockets
 		if (other.ammo_rockets >= 100)
 			return;
 		other.ammo_rockets = other.ammo_rockets + self.aflag;
 	}
-
-	//	cells
-	if (self.weapon == 4)
-	{
+	else if (self.weapon == 4)
+	{  // cells
 		if (other.ammo_cells >= 100)
 			return;
 		other.ammo_cells = other.ammo_cells + self.aflag;
@@ -890,12 +883,12 @@ void() key_setsounds =
 		precache_sound ("misc/medkey.wav");
 		self.noise = "misc/medkey.wav";
 	}
-	if (world.worldtype == 1)
+	else if (world.worldtype == 1)
 	{
 		precache_sound ("misc/runekey.wav");
 		self.noise = "misc/runekey.wav";
 	}
-	if (world.worldtype == 2)
+	else if (world.worldtype == 2)
 	{
 		precache_sound2 ("misc/basekey.wav");
 		self.noise = "misc/basekey.wav";
@@ -957,13 +950,13 @@ void() item_key2 =
 		setmodel (self, "progs/w_g_key.mdl");
 		self.netname = "gold key";
 	}
-	if (world.worldtype == 1)
+	else if (world.worldtype == 1)
 	{
 		precache_model ("progs/m_g_key.mdl");
 		setmodel (self, "progs/m_g_key.mdl");
 		self.netname = "gold runekey";
 	}
-	if (world.worldtype == 2)
+	else if (world.worldtype == 2)
 	{
 		precache_model2 ("progs/b_g_key.mdl");
 		setmodel (self, "progs/b_g_key.mdl");
