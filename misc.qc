@@ -297,7 +297,7 @@ void() misc_explobox2 =
 
 void(vector org, vector vec) LaunchLaser;
 
-//MED 11/09/96 added lava ball and rocket
+// MED 11/09/96 added lava ball and rocket
 void() spikeshooter_use =
 {
 	local entity lavaball;
@@ -348,7 +348,7 @@ void() spikeshooter_use =
 	}
 };
 
-//MED 11/01/96 added state capability
+// MED 11/01/96 added state capability
 void() shooter_think =
 {
 	if (self.state)
@@ -362,7 +362,7 @@ void() shooter_think =
 When triggered, fires a spike in the direction set in QuakeEd.
 Laser is only for REGISTERED.
 */
-//MED 11/01/96 commented out setmovedir
+// MED 11/01/96 commented out setmovedir
 void() trap_spikeshooter =
 {
 	SetMovedir ();
@@ -401,18 +401,18 @@ void() trap_shooter =
 
 	if (self.wait == 0)
 		self.wait = 1;
-//MED 11/01/96 added state capability
+// MED 11/01/96 added state capability
 	self.state = 1;
 	self.nextthink = self.nextthink + self.wait + self.ltime;
 	self.think = shooter_think;
 };
 
-//MED 11/01/96 added new use function
+// MED 11/01/96 added new use function
 void() trap_shooter_use =
 {
 	self.state = 1 - self.state;
 };
-//MED 11/01/96 added new function
+// MED 11/01/96 added new function
 /*QUAKED trap_switched_shooter (0 .5 .8) (-8 -8 -8) (8 8 8) superspike laser lavaball rocket silent
 Continuously fires spikes.
 "wait" time between spike (1.0 default)
@@ -425,7 +425,7 @@ void() trap_switched_shooter =
 
 	if (self.wait == 0)
 		self.wait = 1;
-//MED 11/01/96 added state capability
+// MED 11/01/96 added state capability
 	self.nextthink = self.nextthink + self.wait + self.ltime;
 	self.think = shooter_think;
 	self.use = trap_shooter_use;

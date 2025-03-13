@@ -106,7 +106,6 @@ be targeted at one or more entities.
 
 "message" is printed when the trigger is touched without having the right key.
 */
-
 void() trigger_usekey =
 {
 	if (world.worldtype == 0)
@@ -153,8 +152,6 @@ void() remove_touch =
 	other.touch = SUB_Null;
 	other.model = "";
 	remove (self);
-	//	other.nextthink = time + 0.1;
-	//	other.think = SUB_Remove;
 };
 
 /*QUAKED trigger_remove (.5 .5 .5) ? ignoremonsters ignoreplayers
@@ -228,7 +225,6 @@ void() trigger_command_use =
 
  "message" is the command to send to the console.
 */
-
 void() trigger_command =
 {
 	self.use = oncount_use;
@@ -249,7 +245,6 @@ void() trigger_decoy_touch =
  only the decoy player can trigger this
  once triggers, all targets are used
 */
-
 void() trigger_decoy_use =
 {
 	if (deathmatch)
@@ -280,7 +275,6 @@ void() trigger_waterfall_touch =
  "speed" is the strength of the push (default 50).
  "count" amount of random xy movement to add to velocity (default 100).
 */
-
 void() trigger_waterfall =
 {
 	InitTrigger ();

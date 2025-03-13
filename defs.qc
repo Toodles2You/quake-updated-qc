@@ -304,7 +304,6 @@ float IT_SUPER_NAILGUN = 8;
 float IT_GRENADE_LAUNCHER = 16;
 float IT_ROCKET_LAUNCHER = 32;
 float IT_LIGHTNING = 64;
-float IT_EXTRA_WEAPON = 128;
 
 float IT_SHELLS = 256;
 float IT_NAILS = 512;
@@ -314,8 +313,7 @@ float IT_CELLS = 2048;
 float IT_ARMOR1 = 8192;
 float IT_ARMOR2 = 16384;
 float IT_ARMOR3 = 32768;
-//MED 11/02/96 added new hip weapon removed SUPERHEALTH
-//float IT_SUPERHEALTH = 65536;
+// MED 11/02/96 added new hip weapon removed SUPERHEALTH
 
 float IT_KEY1 = 131072;
 float IT_KEY2 = 262144;
@@ -325,7 +323,7 @@ float IT_INVULNERABILITY = 1048576;
 float IT_SUIT = 2097152;
 float IT_QUAD = 4194304;
 
-float IT_WEAPONS = 4223;
+float IT_WEAPONS = 8458495;
 float IT_AMMO = 3840;
 float IT_ARMOR = 57344;
 float IT_KEYS = 393216;

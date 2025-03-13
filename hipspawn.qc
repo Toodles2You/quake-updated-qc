@@ -70,26 +70,12 @@ void() spawn_use =
 	// spawn the teleport effect
 	if (self.spawnsilent == 0)
 		spawn_tfog (spawnentity.origin);
-	//	horn_active = 0;
-	//	horn_charmer = find ( world, classname, "player" );
 	// call spawnentity think function
 	if (horn_active)
 	{
 		spawnentity.charmer = horn_charmer;
 		spawnentity.charmed = 1;
 	}
-	//	if (spawnentity.think)
-	//	{
-	//		spawnentity.nextthink = time+0.1;
-	//		tempself = self;
-	//		self = spawnentity;
-	//		self.think ();
-	//		self = tempself;
-	//		spawnentity.nextthink = time+0.1;
-	//		self.nextthink = 1;
-	//		if (spawnentity.nextthink < time)
-	//			spawnentity.nextthink = 1;
-	//	}
 	// check to see if it is a monster
 	if (spawnentity.flags & FL_MONSTER)
 	{
@@ -100,14 +86,9 @@ void() spawn_use =
 			WriteByte (MSG_BROADCAST, STAT_TOTALMONSTERS);
 			WriteLong (MSG_BROADCAST, total_monsters);
 		}
-		// spawn the telefrag effect
-		//		if (self.spawnsilent == 0)
-		//			spawn_tdeath (spawnentity.origin, spawnentity);
 		if (horn_active)
 		{
 			spawnentity.effects = spawnentity.effects | EF_DIMLIGHT;
-			//			spawnentity.effects = spawnentity.effects |
-			//EF_BRIGHTFIELD;
 		}
 	}
 	if ((self.spawnmulti == 0) && (horn_active == 0))
@@ -131,19 +112,13 @@ Think of it like setting up a normal entity.
 "spawnsilent" set this to 1 if you want a silent spawn.
 "spawnmulti" set this to 1 if you want this spawn to be reoccuring.
 */
-
 void() func_spawn =
 {
 	local entity tempself;
 	local entity monster;
 	local float tempdeathmatch;
 	local float temptotal_monsters;
-
-	//	if (deathmatch)
-	//	{
-	//		remove (self);
-	//		return;
-	//	}
+	local float spawnchance;
 
 	// save off deathmatch and zero it out
 	tempself = self;
@@ -151,8 +126,6 @@ void() func_spawn =
 	deathmatch = 0;
 	if (!self.spawnfunction)
 	{
-		local float spawnchance;
-
 		spawnchance = random ();
 		monster = tempself;
 
@@ -373,7 +346,6 @@ like setting up a normal entity. "spawnsilent" set this to 1 if you want a
 silent spawn. "spawnmulti" set this to 1 if you want this spawn to be
 reoccuring.
 */
-
 void() func_spawn_small =
 {
 	func_spawn ();

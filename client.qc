@@ -71,10 +71,7 @@ void() SetChangeParms =
 	// remove items
 	parm1 = self.items - (self.items & (IT_KEYS | IT_ARTS));
 	// MED
-	self.items2 =
-		self.items2 - (self.items2 & (HIP_IT_WETSUIT | HIP_IT_EMPATHY_SHIELDS));
-	// MED
-	self.gravity = 1.0;
+	// parm10 = self.items2 - (self.items2 & HIP_IT_ARTS);
 
 	// cap super health
 	if (self.health > 100)
@@ -252,102 +249,29 @@ void() ExitIntermission =
 			WriteByte (MSG_ALL, SVC_CDTRACK);
 			WriteByte (MSG_ALL, 6);
 			WriteByte (MSG_ALL, 3);
-			WriteByte (MSG_ALL, SVC_FINALE);
-/*
-			**************************************
-			Deep within the bowels of the
-			Research Facility, you discover the
-			passage that the followers of Quake
-			have used to enter our world.
-			The bastards used some type of
-			gigantic teleporter to overload
-			one of our own slipgates!  As long as
-			this portal exists, Earth will never
-			be safe from Quake's cruel minions.
 
-			If you can find the source of the
-			portal's power, you can shut it
-			down--possibly forever!  With only a
-			moment's consideration for your own
-			safety, you re-enter the dark domain,
-			knowing Hell would be a better fate
-			than experiencing the reign of Quake.
-*/
+			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "Deep within the bowels of the\nResearch Facility, you discover the\npassage that the followers of Quake\nhave used to enter our world.\nThe bastards used some type of\ngigantic teleporter to overload\none of our own slipgates!  As long as\nthis portal exists, Earth will never\nbe safe from Quake's cruel minions.");
-			// WriteString (MSG_ALL, "If you can find the source of the\nportal's power, you can shut it\ndown--possibly forever!  With only a\nmoment's consideration for your own\nsafety, you re-enter the dark domain,\nknowing Hell would be a better fate\nthan experiencing the reign of Quake.");
 			return;
 		}
 		else if (world.model == "maps/hip2m5.bsp")
 		{
-/*
-			**************************************
-			After destroying the power generator,
-			you pass beyond the gate of Mortum's
-			Keep.  A wave of nausea suddenly flows
-			over you and you find yourself cast
-			out into a liquid void.  You float
-			lifelessly, yet aware, in a lavender
-			sea of energy.
-
-			After what seems like an eternity,
-			you feel the presence of a diabolical
-			intelligence.  You are held helpless
-			for a moment as your mind is open to
-			that of Armagon--Quake's General and
-			master of this realm.  Recognizing
-			you as the one who foiled his
-			attempt to conquer Earth, a hellish
-			howl fills your mind and blots out
-			all consciousness.  When you awake,
-			you find yourself on the shores of
-			reality, but in a time and place
-			unknown to you.
-*/
 			WriteByte (MSG_ALL, SVC_CDTRACK);
 			WriteByte (MSG_ALL, 6);
 			WriteByte (MSG_ALL, 3);
 
 			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "After destroying the power generator,\nyou pass beyond the gate of Mortum's\nKeep.  A wave of nausea suddenly flows\nover you and you find yourself cast\nout into a liquid void.  You float\nlifelessly, yet aware, in a lavender\nsea of energy.");
-			// WriteString (MSG_ALL, "After what seems like an eternity,\nyou feel the presence of a diabolical\nintelligence.  You are held helpless\nfor a moment as your mind is open to\nthat of Armagon--Quake's General and\nmaster of this realm.  Recognizing\nyou as the one who foiled his\nattempts to conquer Earth, a hellish\nhowl fills your mind and blots out\nall consciousness.  When you awake,\nyou find yourself on the shores of\nreality, but in a time and place\nunknown to you.");
 			return;
 		}
 		else if (world.model == "maps/hipend.bsp")
 		{
-/*
-			**************************************
-			After the last echoes of Armagon's
-			death yell fade away, you breathe a
-			heavy sigh of relief.  With the loss
-			of his magic, Armagon's fortress
-			begins to collapse.  The rift he
-			created to send his grisly troops
-			through time slowly closes and seals
-			itself forever.  In the chaos that
-			ensues, a wall collapses, revealing
-			one remaining time portal.  With your
-			chances to escape rapidly growing
-			slim, you race for the portal,
-			mindless of your destination.  In a
-			flash of light, you find yourself
-			back at Command HQ, safe and sound.
-
-			Congratulations!  You are victorious!
-			The minions of Quake have once again
-			fallen before your mighty hand.
-			Is this the last you will see of
-			Quake's hellions?
-
-			Only time will tell...
-*/
 			WriteByte (MSG_ALL, SVC_CDTRACK);
 			WriteByte (MSG_ALL, 2);
 			WriteByte (MSG_ALL, 3);
 
 			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "After the last echoes of Armagon's\ndeath yell fade away, you breathe a\nheavy sigh of relief.  With the loss\nof his magic, Armagon's fortress\nbegins to collapse.  The rift he\ncreated to send his grisly troops\nthrough time slowly closes and seals\nitself forever.  In the chaos that\nensues, a wall collapses, revealing\none remaining time portal.  With your\nchances to escape rapidly growing\nslim, you race for the portal,\nmindless of your destination.  In a\nflash of light, you find yourself\nback at Command HQ, safe and sound.");
-			// WriteString (MSG_ALL, "Congratulations!  You are victorious!\nThe minions of Quake have once again\nfallen before your mighty hand.\nIs this the last you will see of\nQuake's hellions?\n\nOnly time will tell...");
-			//intermission_exittime = time + 10000000;  // never allow exit
 			return;
 		}
 		GotoNextMap ();
@@ -684,8 +608,7 @@ void() PutClientInServer =
 	self.fixangle = TRUE;  // turn this way immediately
 
 	// JIM
-	//  Clear out velocity so you're not launched into the air
-	//  when you respawn.
+	// Clear out velocity so you're not launched into the air when you respawn.
 	self.velocity = '0 0 0';
 
 	// oh, this is a hack!
@@ -764,40 +687,7 @@ void() NextLevel =
 
 	// HIPNOTIC
 	// Commented out so that timelimit and fraglimit work on start map
-	/*
-	if (mapname == "start")
-	{
-		if (!cvar ("registered"))
-		{
-			mapname = "e1m1";
-		}
-		else if (!(serverflags & 1))
-		{
-			mapname = "e1m1";
-			serverflags = serverflags | 1;
-		}
-		else if (!(serverflags & 2))
-		{
-			mapname = "e2m1";
-			serverflags = serverflags | 2;
-		}
-		else if (!(serverflags & 4))
-		{
-			mapname = "e3m1";
-			serverflags = serverflags | 4;
-		}
-		else if (!(serverflags & 8))
-		{
-			mapname = "e4m1";
-			serverflags = serverflags - 7;
-		}
 
-		o = spawn ();
-		o.map = mapname;
-	}
-	else
-	{
-*/
 	// find a trigger changelevel
 	o = find (world, classname, "trigger_changelevel");
 
@@ -808,7 +698,6 @@ void() NextLevel =
 		o = spawn ();
 		o.map = mapname;
 	}
-	//	}
 
 	nextmap = o.map;
 	gameover = TRUE;
@@ -1065,17 +954,17 @@ void() PlayerPreThink =
 	{
 		earthquake_prethink ();
 		IntermissionThink ();  // otherwise a button could be missed between
-		return;               // the think tics
+		return;                // the think tics
 	}
 
 	if (self.view_ofs == '0 0 0')
 		return;  // intermission or finale
 
 	// JIM
-	//  Kill player on Edge of Oblivion
+	// Kill player on Edge of Oblivion
 	if ((self.origin_z < -1300) && (world.model == "maps/hipdm1.bsp") &&
 		(self.health > 0))
-		{
+	{
 		self.deathtype = "falling";
 
 		if (self.invincible_finished >= time)
@@ -1090,10 +979,7 @@ void() PlayerPreThink =
 	}
 
 	// JIM
-	//	if (!deathmatch)
-	//	{
 	earthquake_prethink ();
-	//	}
 
 	makevectors (self.v_angle);  // is this still used
 
@@ -1325,7 +1211,7 @@ void() CheckPowerups =
 	}
 
 	// JIM
-	//  wetsuit
+	// wetsuit
 	if (self.wetsuit_finished)
 	{
 		self.air_finished = time + 12;  // don't drown
@@ -1350,7 +1236,7 @@ void() CheckPowerups =
 
 		if (self.wetsuit_finished < time)
 		{  // just stopped
-											 // MED
+			// MED
 			self.items2 = self.items2 - HIP_IT_WETSUIT;
 			self.wetsuit_time = 0;
 			self.wetsuit_finished = 0;
@@ -1358,7 +1244,7 @@ void() CheckPowerups =
 	}
 
 	// MED
-	//  empathy shields
+	// empathy shields
 	if (self.empathy_finished)
 	{
 		// sound and screen flash when items starts to run out
@@ -1381,7 +1267,7 @@ void() CheckPowerups =
 
 		if (self.empathy_finished < time)
 		{  // just stopped
-											 // MED
+			// MED
 			self.items2 = self.items2 - HIP_IT_EMPATHY_SHIELDS;
 			self.empathy_time = 0;
 			self.empathy_finished = 0;
@@ -1424,10 +1310,7 @@ void() PlayerPostThink =
 	}
 
 	// JIM
-	//	if (!deathmatch)
-	//	{
 	earthquake_postthink ();
-	//	}
 
 	if (self.deadflag)
 		return;

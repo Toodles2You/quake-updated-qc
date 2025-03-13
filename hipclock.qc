@@ -84,7 +84,6 @@ Set the angle to be the direction the clock is facing.
 "count" is the # of seconds it takes to make a full revolution (seconds is 60,
 minutes 3600, hours 43200).  default is 60.
 */
-
 void() func_clock =
 {
 	local vector temp;

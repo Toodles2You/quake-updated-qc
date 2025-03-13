@@ -251,7 +251,6 @@ void() monster_shalrath =
 	self.th_pain = shalrath_pain;
 	self.th_missile = shal_attack1;
 
-   walkmonster_start();
-//	self.think = walkmonster_start;
+   walkmonster_start ();
 	self.nextthink = time + 0.1 + random () * 0.1;
 };

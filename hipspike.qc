@@ -65,14 +65,4 @@ void() monster_spikemine =
 	setmodel (self, "progs/demon.mdl");
 
 	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
-
-	/*
-			self.th_stand = gremlin_stand1;
-			self.th_walk = gremlin_walk1;
-			self.th_run = gremlin_run1;
-			self.th_die = gremlin_die;
-			self.th_melee = Gremlin_MeleeAttack;	  // one of two attacks
-			self.th_missile = Gremlin_MissileAttack; // check for random jump or
-	   firing of weapon self.th_pain = gremlin_pain; walkmonster_start ();
-	*/
 };

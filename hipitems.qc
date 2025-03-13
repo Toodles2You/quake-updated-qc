@@ -51,9 +51,6 @@ void() hip_powerup_touch =
 	{
 		self.mdl = self.model;
 
-		//		if ((self.classname == "item_artifact_invulnerability")
-		//|| 			(self.classname == "item_artifact_invisibility")) 			self.nextthink =
-		//time + 60*5; 		else
 		self.nextthink = time + 60;
 
 		self.think = SUB_regen;
@@ -180,7 +177,6 @@ HIPNOTIC WEAPONS
 
 /*QUAKED weapon_mjolnir (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_mjolnir =
 {
 	precache_model ("progs/g_hammer.mdl");
@@ -195,7 +191,6 @@ void() weapon_mjolnir =
 
 /*QUAKED weapon_laser_gun (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_laser_gun =
 {
 	precache_model ("progs/g_laserg.mdl");
@@ -210,7 +205,6 @@ void() weapon_laser_gun =
 
 /*QUAKED weapon_proximity_gun (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_proximity_gun =
 {
 	precache_model ("progs/g_prox.mdl");
@@ -268,7 +262,6 @@ void() spikemine_Home =
 			}
 			head = head.chain;
 		}
-		//		if (selected != world && selected != self.enemy)
 		if (selected != world)
 			sound (self, CHAN_VOICE, "hipitems/spikmine.wav", 1, ATTN_NORM);
 		self.enemy = selected;
@@ -308,10 +301,7 @@ void() spikemine_Touch =
 			return;
 
 		T_Damage (self, self, self, self.health + 10);
-		//		killed_monsters = killed_monsters + 1;
-		//		WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
 	}
-	//	self.effects = self.effects | EF_MUZZLEFLASH;
 
 	T_RadiusDamage (self, self, 110, world);
 	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
@@ -345,7 +335,6 @@ void() spike_mine_first_think =
 
 /*QUAKED trap_spike_mine (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() trap_spike_mine =
 {
 	if (deathmatch)
@@ -358,13 +347,10 @@ void() trap_spike_mine =
 	precache_sound ("hipitems/spikmine.wav");
 	precache_sound ("misc/null.wav");
 	setmodel (self, "progs/spikmine.mdl");
-	//	setmodel (self, "progs/spike.mdl");
 	setsize (self, self.mins, self.maxs);
 	self.classname = "trap_spike_mine";
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_FLYMISSILE;
-	//	setsize (self, '0 0 0', '0 0 0');
-	//	self.avelocity = '-100 100 -100';
 	self.avelocity = '-50 100 150';
 	if (cvar ("skill") <= 1)
 		self.health = 200;
@@ -419,6 +405,7 @@ void() trap_lightning_use =
 	local vector dir;
 	local float dst;
 	local float remainder;
+	local entity temp;
 
 	if (time >= self.pausetime)
 	{
@@ -458,8 +445,6 @@ void() trap_lightning_use =
 	}
 	if (self.duration > 0.1)
 	{
-		local entity temp;
-
 		temp = self;
 		self = spawn ();
 		self.origin = p1;
@@ -550,7 +535,6 @@ When triggered, fires lightning in the direction set in QuakeEd.
 "dmg" how much damage lightning should inflict (30 default)
 "duration" how long each lightning attack should last (0.1 default)
 */
-
 void() trap_lightning_triggered =
 {
 	if (self.wait == 0)
@@ -622,7 +606,7 @@ void() trap_tesla_scan =
 		{
 			if (visible (head) && (head.health > 0) &&
 				(head.struck_by_mjolnir == 0))
-				{
+			{
 				if (tesla_numtargets == 0)
 				{
 					tesla_target = head;
@@ -654,7 +638,7 @@ void() TeslaLightningThink =
 
 	if (trace_fraction != 1.0 || self.enemy.health <= 0 ||
 		vlen (self.origin - self.enemy.origin) > (self.distance + 10))
-		{
+	{
 		self.enemy.struck_by_mjolnir = 0;
 		remove (self);
 		return;
@@ -818,7 +802,6 @@ void() trap_gods_wrath =
 	self.state = 1;
 	self.nextthink = -1;
 	self.deathtype = "suffers the wrath of God";
-	//	self.attack_state = 1;
 	self.use = trap_gods_wrath_use;
 };
 

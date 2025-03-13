@@ -62,7 +62,6 @@ INVISIBLE tells the trigger to not be visible.
 Default is 60.
 
 */
-
 void() trigger_damagethreshold =
 {
 	self.mangle = self.angles;
@@ -94,7 +93,6 @@ void() trigger_damagethreshold =
 /*QUAKED func_breakawaywall (0 .5 .8) ?
 Special walltype that removes itself when triggered.
 */
-
 void() func_breakawaywall =
 {
 	self.mangle = self.angles;

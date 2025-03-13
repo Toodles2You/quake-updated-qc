@@ -131,6 +131,9 @@ void() player_stand1 = [$axstnd1, player_stand1]
 
 void() player_run = [$rockrun1, player_run]
 {
+	local float dist;
+	local float r;
+
 	self.weaponframe = 0;
 	if (!self.velocity_x && !self.velocity_y)
 	{
@@ -159,14 +162,13 @@ void() player_run = [$rockrun1, player_run]
 	}
 	if (footsteps == 1)
 	{
-		self.spawnsilent =
-			self.spawnsilent + vlen (self.origin - self.old_velocity);
+		dist = vlen (self.origin - self.old_velocity);
+		self.spawnsilent = self.spawnsilent + dist;
 		self.old_velocity = self.origin;
 		if (self.flags & FL_ONGROUND)
 		{
 			if (self.spawnsilent > 95)
 			{
-				local float r;
 				if (self.spawnsilent > 190)
 					self.spawnsilent = 0;
 				else
@@ -658,7 +660,6 @@ void(string gibname, float dm) ThrowHead =
 {
 	setmodel (self, gibname);
 	self.frame = 0;
-	//	self.nextthink = -1;
 	// MED
 	self.nextthink = time + 1.5;
 	self.movetype = MOVETYPE_BOUNCE;
@@ -856,7 +857,4 @@ void() player_die_ham4 = [ 27, player_die_ham5 ]{};
 void() player_die_ham5 = [ 28, player_die_ham6 ]{};
 void() player_die_ham6 = [ 29, player_die_ham7 ]{};
 void() player_die_ham7 = [ 30, player_die_ham8 ]{};
-void() player_die_ham8 = [ 31, player_die_ham8 ]
-{
-	PlayerDead ();
-};
+void() player_die_ham8 = [ 31, player_die_ham8 ] { PlayerDead (); };

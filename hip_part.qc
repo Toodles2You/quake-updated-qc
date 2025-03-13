@@ -24,7 +24,6 @@
 	Do not distribute.
 */
 
-// float START_OFF = 1;
 float USE_COUNT = 1;
 
 void() particlefield_XZ =
@@ -35,10 +34,9 @@ void() particlefield_XZ =
 
 	if ((self.spawnflags & USE_COUNT) &&
 		(counter_GetCount (other) != self.cnt))
-		{
+	{
 		return;
 	}
-	//	dprint ( "XZ\n" );
 
 	self.ltime = time + 0.25;
 	if (self.noise != "")
@@ -76,15 +74,10 @@ void() particlefield_YZ =
 
 	if ((self.spawnflags & USE_COUNT) &&
 		(counter_GetCount (other) != self.cnt))
-		{
+	{
 		return;
 	}
 
-	//	dprint ( "YZ: " );
-	//	dprint ( vtos ( self.dest1 ) );
-	//	dprint ( " - " );
-	//	dprint ( vtos ( self.dest2 ) );
-	//	dprint ( "\n" );
 	self.ltime = time + 0.25;
 	if (self.noise != "")
 	{
@@ -121,7 +114,7 @@ void() particlefield_XY =
 
 	if ((self.spawnflags & USE_COUNT) &&
 		(counter_GetCount (other) != self.cnt))
-		{
+	{
 		return;
 	}
 
@@ -182,7 +175,6 @@ USE_COUNT when the activator is a func_counter, the field will only
 "noise" is the sound to play when triggered.  Do not use a looping sound here.
 "dmg" is the amount of damage to cause when touched.
 */
-
 void() func_particlefield =
 {
 	if (!self.color)
@@ -206,23 +198,16 @@ void() func_particlefield =
 	self.dest2 = self.maxs + '7.9 7.9 7.9' - self.origin;
 	setsize (self, self.mins, self.maxs);
 	self.touch = particlefield_touch;
-	//	dprint ( vtos ( self.dest ) );
-	//	dprint ( "  " );
+
 	if (self.dest_x > self.dest_z)
 	{
 		if (self.dest_y > self.dest_z)
 		{
-			//			dprint ( "XY1 - " );
-			//			dprint ( ftos ( self.cnt ) );
-			//			dprint ( "\n" );
 			self.use = particlefield_XY;
 			self.dest1_z = (self.dest1_z + self.dest2_z) / 2;
 		}
 		else
 		{
-			//			dprint ( "XZ1 - " );
-			//			dprint ( ftos ( self.cnt ) );
-			//			dprint ( "\n" );
 			self.use = particlefield_XZ;
 			self.dest1_y = (self.dest1_y + self.dest2_y) / 2;
 		}
@@ -231,17 +216,11 @@ void() func_particlefield =
 	{
 		if (self.dest_y > self.dest_x)
 		{
-			//			dprint ( "YZ2 - " );
-			//			dprint ( ftos ( self.cnt ) );
-			//			dprint ( "\n" );
 			self.use = particlefield_YZ;
 			self.dest1_x = (self.dest1_x + self.dest2_x) / 2;
 		}
 		else
 		{
-			//			dprint ( "XZ2 - " );
-			//			dprint ( ftos ( self.cnt ) );
-			//			dprint ( "\n" );
 			self.use = particlefield_XZ;
 			self.dest1_y = (self.dest1_y + self.dest2_y) / 2;
 		}
@@ -290,7 +269,6 @@ START_OFF wall doesn't block until triggered.
 "noise1" is the sound to play when wall is blocking.
 "dmg" is the amount of damage to cause when touched.
 */
-
 void() func_togglewall =
 {
 	self.classname = "togglewall";

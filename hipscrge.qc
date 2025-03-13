@@ -96,8 +96,6 @@ float() ScourgeCheckAttack =
 	}
 
 	// missile attack
-	//	if (enemy_range == RANGE_FAR)
-	//	   return FALSE;
 
 	self.attack_state = AS_MISSILE;
 	SUB_AttackFinished (2 + 2 * random ());
@@ -144,6 +142,7 @@ void() Attack_With_Tail =
 
 void() ScourgeTriggerThink;
 void() ScourgeTriggerTouch;
+
 void() scourge_think =
 {
 	local entity trig;
@@ -329,19 +328,6 @@ void() scourge_straferight5 = [$walk5, scourge_straferight6]
 };
 void() scourge_straferight6 = [$walk6, scourge_run1] { ai_right (14); };
 
-/*
-void()	scourge_wake1  =[ $stand2, scourge_wake2  ] {self.spawnsilent =
-0;scourge_think ();}; void()	scourge_wake2  =[ $stand3, scourge_wake3  ]
-{}; void()	scourge_wake3  =[ $stand4, scourge_wake4  ] {}; void()
-scourge_wake4  =[ $stand5, scourge_wake5  ] {}; void()	scourge_wake5 =[
-$stand6, scourge_wake6  ] {}; void()	scourge_wake6  =[ $stand7,
-scourge_run1  ]
-{
-		SUB_AttackFinished (1);
-};
-//void()	scourge_wake7  =[ $stand7, scourge_run1	] {};
-*/
-
 void() scourge_turn1 = [$walk1, scourge_turn2]
 {
 	self.spawnsilent = 1;
@@ -360,49 +346,41 @@ void() scourge_atk1 = [$shoot1, scourge_atk2]
 	scourge_think ();
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	SCOURGE_FireSpikes (40);
-	//	SCOURGE_FireSpikes (-40);
 };
 void() scourge_atk2 = [$shoot2, scourge_atk3]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	//	SCOURGE_FireSpikes (56);
 	SCOURGE_FireSpikes (-56);
 };
 void() scourge_atk3 = [$shoot1, scourge_atk4]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	//	SCOURGE_FireSpikes (40);
 	SCOURGE_FireSpikes (-40);
 };
 void() scourge_atk4 = [$shoot2, scourge_atk5]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	SCOURGE_FireSpikes (56);
-	//	SCOURGE_FireSpikes (-56);
 };
 void() scourge_atk5 = [$shoot1, scourge_atk6]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	SCOURGE_FireSpikes (40);
-	//	SCOURGE_FireSpikes (-40);
 };
 void() scourge_atk6 = [$shoot2, scourge_atk7]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	//	SCOURGE_FireSpikes (56);
 	SCOURGE_FireSpikes (-56);
 };
 void() scourge_atk7 = [$shoot1, scourge_atk8]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	//	SCOURGE_FireSpikes (40);
 	SCOURGE_FireSpikes (-40);
 };
 void() scourge_atk8 = [$shoot2, scourge_run1]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	SCOURGE_FireSpikes (56);
-	//	SCOURGE_FireSpikes (-56);
 	SUB_AttackFinished (4 * random ());
 };
 
@@ -497,13 +475,7 @@ void() scourge_die =
 //
 void() scourge_melee =
 {
-	//	chance = random ();
-	//	if (chance < 0.5 )
-	//	{
 	scourge_melee1 ();
-	//	}
-	//	else
-	//		return;
 	SUB_AttackFinished (2 * random ());
 };
 
@@ -551,9 +523,6 @@ void() ScourgeTriggerTouch =
 
 	tempent = world;
 
-	//	targ.think = targ.th_run;
-	//	if (targ.flags & FL_ONGROUND)
-	//	{
 	if (time > self.duration)
 	{
 		tempent = self;
@@ -564,14 +533,7 @@ void() ScourgeTriggerTouch =
 			scourge_straferight1 ();
 		self.duration = time + 1.5;
 	}
-	/*
-					targ.origin_z = targ.origin_z + 1;
-					targ.velocity = targ.velocity + '0 0 500';
-					targ.flags = targ.flags - FL_ONGROUND;
-	*/
 	self = tempent;
-	//	}
-	//	dprint ("ouch\n");
 };
 
 /*QUAKED monster_scourge (1 0 0) (-16 -16 -24) (16 16 40) Ambush
@@ -615,7 +577,6 @@ void() monster_scourge =
 	self.th_die = scourge_die;
 	self.th_melee = scourge_melee;
 	self.th_missile = scourge_atk1;
-	//	self.th_turn = scourge_turn1;
 	self.yaw_speed = 60;
 	self.attack_state = AS_DODGING;
 	self.state = 0;

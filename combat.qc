@@ -143,15 +143,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	if (discharged && targ.wetsuit_finished)
 		return;
 	// MED moved damage_attacker down a bit
-	/*
-			dprint ("netname = ");
-			dprint (attacker.netname);
-			dprint (" classname = ");
-			dprint (attacker.classname);
-			dprint (" classname = ");
-			dprint (inflictor.classname);
-			dprint ("\n");
-	*/
+
 	// check for quad damage powerup on the attacker
 	if (attacker.super_damage_finished > time)
 		damage = damage * 4;
@@ -167,11 +159,11 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		empathyused = 0;
 	}
 	// MED
-	//  used by buttons and triggers to set activator for target firing
+	// used by buttons and triggers to set activator for target firing
 	damage_attacker = attacker;
 
 	// MED
-	//  used to keep track of what hit us
+	// used to keep track of what hit us
 	damage_inflictor = inflictor;
 
 	// save damage based on the target's armor level

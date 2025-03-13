@@ -148,7 +148,6 @@ void() f_death18 = [$death18, f_death19] {};
 void() f_death19 = [$death19, f_death20] {};
 void() f_death20 = [$death20, f_death21] {};
 // MED 01/15/97 removed solid from here
-// void() f_death21 = [$death21, f_death21] { self.solid = SOLID_NOT; };
 void() f_death21 = [$death21, f_death21] {};
 
 // MED 01/15/97 added fish_die
@@ -213,7 +212,6 @@ void() monster_fish =
 	self.th_walk = f_walk1;
 	self.th_run = f_run1;
 	// MED 01/15/97 added fish death
-	//	self.th_die = f_death1;
 	self.th_die = fish_die;
 	self.th_pain = fish_pain;
 	self.th_melee = f_attack1;

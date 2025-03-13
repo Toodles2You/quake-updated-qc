@@ -72,9 +72,9 @@ $frame gpain1 gpain2 gpain3
 $frame grun1 grun2 grun3 grun4 grun5 grun6 grun7
 $frame grun8 grun9 grun10 grun11 grun12 grun13 grun14 grun15
 
-	//============================================================================
+//============================================================================
 
-	float NumGremlins;
+float NumGremlins;
 float NumSpawnGremlins;
 
 /*
@@ -125,8 +125,7 @@ float() GremlinAttemptWeaponSteal =
 	self.items = self.items | best;
 	self.weapon = best;
 	// take some ammo while we are at it
-	self.items = self.items -
-				 (self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
+	self.items = self.items - (self.items & IT_AMMO);
 	if (best == IT_SUPER_SHOTGUN)
 	{
 		amount = victim.ammo_shells;
@@ -230,7 +229,6 @@ float() GremlinAttemptWeaponSteal =
 		self.lastvictim = victim;
 	else
 		self.lastvictim = self;
-	//	self.attack_state = AS_STRAIGHT;
 	// find a recipient
 	victim = GremlinFindVictim ();
 	if (victim != world)
@@ -243,6 +241,7 @@ float() GremlinAttemptWeaponSteal =
 
 	return TRUE;
 };
+
 //============================================================================
 
 /*
@@ -273,7 +272,7 @@ float() GremlinFindTarget =
 				result = fabs (head.origin_z - self.origin_z);
 				if ((visible (head)) && (result < 80) &&
 					(head.gorging == FALSE) && (visible_distance < dist))
-					{
+				{
 					dist = visible_distance;
 					gorge = head;
 				}
@@ -282,9 +281,6 @@ float() GremlinFindTarget =
 		}
 		if ((gorge != world) && (dist < (700 * random ())))
 		{
-			//			dprint ("starting to gorge on ");
-			//			dprint (gorge.classname);
-			//			dprint ("\n");
 			self.oldenemy = self.enemy;
 			self.gorging = TRUE;
 			self.enemy = gorge;
@@ -309,7 +305,9 @@ float() GremlinFindTarget =
 	self.search_time = time + 2.0;
 	return result;
 };
+
 //============================================================================
+
 /*
 =============
 gremlin_walk
@@ -350,8 +348,10 @@ void() gremlin_stand =
 };
 
 //============================================================================
+
 float() GremlinCheckNoAmmo;
 void() gremlin_glook1;
+
 /*
 =============
 gremlin_run
@@ -363,6 +363,10 @@ void(float dist) gremlin_run =
 {
 	local float r;
 	local vector d;
+	local vector ang;
+	local float done;
+	local vector end;
+	local float c;
 
 	if (self.watertype == CONTENT_LAVA)
 	{  // do damage
@@ -447,18 +451,11 @@ void(float dist) gremlin_run =
 					remove (self.trigger_field);
 					self.goalentity = self.enemy;
 					self.t_length = 0;
-					//					self.attack_state =
-					//AS_SLIDING;
 				}
 				else
 				{
 					if (r < 160)
 					{
-						local vector ang;
-						local float done;
-						local vector end;
-						local float c;
-
 						ang = vectoangles (d);
 						done = 0;
 						end = '0 0 0';
@@ -679,6 +676,7 @@ void() gremlin_shot5 = [$gfire5, gremlin_shot6] {};
 void() gremlin_shot6 = [$gfire6, gremlin_run1] {};
 
 //============================================================================
+
 void(float ox) Gremlin_FireNailGun;
 
 void() gremlin_nail1 = [$gfire1, gremlin_nail2]
@@ -946,9 +944,7 @@ void(entity attacker, float damage) gremlin_pain =
 		return;
 
 	self.pain_finished = time + 1;
-	//	if (random ()<0.5)
-	//		sound (self, CHAN_VOICE, "grem/pain2.wav", 1, ATTN_NORM);
-	//	else
+
 	r = random ();
 	if (r < 0.33)
 		sound (self, CHAN_VOICE, "grem/pain1.wav", 1, ATTN_NORM);
@@ -971,7 +967,6 @@ void() gremlin_spawn1 = [$spawn1, gremlin_spawn2]
 {
 	self.nextthink = time + 0.3;
 	self.th_pain = SUB_null_pain;
-	//	 sound (self, CHAN_VOICE, "grem/idle.wav", 1, ATTN_IDLE);
 };
 void() gremlin_spawn2 = [$spawn2, gremlin_spawn3]
 {
@@ -1056,8 +1051,7 @@ void() GremlinDropBackpack =
 	item = spawn ();
 	item.origin = self.origin - '0 0 24';
 
-	self.items = self.items -
-				 (self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
+	self.items = self.items - (self.items & IT_AMMO);
 	item.items = self.items;
 
 	if (item.items & IT_AXE)
@@ -1119,9 +1113,7 @@ void() gremlin_die =
 	local float dot;
 
 	// check for gib
-	if (self.items & (IT_SUPER_SHOTGUN | IT_NAILGUN | IT_SUPER_NAILGUN |
-					  IT_GRENADE_LAUNCHER | IT_ROCKET_LAUNCHER | IT_LIGHTNING |
-					  IT_LASER_CANNON | IT_PROXIMITY_GUN))
+	if (self.items & IT_WEAPONS)
 	{
 		GremlinDropBackpack ();
 		self.stoleweapon = FALSE;
@@ -1150,6 +1142,7 @@ void() gremlin_die =
 };
 
 float() GremlinWeaponAttack;
+
 void() Gremlin_MeleeAttack =
 {
 	local float num;
@@ -1183,42 +1176,6 @@ void() Gremlin_MeleeAttack =
 		}
 	}
 };
-
-/*
-============
-gremlin_recoil
-============
-*/
-/*
-void() gremlin_recoil
-{
-		self.nextthink = time + 0.1;
-		self.flags = self.flags - FL_ONGROUND;
-		if (vlen (self.velocity)<2)
-		{
-				self.movetype = self.spawnsolidtype;
-				self.think = self.spawnthink;
-		}
-};
-*/
-/*
-============
-GremlinRecoil
-============
-*/
-/*
-void(vector dir, float mag) GremlinRecoil
-{
-		self.spawnsolidtype = self.movetype;
-		self.movetype = MOVETYPE_BOUNCE;
-		self.spawnthink = self.think;
-		self.think = gremlin_recoil;
-		self.nextthink = time;
-		self.velocity = mag * dir;
-		self.velocity_z = self.velocity_z + 100;
-		self.flags = self.flags - FL_ONGROUND;
-};
-*/
 
 /*
 ============
@@ -1262,7 +1219,7 @@ entity() GremlinFindVictim =
 	{
 		if (!(head.flags & FL_NOTARGET) &&
 			((head.flags & FL_MONSTER) || (head.flags & FL_CLIENT)))
-			{
+		{
 			if (visible (head) && (head.health > 0) && (head != self))
 			{
 				head_dist = vlen (head.origin - self.origin);
@@ -1330,7 +1287,6 @@ void() Gremlin_FireRocket =
 	setmodel (missile, "progs/missile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + v_forward * 8 + '0 0 16');
-	//	GremlinRecoil (dir,-1000);
 };
 
 /*
@@ -1447,7 +1403,6 @@ void() Gremlin_FireLightningGun =
 		discharged = 1;
 		T_RadiusDamage (self, self, 35 * cells, world);
 		discharged = 0;
-		//		W_SetCurrentAmmo ();
 		return;
 	}
 
@@ -1681,8 +1636,8 @@ float() GremlinCheckAttack =
 		return FALSE;
 
 	// see if any entities are in the way of the shot
-	spot1 = self.origin;  // + self.view_ofs;
-	spot2 = targ.origin;  // + targ.view_ofs;
+	spot1 = self.origin;
+	spot2 = targ.origin;
 
 	if ((vlen (spot2 - spot1) <= 90) && (self.stoleweapon == 0))
 	{
@@ -1707,8 +1662,6 @@ void(float side) Gremlin_Melee =
 	local vector delta;
 
 	ai_face ();
-
-	//	walkmove (self.ideal_yaw, 12);	// allow a little closing
 
 	delta = self.enemy.origin - self.origin;
 
@@ -1864,8 +1817,6 @@ void() Gremlin_Split =
 		self.health = 100;
 	grem.health = self.health / 2;
 	self.health = self.health / 2;
-	//	grem.max_health = 101;
-	//	grem.gorging = FALSE;
 	grem.stoleweapon = FALSE;
 	grem.items = 0;
 	total_monsters = total_monsters + 1;
@@ -1887,14 +1838,10 @@ void(float side) Gremlin_Gorge =
 	local vector delta;
 	local entity temp;
 
-	//	ai_face ();
-	//	walkmove (self.ideal_yaw, 6);	// allow a little closing
-
 	delta = self.enemy.origin - self.origin;
-	//	self.enemy.takedamage = DAMAGE_YES;
 
 	sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM);
-	//	 sound (self, CHAN_WEAPON, "grem/attack.wav", 1, ATTN_NORM);
+
 	ldmg = 7 + 5 * random ();
 	Gremlin_Damage (self.enemy, self, self, ldmg);
 
@@ -1909,45 +1856,13 @@ void(float side) Gremlin_Gorge =
 			temp = self;
 			self = self.enemy;
 			Gremlin_ThrowHead (-15);
-			//			ThrowGib ("progs/gib1.mdl", -15);
-			//			ThrowGib ("progs/gib2.mdl", -15);
-			//			ThrowGib ("progs/gib3.mdl", -15);
 			self = temp;
 			ldmg = 150 + 100 * random ();
 			T_Heal (self, ldmg, FALSE);
-			//			if (self.health >= self.max_health)
 			Gremlin_Split ();
 		}
 		self.enemy = world;
 		self.gorging = FALSE;
-		/*
-						if (self.stoleweapon)
-						{
-								temp = GremlinFindVictim ();
-								if (temp != world)
-								{
-										self.enemy = temp;
-										FoundTarget ();
-										self.search_time = time + 1.0;
-		//				return;
-								}
-						}
-		*/
-		//		FindTarget ();
-		/*
-						if (self.oldenemy.health > 0)
-						{
-								self.enemy = self.oldenemy;
-								HuntTarget ();
-						}
-						else
-						{
-								if (self.movetarget)
-										self.th_walk ();
-								else
-										self.th_stand ();
-						}
-		*/
 		gremlin_look1 ();
 	}
 };
@@ -1957,16 +1872,6 @@ void() Gremlin_JumpTouch =
 	if (self.health <= 0)
 		return;
 
-	/*
-			if (other.takedamage)
-			{
-					if ( vlen (self.velocity) > 400 )
-					{
-							ldmg = 40 + 10*random ();
-							T_Damage (other, self, self, ldmg);
-					}
-			}
-	*/
 	if (!checkbottom (self))
 	{
 		if (self.flags & FL_ONGROUND)

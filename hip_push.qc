@@ -30,33 +30,8 @@ void() push_use =
 	local float x;
 	local float y;
 
-	//	walkmove (other.angles_y, 16 * frametime);
-	/*
-			if ( (other.angles_y >= 315) || (other.angles_y < 45))
-			{
-					walkmove ( 0, 16 * frametime);
-			}
-			else if ( (other.angles_y >= 45) && (other.angles_y < 135))
-			{
-					walkmove ( 90, 16 * frametime);
-			}
-			else if ( (other.angles_y >= 135) && (other.angles_y < 225))
-			{
-					walkmove ( 180, 16 * frametime);
-			}
-			else if ( (other.angles_y >= 225) && (other.angles_y < 315))
-			{
-					walkmove ( 270, 16 * frametime);
-			}
-			else
-			{
-					return;
-			}
-	*/
 	makevectors (other.angles);
 
-	//	x = fabs ( v_forward_x );
-	//	y = fabs ( v_forward_y );
 	x = fabs (other.velocity_x);
 	y = fabs (other.velocity_y);
 	dprint (ftos (x));
@@ -94,7 +69,6 @@ void() push_use =
 /*QUAKED func_pushable (0 .5 .8) ?
 Pushable walls.
 */
-
 void() func_pushable =
 {
 	local entity new;

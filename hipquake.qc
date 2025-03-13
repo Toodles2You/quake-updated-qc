@@ -41,13 +41,7 @@ void(float value) EarthQuakeTime =
 	}
 };
 
-void() earthquake_prethink{
-	//	if ( lastearthquake )
-	//	{
-	//		self.view_ofs_z = self.savedz;
-	//		lastearthquake = 0;
-	//	}
-};
+void() earthquake_prethink = {};
 
 void() earthquake_postthink =
 {
@@ -58,12 +52,8 @@ void() earthquake_postthink =
 			sound (self, CHAN_VOICE, "misc/quake.wav", 1, ATTN_NONE);
 			quakeactive = 1;
 		}
-		//		lastearthquake = 1;
-		//		self.savedz = self.view_ofs_z;
 		if (self.flags & FL_ONGROUND)
 		{
-			//			self.view_ofs_z = self.view_ofs_z - 5 + random ()
-			//* 10;
 			self.velocity = self.velocity + (random () * '0 0 150');
 		}
 	}
@@ -87,7 +77,6 @@ Causes an earthquake.  Triggers targets.
 
 "dmg" is the duration of the earthquake.  Default is 0.8 seconds.
 */
-
 void() func_earthquake =
 {
 	quakeactive = 0;

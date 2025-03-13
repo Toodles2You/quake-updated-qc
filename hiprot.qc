@@ -113,9 +113,8 @@ void() RotateTargets =
 			vy = (v_right * org_y);
 			vy = vy * -1;
 			vz = (v_up * org_z);
-			ent.neworigin = vx + vy + vz;
-			ent.neworigin =
-				self.origin - self.oldorigin + (ent.neworigin - ent.oldorigin);
+			ent.neworigin = vx + vy + vz - ent.oldorigin;
+			ent.neworigin = self.origin - self.oldorigin + ent.neworigin;
 			ent.velocity = (ent.neworigin - ent.origin) * 25;
 		}
 		ent = find (ent, targetname, self.target);
@@ -141,14 +140,16 @@ void() RotateTargetsFinal =
 void() SetTargetOrigin =
 {
 	local entity ent;
+	local vector org;
 
 	ent = find (world, targetname, self.target);
 	while (ent)
 	{
 		if (ent.rotate_type == OBJECT_MOVEWALL)
 		{
-			setorigin (ent, self.origin - self.oldorigin +
-							   (ent.neworigin - ent.oldorigin));
+			org = self.origin - self.oldorigin;
+			org = org + ent.neworigin - ent.oldorigin;
+			setorigin (ent, org);
 		}
 		else
 		{
@@ -340,7 +341,6 @@ player is killed by the train.
 "speed"  is how long the entity takes to go from standing still to full speed
 and vice-versa.
 */
-
 void() func_rotate_entity =
 {
 	self.solid = SOLID_NOT;
@@ -742,12 +742,9 @@ dmg      default  0
 sounds
 1) ratchet metal
 */
-
 void() rotate_train =
 {
-	objerror (
-		"rotate_train entities should be changed to rotate_object "
-		"with\nfunc_rotate_train controllers\n");
+	objerror ("rotate_train entities should be changed to rotate_object with\nfunc_rotate_train controllers\n");
 };
 
 void() func_rotate_train =
@@ -1085,7 +1082,6 @@ numbers indicate no damage. "speed" specifies how the time it takes to rotate
 2) metal
 3) base
 */
-
 void() func_rotate_door =
 {
 	if (self.target == "")

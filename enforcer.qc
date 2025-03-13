@@ -63,7 +63,7 @@ void() Laser_Touch =
 		return;
 	}
 
-//MED 01/16/97 added silent command
+// MED 01/16/97 added silent command
 
 	if (!(self.spawnflags & SPAWNFLAG_SILENT))
 		sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);

@@ -53,18 +53,14 @@ void() decoy_stand1 = [$axstnd1, decoy_stand1]
 
 void() decoy_walk1 = [$rockrun1, decoy_walk1]
 {
-	//	local vector a;
+	local float r;
+
 	movetogoal (12);
-	//	a = '0 0 0';
-	//	a_y = self.ideal_yaw;
-	//	makevectors (a);
-	//	self.velocity = 1*v_forward;
 	self.weaponframe = 0;
 	if (self.walkframe == 6)
 		self.walkframe = 0;
 	if (self.walkframe == 2 || self.walkframe == 5)
 	{
-		local float r;
 		r = random ();
 		if (r < 0.14)
 			sound (self, CHAN_VOICE, "misc/foot1.wav", 0.5, ATTN_NORM);

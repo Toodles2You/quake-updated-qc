@@ -164,6 +164,8 @@ void() armagon_think =
 {
 	local float delta;
 	local float angdelta;
+	local float r;
+
 	setorigin (self.trigger_field, self.origin);
 	self.trigger_field.angles = self.angles;
 	self.trigger_field.frame = self.frame;
@@ -183,13 +185,10 @@ void() armagon_think =
 	}
 	angdelta = delta - self.fixangle;
 	armagon_turn (angdelta, delta);
-	//	self.nextthink = time + 0.1;
 	if (self.health < 0)
 		return;
 	if (time > self.super_time)
 	{
-		local float r;
-
 		self.super_time = time + 3;
 		if (random () < 0.5)
 		{
@@ -211,6 +210,8 @@ void() armagon_walkthink =
 	local float delta;
 	local float angdelta;
 	local entity client;
+	local float r;
+
 	setorigin (self.trigger_field, self.origin);
 	self.trigger_field.angles = self.angles;
 	self.trigger_field.frame = self.frame;
@@ -233,8 +234,6 @@ void() armagon_walkthink =
 		return;
 	if (time > self.super_time)
 	{
-		local float r;
-
 		self.super_time = time + 3;
 		if (random () < 0.5)
 		{
@@ -292,7 +291,6 @@ void() armagon_overleft_think =
 		angdelta = delta - self.fixangle;
 	}
 	armagon_turn (angdelta, delta);
-	//	self.nextthink = time + 0.1;
 };
 
 void() armagon_overright_think =
@@ -328,7 +326,6 @@ void() armagon_overright_think =
 		angdelta = delta - self.fixangle;
 	}
 	armagon_turn (angdelta, delta);
-	//	self.nextthink = time + 0.1;
 };
 
 void() armagon_stand_attack;
@@ -585,13 +582,14 @@ void() armagon_run11 = [$lwalk11, armagon_run12]
 };
 void() armagon_run12 = [$lwalk12, armagon_run1]
 {
+	local float delta;
+
 	ChangeYaw ();
 	RUN_STRAIGHT = 1;
 	ai_run (14);
 	armagon_think ();
 	if ((self.cnt == 1) && (time > self.attack_finished))
 	{
-		local float delta;
 		delta = self.ideal_yaw - self.angles_y;
 		if (delta > 180)
 			delta = delta - 360;
@@ -682,8 +680,6 @@ void() armagon_watk11 = [$lw0fir11, armagon_watk13]
 	armagon_think ();
 	armagon_launch_missile (-40, 0);
 };
-// void()	armagon_watk12	 =[ $lw0fir12, armagon_watk13  ]
-// {ChangeYaw ();walkmove (self.angles_y, 14);armagon_think ();};
 void() armagon_watk13 = [$lw0fir12, armagon_run1]
 {
 	ChangeYaw ();
@@ -764,8 +760,6 @@ void() armagon_wlaseratk11 = [$lw0fir11, armagon_wlaseratk13]
 	armagon_think ();
 	armagon_launch_laser (-40);
 };
-// void()	armagon_wlaseratk12	 =[ $lw0fir12, armagon_wlaseratk13
-// ] {ChangeYaw ();walkmove (self.angles_y, 14);armagon_think ();};
 void() armagon_wlaseratk13 = [$lw0fir12, armagon_run1]
 {
 	ChangeYaw ();
@@ -1116,7 +1110,6 @@ void() armagon_die14 = [$ldie12, armagon_die14]
 	self.movetype = MOVETYPE_NONE;
 	body.takedamage = DAMAGE_NO;
 	body.solid = SOLID_NOT;
-	//	setsize (body, '-32 -32 30', '32 32 64' );
 	body.think = armagon_body_explode1;
 	body.nextthink = time + 0.1;
 	body.gorging = TRUE;
@@ -1188,11 +1181,13 @@ void() armagon_missile_attack =
 		armagon_watk1 ();
 	else
 		armagon_wlaseratk1 ();
-	//	self.nextthink = time + 0.1;
 };
 
 void() armagon_repulse_attack =
 {
+	local entity head;
+	local vector dir;
+
 	armagon_think ();
 	if (self.state == 0)
 	{
@@ -1203,9 +1198,6 @@ void() armagon_repulse_attack =
 	}
 	else if (self.state == 1)
 	{
-		local entity head;
-		local vector dir;
-
 		// look in our immediate vicinity
 		head = findradius (self.origin, 300);
 		while (head)
@@ -1225,7 +1217,6 @@ void() armagon_repulse_attack =
 		self.state = 0;
 		SUB_AttackFinished (0.1);
 	}
-	//	self.nextthink = time + 0.1;
 };
 
 void() armagon_stand_attack =
@@ -1321,8 +1312,6 @@ float() ArmagonCheckAttack =
 	}
 	// missile attack
 	self.lefty = 1;
-	//	self.th_missile ();
-	//	SUB_AttackFinished (1.5*random ());
 	return FALSE;
 };
 
@@ -1332,6 +1321,7 @@ void() monster_armagon =
 {
 	local entity body;
 	local float sk;
+
 	if (deathmatch)
 	{
 		remove (self);
@@ -1347,12 +1337,9 @@ void() monster_armagon =
 
 	precache_sound ("armagon/footfall.wav");
 	precache_sound ("armagon/servo.wav");
-	//	precache_sound ("armagon/footfall2.wav");
 	precache_sound ("armagon/death.wav");
-	//	precache_sound ("armagon/death2.wav");
 	precache_sound ("armagon/pain.wav");
 	precache_sound ("armagon/repel.wav");
-	//	precache_sound ("armagon/idle.wav");
 	precache_sound ("armagon/sight.wav");
 	precache_sound ("armagon/idle1.wav");
 	precache_sound ("armagon/idle2.wav");
@@ -1362,7 +1349,6 @@ void() monster_armagon =
 	body = spawn ();
 	body.origin = self.origin;
 	body.origin = body.origin - '0 0 64';
-	//  SUB_CopyEntity(self,body);
 
 	self.solid = SOLID_SLIDEBOX;
 	self.fixangle = 0;

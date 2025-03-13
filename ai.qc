@@ -179,8 +179,6 @@ void() t_followtarget =
 		return;
 	if (other.classname == "monster_decoy")
 		return;
-	//	if (other.enemy == world)
-	//		return;
 	if (other.wetsuit_time > time)
 		return;
 	targ = other.enemy;
@@ -205,16 +203,8 @@ void() t_followtarget =
 	self = other;
 	other = temp;
 
-	self.goalentity = self.movetarget = find (world, targetname, other.target);
-	/*
-	bprint ("target ");
-	bprint (other.target);
-	bprint (" targetname ");
-	bprint (self.goalentity.targetname);
-	bprint (" origin ");
-	bprint (vtos (self.goalentity.origin));
-	bprint ("\n");
-	*/
+	self.movetarget = find (world, targetname, other.target);
+	self.goalentity = self.movetarget;
 	self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
 	self.wetsuit_time = time + 2;
 	if (!self.movetarget)
@@ -242,22 +232,17 @@ void() t_followtarget =
 
 void() followtarget_f =
 {
-	//	if (self.targetname == "")
-	//		objerror ("monster_followtarget: no targetname");
-
 	self.solid = SOLID_TRIGGER;
 	self.touch = t_followtarget;
 	setmodel (self, self.model);  // set size and link into world
 	self.movetype = MOVETYPE_NONE;
 	self.modelindex = 0;
 	self.model = "";
-	//	setsize (self, '-8 -8 -8', '8 8 8');
 };
 
 /*QUAKED path_follow (0.5 0.3 0) ?
 Monsters will stop what they are doing and follow to the path
 */
-
 void() path_follow =
 {
 	followtarget_f ();
@@ -266,7 +251,6 @@ void() path_follow =
 /*QUAKED path_follow2 (0.5 0.3 0) (-8 -8 -8) (8 8 8)
 Monsters will stop what they are doing and follow to the path
 */
-
 void() path_follow2 =
 {
 	self.solid = SOLID_TRIGGER;
@@ -356,7 +340,7 @@ float(entity targ) infront =
 
 //============================================================================
 
-//MED 10/18/96 added charmed stuff
+// MED 10/18/96 added charmed stuff
 //============================================================================
 void() UpdateCharmerGoal =
 {
@@ -544,6 +528,9 @@ float() FindTarget =
 {
 	local entity client;
 	local float r;
+	local entity head;
+	local entity selected;
+	local float dist;
 
 	// if the first spawnflag bit is set, the monster will only wake up on
 	// really seeing the player, not another monster getting angry
@@ -599,10 +586,6 @@ float() FindTarget =
 	// MED 10/17/96 added charmed clause
 	else if (self.charmed)
 	{
-		local entity head;
-		local entity selected;
-		local float dist;
-
 		selected = world;
 		dist = CHARMED_RADIUS;
 		head = findradius (self.origin, CHARMED_RADIUS);
@@ -741,14 +724,13 @@ void(float dist) ai_walk =
 	movedist = dist;
 
 	// MED 01/20/97
-	//  check for noticing a player
+	// check for noticing a player
 	if (FindTarget ())
 		return;
 
 	// MED 11/02/96
 	if (self.huntingcharmer)
 	{
-		//		movetogoal (dist*2);
 		movetogoal (dist);
 		self.nextthink = time + ((self.nextthink - time) / 2);
 	}
@@ -1029,6 +1011,8 @@ float RUN_STRAIGHT;
 void(float dist) ai_run =
 {
 	local float axis;
+	local float angledelta;
+
 	movedist = dist;
 	// see if the enemy is dead
 	if (self.enemy.health <= 0 ||
@@ -1079,8 +1063,6 @@ void(float dist) ai_run =
 	// MED
 	if (self.th_turn)
 	{
-		local float angledelta;
-
 		angledelta = fabs (self.angles_y - enemy_yaw);
 		if (angledelta > MIN_ANGLE_DELTA)
 		{

@@ -196,7 +196,6 @@ void() health_touch =
 	if (self.healtype == 2)
 	{
 		// 11/02/96 removed SUPERHEALTH from defs.qc
-		//		other.items = other.items | IT_SUPERHEALTH;
 		self.nextthink = time + 5;
 		self.think = item_megahealth_rot;
 		self.owner = other;
@@ -226,10 +225,7 @@ void() item_megahealth_rot =
 		return;
 	}
 
-	// it is possible for a player to die and respawn between rots, so don't
-	// just blindly subtract the flag off
 	// MED 11/02/96 removed SUPERHEALTH
-	//	other.items = other.items - (other.items & IT_SUPERHEALTH);
 
 	if (deathmatch == 1)  // deathmatch 2 is silly old rules
 	{

@@ -72,9 +72,7 @@ void() HIP_LaserTouch =
 	}
 	else
 	{
-		//		self.dmg = 0.66 * self.dmg;
 		self.dmg = 0.9 * self.dmg;
-		//		self.speed = 0.95 * self.speed;
 		self.velocity = oldvel + (2 * trace_plane_normal);
 		self.velocity = normalize (self.velocity);
 		self.velocity = self.speed * self.velocity;
@@ -83,13 +81,6 @@ void() HIP_LaserTouch =
 			self.flags = self.flags - FL_ONGROUND;
 		r = random ();
 		sound (self, CHAN_WEAPON, "hipweap/laserric.wav", 1, ATTN_STATIC);
-		/*
-						if (r<0.33)
-								sound (self, CHAN_WEAPON, "weapons/ric1.wav", 1,
-		   ATTN_STATIC); else if (r<0.66) sound (self, CHAN_WEAPON,
-		   "weapons/ric2.wav", 1, ATTN_STATIC); else sound (self, CHAN_WEAPON,
-		   "weapons/ric3.wav", 1, ATTN_STATIC);
-		*/
 		return;
 	}
 	sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
@@ -111,7 +102,6 @@ void() HIP_LaserThink =
 
 void(vector org, vector vec, float light) HIP_LaunchLaser =
 {
-	//	sound (self ,CHAN_WEAPON, "weapons/shotgn2.wav", 1, ATTN_NORM);
 	sound (self, CHAN_WEAPON, "hipweap/laserg.wav", 1, ATTN_NORM);
 
 	vec = normalize (vec);
@@ -177,7 +167,6 @@ void(float stat) HIP_FireLaser =
 	out_z = 0;
 	out = normalize (out);
 	org = self.origin + ((12 - ofs) * v_up) + (12 * out);
-	//	org = self.origin + (1*v_forward);
 	dir = aim (self, 1000);
 	aofs = ofs * 0.707;
 	if (stat == 0)
@@ -257,40 +246,6 @@ void(vector p1, vector p2, entity from, float damage) HIP_HammerDamage =
 	}
 };
 
-/*
-void() HIP_DiversionLightningThink
-{
-		local vector	org,end;
-
-		if (time > self.delay)
-		{
-				remove (self);
-				return;
-		}
-
-		makevectors (self.v_angle);
-		org = self.origin;
-		end = org + v_forward*200;
-//	end = end + (((200*random ()) - 100) * v_up);
-		end = end + (((400*random ()) - 200) * v_right);
-
-		traceline (org, end, TRUE, self);
-
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-		WriteEntity (MSG_BROADCAST, self);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-
-		self.nextthink = time + 0.1;
-};
-*/
-
-// void(entity prev, entity owner, float dst) HIP_SpawnMjolnirLightning;
 void() HIP_LightningThink =
 {
 	local vector org;
@@ -303,6 +258,7 @@ void() HIP_LightningThink =
 	local float dot;
 	local float oldstate;
 	local float dam;
+	local vector end;
 
 	if (time > self.delay)
 	{
@@ -323,9 +279,7 @@ void() HIP_LightningThink =
 		{
 			if (!(head.flags & FL_NOTARGET) &&
 				((head.flags & FL_MONSTER) || (head.flags & FL_CLIENT)))
-				{
-				//				if (visible (head) &&
-				//(head!=self.owner.owner) && (head.health>0))
+			{
 				if ((visible (head)) && (head != self.owner.owner) &&
 					(head.health > 0))
 					{
@@ -348,8 +302,6 @@ void() HIP_LightningThink =
 		}
 		else
 		{
-			local vector end;
-
 			makevectors (self.v_angle);
 			org = self.owner.origin;
 			end = org + v_forward * 200;
@@ -368,11 +320,6 @@ void() HIP_LightningThink =
 			WriteCoord (MSG_BROADCAST, trace_endpos_z);
 
 			self.nextthink = time + 0.1;
-			//			self.think = HIP_DiversionLightningThink;
-			//			self.nextthink = time;
-			//			self.delay = time + 0.30;
-			//			self.origin = self.owner.origin;
-			//			self.think ();
 			return;
 		}
 	}
@@ -437,7 +384,6 @@ void() HIP_SpawnMjolnirBase =
 	local entity light;
 	// spawn lightning base
 	light = spawn ();
-	//	light.origin = self.origin - '0 0 24' + (32*v_forward);
 	light.origin = trace_endpos;
 	light.flags = 0;
 	light.owner = self;
@@ -470,13 +416,6 @@ void() HIP_FireMjolnirLightning =
 		return;
 	}
 
-	//	if (self.t_width < time)
-	//	{
-	//		sound (self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
-	//		self.t_width = time + 0.6;
-	//	}
-	//	self.punchangle_x = 12;
-
 	self.currentammo = self.ammo_cells = self.ammo_cells - 15;
 
 	HIP_SpawnMjolnirBase ();
@@ -490,18 +429,12 @@ void() HIP_FireMjolnir =
 
 	self.attack_finished = time + 0.4;
 	source = self.origin + '0 0 16';
-	//	ang = self.angles;
-	//	ang_x = 0;
-	//	ang_y = 0;
 	makevectors (self.v_angle);
 	traceline (source, source + v_forward * 32, FALSE, self);
 	if (trace_fraction == 1.0 && (self.ammo_cells >= 15))
 	{
 		source = source + v_forward * 32;
 		traceline (source, source - v_up * 50, FALSE, self);
-		//		dprint ("fraction = ");
-		//		dprint (ftos (trace_fraction));
-		//		dprint ("\n");
 		if (trace_fraction > 0.3 && trace_fraction < 1.0)
 		{
 			HIP_FireMjolnirLightning ();
@@ -524,8 +457,6 @@ void() HIP_FireMjolnir =
 	{  // hit wall
 		if (trace_fraction != 1.0)
 		{
-			//			sound (self, CHAN_WEAPON, "player/axhit2.wav",
-			//1, ATTN_NORM);
 			sound (self, CHAN_WEAPON, "hipweap/mjoltink.wav", 1, ATTN_NORM);
 			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 			WriteByte (MSG_BROADCAST, TE_GUNSHOT);
@@ -556,15 +487,15 @@ void() W_Precache =
 	precache_sound ("weapons/grenade.wav");   // grenade launcher
 	precache_sound ("weapons/bounce.wav");    // grenade bounce
 	precache_sound ("weapons/shotgn2.wav");   // super shotgun
-											 // MED
+	// MED
 	precache_sound ("enforcer/enfstop.wav");  // laser cannon
-											 // MED 11/06/96
+	// MED 11/06/96
 	precache_sound ("knight/sword1.wav");     // laser cannon
 	precache_sound ("hipweap/laserg.wav");    // laser cannon
 	precache_sound ("hipweap/laserric.wav");  // laser cannon ricochet
 	precache_sound ("hipweap/proxwarn.wav");  // proximity bomb
 	precache_sound ("hipweap/proxbomb.wav");  // proximity bomb
-											 // MED 11/19/96
+	// MED 11/19/96
 	precache_sound ("hipweap/mjolhit.wav");   // mjolnir
 	precache_sound ("hipweap/mjolslap.wav");  // mjolnir
 	precache_sound ("hipweap/mjoltink.wav");  // mjolnir
@@ -781,6 +712,7 @@ void(float shotcount, vector dir, vector spread) FireBullets =
 	local vector src;
 	// JIM
 	local float bullet;
+
 	bullet = 0;
 
 	makevectors (self.v_angle);
@@ -796,9 +728,9 @@ void(float shotcount, vector dir, vector spread) FireBullets =
 
 		traceline (src, src + direction * 2048, FALSE, self);
 		if (trace_fraction != 1.0)
-		// JIM
 		{
 			TraceAttack (4, direction);
+			// JIM
 			if ((!bullet) && (trace_ent == world))
 			{
 				placebullethole (trace_endpos);
@@ -1206,8 +1138,8 @@ void() ProximityGrenadeTouch =
 		self.think ();
 		return;
 	}
-	sound (self, CHAN_WEAPON, "weapons/bounce.wav", 1,
-		  ATTN_NORM);  // bounce sound
+	// bounce sound
+	sound (self, CHAN_WEAPON, "weapons/bounce.wav", 1, ATTN_NORM);
 	self.movetype = MOVETYPE_NONE;
 	setsize (self, '-8 -8 -8', '8 8 8');
 	self.state = 1;
@@ -1226,7 +1158,7 @@ void() ProximityBomb =
 
 	if ((time > self.delay) || (NumProximityGrenades > 15) ||
 		(vlen (self.spawnmaster.velocity) > 0))
-		{
+	{
 		ProximityGrenadeExplode ();
 		self.think ();
 		return;
@@ -1290,8 +1222,8 @@ void() W_FireProximityGrenade =
 	makevectors (self.v_angle);
 
 	if (self.v_angle_x)
-		missile.velocity = v_forward * 600 + v_up * 200 +
-						   crandom () * v_right * 10 + crandom () * v_up * 10;
+		missile.velocity = v_forward * 600 + v_up * 200
+						 + crandom () * v_right * 10 + crandom () * v_up * 10;
 	else
 	{
 		missile.velocity = aim (self, 10000);
@@ -1573,18 +1505,18 @@ float() W_BestWeapon =
 	if (self.waterlevel <= 1 && self.ammo_cells >= 1 && (it & IT_LIGHTNING))
 		return IT_LIGHTNING;
 	// MED
-	else if (self.ammo_cells >= 1 && (it & IT_LASER_CANNON))
+	if (self.ammo_cells >= 1 && (it & IT_LASER_CANNON))
 		return IT_LASER_CANNON;
-	else if (self.ammo_nails >= 2 && (it & IT_SUPER_NAILGUN))
+	if (self.ammo_nails >= 2 && (it & IT_SUPER_NAILGUN))
 		return IT_SUPER_NAILGUN;
-	else if (self.ammo_shells >= 2 && (it & IT_SUPER_SHOTGUN))
+	if (self.ammo_shells >= 2 && (it & IT_SUPER_SHOTGUN))
 		return IT_SUPER_SHOTGUN;
-	else if (self.ammo_nails >= 1 && (it & IT_NAILGUN))
+	if (self.ammo_nails >= 1 && (it & IT_NAILGUN))
 		return IT_NAILGUN;
-	else if (self.ammo_shells >= 1 && (it & IT_SHOTGUN))
+	if (self.ammo_shells >= 1 && (it & IT_SHOTGUN))
 		return IT_SHOTGUN;
 	// MED
-	else if (it & IT_MJOLNIR)
+	if (it & IT_MJOLNIR)
 		return IT_MJOLNIR;
 
 	return IT_AXE;
@@ -1808,7 +1740,7 @@ void() W_ChangeWeapon =
 
 	if (!(self.items & fl))
 	{  // don't have the weapon or the ammo
-							   // MED
+		// MED
 		if (fl == IT_GRENADE_LAUNCHER)
 		{
 			fl = IT_PROXIMITY_GUN;
@@ -1858,10 +1790,6 @@ void() CheatCommand =
 	self.items = self.items | IT_WEAPONS | IT_KEYS;
 
 	self.ammo_cells = 200;
-	// MED
-	self.items = self.items | IT_LASER_CANNON;
-	self.items = self.items | IT_MJOLNIR;
-	self.items = self.items | IT_PROXIMITY_GUN;
 
 	self.weapon = IT_ROCKET_LAUNCHER;
 	self.impulse = 0;
@@ -2156,12 +2084,14 @@ void() Genocide =
 };
 
 float dump_coord;
+
 void() ToggleDump =
 {
 	dump_coord = 1 - dump_coord;
 	if (dump_coord == 1)
 		bprint ("Dumping Player Location\n");
 };
+
 void() DumpCoordinates =
 {
 	local entity pl;
@@ -2173,6 +2103,7 @@ void() DumpCoordinates =
 		bprint ("\n");
 	}
 };
+
 /*
 ============
 ImpulseCommands

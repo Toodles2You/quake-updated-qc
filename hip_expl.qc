@@ -149,8 +149,7 @@ void() multi_exploder_fire =
 	self = temp;
 };
 
-void(vector loc, float rad, float damage, float dur, float pause, float vol)
-	multi_explosion =
+void(vector loc, float rad, float damage, float dur, float pause, float vol) multi_explosion =
 {
 	local entity temp;
 
