@@ -439,7 +439,7 @@ float() FindTarget =
 		}
 	}
 
-// PGM hack	
+	// PGM hack
 	if (self.classname != "dragon")
 		FoundTarget ();
 
@@ -501,14 +501,14 @@ void(float dist) ai_walk =
 {
 	movedist = dist;
 
-/* Dragon movement handled in dragon.qc.... this is legacy.
+	/* Dragon movement handled in dragon.qc.... this is legacy.
 	if (self.classname == "monster_dragon")
 	{
 		movetogoal (dist);
 		return;
 	}
-*/
-	
+	*/
+
 	// check for noticing a player
 	if (FindTarget ())
 		return;

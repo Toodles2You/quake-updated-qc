@@ -194,9 +194,9 @@ void(entity attacker, float damage) tbaby_mitosis;
 
 void() tbaby_checknew =
 {
-	if (!walkmove(0,0))
+	if (!walkmove (0,0))
 	{
-		remove(self);
+		remove (self);
 		return;
 	}
 	
@@ -208,12 +208,12 @@ void() tbaby_checknew =
 	self.th_melee = tbaby_jump1;
 	self.th_die = tbaby_die1;       
 	self.origin_z = self.origin_z + 1;      // raise off floor a bit
-	droptofloor(0, 0);
+	droptofloor (0, 0);
 
-	if (!walkmove(0,0))
+	if (!walkmove (0,0))
 	{
 		self.owner.th_pain = tbaby_mitosis;
-		remove(self);
+		remove (self);
 		return;
 	}
 
@@ -226,7 +226,7 @@ void() tbaby_checknew =
 	self.flags = self.flags | FL_MONSTER;
 	self.pausetime = 99999999;
 	self.th_stand ();
-	self.nextthink = self.nextthink + random()*0.5;
+	self.nextthink = self.nextthink + random ()*0.5;
 
 	total_monsters = total_monsters + 1;
   
@@ -240,9 +240,9 @@ void(entity attacker, float damage) tbaby_mitosis =
 {
 	local entity    newSpawn;
 	
-	if ( random() < 0.35 )
+	if ( random () < 0.35 )
 	{
-		newSpawn = spawn();
+		newSpawn = spawn ();
 		newSpawn.classname = self.classname;
 		newSpawn.movetype = MOVETYPE_STEP;
 		setsize (newSpawn, '-16 -16 -24', '16 16 40');
@@ -326,7 +326,7 @@ void() monster_tarbaby =
 	{
 		skillLevel = cvar ( "skill" );
 		myRand = skillLevel * 0.2;
-		myRand = myRand + random();
+		myRand = myRand + random ();
 	
 		if (myRand > 0.8 && skillLevel > 1)
 		{

@@ -25,7 +25,7 @@ void() sphere_spawn;
 
 void(entity theEntity) UpdateAmmoCounts =
 {
-	if ( self.weapon >= IT_LAVA_NAILGUN )
+	if (self.weapon >= IT_LAVA_NAILGUN)
 	{
 		theEntity.ammo_shells = theEntity.ammo_shells1;
 		theEntity.ammo_nails = theEntity.ammo_lava_nails;
@@ -47,7 +47,7 @@ void() newitems_touch =
 		return;
 	if (other.health <= 0)
 		return;
-		
+
 	// only one per person, please.
 	if (self.classname == "item_sphere")
 		if (other.items2 & IT2_V_SPHERE)
@@ -55,7 +55,7 @@ void() newitems_touch =
 
 	sprint (other, "You got the ");
 	sprint (other, self.netname);
-	sprint (other,"\n");
+	sprint (other, "\n");
 
 	if (deathmatch)
 	{
@@ -67,16 +67,16 @@ void() newitems_touch =
 		else if (self.classname == "item_sphere")
 		{
 			self.mdl = self.model;
-			self.nextthink = time + 60*3;
+			self.nextthink = time + 60 * 3;
 			self.think = SUB_regen;
 		}
-		else 
+		else
 		{
 			self.mdl = self.model;
 			self.nextthink = time + 60;
 			self.think = SUB_regen;
 		}
-	}	
+	}
 
 	sound (other, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
@@ -85,7 +85,7 @@ void() newitems_touch =
 	other.items2 = other.items2 | self.items2;
 	self.model = string_null;
 
-// do the apropriate action
+	// do the apropriate action
 	if (self.netname == "Power Shield")
 	{
 		other.shield_time = 1;
@@ -100,13 +100,12 @@ void() newitems_touch =
 	else if (self.classname == "item_sphere")
 	{
 		other.items2 = other.items2 | IT2_V_SPHERE;
-		sphere_spawn();
+		sphere_spawn ();
 	}
-	
-	activator = other;
-	SUB_UseTargets();				// fire all targets / killtargets
-};
 
+	activator = other;
+	SUB_UseTargets ();  // fire all targets / killtargets
+};
 
 /*QUAKED item_powerup_shield (0 .5 .8) (-16 -16 -24) (16 16 32)
 The shield upgrade
@@ -146,7 +145,3 @@ void() item_powerup_belt =
 	setsize (self, '-16 -16 -24', '16 16 32');
 	StartItem ();
 };
-
-
-
-

@@ -24,7 +24,7 @@ OGRE
 ==============================================================================
 */
 
-$frame	stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
+$frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7
 $frame walk8 walk9 walk10 walk11 walk12 walk13 walk14 walk15 walk16
@@ -62,8 +62,8 @@ $frame pull1 pull2 pull3 pull4 pull5 pull6 pull7 pull8 pull9 pull10 pull11
 
 //=============================================================================
 
-float	OGRE_BOSS	= 2;
-float	OGRE_NORMAL	= 4;
+float OGRE_BOSS = 2;
+float OGRE_NORMAL = 4;
 
 void() OgreGrenadeExplode =
 {
@@ -132,14 +132,14 @@ void() OgreFireGrenade =
 
 	missile.angles = vectoangles (missile.velocity);
 
-// set missile duration
-	if(self.spawnflags & OGRE_BOSS)
+	// set missile duration
+	if (self.spawnflags & OGRE_BOSS)
 	{
 		missile.touch = MultiGrenadeTouch;
 		missile.nextthink = time + 2.5;
 		missile.think = MultiGrenadeExplode;
 		setmodel (missile, "progs/mervup.mdl");
-		setsize (missile, '0 0 0', '0 0 0');		
+		setsize (missile, '0 0 0', '0 0 0');
 		setorigin (missile, self.origin);
 		missile.classname = "MultiGrenade";
 	}
@@ -149,7 +149,7 @@ void() OgreFireGrenade =
 		missile.nextthink = time + 2.5;
 		missile.think = OgreGrenadeExplode;
 		setmodel (missile, "progs/grenade.mdl");
-		setsize (missile, '0 0 0', '0 0 0');		
+		setsize (missile, '0 0 0', '0 0 0');
 		setorigin (missile, self.origin);
 	}
 };
@@ -543,15 +543,15 @@ void() monster_ogre =
 	// none specified - choose random. 25% boss on normal, hard, bloodbath
 	if (self.spawnflags <= 1)
 	{
-		if (cvar("skill") > 0)
+		if (cvar ("skill") > 0)
 		{
-			if ( random() <= 0.25 )
+			if (random () <= 0.25)
 			{
 				self.spawnflags = self.spawnflags | OGRE_BOSS;
 			}
 		}
 	}
-	
+
 	if (self.spawnflags & OGRE_BOSS)
 	{
 		self.skin = 1;

@@ -64,9 +64,9 @@ $frame cruc_7 cruc_8 cruc_9 cruc_10 cruc_11 cruc_12 cruc_13
 $frame cruc_14 cruc_15 cruc_16
 
 float SPAWN_CRUCIFIED = 1;
-float	SPAWN_LYING = 2;
-float	SPAWN_AMBUSH = 4;
-float	SPAWN_SNEAKY = 8;
+float SPAWN_LYING = 2;
+float SPAWN_AMBUSH = 4;
+float SPAWN_SNEAKY = 8;
 
 //=============================================================================
 
@@ -90,7 +90,7 @@ void() zombie_stand14 = [$stand14, zombie_stand15] { ai_stand (); };
 void() zombie_stand15 = [$stand15, zombie_stand1] { ai_stand (); };
 
 // zombie_lurk is an improved version of what zombie did in zombie_crucXX
-// with an added check for enemies if they're sneaky types... 
+// with an added check for enemies if they're sneaky types...
 void() zombie_lurk =
 {
 	if (self.spawnflags & SPAWN_SNEAKY)
@@ -98,13 +98,13 @@ void() zombie_lurk =
 		// not pausing before attack, but looking for player.
 		if (!self.pain_finished)
 		{
-			if(FindTarget ()) 
+			if (FindTarget ())
 				return;
 		}
 		else
 		{
 			// if we've waited long enough, pounce!
-			if ( self.pain_finished < time )
+			if (self.pain_finished < time)
 			{
 				self.think = zombie_escape1;
 				self.nextthink = time + 0.1;
@@ -112,20 +112,20 @@ void() zombie_lurk =
 			}
 		}
 	}
-	self.nextthink = time + 0.1 + random()*0.1;
+	self.nextthink = time + 0.1 + random () * 0.1;
 };
 
 void() zombie_cruc1 = [$cruc_1, zombie_cruc2]
 {
-zombie_lurk();
+	zombie_lurk ();
 	if (random () < 0.1)
 		sound (self, CHAN_VOICE, "zombie/idle_w2.wav", 1, ATTN_STATIC);
 };
-void() zombie_cruc2 = [$cruc_2, zombie_cruc3] { zombie_lurk(); };
-void() zombie_cruc3 = [$cruc_3, zombie_cruc4] { zombie_lurk(); };
-void() zombie_cruc4 = [$cruc_4, zombie_cruc5] { zombie_lurk(); };
-void() zombie_cruc5 = [$cruc_5, zombie_cruc6] { zombie_lurk(); };
-void() zombie_cruc6 = [$cruc_6, zombie_cruc1] { zombie_lurk(); };
+void() zombie_cruc2 = [$cruc_2, zombie_cruc3] { zombie_lurk (); };
+void() zombie_cruc3 = [$cruc_3, zombie_cruc4] { zombie_lurk (); };
+void() zombie_cruc4 = [$cruc_4, zombie_cruc5] { zombie_lurk (); };
+void() zombie_cruc5 = [$cruc_5, zombie_cruc6] { zombie_lurk (); };
+void() zombie_cruc6 = [$cruc_6, zombie_cruc1] { zombie_lurk (); };
 
 void() zombie_walk1 = [$walk1, zombie_walk2] { ai_walk (0); };
 void() zombie_walk2 = [$walk2, zombie_walk3] { ai_walk (2); };
@@ -307,7 +307,7 @@ void() zombie_missile =
 {
 	local float r;
 
-	droptofloor(0, 0);
+	droptofloor (0, 0);
 	r = random ();
 
 	if (r < 0.3)
@@ -436,14 +436,14 @@ void() zombie_paine10 = [$paine10, zombie_paine11]
 };
 void() zombie_paine11 = [$paine11, zombie_paine12]
 {
-	droptofloor(0, 0);
+	droptofloor (0, 0);
 	self.nextthink = self.nextthink + 5;
 	self.health = 60;
 };
 void() zombie_paine12 = [$paine12, zombie_paine13]
 {
 	// see if ok to stand up
-	droptofloor(0, 0);
+	droptofloor (0, 0);
 	self.health = 60;
 	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
@@ -552,7 +552,7 @@ void(entity attacker, float take) zombie_pain =
 		zombie_paind1 ();
 };
 
-void() zombie_sleep = [ $paine11, zombie_sleep ] { ai_stand(); };
+void() zombie_sleep = [$paine11, zombie_sleep] { ai_stand (); };
 
 void() zombie_wake =
 {
@@ -562,44 +562,83 @@ void() zombie_wake =
 	self.th_run = zombie_run1;
 	self.th_missile = zombie_missile;
 
-//	paine12 will handle setting solid, just make the size box correct.
-//	self.solid = SOLID_SLIDEBOX;
-//	setsize (self, '-16 -16 -24', '16 16 40');
+	//	paine12 will handle setting solid, just make the size box correct.
+	//	self.solid = SOLID_SLIDEBOX;
+	//	setsize (self, '-16 -16 -24', '16 16 40');
 
-	zombie_paine12();
+	zombie_paine12 ();
 };
 
 void(entity attacker, float damage) zombie_wake_pain =
 {
-	zombie_wake();
+	zombie_wake ();
 };
 
-void() zombie_escape1=[ $cruc_1, zombie_escape2 ] {self.nextthink=time+0.20;};
-void() zombie_escape2=[ $cruc_2, zombie_escape3 ] {self.nextthink=time+0.20;};
-void() zombie_escape3=[ $cruc_3, zombie_escape4 ] {self.nextthink=time+0.20;};
-void() zombie_escape4=[ $cruc_4, zombie_escape5 ] {self.nextthink=time+0.20;};
-void() zombie_escape5=[ $cruc_5, zombie_escape6 ] {self.nextthink=time+0.15;};
-void() zombie_escape6=[ $cruc_6, zombie_escape7 ] {self.nextthink=time+0.15;};
-void() zombie_escape7=[ $cruc_7, zombie_escape8 ] {self.nextthink=time+0.15;};
-void() zombie_escape8=[ $cruc_8, zombie_escape9 ] {self.nextthink=time+0.15;};
-void() zombie_escape9=[ $cruc_9, zombie_escape10 ] {self.nextthink=time+0.15;};
-void() zombie_escape10=[$cruc_10, zombie_escape11] {self.nextthink=time+0.15;};
-void() zombie_escape11=[$cruc_11, zombie_escape12] {self.nextthink=time+0.10;};
-void() zombie_escape12=[$cruc_12, zombie_escape13] {self.nextthink=time+0.10;};
-void() zombie_escape13=[$cruc_13, zombie_escape14] {self.nextthink=time+0.10;};
-void() zombie_escape14=[$cruc_14, zombie_escape15] 
+void() zombie_escape1 = [$cruc_1, zombie_escape2]
+{
+	self.nextthink = time + 0.20;
+};
+void() zombie_escape2 = [$cruc_2, zombie_escape3]
+{
+	self.nextthink = time + 0.20;
+};
+void() zombie_escape3 = [$cruc_3, zombie_escape4]
+{
+	self.nextthink = time + 0.20;
+};
+void() zombie_escape4 = [$cruc_4, zombie_escape5]
+{
+	self.nextthink = time + 0.20;
+};
+void() zombie_escape5 = [$cruc_5, zombie_escape6]
+{
+	self.nextthink = time + 0.15;
+};
+void() zombie_escape6 = [$cruc_6, zombie_escape7]
+{
+	self.nextthink = time + 0.15;
+};
+void() zombie_escape7 = [$cruc_7, zombie_escape8]
+{
+	self.nextthink = time + 0.15;
+};
+void() zombie_escape8 = [$cruc_8, zombie_escape9]
+{
+	self.nextthink = time + 0.15;
+};
+void() zombie_escape9 = [$cruc_9, zombie_escape10]
+{
+	self.nextthink = time + 0.15;
+};
+void() zombie_escape10 = [$cruc_10, zombie_escape11]
+{
+	self.nextthink = time + 0.15;
+};
+void() zombie_escape11 = [$cruc_11, zombie_escape12]
+{
+	self.nextthink = time + 0.10;
+};
+void() zombie_escape12 = [$cruc_12, zombie_escape13]
+{
+	self.nextthink = time + 0.10;
+};
+void() zombie_escape13 = [$cruc_13, zombie_escape14]
+{
+	self.nextthink = time + 0.10;
+};
+void() zombie_escape14 = [$cruc_14, zombie_escape15]
 {
 	makevectors (self.angles);
-	setorigin ( self, self.origin + v_forward * 8);
-	self.nextthink=time+0.15;
+	setorigin (self, self.origin + v_forward * 8);
+	self.nextthink = time + 0.15;
 };
-void() zombie_escape15=[ $cruc_15, zombie_escape16] 
+void() zombie_escape15 = [$cruc_15, zombie_escape16]
 {
 	makevectors (self.angles);
-	setorigin ( self, self.origin + v_forward * 8);
-	self.nextthink=time+0.15;
+	setorigin (self, self.origin + v_forward * 8);
+	self.nextthink = time + 0.15;
 };
-void() zombie_escape16 = [ $cruc_16, zombie_run1 ] 
+void() zombie_escape16 = [$cruc_16, zombie_run1]
 {
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
@@ -612,10 +651,10 @@ void() zombie_escape16 = [ $cruc_16, zombie_run1 ]
 	self.health = 60;
 	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 
-	droptofloor(0, 0);
+	droptofloor (0, 0);
 };
 
-void() zombie_escape = 
+void() zombie_escape =
 {
 	if (!self.pain_finished)
 	{
@@ -627,17 +666,19 @@ void() zombie_escape =
 
 void(entity attacker, float damage) zombie_escape_pain =
 {
-	zombie_escape();
+	zombie_escape ();
 };
 
 //============================================================================
 
-/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified Lying ambush Sneaky
+/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified Lying ambush
+Sneaky
 
 Crucified - Zombie stays stuck in the wall, moans and writhes.
 Lying - Zombie will start lying down, and stand when player spotted.
 Ambush - Just like all the other ambush flags.
-Sneaky - Zombie stays stuck in the wall, but breaks his chains, hops off the wall, and attacks after seeing the player.
+Sneaky - Zombie stays stuck in the wall, but breaks his chains, hops off the
+wall, and attacks after seeing the player.
 
 If crucified, stick the bounding box 12 pixels back into a wall to look right.
 */
@@ -695,10 +736,10 @@ void() monster_zombie =
 		setsize (self, '-16 -16 -24', '16 16 -16');
 
 		// HOLY HACK, BATMAN! - Don't blame me. Check out FindTarget in ai.qc!
-		if ( self.spawnflags & SPAWN_AMBUSH)
+		if (self.spawnflags & SPAWN_AMBUSH)
 			self.spawnflags = SPAWN_LYING;
 
-		walkmonster_start();
+		walkmonster_start ();
 	}
 	else if (self.spawnflags & SPAWN_SNEAKY)
 	{
@@ -719,7 +760,7 @@ void() monster_zombie =
 		self.view_ofs = '0 0 25';
 		self.flags = self.flags | FL_MONSTER;
 		self.th_stand ();
-		self.nextthink = self.nextthink + random()*0.5;
+		self.nextthink = self.nextthink + random () * 0.5;
 		total_monsters = total_monsters + 1;
 	}
 	else

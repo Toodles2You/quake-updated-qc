@@ -26,15 +26,15 @@ void() sphere_impact =
 {
 	if (other.health)
 	{
-		T_Damage (other, self, self, 1000 );
+		T_Damage (other, self, self, 1000);
 	}
 
 	// don't do radius damage to the other, because all the damage
 	// was done in the impact
 	T_RadiusDamage (self, self, 300, other);
 
-//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
-	self.origin = self.origin - 8*normalize(self.velocity);
+	//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
+	self.origin = self.origin - 8 * normalize (self.velocity);
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
@@ -48,19 +48,19 @@ void() sphere_impact =
 void(entity ownerEntity) sphere_remove =
 {
 	local entity theSphere;
-	
-	theSphere = find(world, classname, "Vengeance");
-	while(theSphere != world)
+
+	theSphere = find (world, classname, "Vengeance");
+	while (theSphere != world)
 	{
-		if(theSphere.owner == self)
+		if (theSphere.owner == self)
 		{
-			bprint ( theSphere.owner.netname );
-			bprint ( " is denied Vengeance.\n" );
+			bprint (theSphere.owner.netname);
+			bprint (" is denied Vengeance.\n");
 			remove (theSphere);
-			theSphere = find(world, classname, "Vengeance");
+			theSphere = find (world, classname, "Vengeance");
 		}
 		else
-			theSphere = find(theSphere, classname, "Vengeance");
+			theSphere = find (theSphere, classname, "Vengeance");
 	}
 };
 
@@ -74,14 +74,14 @@ void() sphere_attack =
 
 	if (self.enemy.health < 1)
 	{
-		sprint ( self.owner, "You are denied Vengeance");
-		remove(self);
+		sprint (self.owner, "You are denied Vengeance");
+		remove (self);
 		return;
 	}
 
-	ai_track(self.enemy, 650);
+	ai_track (self.enemy, 650);
 	self.nextthink = time + 0.1;
-	self.think = sphere_attack; 
+	self.think = sphere_attack;
 };
 
 // ==============================
@@ -91,15 +91,15 @@ void() sphere_think =
 {
 	if (self.shieldSoundTime < time)
 	{
-		sound ( self, CHAN_VOICE, "sphere/sphere.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "sphere/sphere.wav", 1, ATTN_NORM);
 		self.shieldSoundTime = time + 4;
 	}
-	
+
 	if (time > self.delay)
 	{
 		if (self.owner.items2 & IT2_V_SPHERE)
 			self.owner.items2 = self.owner.items2 - IT2_V_SPHERE;
-		sprint ( self.owner, "Vengeance Sphere Lost\n");
+		sprint (self.owner, "Vengeance Sphere Lost\n");
 		remove (self);
 		return;
 	}
@@ -108,24 +108,24 @@ void() sphere_think =
 	{
 		if (self.owner.items2 & IT2_V_SPHERE)
 			self.owner.items2 = self.owner.items2 - IT2_V_SPHERE;
-		if ( self.owner.enemy.classname == "player" )
+		if (self.owner.enemy.classname == "player")
 		{
 			self.enemy = self.owner.enemy;
-			sphere_attack();
+			sphere_attack ();
 			return;
 		}
-		if ( self.owner.enemy.owner.classname == "player")
+		if (self.owner.enemy.owner.classname == "player")
 		{
 			self.enemy = self.owner.enemy.owner;
-			sphere_attack();
+			sphere_attack ();
 			return;
 		}
 		remove (self);
 		return;
 	}
-	
-	ai_orbit(self.owner, 16, '0 0 48');
-	
+
+	ai_orbit (self.owner, 16, '0 0 48');
+
 	self.think = sphere_think;
 	self.nextthink = time + 0.1;
 };
@@ -135,19 +135,19 @@ void() sphere_think =
 // ==============================
 void() sphere_spawn =
 {
-	local   entity missile;
+	local entity missile;
 
-	missile = spawn();
+	missile = spawn ();
 	missile.movetype = MOVETYPE_FLYMISSILE;
-//	missile.solid = SOLID_BBOX;
+	//	missile.solid = SOLID_BBOX;
 	missile.solid = SOLID_NOT;
 	missile.classname = "Vengeance";
 	missile.owner = other;
 	missile.weapon = 0;
 	missile.delay = time + 30;
 	setmodel (missile, "progs/sphere.mdl");
-	setsize (missile, '0 0 0', '0 0 0');     
-	setorigin (missile, self.origin );
+	setsize (missile, '0 0 0', '0 0 0');
+	setorigin (missile, self.origin);
 	missile.avelocity = '40 40 40';
 	missile.think = sphere_think;
 	missile.nextthink = time + 0.1;
@@ -160,7 +160,7 @@ void() item_sphere =
 {
 	if (!deathmatch)
 	{
-		remove(self);
+		remove (self);
 		return;
 	}
 

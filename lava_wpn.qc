@@ -33,14 +33,14 @@ void(vector org, vector dir) launch_lava_spike =
 	newmis.movetype = MOVETYPE_FLYMISSILE;
 	newmis.solid = SOLID_BBOX;
 
-	newmis.angles = vectoangles(dir);
-	
+	newmis.angles = vectoangles (dir);
+
 	newmis.touch = lavaspike_touch;
 	newmis.classname = "lava_spike";
 	newmis.think = SUB_Remove;
 	newmis.nextthink = time + 6;
-	setmodel (newmis, "progs/lspike.mdl");	
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
+	setmodel (newmis, "progs/lspike.mdl");
+	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	setorigin (newmis, org);
 
 	newmis.velocity = dir * 1000;
@@ -48,29 +48,29 @@ void(vector org, vector dir) launch_lava_spike =
 
 void() W_FireSuperLavaSpikes =
 {
-	local vector	dir;
-	
+	local vector dir;
+
 	sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 	self.attack_finished = time + 0.2;
 	self.currentammo = self.ammo_lava_nails = self.ammo_lava_nails - 2;
 	UpdateAmmoCounts (self);
-	
+
 	dir = aim (self, 1000);
 	launch_lava_spike (self.origin + '0 0 16', dir);
 	newmis.touch = superlavaspike_touch;
 
-//	setmodel (newmis, "progs/lspike.mdl");			
+	//	setmodel (newmis, "progs/lspike.mdl");
 
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
+	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	self.punchangle_x = -2;
 };
 
 void(float ox) W_FireLavaSpikes =
 {
-	local vector	dir;
-	
+	local vector dir;
+
 	makevectors (self.v_angle);
-	
+
 	if (self.ammo_lava_nails >= 2 && self.weapon == IT_LAVA_SUPER_NAILGUN)
 	{
 		W_FireSuperLavaSpikes ();
@@ -89,9 +89,9 @@ void(float ox) W_FireLavaSpikes =
 	self.attack_finished = time + 0.2;
 	self.currentammo = self.ammo_lava_nails = self.ammo_lava_nails - 1;
 	UpdateAmmoCounts (self);
-	
+
 	dir = aim (self, 1000);
-	launch_lava_spike (self.origin + '0 0 16' + v_right*ox, dir);
+	launch_lava_spike (self.origin + '0 0 16' + v_right * ox, dir);
 
 	self.punchangle_x = -2;
 };
@@ -100,31 +100,32 @@ void(float ox) W_FireLavaSpikes =
 
 void() lavaspike_touch =
 {
-local float old_armortype;
-local float old_armorvalue;
-local float old_armormask;
+	local float old_armortype;
+	local float old_armorvalue;
+	local float old_armormask;
 
 	if (other == self.owner)
 		return;
 
 	if (other.solid == SOLID_TRIGGER)
-		return;	// trigger field, do nothing
+		return;  // trigger field, do nothing
 
-	if (pointcontents(self.origin) == CONTENT_SKY)
+	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
-		remove(self);
+		remove (self);
 		return;
 	}
-	
-// hit something that bleeds
+
+	// hit something that bleeds
 	if (other.takedamage)
 	{
 		spawn_touchblood (9);
-		if(other.classname == "player")
+		if (other.classname == "player")
 		{
 			old_armortype = other.armortype;
 			old_armorvalue = other.armorvalue;
-			old_armormask = other.items2 & (IT2_ARMOR1|IT2_ARMOR2|IT2_ARMOR3);
+			old_armormask =
+				other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3);
 			other.armortype = 0;
 			other.armorvalue = 0;
 			T_Damage (other, self, self.owner, 9);
@@ -132,9 +133,9 @@ local float old_armormask;
 			other.armorvalue = old_armorvalue;
 			other.items2 = other.items2 | old_armormask;
 		}
-		else		// is a monster
+		else  // is a monster
 		{
-			if ( other.classname != "monster_lava_man")
+			if (other.classname != "monster_lava_man")
 			{
 				T_Damage (other, self, self.owner, 15);
 			}
@@ -143,7 +144,7 @@ local float old_armormask;
 	else
 	{
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		
+
 		if (self.classname == "wizspike")
 			WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
 		else if (self.classname == "knightspike")
@@ -155,52 +156,52 @@ local float old_armormask;
 		WriteCoord (MSG_BROADCAST, self.origin_z);
 	}
 
-	remove(self);
-
+	remove (self);
 };
 
 void() superlavaspike_touch =
 {
-local float old_armortype;
-//local float old_armorvalue;
+	local float old_armortype;
+	// local float old_armorvalue;
 
 	if (other == self.owner)
 		return;
 
 	if (other.solid == SOLID_TRIGGER)
-		return;	// trigger field, do nothing
+		return;  // trigger field, do nothing
 
-	if (pointcontents(self.origin) == CONTENT_SKY)
+	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
-		remove(self);
+		remove (self);
 		return;
 	}
-	
-// hit something that bleeds
+
+	// hit something that bleeds
 	if (other.takedamage)
 	{
 		spawn_touchblood (18);
-		
+
 		// halve the effectiveness of the armor for players..
-		if(other.classname == "player")
+		if (other.classname == "player")
 		{
 			// save the old armor values...
 			old_armortype = other.armortype;
-//			old_armorvalue = other.armorvalue;
+			//			old_armorvalue = other.armorvalue;
 			other.armortype = other.armortype * 0.5;
-//			other.armorvalue = 0;
+			//			other.armorvalue = 0;
 			T_Damage (other, self, self.owner, 18);
-			
-			// if the damage didn't wipe out the armor, armortype 
-			if(other.armortype != 0)
+
+			// if the damage didn't wipe out the armor, armortype
+			if (other.armortype != 0)
 			{
 				other.armortype = old_armortype;
-//				other.armorvalue = old_armorvalue;
+				//				other.armorvalue =
+				//old_armorvalue;
 			}
 		}
-		else		// is a monster, do 50% more damage
+		else  // is a monster, do 50% more damage
 		{
-			if ( other.classname != "monster_lava_man")
+			if (other.classname != "monster_lava_man")
 			{
 				T_Damage (other, self, self.owner, 30);
 			}
@@ -215,6 +216,5 @@ local float old_armortype;
 		WriteCoord (MSG_BROADCAST, self.origin_z);
 	}
 
-	remove(self);
-
+	remove (self);
 };

@@ -195,7 +195,7 @@ void() health_touch =
 	self.solid = SOLID_NOT;
 
 	// Megahealth = rot down the player's super health
-	if (self.healtype == 2 && !RuneHasElder(other))
+	if (self.healtype == 2 && !RuneHasElder (other))
 	{
 		other.items2 = other.items2 | IT2_SUPERHEALTH;
 		self.nextthink = time + 5;
@@ -283,8 +283,9 @@ void() armor_touch =
 
 	other.armortype = type;
 	other.armorvalue = value;
-	other.items2 = other.items2 - 
-				(other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3)) + bit;
+	other.items2 = other.items2 -
+				   (other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3)) +
+				   bit;
 
 	self.solid = SOLID_NOT;
 	self.model = string_null;
@@ -358,7 +359,7 @@ void() bound_other_ammo =
 		other.ammo_rockets1 = 100;
 	if (other.ammo_cells1 > 100)
 		other.ammo_cells1 = 100;
-		
+
 	// PGM addition
 	if (other.ammo_lava_nails > 200)
 		other.ammo_lava_nails = 200;
@@ -408,7 +409,7 @@ void(float old, float new) Deathmatch_Weapon =
 {
 	local float or, nr;
 
-// PGM - fix for changing to weapons when grappling.
+	// PGM - fix for changing to weapons when grappling.
 	if (self.weapon == IT_GRAPPLE && self.button0)
 		return;
 
@@ -423,7 +424,7 @@ void(entity comboOwner) EnableComboWeapons =
 {
 	if (comboOwner.classname != "player")
 		return;
-	
+
 	if (!(comboOwner.items & IT_LAVA_NAILGUN))
 	{
 		if (comboOwner.ammo_lava_nails > 0 && (comboOwner.items & IT_NAILGUN))
@@ -435,31 +436,31 @@ void(entity comboOwner) EnableComboWeapons =
 
 	if (!(comboOwner.items & IT_LAVA_SUPER_NAILGUN))
 	{
-		if (comboOwner.ammo_lava_nails > 0 && 
-							(comboOwner.items & IT_SUPER_NAILGUN))
-		{
+		if (comboOwner.ammo_lava_nails > 0 &&
+			(comboOwner.items & IT_SUPER_NAILGUN))
+			{
 			sprint (comboOwner, "Super Lava Enabled\n");
-			comboOwner.items = comboOwner.items | IT_LAVA_SUPER_NAILGUN;		
+			comboOwner.items = comboOwner.items | IT_LAVA_SUPER_NAILGUN;
 		}
 	}
 
 	if (!(comboOwner.items & IT_MULTI_GRENADE))
 	{
-		if (comboOwner.ammo_multi_rockets > 0 && 
-							(comboOwner.items & IT_GRENADE_LAUNCHER))
-		{
+		if (comboOwner.ammo_multi_rockets > 0 &&
+			(comboOwner.items & IT_GRENADE_LAUNCHER))
+			{
 			sprint (comboOwner, "Multi Grenades Enabled\n");
-			comboOwner.items = comboOwner.items | IT_MULTI_GRENADE;		
+			comboOwner.items = comboOwner.items | IT_MULTI_GRENADE;
 		}
 	}
 
 	if (!(comboOwner.items & IT_MULTI_ROCKET))
 	{
-		if (comboOwner.ammo_multi_rockets > 0 && 
-							(comboOwner.items & IT_ROCKET_LAUNCHER))
-		{
+		if (comboOwner.ammo_multi_rockets > 0 &&
+			(comboOwner.items & IT_ROCKET_LAUNCHER))
+			{
 			sprint (comboOwner, "Multi Rockets Enabled\n");
-			comboOwner.items = comboOwner.items | IT_MULTI_ROCKET;		
+			comboOwner.items = comboOwner.items | IT_MULTI_ROCKET;
 		}
 	}
 
@@ -468,7 +469,7 @@ void(entity comboOwner) EnableComboWeapons =
 		if (comboOwner.ammo_plasma > 0 && (comboOwner.items & IT_LIGHTNING))
 		{
 			sprint (comboOwner, "Plasma Gun Enabled\n");
-			comboOwner.items = comboOwner.items | IT_PLASMA_GUN;		
+			comboOwner.items = comboOwner.items | IT_PLASMA_GUN;
 		}
 	}
 };
@@ -575,8 +576,8 @@ void() weapon_touch =
 	// change to the weapon
 	old = other.items;
 	other.items = other.items | new;
-	
-	EnableComboWeapons ( other );
+
+	EnableComboWeapons (other);
 
 	// PGM - fake picking up the plasma gun.
 	if (new == IT_LIGHTNING)
@@ -613,7 +614,7 @@ void() weapon_touch =
 	else
 		Deathmatch_Weapon (old, new);
 
-	UpdateAmmoCounts ( self );
+	UpdateAmmoCounts (self);
 	W_SetCurrentAmmo ();
 
 	self = stemp;
@@ -741,7 +742,7 @@ void() ammo_touch =
 	best = W_BestWeapon ();
 	self = stemp;
 
-// by this point, other is the player and self is the ammo pack. - PGM
+	// by this point, other is the player and self is the ammo pack. - PGM
 
 	// shotgun
 	if (self.weapon == 1)
@@ -775,33 +776,33 @@ void() ammo_touch =
 		other.ammo_cells1 = other.ammo_cells1 + self.aflag;
 	}
 
-//	lava spikes
+	//	lava spikes
 	if (self.weapon == 5)
 	{
-		if(other.ammo_lava_nails >= 200)
-			return;			
+		if (other.ammo_lava_nails >= 200)
+			return;
 		other.ammo_lava_nails = other.ammo_lava_nails + self.aflag;
 	}
 
-//	multi grenades
+	//	multi grenades
 	if (self.weapon == 6)
 	{
-		if(other.ammo_multi_rockets >= 100)
+		if (other.ammo_multi_rockets >= 100)
 			return;
 		other.ammo_multi_rockets = other.ammo_multi_rockets + self.aflag;
 	}
 
-//	plasma
+	//	plasma
 	if (self.weapon == 7)
 	{
-		if(other.ammo_plasma >= 100)
+		if (other.ammo_plasma >= 100)
 			return;
 		other.ammo_plasma = other.ammo_plasma + self.aflag;
 	}
 
-	EnableComboWeapons ( other );
-	UpdateAmmoCounts ( other );
-	
+	EnableComboWeapons (other);
+	UpdateAmmoCounts (other);
+
 	bound_other_ammo ();
 
 	sprint (other, "You got the ");
@@ -1313,23 +1314,23 @@ void() powerup_touch =
 	if (deathmatch)
 	{
 		self.mdl = self.model;
-		
+
 		if (self.classname == "item_random_powerup")
 		{
 			self.nextthink = time + 30;
 			self.think = random_regen;
 		}
-		else 
+		else
 		{
 			if ((self.classname == "item_artifact_invulnerability") ||
 				(self.classname == "item_artifact_invisibility"))
-				self.nextthink = time + 60*5;
+				self.nextthink = time + 60 * 5;
 			else
 				self.nextthink = time + 60;
-		
+
 			self.think = SUB_regen;
 		}
-	}	
+	}
 
 	sound (other, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
@@ -1337,29 +1338,29 @@ void() powerup_touch =
 	other.items = other.items | self.items;
 	self.model = string_null;
 
-// do the apropriate action
-//	if (self.classname == "item_artifact_envirosuit")
+	// do the apropriate action
+	//	if (self.classname == "item_artifact_envirosuit")
 	if (self.netname == "Biosuit")
 	{
 		other.rad_time = 1;
 		other.radsuit_finished = time + 30;
 	}
 
-//	if (self.classname == "item_artifact_invulnerability")
+	//	if (self.classname == "item_artifact_invulnerability")
 	if (self.netname == "Pentagram of Protection")
 	{
 		other.invincible_time = 1;
 		other.invincible_finished = time + 30;
 	}
 
-//	if (self.classname == "item_artifact_invisibility")
+	//	if (self.classname == "item_artifact_invisibility")
 	if (self.netname == "Ring of Shadows")
 	{
 		other.invisible_time = 1;
 		other.invisible_finished = time + 30;
 	}
 
-//	if (self.classname == "item_artifact_super_damage")
+	//	if (self.classname == "item_artifact_super_damage")
 	if (self.netname == "Quad Damage")
 	{
 		other.super_time = 1;
@@ -1465,11 +1466,11 @@ void() BackpackTouch =
 	if (other.health <= 0)
 		return;
 
-//ZOID--
-	// Don't let the owner pick up his own backpack for a second.
+	// ZOID--
+	//  Don't let the owner pick up his own backpack for a second.
 	if ((other == self.owner) && ((self.nextthink - time) > 119))
 		return;
-//--ZOID
+	//--ZOID
 
 	acount = 0;
 	sprint (other, "You get ");
@@ -1496,8 +1497,8 @@ void() BackpackTouch =
 	other.ammo_cells1 = other.ammo_cells1 + self.ammo_cells1;
 
 	other.ammo_lava_nails = other.ammo_lava_nails + self.ammo_lava_nails;
-	other.ammo_multi_rockets = other.ammo_multi_rockets +
-									self.ammo_multi_rockets;
+	other.ammo_multi_rockets =
+		other.ammo_multi_rockets + self.ammo_multi_rockets;
 	other.ammo_plasma = other.ammo_plasma + self.ammo_plasma;
 
 	new = self.items;
@@ -1547,27 +1548,27 @@ void() BackpackTouch =
 	if (self.ammo_lava_nails)
 	{
 		if (acount)
-			sprint(other, ", ");
+			sprint (other, ", ");
 		acount = 1;
-		s = ftos(self.ammo_lava_nails);
+		s = ftos (self.ammo_lava_nails);
 		sprint (other, s);
 		sprint (other, " lava nails");
 	}
 	if (self.ammo_multi_rockets)
 	{
 		if (acount)
-			sprint(other, ", ");
+			sprint (other, ", ");
 		acount = 1;
-		s = ftos(self.ammo_multi_rockets);
+		s = ftos (self.ammo_multi_rockets);
 		sprint (other, s);
 		sprint (other, " multi rockets");
 	}
 	if (self.ammo_plasma)
 	{
 		if (acount)
-			sprint(other, ", ");
+			sprint (other, ", ");
 		acount = 1;
-		s = ftos(self.ammo_plasma);
+		s = ftos (self.ammo_plasma);
 		sprint (other, s);
 		sprint (other, " plasma balls");
 	}
@@ -1581,8 +1582,8 @@ void() BackpackTouch =
 	remove (self);
 	self = other;
 
-// fixme -- move this to after weapon choice if problematic.
-	EnableComboWeapons ( self );
+	// fixme -- move this to after weapon choice if problematic.
+	EnableComboWeapons (self);
 
 	// change to the weapon
 	if (!deathmatch)
@@ -1590,9 +1591,9 @@ void() BackpackTouch =
 	else
 		Deathmatch_Weapon (old, new);
 
-//	EnableComboWeapons ( self );
+	//	EnableComboWeapons ( self );
 	UpdateAmmoCounts (self);
-	
+
 	W_SetCurrentAmmo ();
 };
 
@@ -1614,9 +1615,9 @@ void() DropBackpack =
 		self.ammo_rockets1 = self.ammo_rockets;
 		self.ammo_cells1 = self.ammo_cells;
 	}
-	
-	if (!(self.ammo_shells1 + self.ammo_nails1 + self.ammo_rockets1 + 
-			self.ammo_cells1 + self.ammo_lava_nails + self.ammo_multi_rockets))
+
+	if (!(self.ammo_shells1 + self.ammo_nails1 + self.ammo_rockets1 +
+		  self.ammo_cells1 + self.ammo_lava_nails + self.ammo_multi_rockets))
 		return;  // nothing in it
 
 	item = spawn ();
@@ -1641,27 +1642,27 @@ void() DropBackpack =
 		item.netname = "Thunderbolt";
 	else if (item.items == IT_LAVA_NAILGUN)
 	{
-		item.netname = "Lava Nail Gun";	
+		item.netname = "Lava Nail Gun";
 		item.items = IT_NAILGUN;
 	}
 	else if (item.items == IT_LAVA_SUPER_NAILGUN)
 	{
-		item.netname = "Super Lava Nail Gun";	
+		item.netname = "Super Lava Nail Gun";
 		item.items = IT_SUPER_NAILGUN;
 	}
 	else if (item.items == IT_MULTI_GRENADE)
 	{
-		item.netname = "Multi Grenade Launcher";	
+		item.netname = "Multi Grenade Launcher";
 		item.items = IT_GRENADE_LAUNCHER;
 	}
 	else if (item.items == IT_MULTI_ROCKET)
 	{
-		item.netname = "Multi Rocket Launcher";	
+		item.netname = "Multi Rocket Launcher";
 		item.items = IT_ROCKET_LAUNCHER;
 	}
 	else if (item.items == IT_PLASMA_GUN)
 	{
-		item.netname = "Plasma Gun";	
+		item.netname = "Plasma Gun";
 		item.items = IT_LIGHTNING;
 	}
 	else

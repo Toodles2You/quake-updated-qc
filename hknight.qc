@@ -182,7 +182,7 @@ void() hknight_run8 = [$run8, hknight_run1] { ai_run (13); };
 
 void() hknight_pain1 = [$pain1, hknight_pain2]
 {
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2)  // statue
 		sound (self, CHAN_VOICE, "statue/pain.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
@@ -228,12 +228,12 @@ void() hknight_die =
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		ThrowHead ("progs/h_hellkn.mdl", self.health);
-	
-		if (self.spawnflags & 2) // statue
+
+		if (self.spawnflags & 2)  // statue
 		{
-			ThrowGib ( "progs/statgib1.mdl", self.health);
-			ThrowGib ( "progs/statgib2.mdl", self.health);
-			ThrowGib ( "progs/statgib3.mdl", self.health);
+			ThrowGib ("progs/statgib1.mdl", self.health);
+			ThrowGib ("progs/statgib2.mdl", self.health);
+			ThrowGib ("progs/statgib3.mdl", self.health);
 		}
 		else
 		{
@@ -246,7 +246,7 @@ void() hknight_die =
 
 	// regular death
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2)  // statue
 		sound (self, CHAN_VOICE, "statue/death.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
@@ -499,7 +499,7 @@ void() hk_idle_sound =
 {
 	if (random () < 0.2)
 	{
-		if (self.spawnflags & 2) // statue
+		if (self.spawnflags & 2)  // statue
 			sound (self, CHAN_VOICE, "statue/idle.wav", 1, ATTN_IDLE);
 		else
 			sound (self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
@@ -511,14 +511,13 @@ void(entity attacker, float damage) hknight_pain =
 	if (self.pain_finished > time)
 		return;
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2)  // statue
 		sound (self, CHAN_VOICE, "statue/pain.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
 
-	if (time - self.pain_finished >
-		5)
-		{  // allways go into pain frame if it has been a while
+	if (time - self.pain_finished > 5)
+	{  // allways go into pain frame if it has been a while
 		hknight_pain1 ();
 		self.pain_finished = time + 1;
 		return;
@@ -551,7 +550,7 @@ void() hknight_melee =
 
 void() hknight_pause =
 {
-	sound ( self, CHAN_VOICE, "statue/see.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "statue/see.wav", 1, ATTN_NORM);
 
 	self.takedamage = DAMAGE_AIM;
 	self.th_stand = hknight_stand1;
@@ -596,15 +595,15 @@ void() monster_hell_knight =
 	precache_model2 ("progs/k_spike.mdl");
 	precache_model2 ("progs/h_hellkn.mdl");
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2)  // statue
 	{
-		precache_model ( "progs/statgib1.mdl");
-		precache_model ( "progs/statgib2.mdl");
-		precache_model ( "progs/statgib3.mdl");
-		precache_sound ( "statue/see.wav");
-		precache_sound ( "statue/idle.wav");
-		precache_sound ( "statue/pain.wav");
-		precache_sound ( "statue/death.wav");
+		precache_model ("progs/statgib1.mdl");
+		precache_model ("progs/statgib2.mdl");
+		precache_model ("progs/statgib3.mdl");
+		precache_sound ("statue/see.wav");
+		precache_sound ("statue/idle.wav");
+		precache_sound ("statue/pain.wav");
+		precache_sound ("statue/death.wav");
 	}
 	else
 	{
@@ -612,9 +611,8 @@ void() monster_hell_knight =
 		precache_sound2 ("hknight/pain1.wav");
 		precache_sound2 ("hknight/sight1.wav");
 		precache_sound2 ("hknight/idle.wav");
-
 	}
-	
+
 	precache_sound2 ("hknight/attack1.wav");
 	precache_sound ("hknight/hit.wav");  // used by C code, so don't sound2
 	precache_sound2 ("hknight/slash1.wav");
@@ -631,7 +629,7 @@ void() monster_hell_knight =
 	setsize (self, '-16 -16 -24', '16 16 40');
 	self.health = 250;
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2)  // statue
 	{
 		if (self.frame == 0)
 			self.frame = 73;
@@ -642,7 +640,7 @@ void() monster_hell_knight =
 			dprint ("statue not targeted\n");
 			dprint (self.classname);
 			dprint (" at ");
-			dprint (vtos(self.origin));
+			dprint (vtos (self.origin));
 			dprint ("\n");
 			return;
 		}
@@ -662,7 +660,7 @@ void() monster_hell_knight =
 		self.th_missile = hknight_magicc1;
 		self.th_pain = hknight_pain;
 		self.th_die = hknight_die;
-	
+
 		walkmonster_start ();
 	}
 };

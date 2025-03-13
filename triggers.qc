@@ -288,7 +288,7 @@ TELEPORT TRIGGERS
 
 float PLAYER_ONLY = 1;
 float SILENT = 2;
-float	CTF_ONLY = 4;
+float CTF_ONLY = 4;
 
 void() play_teleport =
 {
@@ -592,15 +592,15 @@ void() trigger_hurt =
 
 //============================================================================
 
-float PUSH_ONCE = 	1;
-float PUSH_TOGL = 	2;
-float PUSH_ACTIVE =	4;
+float PUSH_ONCE = 1;
+float PUSH_TOGL = 2;
+float PUSH_ACTIVE = 4;
 
 void() trigger_push_touch =
 {
 	if (!(self.spawnflags & PUSH_ACTIVE))
 		return;
-		
+
 	if (other.classname == "grenade")
 		other.velocity = self.speed * self.movedir * 10;
 	else if (other.classname == "MiniGrenade")
@@ -623,7 +623,7 @@ void() trigger_push_touch =
 		remove (self);
 };
 
-void() trigger_push_use = 
+void() trigger_push_use =
 {
 	if (self.spawnflags & PUSH_ACTIVE)
 		self.spawnflags = self.spawnflags - PUSH_ACTIVE;

@@ -67,7 +67,7 @@ void() SetChangeParms =
 	if (self.health <= 0)
 	{
 		SetNewParms ();
-		parm14 = self.steam;	// Save the current team of the player
+		parm14 = self.steam;  // Save the current team of the player
 		return;
 	}
 
@@ -76,20 +76,20 @@ void() SetChangeParms =
 		self.items - (self.items & (IT_KEY1 | IT_KEY2 | IT_INVISIBILITY |
 									IT_INVULNERABILITY | IT_SUIT | IT_QUAD));
 
-	self.items2 = self.items2 - (self.items2 & 
-					(IT2_ANTIGRAV | IT2_SHIELD | IT2_SUPERHEALTH));
+	self.items2 = self.items2 -
+				  (self.items2 & (IT2_ANTIGRAV | IT2_SHIELD | IT2_SUPERHEALTH));
 	self.gravity = 1.0;
-	
+
 	// cap super health
 	if (self.health > 100)
 		self.health = 100;
 	if (self.health < 50)
 		self.health = 50;
 
-	teamplay = cvar ( "teamplay" );
-	if (teamplay >= TEAM_CTF)	// don't carry items between levels in CTF
-		SetNewParms();
-	else 
+	teamplay = cvar ("teamplay");
+	if (teamplay >= TEAM_CTF)  // don't carry items between levels in CTF
+		SetNewParms ();
+	else
 	{
 		parm1 = self.items;
 		parm2 = self.health;
@@ -108,24 +108,27 @@ void() SetChangeParms =
 		parm12 = self.ammo_multi_rockets;
 		parm13 = self.ammo_plasma;
 	}
-	parm14 = self.steam; // save team setting
+	parm14 = self.steam;  // save team setting
 };
 
 void() SetNewParms =
 {
-//ZOID--
-	if (deathmatch && teamplay >= TEAM_CTF) {
+	// ZOID--
+	if (deathmatch && teamplay >= TEAM_CTF)
+	{
 		parm1 = IT_SHOTGUN | IT_AXE | IT_GRAPPLE;
 		parm10 = IT2_ARMOR1;
 		parm3 = 50;
 		parm9 = 30;
-	} else {
+	}
+	else
+	{
 		parm1 = IT_SHOTGUN | IT_AXE;
 		parm3 = 0;
 		parm9 = 0;
 		parm10 = 0;
 	}
-//--ZOID
+	//--ZOID
 	parm2 = 100;
 	parm4 = 25;
 	parm5 = 0;
@@ -135,9 +138,9 @@ void() SetNewParms =
 	parm11 = 0;
 	parm12 = 0;
 	parm13 = 0;
-//ZOID--
-	parm14 = -1; 		// CTF: reset current team selection
-//--ZOID
+	// ZOID--
+	parm14 = -1;  // CTF: reset current team selection
+	//--ZOID
 };
 
 void() DecodeLevelParms =
@@ -168,12 +171,13 @@ void() DecodeLevelParms =
 	self.ammo_lava_nails = parm11;
 	self.ammo_multi_rockets = parm12;
 	self.ammo_plasma = parm13;
-//ZOID--
-	if (TeamColorIsLegal(parm14)) {
+	// ZOID--
+	if (TeamColorIsLegal (parm14))
+	{
 		self.steam = parm14;
-		TeamSetSkin();
+		TeamSetSkin ();
 	}
-//--ZOID
+	//--ZOID
 };
 
 /*
@@ -456,7 +460,7 @@ void() respawn =
 		// respawn
 		PutClientInServer ();
 		// set the skin correctly.
-		TeamSetSkin();
+		TeamSetSkin ();
 	}
 	else
 	{  // restart the entire server
@@ -473,35 +477,35 @@ Player entered the suicide command
 */
 void() ClientKill =
 {
-	local entity	vSphere;
+	local entity vSphere;
 
-// ZOID--
+	// ZOID--
 	if (self.suicide_count > 3)
 	{
-		sprint(self, "You have suicided too much already.\n");
+		sprint (self, "You have suicided too much already.\n");
 		return;
 	}
-	TeamDropFlagOfPlayer(self);
+	TeamDropFlagOfPlayer (self);
 	self.suicide_count = self.suicide_count + 1;
-// --ZOID
+	// --ZOID
 
-	if ( tag_token_owner == self)
+	if (tag_token_owner == self)
 	{
 		self.health = 0;
 		self.solid = SOLID_NOT;
-		tag_token_drop();
+		tag_token_drop ();
 	}
 
-	if ( self.items2 & IT2_V_SPHERE)
+	if (self.items2 & IT2_V_SPHERE)
 	{
-		vSphere = find ( world, classname, "Vengeance");
+		vSphere = find (world, classname, "Vengeance");
 		while (vSphere)
 		{
-			if ( vSphere.owner == self )
+			if (vSphere.owner == self)
 			{
 				remove (vSphere);
 			}
-			vSphere = find(vSphere, classname, "Vengeance");
+			vSphere = find (vSphere, classname, "Vengeance");
 		}
 	}
 
@@ -530,10 +534,10 @@ entity() SelectSpawnPoint =
 	local entity spot;
 	local entity thing;
 	local float pcount;
-//ZOID--
-	local	entity	startspot;
-	local	float	t;
-//--ZOID
+	// ZOID--
+	local entity startspot;
+	local float t;
+	//--ZOID
 
 	// testinfo_player_start is only found in regioned levels
 	spot = find (world, classname, "testplayerstart");
@@ -559,22 +563,22 @@ entity() SelectSpawnPoint =
 			{
 				startspot = spot = team1_lastspawn;
 				t = TEAM1;
-			} 
+			}
 			else if (self.steam == TEAM2)
 			{
 				startspot = spot = team2_lastspawn;
 				t = TEAM2;
 			}
 		}
-		
+
 		while (1)
 		{
 			if (t == TEAM1)
-				spot = find(spot, classname, "info_player_team1");
+				spot = find (spot, classname, "info_player_team1");
 			else if (t == TEAM2)
-				spot = find(spot, classname, "info_player_team2");
+				spot = find (spot, classname, "info_player_team2");
 			else
-				spot = find(spot, classname, "info_player_deathmatch");
+				spot = find (spot, classname, "info_player_deathmatch");
 
 			if (spot != world)
 			{
@@ -599,7 +603,7 @@ entity() SelectSpawnPoint =
 					return spot;
 				}
 			}
-			else				
+			else
 				t = 0;
 			// pgm fix for ctf in levels w/o ctf support
 		}
@@ -654,13 +658,13 @@ void() PutClientInServer =
 
 	self.shield_finished = 0;
 	self.antigrav_finished = 0;
-		
-//ZOID--
+
+	// ZOID--
 	self.ctf_lastreturnedflag = -10;
 	self.ctf_lastfraggedcarrier = -10;
 	self.ctf_flagsince = -10;
 	self.ctf_lasthurtcarrier = -10;
-//--ZOID
+	//--ZOID
 
 	DecodeLevelParms ();
 
@@ -704,7 +708,7 @@ void() PutClientInServer =
 		spawn_tfog (self.origin + v_forward * 20);
 	}
 
-	//Grapple stuff
+	// Grapple stuff
 	self.on_hook = FALSE;
 	self.hook_out = FALSE;
 
@@ -739,7 +743,7 @@ potential spawning position for deathmatch games
 */
 void() info_player_deathmatch =
 {
-	SpawnRunes();
+	SpawnRunes ();
 };
 
 /*QUAKED info_player_coop (1 0 1) (-16 -16 -24) (16 16 24)
@@ -764,7 +768,7 @@ void() NextLevel =
 
 	if (mapname == "start")
 	{
-/*
+		/*
 		if (!cvar ("registered"))
 		{
 			mapname = "e1m1";
@@ -789,7 +793,7 @@ void() NextLevel =
 			mapname = "e4m1";
 			serverflags = serverflags - 7;
 		}
-*/
+		*/
 		// PGM 03/02/97 - make it always go to rogue level1 when in our progs
 		mapname = "r1m1";
 
@@ -850,10 +854,10 @@ void() CheckRules =
 		return;
 	}
 
-//ZOID--
-	// update team scores? 
-	TeamCheckUpdate();
-//--ZOID
+	// ZOID--
+	//  update team scores?
+	TeamCheckUpdate ();
+	//--ZOID
 };
 
 //============================================================================
@@ -1072,29 +1076,29 @@ void() PlayerPreThink =
 
 	if (earthquake_active)
 	{
-		if ( self.flags & FL_ONGROUND )
+		if (self.flags & FL_ONGROUND)
 		{
-			self.velocity_x = self.velocity_x + 
-								(random() * earthquake_intensity * 2) -
-								earthquake_intensity;
-			self.velocity_y = self.velocity_y + 
-								(random() * earthquake_intensity * 2) -
-								earthquake_intensity;
-			self.velocity_z = self.velocity_z + 
-								(random() * earthquake_intensity * 2) -
-								earthquake_intensity;
+			self.velocity_x = self.velocity_x +
+							  (random () * earthquake_intensity * 2) -
+							  earthquake_intensity;
+			self.velocity_y = self.velocity_y +
+							  (random () * earthquake_intensity * 2) -
+							  earthquake_intensity;
+			self.velocity_z = self.velocity_z +
+							  (random () * earthquake_intensity * 2) -
+							  earthquake_intensity;
 		}
 	}
 
 	makevectors (self.v_angle);  // is this still used
 
-//ZOID--
-	// TeamCheckLock performs all necessary teamlock checking, and performs all
-	// actions needed.
-	TeamCheckLock();
-//--ZOID
+	// ZOID--
+	//  TeamCheckLock performs all necessary teamlock checking, and performs all
+	//  actions needed.
+	TeamCheckLock ();
+	//--ZOID
 
-	CheckMOTD();
+	CheckMOTD ();
 	CheckRules ();
 	WaterMove ();
 
@@ -1130,20 +1134,20 @@ void() PlayerPreThink =
 
 	if (self.items2 & IT2_ANTIGRAV)
 	{
-		if ( time > self.AGping )
+		if (time > self.AGping)
 		{
-			sound ( self, CHAN_AUTO, "belt/use.wav", 0.4, ATTN_NORM);
-			self. AGping = time + 3;
-			if(self. AGping >= (self.antigrav_finished - 3))
-				self. AGping = self.antigrav_finished + 3;
+			sound (self, CHAN_AUTO, "belt/use.wav", 0.4, ATTN_NORM);
+			self.AGping = time + 3;
+			if (self.AGping >= (self.antigrav_finished - 3))
+				self.AGping = self.antigrav_finished + 3;
 		}
 	}
 
-	RuneApplyElder(self); // regeneration rune 
+	RuneApplyElder (self);  // regeneration rune
 
 	// Track the grapple
 	if (self.hook_out)
-		GrappleService();
+		GrappleService ();
 };
 
 /*
@@ -1297,9 +1301,9 @@ void() CheckPowerups =
 		}
 	}
 
-	if(self.shield_finished)
+	if (self.shield_finished)
 	{
-		if ( self.shield_finished < time + 3)
+		if (self.shield_finished < time + 3)
 		{
 			if (self.shield_time == 1)
 			{
@@ -1313,8 +1317,8 @@ void() CheckPowerups =
 				stuffcmd (self, "bf\n");
 			}
 		}
-		
-		if ( self.shield_finished < time)
+
+		if (self.shield_finished < time)
 		{
 			sprint (self, "Shield Lost.\n");
 			self.shield_finished = 0;
@@ -1322,9 +1326,9 @@ void() CheckPowerups =
 		}
 	}
 
-	if(self.antigrav_finished)
+	if (self.antigrav_finished)
 	{
-		if ( self.antigrav_finished < time + 3)
+		if (self.antigrav_finished < time + 3)
 		{
 			if (self.antigrav_time == 1)
 			{
@@ -1338,8 +1342,8 @@ void() CheckPowerups =
 				stuffcmd (self, "bf\n");
 			}
 		}
-		
-		if ( self.antigrav_finished < time)
+
+		if (self.antigrav_finished < time)
 		{
 			sprint (self, "Antigrav Lost.\n");
 			self.antigrav_finished = 0;
@@ -1364,10 +1368,10 @@ void() PlayerPostThink =
 		return;  // intermission or finale
 	if (self.deadflag)
 		return;
-		
+
 	if (cutscene_running)
 	{
-		xpackEnding();
+		xpackEnding ();
 	}
 
 	// do weapon stuff
@@ -1409,24 +1413,24 @@ void() ClientConnect =
 {
 	bprint (self.netname);
 	bprint (" entered the game\n");
-	
-//ZOID--
+
+	// ZOID--
 	self.suicide_count = 0;
 	self.ctf_killed = 0;
 
-	SetMOTD();
+	SetMOTD ();
 
- 	// If this is our first connection, parm14 is < 0
- 	// Set lastteam negative.
- 	if (parm14 < 0 && teamplay > 0)
+	// If this is our first connection, parm14 is < 0
+	// Set lastteam negative.
+	if (parm14 < 0 && teamplay > 0)
 	{
-		if (cvar("gamecfg") & GAMECFG_USE_COLOR)
-			self.steam = self.team; // accept joining players color if legal
+		if (cvar ("gamecfg") & GAMECFG_USE_COLOR)
+			self.steam = self.team;  // accept joining players color if legal
 		else
-			self.steam = -50; // always reassign
-		TeamCheckLock();
+			self.steam = -50;  // always reassign
+		TeamCheckLock ();
 	}
-//--ZOID
+	//--ZOID
 
 	// a client connecting during an intermission can cause problems
 	if (intermission_running)
@@ -1454,15 +1458,15 @@ void() ClientDisconnect =
 	bprint (" frags\n");
 	sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
 
-	sphere_remove(self);
-	if ( tag_token_owner == self)
-		tag_token_drop();
-	
-//ZOID--
-	TeamDropFlagOfPlayer(self);
+	sphere_remove (self);
+	if (tag_token_owner == self)
+		tag_token_drop ();
+
+	// ZOID--
+	TeamDropFlagOfPlayer (self);
 	self.steam = -50;
 	self.team = 0;
-//--ZOID
+	//--ZOID
 
 	set_suicide_frame ();
 };
@@ -1484,9 +1488,9 @@ void(entity targ, entity attacker) ClientObituary =
 
 	if (targ.classname == "player")
 	{
-// ZOID--
-		TeamResetCarrier(targ);
-// --ZOID
+		// ZOID--
+		TeamResetCarrier (targ);
+		// --ZOID
 
 		if (attacker.classname == "teledeath")
 		{
@@ -1524,16 +1528,16 @@ void(entity targ, entity attacker) ClientObituary =
 				}
 				if (targ.weapon == IT_GRENADE_LAUNCHER)
 					bprint (" tries to put the pin back in\n");
-//ZOID--
-//gibbed for changing teams
+				// ZOID--
+				// gibbed for changing teams
 				else if (teamplay && (targ.team != targ.steam))
 				{
-					if (cvar("gamecfg") & GAMECFG_ALLOW_CHG)
-						bprint(" changed teams\n");
+					if (cvar ("gamecfg") & GAMECFG_ALLOW_CHG)
+						bprint (" changed teams\n");
 					else
-						bprint(" tried to change teams\n");
+						bprint (" tried to change teams\n");
 				}
-//--ZOID
+				//--ZOID
 				else
 					bprint (" becomes bored with life\n");
 				return;
@@ -1561,9 +1565,9 @@ void(entity targ, entity attacker) ClientObituary =
 				else
 				{
 					attacker.frags = attacker.frags + 1;
-//ZOID--
-					TeamAssists(targ, attacker);
-//--ZOID
+					// ZOID--
+					TeamAssists (targ, attacker);
+					//--ZOID
 				}
 
 				rnum = attacker.weapon;
@@ -1572,13 +1576,13 @@ void(entity targ, entity attacker) ClientObituary =
 					deathstring = " was ax-murdered by ";
 					deathstring2 = "\n";
 				}
-//ZOID--
+				// ZOID--
 				if (rnum == IT_GRAPPLE)
 				{
 					deathstring = " was grappled by ";
 					deathstring2 = "\n";
 				}
-//--ZOID
+				//--ZOID
 				if (rnum == IT_SHOTGUN)
 				{
 					deathstring = " chewed on ";
@@ -1627,9 +1631,8 @@ void(entity targ, entity attacker) ClientObituary =
 					else
 						deathstring2 = "'s shaft\n";
 				}
-				
-				if (rnum == IT_LAVA_NAILGUN ||
-						rnum == IT_LAVA_SUPER_NAILGUN)
+
+				if (rnum == IT_LAVA_NAILGUN || rnum == IT_LAVA_SUPER_NAILGUN)
 				{
 					deathstring = " was burned by ";
 					deathstring2 = "\n";
@@ -1639,13 +1642,12 @@ void(entity targ, entity attacker) ClientObituary =
 					deathstring = " was fused by ";
 					deathstring2 = "\n";
 				}
-				else if (rnum == IT_MULTI_GRENADE ||
-							rnum == IT_MULTI_ROCKET)
+				else if (rnum == IT_MULTI_GRENADE || rnum == IT_MULTI_ROCKET)
 				{
 					deathstring = " was blasted to bits by ";
 					deathstring2 = "\n";
 				}
-				
+
 				bprint (targ.netname);
 				bprint (deathstring);
 				bprint (attacker.netname);
@@ -1742,9 +1744,9 @@ void(entity targ, entity attacker) ClientObituary =
 				return;
 			}
 
-			if (attacker.classname == "ltrail_start" || 
+			if (attacker.classname == "ltrail_start" ||
 				attacker.classname == "ltrail_relay")
-			{
+				{
 				bprint (" rode the lightning\n");
 				return;
 			}
@@ -1760,14 +1762,14 @@ void(entity targ, entity attacker) ClientObituary =
 			}
 			if (attacker.classname == "plasma")
 			{
-				bprint ( " was turned to plasma\n");
+				bprint (" was turned to plasma\n");
 				return;
 			}
 			if (attacker.classname == "Vengeance")
 			{
 				// vengeance sphere doesn't count as a negative frag
 				targ.frags = targ.frags + 1;
-				bprint ( " was purged by the Vengeance Sphere\n");
+				bprint (" was purged by the Vengeance Sphere\n");
 				return;
 			}
 			if (attacker.classname == "power_shield")
@@ -1776,7 +1778,7 @@ void(entity targ, entity attacker) ClientObituary =
 				// shield death doesn't count as a negative frag
 				targ.frags = targ.frags + 1;
 				attacker.owner.frags = attacker.owner.frags + 1;
-				TeamAssists(targ, attacker.owner);			//PGM
+				TeamAssists (targ, attacker.owner);  // PGM
 
 				deathstring = " was smashed by ";
 				deathstring2 = "\n";

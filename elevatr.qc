@@ -33,13 +33,13 @@ void() elvtr_button_wait =
 		ELV_BUTN_DIR = -1;
 	else
 		ELV_BUTN_DIR = 1;
-		
+
 	self.state = STATE_TOP;
 	self.nextthink = self.ltime + self.wait;
 	self.think = elvtr_button_return;
 	activator = self.enemy;
-	SUB_UseTargets();
-	self.frame = 1;			// use alternate textures
+	SUB_UseTargets ();
+	self.frame = 1;  // use alternate textures
 };
 
 void() elvtr_button_done =
@@ -51,16 +51,14 @@ void() elvtr_button_return =
 {
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos1, self.speed, elvtr_button_done);
-	self.frame = 0;			// use normal textures
+	self.frame = 0;  // use normal textures
 	if (self.health)
-		self.takedamage = DAMAGE_YES;	// can be shot again
+		self.takedamage = DAMAGE_YES;  // can be shot again
 };
 
-
-void() elvtr_button_blocked =
-{	// do nothing, just don't ome all the way back out
+void() elvtr_button_blocked{
+	// do nothing, just don't ome all the way back out
 };
-
 
 void() elvtr_button_fire =
 {
@@ -72,7 +70,6 @@ void() elvtr_button_fire =
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, elvtr_button_wait);
 };
-
 
 void() elvtr_button_use =
 {
@@ -92,10 +89,9 @@ void() elvtr_button_killed =
 {
 	self.enemy = damage_attacker;
 	self.health = self.max_health;
-	self.takedamage = DAMAGE_NO;	// wil be reset upon return
+	self.takedamage = DAMAGE_NO;  // wil be reset upon return
 	elvtr_button_fire ();
 };
-
 
 /*QUAKED func_elvtr_button (0 .5 .8) ? ELVTR_DOWN
 ELEVATOR BUTTON ONLY!
@@ -103,7 +99,9 @@ ELEVATOR BUTTON ONLY!
 ELVTR_DOWN causes this to be a DOWN button.
 Default is UP.
 
-When a button is touched, it moves some distance in the direction of it's angle, triggers all of it's targets, waits some time, then returns to it's original position where it can be triggered again.
+When a button is touched, it moves some distance in the direction of it's angle,
+triggers all of it's targets, waits some time, then returns to it's original
+position where it can be triggered again.
 
 "angle"		determines the opening direction
 "target"	all entities with a matching targetname will be used
@@ -139,7 +137,7 @@ void() func_elvtr_button =
 		precache_sound ("buttons/switch04.wav");
 		self.noise = "buttons/switch04.wav";
 	}
-	
+
 	SetMovedir ();
 
 	self.movetype = MOVETYPE_PUSH;
@@ -168,6 +166,6 @@ void() func_elvtr_button =
 	self.state = STATE_BOTTOM;
 
 	self.pos1 = self.origin;
-	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
+	self.pos2 =
+		self.pos1 + self.movedir * (fabs (self.movedir * self.size) - self.lip);
 };
-

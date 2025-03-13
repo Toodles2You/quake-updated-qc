@@ -335,7 +335,7 @@ void() spikeshooter_use =
 		newmis.velocity = self.movedir * 500;
 		if (self.spawnflags & SPAWNFLAG_SUPERLAVA)
 			newmis.touch = superlavaspike_touch;
-		else if((self.spawnflags & SPAWNFLAG_LAVASKILL) && (skill > 1))
+		else if ((self.spawnflags & SPAWNFLAG_LAVASKILL) && (skill > 1))
 			newmis.touch = superlavaspike_touch;
 	}
 };
@@ -347,9 +347,9 @@ void() shooter_think =
 	newmis.velocity = self.movedir * 500;
 };
 
-/*QUAKED trap_spikeshooter (0 .5 .8) (-8 -8 -8) (8 8 8) superspike laser lava superlava skilllava fireball
-When triggered, fires a spike in the direction set in QuakeEd.
-Laser, Lava and SuperLava are only for REGISTERED.
+/*QUAKED trap_spikeshooter (0 .5 .8) (-8 -8 -8) (8 8 8) superspike laser lava
+superlava skilllava fireball When triggered, fires a spike in the direction set
+in QuakeEd. Laser, Lava and SuperLava are only for REGISTERED.
 */
 
 void() trap_spikeshooter =
@@ -366,19 +366,19 @@ void() trap_spikeshooter =
 	else if (self.spawnflags & SPAWNFLAG_LAVASPIKE)
 	{
 		precache_model2 ("progs/lspike.mdl");
-		precache_sound2 ("lavagun/snail.wav");		// lava nail gun cooldown
+		precache_sound2 ("lavagun/snail.wav");  // lava nail gun cooldown
 		precache_sound2 ("weapons/rocket1i.wav");
 	}
 	else if (self.spawnflags & SPAWNFLAG_SUPERLAVA)
 	{
 		precache_model2 ("progs/lspike.mdl");
-		precache_sound2 ("lavagun/snail.wav");		// lava nail gun cooldown
+		precache_sound2 ("lavagun/snail.wav");  // lava nail gun cooldown
 		precache_sound2 ("weapons/spike2.wav");
 	}
 	else if (self.spawnflags & SPAWNFLAG_LAVASKILL)
 	{
 		precache_model2 ("progs/lspike.mdl");
-		precache_sound2 ("lavagun/snail.wav");		// lava nail gun cooldown
+		precache_sound2 ("lavagun/snail.wav");  // lava nail gun cooldown
 		precache_sound2 ("weapons/rocket1i.wav");
 		precache_sound2 ("weapons/spike2.wav");
 	}
@@ -492,9 +492,9 @@ void() bubble_bob =
 	local float rnd1, rnd2, rnd3;
 
 	// PGM fix - 02/25/97 so bubbles won't go through walls
-	rnd1 = pointcontents(self.origin);
+	rnd1 = pointcontents (self.origin);
 	if (rnd1 == CONTENT_SOLID)
-		remove(self);
+		remove (self);
 	// PGM fix - 02/25/97 so bubbles pop 2 seconds after leaving water
 	else if (rnd1 == CONTENT_EMPTY)
 	{

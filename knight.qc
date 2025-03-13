@@ -28,7 +28,7 @@ $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 
 $frame runb1 runb2 runb3 runb4 runb5 runb6 runb7 runb8
 
-//frame runc1 runc2 runc3 runc4 runc5 runc6
+// frame runc1 runc2 runc3 runc4 runc5 runc6
 
 $frame runattack1 runattack2 runattack3 runattack4 runattack5
 $frame runattack6 runattack7 runattack8 runattack9 runattack10
@@ -39,8 +39,8 @@ $frame pain1 pain2 pain3
 $frame painb1 painb2 painb3 painb4 painb5 painb6 painb7 painb8 painb9
 $frame painb10 painb11
 
-//frame attack1 attack2 attack3 attack4 attack5 attack6 attack7
-//frame attack8 attack9 attack10 attack11
+// frame attack1 attack2 attack3 attack4 attack5 attack6
+// attack7 frame attack8 attack9 attack10 attack11
 
 $frame attackb1 attackb1a attackb2 attackb3 attackb4 attackb5
 $frame attackb6 attackb7 attackb8 attackb9 attackb10
@@ -70,9 +70,9 @@ void() knight_stand9 = [$stand9, knight_stand1] { ai_stand (); };
 
 void() kn_idle_sound =
 {
-	if (random() < 0.2)
+	if (random () < 0.2)
 	{
-		if (self.spawnflags & 2) // statue
+		if (self.spawnflags & 2)  // statue
 			sound (self, CHAN_VOICE, "statue/idle.wav", 1, ATTN_IDLE);
 		else
 			sound (self, CHAN_VOICE, "knight/idle.wav", 1, ATTN_IDLE);
@@ -157,9 +157,9 @@ void() knight_atk8 = [$attackb8, knight_atk9]
 void() knight_atk9 = [$attackb9, knight_atk10] { ai_charge (1); };
 void() knight_atk10 = [$attackb10, knight_run1] { ai_charge (5); };
 
-// void()	knight_atk9	=[	$attack9,		knight_atk10
-// ] {}; void()	knight_atk10	=[	$attack10,		knight_atk11
-// ] {}; void()	knight_atk11	=[	$attack11,		knight_run1
+// void()	knight_atk9	=[$attack9,		knight_atk10
+// ] {}; void()	knight_atk10	=[$attack10,		knight_atk11
+// ] {}; void()	knight_atk11	=[$attack11,		knight_run1
 // ] {};
 
 //===========================================================================
@@ -189,12 +189,12 @@ void(entity attacker, float damage) knight_pain =
 
 	r = random ();
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2)  // statue
 		sound (self, CHAN_VOICE, "statue/pain.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_VOICE, "knight/khurt.wav", 1, ATTN_NORM);
-	
-	if (r < 0.85) 
+
+	if (r < 0.85)
 	{
 		knight_pain1 ();
 		self.pain_finished = time + 1;
@@ -247,16 +247,16 @@ void() knight_dieb11 = [$deathb11, knight_dieb11] {};
 void() knight_die =
 {
 	// check for gib
-	if (self.health < -40) 
+	if (self.health < -40)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		ThrowHead ("progs/h_knight.mdl", self.health);
-	
-	if (self.spawnflags & 2) // statue
+
+		if (self.spawnflags & 2)  // statue
 		{
-			ThrowGib ( "progs/statgib1.mdl", self.health);
-			ThrowGib ( "progs/statgib2.mdl", self.health);
-			ThrowGib ( "progs/statgib3.mdl", self.health);
+			ThrowGib ("progs/statgib1.mdl", self.health);
+			ThrowGib ("progs/statgib2.mdl", self.health);
+			ThrowGib ("progs/statgib3.mdl", self.health);
 		}
 		else
 		{
@@ -268,7 +268,7 @@ void() knight_die =
 	}
 
 	// regular death
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2)  // statue
 		sound (self, CHAN_VOICE, "statue/death.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
@@ -281,7 +281,7 @@ void() knight_die =
 
 void() knight_pause =
 {
-	sound ( self, CHAN_VOICE, "statue/see.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "statue/see.wav", 1, ATTN_NORM);
 
 	self.takedamage = DAMAGE_AIM;
 	self.th_stand = knight_stand1;
@@ -291,13 +291,13 @@ void() knight_pause =
 	self.th_pain = knight_pain;
 	self.th_die = knight_die;
 	self.use = SUB_Null;
-	
+
 	self.think = knight_run1;
 
 	self.enemy = activator;
 	self.nextthink = time + 0.1;
 	self.think = FoundTarget;
-		
+
 	self.delay = 0;
 };
 
@@ -318,7 +318,7 @@ frame: frame to be frozen in. (default 44)
 */
 void() monster_knight =
 {
-	if (deathmatch) 
+	if (deathmatch)
 	{
 		remove (self);
 		return;
@@ -326,15 +326,15 @@ void() monster_knight =
 	precache_model ("progs/knight.mdl");
 	precache_model ("progs/h_knight.mdl");
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2)  // statue
 	{
-		precache_model ( "progs/statgib1.mdl");
-		precache_model ( "progs/statgib2.mdl");
-		precache_model ( "progs/statgib3.mdl");
-		precache_sound ( "statue/see.wav");
-		precache_sound ( "statue/idle.wav");
-		precache_sound ( "statue/pain.wav");
-		precache_sound ( "statue/death.wav");
+		precache_model ("progs/statgib1.mdl");
+		precache_model ("progs/statgib2.mdl");
+		precache_model ("progs/statgib3.mdl");
+		precache_sound ("statue/see.wav");
+		precache_sound ("statue/idle.wav");
+		precache_sound ("statue/pain.wav");
+		precache_sound ("statue/death.wav");
 	}
 	else
 	{
@@ -343,7 +343,7 @@ void() monster_knight =
 		precache_sound ("knight/ksight.wav");
 		precache_sound ("knight/idle.wav");
 	}
-	
+
 	precache_sound ("knight/sword1.wav");
 	precache_sound ("knight/sword2.wav");
 
@@ -355,7 +355,7 @@ void() monster_knight =
 	setsize (self, '-16 -16 -24', '16 16 40');
 	self.health = 75;
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2)  // statue
 	{
 		if (self.frame == 0)
 			self.frame = 44;
@@ -366,23 +366,23 @@ void() monster_knight =
 			dprint ("statue not targeted\n");
 			dprint (self.classname);
 			dprint (" at ");
-			dprint (vtos(self.origin));
+			dprint (vtos (self.origin));
 			dprint ("\n");
 			return;
 		}
-					
+
 		self.use = knight_pause;
 		self.th_stand = knight_pause1;
 		self.th_walk = knight_pause1;
 		self.th_run = knight_pause1;
-/*
-		self.th_stand = knight_pause1;
-		self.th_walk = knight_pause;
-		self.th_run = knight_pause;
-		self.th_melee = knight_atk1;
-		self.th_pain = knight_pause;
-		self.th_die = knight_die;
-*/
+		/*
+						self.th_stand = knight_pause1;
+						self.th_walk = knight_pause;
+						self.th_run = knight_pause;
+						self.th_melee = knight_atk1;
+						self.th_pain = knight_pause;
+						self.th_die = knight_die;
+		*/
 		walkmonster_start ();
 	}
 	else
@@ -395,5 +395,4 @@ void() monster_knight =
 		self.th_die = knight_die;
 		walkmonster_start ();
 	}
-
 };

@@ -201,8 +201,8 @@ void() worldspawn =
 	// the area based ambient sounds MUST be the first precache_sounds
 
 	// player precaches
-	W_Precache ();  // get weapon precaches
-	RunePrecache();			// precache the runes
+	W_Precache ();    // get weapon precaches
+	RunePrecache ();  // precache the runes
 
 	// sounds used from C physics code
 	precache_sound ("demon/dland2.wav");  // landing thud
@@ -273,10 +273,10 @@ void() worldspawn =
 	precache_sound ("misc/water1.wav");  // swimming
 	precache_sound ("misc/water2.wav");  // swimming
 
-// PGM Addition Sounds
-	precache_sound ("enforcer/enfstop.wav");    // shield impact
+	// PGM Addition Sounds
+	precache_sound ("enforcer/enfstop.wav");  // shield impact
 	precache_sound ("plasma/explode.wav");
-	precache_sound ("plasma/flight.wav");			
+	precache_sound ("plasma/flight.wav");
 	precache_sound ("plasma/fire.wav");
 	precache_sound ("shield/hit.wav");
 	precache_sound ("belt/use.wav");
@@ -305,7 +305,7 @@ void() worldspawn =
 	precache_model ("progs/v_lava2.mdl");
 	precache_model ("progs/v_multi.mdl");
 	precache_model ("progs/v_multi2.mdl");
-	
+
 	precache_model ("progs/bolt.mdl");      // for lightning gun
 	precache_model ("progs/bolt2.mdl");     // for lightning gun
 	precache_model ("progs/bolt3.mdl");     // for boss shock
@@ -323,22 +323,22 @@ void() worldspawn =
 	precache_model ("progs/lspike.mdl");
 	precache_model ("progs/shield.mdl");
 	precache_model ("progs/p_shield.mdl");
-	
+
 	precache_model ("progs/backpack.mdl");
 
 	precache_model ("progs/zom_gib.mdl");
 
 	precache_model ("progs/v_light.mdl");
-	
+
 	precache_model ("progs/plasma.mdl");
 	precache_model ("progs/v_plasma.mdl");
-	
-//ZOID--
-	// hook for CTF
+
+	// ZOID--
+	//  hook for CTF
 	precache_model ("progs/hook.mdl");
 	precache_model ("progs/v_grpple.mdl");
-//	precache_model ("progs/bit.mdl");
-//--ZOID
+	//	precache_model ("progs/bit.mdl");
+	//--ZOID
 
 	//
 	// Setup light animation tables. 'a' is total darkness, 'z' is maxbright.

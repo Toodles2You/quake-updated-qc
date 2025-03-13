@@ -101,13 +101,12 @@ void(entity targ, entity attacker) Killed =
 		WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
 	}
 
-// PGM - guarantee gib if killed by buzzsaw.
-	if (attacker.classname == "buzzsaw" || 
-		attacker.classname == "Vengeance" ||
+	// PGM - guarantee gib if killed by buzzsaw.
+	if (attacker.classname == "buzzsaw" || attacker.classname == "Vengeance" ||
 		attacker.classname == "pendulum")
 		self.health = -99;
 
-// PGM - gravity fix!
+	// PGM - gravity fix!
 	self.gravity = 1.0;
 	ClientObituary (self, attacker);
 
@@ -145,7 +144,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 
 	if (targ.classname == "trigger_explosion")
 	{
-		if ( IsExplosionDamage != 1)
+		if (IsExplosionDamage != 1)
 			return;
 	}
 	IsExplosionDamage = 0;
@@ -153,7 +152,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	if (targ.items2 & IT2_SHIELD)
 	{
 		// Allow some damage to pass through.
-		damage = shield_hit(targ, inflictor, attacker, damage);
+		damage = shield_hit (targ, inflictor, attacker, damage);
 		if (damage == 0)
 			return;
 	}
@@ -164,24 +163,25 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	// check for quad damage powerup on the attacker
 	if (attacker.super_damage_finished > time)
 		damage = damage * 4;
-// rune power up (Black Magic)
+	// rune power up (Black Magic)
 	if (deathmatch)
-		damage = RuneApplyBlack(damage, attacker);
+		damage = RuneApplyBlack (damage, attacker);
 
 	// save damage based on the target's armor level
 
-//ZOID--
-	if (TeamArmorDam(targ, inflictor, attacker, damage))
-		save = ceil(targ.armortype*damage);
+	// ZOID--
+	if (TeamArmorDam (targ, inflictor, attacker, damage))
+		save = ceil (targ.armortype * damage);
 	else
 		save = 0;
-//--ZOID
+	//--ZOID
 
 	if (save >= targ.armorvalue)
 	{
 		save = targ.armorvalue;
 		targ.armortype = 0;  // lost all armor
-		targ.items2 = targ.items2 - (targ.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3));
+		targ.items2 = targ.items2 -
+					  (targ.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3));
 	}
 
 	targ.armorvalue = targ.armorvalue - save;
@@ -218,17 +218,17 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		return;
 	}
 
-// team play damage avoidance
-//	if ((teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team))
-//		return;
-//ZOID--
-	if (!TeamHealthDam(targ, inflictor, attacker, damage))
-		return; // same team
-//--ZOID
+	// team play damage avoidance
+	//	if ((teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team))
+	//		return;
+	// ZOID--
+	if (!TeamHealthDam (targ, inflictor, attacker, damage))
+		return;  // same team
+				 //--ZOID
 
-// rune power up (Earth Magic)
+	// rune power up (Earth Magic)
 	if (deathmatch)
-		take = RuneApplyEarth(take, targ);
+		take = RuneApplyEarth (take, targ);
 
 	// do the damage
 	targ.health = targ.health - take;
@@ -251,7 +251,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 			if ((self.classname != attacker.classname) ||
 				(self.classname == "monster_army"))
 				{
-				if ( self.classname != "monster_dragon")
+				if (self.classname != "monster_dragon")
 				{
 					if (self.enemy.classname == "player")
 						self.oldenemy = self.enemy;
@@ -280,25 +280,25 @@ T_EELZap
 */
 void(entity inflictor, entity attacker, float damage) T_EELZap =
 {
-	local	float 	points;
-	local	entity	head;
-	local	vector	org;
-	local	float	radius;
+	local float points;
+	local entity head;
+	local vector org;
+	local float radius;
 
-	radius = damage+40;
+	radius = damage + 40;
 	head = nextent (world);
-	
+
 	while (head)
 	{
 		if (head.solid)
 		{
 			if (head.takedamage)
 			{
-				org = head.origin + (head.mins + head.maxs)*0.5;
+				org = head.origin + (head.mins + head.maxs) * 0.5;
 				points = vlen (inflictor.origin - org);
 				if (points <= radius)
 				{
-					points = 0.5*points;
+					points = 0.5 * points;
 					if (points < 0)
 						points = 0;
 					points = damage - points;
@@ -307,9 +307,9 @@ void(entity inflictor, entity attacker, float damage) T_EELZap =
 					if (points > 0)
 					{
 						if (CanDamage (head, inflictor))
-						{	// eels take no damage from this attack
-							if (head.classname != "monster_eel" && 
-								(head.flags & FL_INWATER))					
+						{  // eels take no damage from this attack
+							if (head.classname != "monster_eel" &&
+								(head.flags & FL_INWATER))
 								T_Damage (head, inflictor, attacker, points);
 						}
 					}

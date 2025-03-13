@@ -530,8 +530,9 @@ local vector tempVect;
 		tempVect_y = 0 - tempVect_y;
 //	if (tempVect_z < 0)
 //		tempVect_z = 0 - tempVect_z;
-//	self.pos2 = self.pos1 + self.movedir*(tempVect*self.size - self.lip);
-	self.pos2 = self.pos1 + self.movedir*(fabs(tempVect*self.size) - self.lip);
+//	self.pos2 = self.pos1 + self.movedir * (tempVect * self.size - self.lip);
+	self.pos2 = self.pos1 + self.movedir
+		* (fabs (tempVect * self.size) - self.lip);
 
 // DOOR_START_OPEN is to allow an entity to be lighted in the closed position
 // but spawn in the open position
