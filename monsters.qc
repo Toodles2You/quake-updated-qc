@@ -115,8 +115,8 @@ void() walkmonster_start_go =
 
 	if (self.target != "")
 	{
-		self.goalentity = self.movetarget =
-			find (world, targetname, self.target);
+		self.movetarget = find (world, targetname, self.target);
+		self.goalentity = self.movetarget;
 		self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
 		if (!self.movetarget)
 		{
@@ -172,8 +172,8 @@ void() flymonster_start_go =
 
 	if (self.target != "")
 	{
-		self.goalentity = self.movetarget =
-			find (world, targetname, self.target);
+		self.movetarget = find (world, targetname, self.target);
+		self.goalentity = self.movetarget;
 		if (!self.movetarget)
 		{
 			dprint ("Monster can't find target at ");
@@ -216,8 +216,8 @@ void() swimmonster_start_go =
 
 	if (self.target != "")
 	{
-		self.goalentity = self.movetarget =
-			find (world, targetname, self.target);
+		self.movetarget = find (world, targetname, self.target);
+		self.goalentity = self.movetarget;
 		if (!self.movetarget)
 		{
 			dprint ("Monster can't find target at ");

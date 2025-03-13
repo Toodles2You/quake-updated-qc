@@ -38,11 +38,13 @@ explosions and melee attacks.
 */
 float(entity targ, entity inflictor) CanDamage =
 {
+	local vector center;
+
 	// bmodels need special checking because their origin is 0,0,0
 	if (targ.movetype == MOVETYPE_PUSH)
 	{
-		traceline (inflictor.origin, 0.5 * (targ.absmin + targ.absmax), TRUE,
-				  self);
+		center = 0.5 * (targ.absmin + targ.absmax);
+		traceline (inflictor.origin, center, TRUE, inflictor);
 		if (trace_fraction == 1)
 			return TRUE;
 		if (trace_ent == targ)
@@ -50,19 +52,19 @@ float(entity targ, entity inflictor) CanDamage =
 		return FALSE;
 	}
 
-	traceline (inflictor.origin, targ.origin, TRUE, self);
+	traceline (inflictor.origin, targ.origin, TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '15 15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '15 15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '-15 -15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '-15 -15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '-15 15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '-15 15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '15 -15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '15 -15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
 
@@ -250,7 +252,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		{
 			if ((self.classname != attacker.classname) ||
 				(self.classname == "monster_army"))
-				{
+			{
 				if (self.classname != "monster_dragon")
 				{
 					if (self.enemy.classname == "player")
@@ -325,8 +327,7 @@ void(entity inflictor, entity attacker, float damage) T_EELZap =
 T_RadiusDamage
 ============
 */
-void(entity inflictor, entity attacker, float damage, entity ignore)
-	T_RadiusDamage =
+void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDamage =
 {
 	local float points;
 	local entity head;
@@ -358,11 +359,8 @@ void(entity inflictor, entity attacker, float damage, entity ignore)
 							points = points * 0.5;
 						if (points > 0)
 						{
-							if (CanDamage (
-									head,
-									inflictor))
-									{  // shambler takes half damage
-												   // from all explosions
+							if (CanDamage (head, inflictor))
+							{  // shambler takes half damage from all explosions
 								if (head.classname == "monster_shambler")
 									points = points * 0.5;
 								T_Damage (head, inflictor, attacker, points);

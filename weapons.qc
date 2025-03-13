@@ -16,8 +16,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 See file, 'COPYING', for details.
 */
-/*
-*/
 
 float lavaGunFired;
 
@@ -103,7 +101,8 @@ vector() wall_velocity =
 	local vector vel;
 
 	vel = normalize (self.velocity);
-	vel = normalize (vel + v_up * (random () - 0.5) + v_right * (random () - 0.5));
+	vel = vel + v_up * (random () - 0.5) + v_right * (random () - 0.5);
+	vel = normalize (vel);
 	vel = vel + 2 * trace_plane_normal;
 	vel = vel * 200;
 
@@ -273,8 +272,8 @@ void(float shotcount, vector dir, vector spread) FireBullets =
 	ClearMultiDamage ();
 	while (shotcount > 0)
 	{
-		direction =
-			dir + crandom () * spread_x * v_right + crandom () * spread_y * v_up;
+		direction = dir + crandom () * spread_x * v_right
+				  + crandom () * spread_y * v_up;
 
 		traceline (src, src + direction * 2048, FALSE, self);
 		if (trace_fraction != 1.0)
@@ -447,44 +446,47 @@ LightningDamage
 */
 void(vector p1, vector p2, entity from, float damage) LightningDamage =
 {
-	local entity e1, e2;
+	local entity e1, e2, e3;
 	local vector f;
+	local float t;
 
 	f = p2 - p1;
-	normalize (f);
+	f = normalize (f);
+	t = f_x;
 	f_x = 0 - f_y;
-	f_y = f_x;
+	f_y = t;
 	f_z = 0;
 	f = f * 16;
 
-	e1 = e2 = world;
+	e1 = e2 = e3 = world;
 
-	traceline (p1, p2, FALSE, self);
-	if (trace_ent.takedamage)
+	traceline (p1, p2, FALSE, from);
+	e1 = trace_ent;
+	if (e1.takedamage)
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from, damage);
-		if (self.classname == "player")
+		T_Damage (e1, from, from, damage);
+		if (from.classname == "player")
 		{
-			if (other.classname == "player")
-				trace_ent.velocity_z = trace_ent.velocity_z + 400;
+			if (e1.classname == "player")
+				e1.velocity_z = e1.velocity_z + 400;
 		}
 	}
-	e1 = trace_ent;
 
-	traceline (p1 + f, p2 + f, FALSE, self);
-	if (trace_ent != e1 && trace_ent.takedamage)
-	{
-		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from, damage);
-	}
+	traceline (p1 + f, p2 + f, FALSE, from);
 	e2 = trace_ent;
-
-	traceline (p1 - f, p2 - f, FALSE, self);
-	if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage)
+	if (e2 != e1 && e2.takedamage)
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from, damage);
+		T_Damage (e2, from, from, damage);
+	}
+
+	traceline (p1 - f, p2 - f, FALSE, from);
+	e3 = trace_ent;
+	if (e3 != e1 && e3 != e2 && e3.takedamage)
+	{
+		particle (trace_endpos, '0 0 100', 225, damage * 4);
+		T_Damage (e3, from, from, damage);
 	}
 };
 
@@ -596,8 +598,8 @@ void() W_FireGrenade =
 	makevectors (self.v_angle);
 
 	if (self.v_angle_x)
-		missile.velocity = v_forward * 600 + v_up * 200 +
-						crandom () * v_right * 10 + crandom () * v_up * 10;
+		missile.velocity = v_forward * 600 + v_up * 200
+						 + crandom () * v_right * 10 + crandom () * v_up * 10;
 	else
 	{
 		missile.velocity = aim (self, 10000);
@@ -785,8 +787,7 @@ void() W_SetCurrentAmmo =
 {
 	player_run ();  // get out of any weapon firing states
 
-	self.items = self.items -
-				(self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
+	self.items = self.items - (self.items & IT_AMMO);
 	self.items2 =
 		self.items2 -
 		(self.items2 & (IT2_LAVA_NAILS | IT2_PLASMA_AMMO | IT2_MULTI_ROCKETS));
@@ -976,8 +977,8 @@ void() W_Attack =
 	if (!W_CheckNoAmmo ())
 		return;
 
-	makevectors (self.v_angle);     // calculate forward angle for velocity
-	self.show_hostile = time + 1;  // wake monsters up
+	makevectors (self.v_angle);    // calculate forward angle for velocity wake
+	self.show_hostile = time + 1;  // monsters up
 
 	// ZOID--
 	RuneApplyBlackNoise (self);  // make rune noise
@@ -1305,14 +1306,9 @@ void() CheatCommand =
 	self.ammo_rockets1 = 100;
 	self.ammo_nails1 = 200;
 	self.ammo_shells1 = 100;
-	self.items = self.items | IT_AXE | IT_SHOTGUN | IT_SUPER_SHOTGUN |
-				IT_NAILGUN | IT_SUPER_NAILGUN | IT_GRENADE_LAUNCHER |
-				IT_ROCKET_LAUNCHER | IT_KEY1 | IT_KEY2 |
-
-				IT_LAVA_NAILGUN | IT_LAVA_SUPER_NAILGUN | IT_MULTI_GRENADE |
-				IT_MULTI_ROCKET | IT_PLASMA_GUN | IT_LIGHTNING;
-
-	self.items = self.items | IT_KEY1 | IT_KEY2;
+	self.items = self.items | IT_WEAPONS | IT_KEYS | IT_LAVA_NAILGUN
+			   | IT_LAVA_SUPER_NAILGUN | IT_MULTI_GRENADE | IT_MULTI_ROCKET
+			   | IT_PLASMA_GUN;
 
 	self.ammo_lava_nails = 200;
 	self.ammo_multi_rockets = 100;

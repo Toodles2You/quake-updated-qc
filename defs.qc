@@ -336,7 +336,11 @@ float IT_QUAD = 4194304;		//23
 //ZOID --
 float	IT_GRAPPLE				= 8388608;		// grapple overload, hope it
 //-- ZOID										// doesn't mess things up!
-												
+
+float IT_WEAPONS = 4223;
+float IT_AMMO = 3840;
+float IT_KEYS = 393216;
+float IT_ARTS = 7864320;
 
 float	IT2_ARMOR1				= 1;			//24
 float	IT2_ARMOR2				= 2;

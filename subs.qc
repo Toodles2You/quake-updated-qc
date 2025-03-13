@@ -144,8 +144,7 @@ self.angles rotating
 The calling function should make sure self.think is valid
 ===============
 */
-void(entity ent, vector destangle, float tspeed, void() func)
-	SUB_CalcAngleMoveEnt =
+void(entity ent, vector destangle, float tspeed, void() func) SUB_CalcAngleMoveEnt =
 {
 	local entity stemp;
 	stemp = self;

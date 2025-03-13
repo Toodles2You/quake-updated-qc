@@ -424,9 +424,9 @@ trigger field activates the door. "health"	if set, door must be shot open
 3)	stone chain
 4)	screechy metal
 */
-
 void() func_door =
 {
+	local float dist;
 
 local vector tempVect;
 	
@@ -462,28 +462,28 @@ local vector tempVect;
 		self.noise1 = "misc/null.wav";
 		self.noise2 = "misc/null.wav";
 	}
-	if (self.sounds == 1)
+	else if (self.sounds == 1)
 	{
 		precache_sound ("doors/drclos4.wav");
 		precache_sound ("doors/doormv1.wav");
 		self.noise1 = "doors/drclos4.wav";
 		self.noise2 = "doors/doormv1.wav";
 	}
-	if (self.sounds == 2)
+	else if (self.sounds == 2)
 	{
 		precache_sound ("doors/hydro1.wav");
 		precache_sound ("doors/hydro2.wav");
 		self.noise2 = "doors/hydro1.wav";
 		self.noise1 = "doors/hydro2.wav";
 	}
-	if (self.sounds == 3)
+	else if (self.sounds == 3)
 	{
 		precache_sound ("doors/stndr1.wav");
 		precache_sound ("doors/stndr2.wav");
 		self.noise2 = "doors/stndr1.wav";
 		self.noise1 = "doors/stndr2.wav";
 	}
-	if (self.sounds == 4)
+	else if (self.sounds == 4)
 	{
 		precache_sound ("doors/ddoor1.wav");
 		precache_sound ("doors/ddoor2.wav");
@@ -518,8 +518,8 @@ local vector tempVect;
 		self.dmg = 2;
 
 	self.pos1 = self.origin;
-//	self.pos2 =
-//		self.pos1 + self.movedir * (fabs (self.movedir * self.size) - self.lip);
+
+// dist = fabs (self.movedir * self.size) - self.lip;
 
 // PGM fix for cameron's door problem - 02/19/97
 
@@ -531,8 +531,10 @@ local vector tempVect;
 //	if (tempVect_z < 0)
 //		tempVect_z = 0 - tempVect_z;
 //	self.pos2 = self.pos1 + self.movedir * (tempVect * self.size - self.lip);
-	self.pos2 = self.pos1 + self.movedir
-		* (fabs (tempVect * self.size) - self.lip);
+
+	dist = fabs (tempVect * self.size) - self.lip;
+
+	self.pos2 = self.pos1 + self.movedir * dist;
 
 // DOOR_START_OPEN is to allow an entity to be lighted in the closed position
 // but spawn in the open position
@@ -739,7 +741,6 @@ t_length = override LENGTH to move sideways
 If a secret door has a targetname, it will only be opened by it's botton or
 trigger, not by damage. "sounds" 1) medieval 2) metal 3) base
 */
-
 void() func_door_secret =
 {
 	if (self.sounds == 0)
@@ -753,7 +754,7 @@ void() func_door_secret =
 		self.noise2 = "doors/winch2.wav";
 		self.noise3 = "doors/drclos4.wav";
 	}
-	if (self.sounds == 2)
+	else if (self.sounds == 2)
 	{
 		precache_sound ("doors/airdoor1.wav");
 		precache_sound ("doors/airdoor2.wav");
@@ -761,7 +762,7 @@ void() func_door_secret =
 		self.noise1 = "doors/airdoor2.wav";
 		self.noise3 = "doors/airdoor2.wav";
 	}
-	if (self.sounds == 3)
+	else if (self.sounds == 3)
 	{
 		precache_sound ("doors/basesec1.wav");
 		precache_sound ("doors/basesec2.wav");

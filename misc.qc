@@ -178,12 +178,12 @@ void() light_flame_small_white =
 
 //============================================================================
 
+void() fire_fly;
+void() fire_touch;
+
 /*QUAKED misc_fireball (0 .5 .8) (-8 -8 -8) (8 8 8)
 Lava Balls
 */
-
-void() fire_fly;
-void() fire_touch;
 void() misc_fireball =
 {
 	precache_model ("progs/lavaball.mdl");
@@ -241,7 +241,6 @@ void() barrel_explode =
 /*QUAKED misc_explobox (0 .5 .8) (0 0 0) (32 32 64)
 TESTING THING
 */
-
 void() misc_explobox =
 {
 	local float oldz;
@@ -270,7 +269,6 @@ void() misc_explobox =
 /*QUAKED misc_explobox2 (0 .5 .8) (0 0 0) (32 32 64)
 Smaller exploding box, REGISTERED ONLY
 */
-
 void() misc_explobox2 =
 {
 	local float oldz;
@@ -351,7 +349,6 @@ void() shooter_think =
 superlava skilllava fireball When triggered, fires a spike in the direction set
 in QuakeEd. Laser, Lava and SuperLava are only for REGISTERED.
 */
-
 void() trap_spikeshooter =
 {
 	SetMovedir ();
@@ -421,7 +418,6 @@ void() bubble_bob;
 
 testing air bubbles
 */
-
 void() air_bubbles =
 {
 	if (deathmatch)
@@ -481,7 +477,6 @@ void() bubble_remove =
 {
 	if (other.classname == self.classname)
 	{
-		//		dprint ("bump");
 		return;
 	}
 	remove (self);
@@ -542,7 +537,6 @@ void() bubble_bob =
 
 Just for the debugging level.  Don't use
 */
-
 void() viewthing =
 {
 	self.movetype = MOVETYPE_NONE;
@@ -703,7 +697,6 @@ void() noise_think =
 
 For optimzation testing, starts a lot of sounds.
 */
-
 void() misc_noisemaker =
 {
 	precache_sound2 ("enforcer/enfire.wav");

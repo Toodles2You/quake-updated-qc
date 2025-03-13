@@ -28,8 +28,6 @@ $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 
 $frame runb1 runb2 runb3 runb4 runb5 runb6 runb7 runb8
 
-// frame runc1 runc2 runc3 runc4 runc5 runc6
-
 $frame runattack1 runattack2 runattack3 runattack4 runattack5
 $frame runattack6 runattack7 runattack8 runattack9 runattack10
 $frame runattack11
@@ -38,9 +36,6 @@ $frame pain1 pain2 pain3
 
 $frame painb1 painb2 painb3 painb4 painb5 painb6 painb7 painb8 painb9
 $frame painb10 painb11
-
-// frame attack1 attack2 attack3 attack4 attack5 attack6
-// attack7 frame attack8 attack9 attack10 attack11
 
 $frame attackb1 attackb1a attackb2 attackb3 attackb4 attackb5
 $frame attackb6 attackb7 attackb8 attackb9 attackb10
@@ -156,11 +151,6 @@ void() knight_atk8 = [$attackb8, knight_atk9]
 };
 void() knight_atk9 = [$attackb9, knight_atk10] { ai_charge (1); };
 void() knight_atk10 = [$attackb10, knight_run1] { ai_charge (5); };
-
-// void()	knight_atk9	=[$attack9,		knight_atk10
-// ] {}; void()	knight_atk10	=[$attack10,		knight_atk11
-// ] {}; void()	knight_atk11	=[$attack11,		knight_run1
-// ] {};
 
 //===========================================================================
 

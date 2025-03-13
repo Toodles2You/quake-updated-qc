@@ -590,15 +590,9 @@ vector(float dm) VelocityForDamage =
 	v_z = 200 + 100 * random ();
 
 	if (dm > -50)
-	{
-		//		dprint ("level 1\n");
 		v = v * 0.7;
-	}
 	else if (dm > -200)
-	{
-		//		dprint ("level 3\n");
 		v = v * 2;
-	}
 	else
 		v = v * 10;
 
