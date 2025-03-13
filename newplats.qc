@@ -498,8 +498,7 @@ void() func_new_plat =
 		self.noise = "plats/plat1.wav";
 		self.noise1 = "plats/plat2.wav";
 	}
-
-	if (self.sounds == 2)
+	else if (self.sounds == 2)
 	{
 		precache_sound ("plats/medplat1.wav");
 		precache_sound ("plats/medplat2.wav");
