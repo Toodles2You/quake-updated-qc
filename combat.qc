@@ -35,11 +35,13 @@ explosions and melee attacks.
 */
 float(entity targ, entity inflictor) CanDamage =
 {
+	local vector center;
+
 	// bmodels need special checking because their origin is 0,0,0
 	if (targ.movetype == MOVETYPE_PUSH)
 	{
-		traceline (inflictor.origin, 0.5 * (targ.absmin + targ.absmax), TRUE,
-				  self);
+		center = 0.5 * (targ.absmin + targ.absmax);
+		traceline (inflictor.origin, center, TRUE, inflictor);
 		if (trace_fraction == 1)
 			return TRUE;
 		if (trace_ent == targ)
@@ -47,19 +49,19 @@ float(entity targ, entity inflictor) CanDamage =
 		return FALSE;
 	}
 
-	traceline (inflictor.origin, targ.origin, TRUE, self);
+	traceline (inflictor.origin, targ.origin, TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '15 15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '15 15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '-15 -15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '-15 -15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '-15 15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '-15 15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
-	traceline (inflictor.origin, targ.origin + '15 -15 0', TRUE, self);
+	traceline (inflictor.origin, targ.origin + '15 -15 0', TRUE, inflictor);
 	if (trace_fraction == 1)
 		return TRUE;
 
@@ -179,8 +181,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	{
 		save = targ.armorvalue;
 		targ.armortype = 0;  // lost all armor
-		targ.items =
-			targ.items - (targ.items & (IT_ARMOR1 | IT_ARMOR2 | IT_ARMOR3));
+		targ.items = targ.items - (targ.items & IT_ARMOR);
 	}
 
 	targ.armorvalue = targ.armorvalue - save;
@@ -209,10 +210,10 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		return;
 	if (targ.invincible_finished >= time)
 	{
-		if (self.invincible_sound < time)
+		if (targ.invincible_sound < time)
 		{
 			sound (targ, CHAN_ITEM, "items/protect3.wav", 1, ATTN_NORM);
-			self.invincible_sound = time + 2;
+			targ.invincible_sound = time + 2;
 		}
 		return;
 	}
@@ -278,8 +279,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 T_RadiusDamage
 ============
 */
-void(entity inflictor, entity attacker, float damage, entity ignore)
-	T_RadiusDamage =
+void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDamage =
 {
 	local float points;
 	local entity head;
@@ -309,11 +309,8 @@ void(entity inflictor, entity attacker, float damage, entity ignore)
 							points = points * 0.5;
 						if (points > 0)
 						{
-							if (CanDamage (
-									head,
-									inflictor))
-									{  // shambler takes half damage
-												   // from all explosions
+							if (CanDamage (head, inflictor))
+							{  // shambler takes half damage from all explosions
 								if (head.classname == "monster_shambler")
 									points = points * 0.5;
 								T_Damage (head, inflictor, attacker, points);

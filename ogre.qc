@@ -89,8 +89,8 @@ void() OgreGrenadeTouch =
 		OgreGrenadeExplode ();
 		return;
 	}
-	sound (self, CHAN_VOICE, "weapons/bounce.wav", 1,
-		  ATTN_NORM);  // bounce sound
+	// bounce sound
+	sound (self, CHAN_VOICE, "weapons/bounce.wav", 1, ATTN_NORM);
 	if (self.velocity == '0 0 0')
 		self.avelocity = '0 0 0';
 };
@@ -173,8 +173,10 @@ void(float side) chainsaw =
 	{
 		makevectors (self.angles);
 		if (side == 1)
-			SpawnMeatSpray (self.origin + v_forward * 16,
-						   crandom () * 100 * v_right);
+		{
+			side = crandom () * 100;
+			SpawnMeatSpray (self.origin + v_forward * 16, side * v_right);
+		}
 		else
 			SpawnMeatSpray (self.origin + v_forward * 16, side * v_right);
 	}
@@ -318,8 +320,8 @@ void() ogre_smash11 = [$smash11, ogre_smash12]
 {
 	ai_charge (2);
 	chainsaw (0);
-	self.nextthink = self.nextthink + random () * 0.2;
-};  // slight variation
+	self.nextthink = self.nextthink + random () * 0.2;  // slight variation
+};
 void() ogre_smash12 = [$smash12, ogre_smash13] { ai_charge (0); };
 void() ogre_smash13 = [$smash13, ogre_smash14] { ai_charge (4); };
 void() ogre_smash14 = [$smash14, ogre_run1] { ai_charge (12); };

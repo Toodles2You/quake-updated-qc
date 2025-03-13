@@ -325,6 +325,12 @@ float IT_INVULNERABILITY = 1048576;
 float IT_SUIT = 2097152;
 float IT_QUAD = 4194304;
 
+float IT_WEAPONS = 4223;
+float IT_AMMO = 3840;
+float IT_ARMOR = 57344;
+float IT_KEYS = 393216;
+float IT_ARTS = 7864320;
+
 // point content values
 
 float CONTENT_EMPTY = -1;

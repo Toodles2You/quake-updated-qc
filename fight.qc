@@ -49,11 +49,14 @@ float enemy_yaw;
 
 void() knight_attack =
 {
+	local vector spot1, spot2;
 	local float len;
 
+	spot1 = self.origin + self.view_ofs;
+	spot2 = self.enemy.origin + self.enemy.view_ofs;
+
 	// decide if now is a good swing time
-	len = vlen (self.enemy.origin + self.enemy.view_ofs -
-			   (self.origin + self.view_ofs));
+	len = vlen (spot1 - spot2);
 
 	if (len < 80)
 		knight_atk1 ();

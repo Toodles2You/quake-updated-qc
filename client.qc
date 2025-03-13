@@ -68,10 +68,8 @@ void() SetChangeParms =
 	}
 
 	// JIM
-	//  remove items
-	self.items =
-		self.items - (self.items & (IT_KEY1 | IT_KEY2 | IT_INVISIBILITY |
-									IT_INVULNERABILITY | IT_SUIT | IT_QUAD));
+	// remove items
+	parm1 = self.items - (self.items & (IT_KEYS | IT_ARTS));
 	// MED
 	self.items2 =
 		self.items2 - (self.items2 & (HIP_IT_WETSUIT | HIP_IT_EMPATHY_SHIELDS));
@@ -80,11 +78,11 @@ void() SetChangeParms =
 
 	// cap super health
 	if (self.health > 100)
-		self.health = 100;
-	if (self.health < 50)
-		self.health = 50;
-	parm1 = self.items;
-	parm2 = self.health;
+		parm2 = 100;
+	else if (self.health < 50)
+		parm2 = 50;
+	else
+		parm2 = self.health;
 	parm3 = self.armorvalue;
 	if (self.ammo_shells < 25)
 		parm4 = 25;
@@ -106,7 +104,7 @@ void() SetNewParms =
 	parm5 = 0;
 	parm6 = 0;
 	parm7 = 0;
-	parm8 = 1;
+	parm8 = IT_SHOTGUN;
 	parm9 = 0;
 };
 
@@ -358,8 +356,7 @@ void() ExitIntermission =
 	if (intermission_running == 3)
 	{
 		if (!cvar ("registered"))
-		{  // shareware episode has been completed, go
-									// to sell screen
+		{  // shareware episode has been completed, go to sell screen
 			WriteByte (MSG_ALL, SVC_SELLSCREEN);
 			return;
 		}
@@ -452,12 +449,15 @@ void() execute_changelevel =
 
 void() changelevel_touch =
 {
+	local float noexit;
+
 	if (other.classname != "player")
 		return;
 
-	if ((cvar ("noexit") == 1) ||
-		((cvar ("noexit") == 2) && (mapname != "start")))
-		{
+	noexit = cvar ("noexit");
+
+	if ((noexit == 1) || ((noexit == 2) && (mapname != "start")))
+	{
 		T_Damage (other, self, self, 50000);
 		return;
 	}
@@ -679,8 +679,6 @@ void() PutClientInServer =
 	// paustime is set by teleporters to keep the player from moving a while
 	self.pausetime = 0;
 
-	//	spot = SelectSpawnPoint ();
-
 	self.origin = spot.origin + '0 0 1';
 	self.angles = spot.angles;
 	self.fixangle = TRUE;  // turn this way immediately
@@ -859,7 +857,7 @@ void() PlayerDeathThink =
 {
 	local float forward;
 
-	if ((self.flags & FL_ONGROUND))
+	if (self.flags & FL_ONGROUND)
 	{
 		forward = vlen (self.velocity);
 		forward = forward - 20;
@@ -941,7 +939,8 @@ WaterMove
 
 void() WaterMove =
 {
-	// dprint (ftos (self.waterlevel));
+	local float waterfriction;
+
 	if (self.movetype == MOVETYPE_NOCLIP)
 		return;
 	if (self.health < 0)
@@ -1016,8 +1015,10 @@ void() WaterMove =
 	}
 
 	if (!(self.flags & FL_WATERJUMP))
-		self.velocity =
-			self.velocity - 0.8 * self.waterlevel * frametime * self.velocity;
+	{
+		waterfriction = 0.8 * self.waterlevel * frametime;
+		self.velocity = self.velocity - waterfriction * self.velocity;
+	}
 };
 
 void() CheckWaterJump =
@@ -1163,7 +1164,7 @@ void() PlayerPreThink =
 
 	if (time > self.attack_finished && self.currentammo == 0 &&
 		self.weapon != IT_AXE && self.weapon != IT_MJOLNIR)
-		{
+	{
 		self.weapon = W_BestWeapon ();
 		W_SetCurrentAmmo ();
 	}
@@ -1438,7 +1439,7 @@ void() PlayerPostThink =
 	// check to see if player landed and play landing sound
 	if ((self.jump_flag < -300) && (self.flags & FL_ONGROUND) &&
 		(self.health > 0))
-		{
+	{
 		if (self.watertype == CONTENT_WATER)
 			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
 		else if (self.jump_flag < -650)
@@ -1545,7 +1546,7 @@ void(entity targ, entity attacker) ClientObituary =
 				attacker.frags = attacker.frags - 1;
 				bprint (targ.netname);
 
-				if (targ.weapon == 64 && targ.waterlevel > 1)
+				if (targ.weapon == IT_LIGHTNING && targ.waterlevel > 1)
 				{
 					bprint (" discharges into the water.\n");
 					return;
@@ -1560,7 +1561,7 @@ void(entity targ, entity attacker) ClientObituary =
 				return;
 			}
 			else if ((teamplay == 2) && (targ.team > 0) &&
-					   (targ.team == attacker.team))
+					 (targ.team == attacker.team))
 			{
 				if (rnum < 0.25)
 					deathstring = " mows down a teammate\n";
@@ -1609,27 +1610,27 @@ void(entity targ, entity attacker) ClientObituary =
 					deathstring = " was ax-murdered by ";
 					deathstring2 = "\n";
 				}
-				if (rnum == IT_SHOTGUN)
+				else if (rnum == IT_SHOTGUN)
 				{
 					deathstring = " chewed on ";
 					deathstring2 = "'s boomstick\n";
 				}
-				if (rnum == IT_SUPER_SHOTGUN)
+				else if (rnum == IT_SUPER_SHOTGUN)
 				{
 					deathstring = " ate 2 loads of ";
 					deathstring2 = "'s buckshot\n";
 				}
-				if (rnum == IT_NAILGUN)
+				else if (rnum == IT_NAILGUN)
 				{
 					deathstring = " was nailed by ";
 					deathstring2 = "\n";
 				}
-				if (rnum == IT_SUPER_NAILGUN)
+				else if (rnum == IT_SUPER_NAILGUN)
 				{
 					deathstring = " was punctured by ";
 					deathstring2 = "\n";
 				}
-				if (rnum == IT_GRENADE_LAUNCHER)
+				else if (rnum == IT_GRENADE_LAUNCHER)
 				{
 					deathstring = " eats ";
 					deathstring2 = "'s pineapple\n";
@@ -1639,7 +1640,7 @@ void(entity targ, entity attacker) ClientObituary =
 						deathstring2 = "'s grenade\n";
 					}
 				}
-				if (rnum == IT_ROCKET_LAUNCHER)
+				else if (rnum == IT_ROCKET_LAUNCHER)
 				{
 					deathstring = " rides ";
 					deathstring2 = "'s rocket\n";
@@ -1649,7 +1650,7 @@ void(entity targ, entity attacker) ClientObituary =
 						deathstring2 = "'s rocket\n";
 					}
 				}
-				if (rnum == IT_LIGHTNING)
+				else if (rnum == IT_LIGHTNING)
 				{
 					deathstring = " accepts ";
 					if (attacker.waterlevel > 1)
@@ -1701,35 +1702,35 @@ void(entity targ, entity attacker) ClientObituary =
 			{
 				if (attacker.classname == "monster_army")
 					bprint (" was shot by a Grunt\n");
-				if (attacker.classname == "monster_demon1")
+				else if (attacker.classname == "monster_demon1")
 					bprint (" was eviscerated by a Fiend\n");
-				if (attacker.classname == "monster_dog")
+				else if (attacker.classname == "monster_dog")
 					bprint (" was mauled by a Rottweiler\n");
-				if (attacker.classname == "monster_dragon")
+				else if (attacker.classname == "monster_dragon")
 					bprint (" was fried by a Dragon\n");
-				if (attacker.classname == "monster_enforcer")
+				else if (attacker.classname == "monster_enforcer")
 					bprint (" was blasted by an Enforcer\n");
-				if (attacker.classname == "monster_fish")
+				else if (attacker.classname == "monster_fish")
 					bprint (" was fed to the Rotfish\n");
-				if (attacker.classname == "monster_hell_knight")
+				else if (attacker.classname == "monster_hell_knight")
 					bprint (" was slain by a Death Knight\n");
-				if (attacker.classname == "monster_knight")
+				else if (attacker.classname == "monster_knight")
 					bprint (" was slashed by a Knight\n");
-				if (attacker.classname == "monster_ogre")
+				else if (attacker.classname == "monster_ogre")
 					bprint (" was destroyed by an Ogre\n");
-				if (attacker.classname == "monster_oldone")
+				else if (attacker.classname == "monster_oldone")
 					bprint (" became one with Shub-Niggurath\n");
-				if (attacker.classname == "monster_shalrath")
+				else if (attacker.classname == "monster_shalrath")
 					bprint (" was exploded by a Vore\n");
-				if (attacker.classname == "monster_shambler")
+				else if (attacker.classname == "monster_shambler")
 					bprint (" was smashed by a Shambler\n");
-				if (attacker.classname == "monster_tarbaby")
+				else if (attacker.classname == "monster_tarbaby")
 					bprint (" was slimed by a Spawn\n");
-				if (attacker.classname == "monster_vomit")
+				else if (attacker.classname == "monster_vomit")
 					bprint (" was vomited on by a Vomitus\n");
-				if (attacker.classname == "monster_wizard")
+				else if (attacker.classname == "monster_wizard")
 					bprint (" was scragged by a Scrag\n");
-				if (attacker.classname == "monster_zombie")
+				else if (attacker.classname == "monster_zombie")
 					bprint (" joins the Zombies\n");
 				// MED
 				if (attacker.classname == "monster_gremlin")
@@ -1757,7 +1758,7 @@ void(entity targ, entity attacker) ClientObituary =
 			}
 			if (attacker.classname == "trap_shooter" ||
 				attacker.classname == "trap_spikeshooter")
-				{
+			{
 				bprint (" was spiked\n");
 				return;
 			}
@@ -1774,7 +1775,7 @@ void(entity targ, entity attacker) ClientObituary =
 
 			// in-water deaths
 			rnum = targ.watertype;
-			if (rnum == -3)
+			if (rnum == CONTENT_WATER)
 			{
 				if (random () < 0.5)
 					bprint (" sleeps with the fishes\n");
@@ -1782,7 +1783,7 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" sucks it down\n");
 				return;
 			}
-			else if (rnum == -4)
+			else if (rnum == CONTENT_SLIME)
 			{
 				if (random () < 0.5)
 					bprint (" gulped a load of slime\n");
@@ -1790,7 +1791,7 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" can't exist on slime alone\n");
 				return;
 			}
-			else if (rnum == -5)
+			else if (rnum == CONTENT_LAVA)
 			{
 				if (targ.health < -15)
 				{

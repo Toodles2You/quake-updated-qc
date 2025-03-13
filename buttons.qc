@@ -102,22 +102,24 @@ position where it can be triggered again.
 */
 void() func_button =
 {
+	local float dist;
+
 	if (self.sounds == 0)
 	{
 		precache_sound ("buttons/airbut1.wav");
 		self.noise = "buttons/airbut1.wav";
 	}
-	if (self.sounds == 1)
+	else if (self.sounds == 1)
 	{
 		precache_sound ("buttons/switch21.wav");
 		self.noise = "buttons/switch21.wav";
 	}
-	if (self.sounds == 2)
+	else if (self.sounds == 2)
 	{
 		precache_sound ("buttons/switch02.wav");
 		self.noise = "buttons/switch02.wav";
 	}
-	if (self.sounds == 3)
+	else if (self.sounds == 3)
 	{
 		precache_sound ("buttons/switch04.wav");
 		self.noise = "buttons/switch04.wav";
@@ -151,6 +153,8 @@ void() func_button =
 	self.state = STATE_BOTTOM;
 
 	self.pos1 = self.origin;
-	self.pos2 =
-		self.pos1 + self.movedir * (fabs (self.movedir * self.size) - self.lip);
+
+	dist = fabs (self.movedir * self.size) - self.lip;
+
+	self.pos2 = self.pos1 + self.movedir * dist;
 };

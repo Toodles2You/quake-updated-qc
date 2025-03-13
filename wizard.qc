@@ -65,8 +65,8 @@ void(entity missile, float mspeed, float accuracy) LaunchMissile =
 	makevectors (self.angles);
 
 	// set missile speed
-	vec = self.enemy.origin + self.enemy.mins + self.enemy.size * 0.7 -
-		  missile.origin;
+	vec = self.enemy.origin + self.enemy.mins + self.enemy.size * 0.7;
+	vec = vec - missile.origin;
 
 	// calc aproximate time for missile to reach vec
 	fly = vlen (vec) / mspeed;
@@ -228,17 +228,20 @@ void() Wiz_FastFire =
 
 void() Wiz_StartFast =
 {
+	local vector org;
 	local entity missile;
 
 	sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
 	self.v_angle = self.angles;
 	makevectors (self.angles);
 
+	org = self.origin + '0 0 30' + v_forward * 14;
+
 	missile = spawn ();
 	missile.owner = self;
 	missile.nextthink = time + 0.6;
 	setsize (missile, '0 0 0', '0 0 0');
-	setorigin (missile, self.origin + '0 0 30' + v_forward * 14 + v_right * 14);
+	setorigin (missile, org + v_right * 14);
 	missile.enemy = self.enemy;
 	missile.nextthink = time + 0.8;
 	missile.think = Wiz_FastFire;
@@ -248,7 +251,7 @@ void() Wiz_StartFast =
 	missile.owner = self;
 	missile.nextthink = time + 1;
 	setsize (missile, '0 0 0', '0 0 0');
-	setorigin (missile, self.origin + '0 0 30' + v_forward * 14 + v_right * -14);
+	setorigin (missile, org + v_right * -14);
 	missile.enemy = self.enemy;
 	missile.nextthink = time + 0.3;
 	missile.think = Wiz_FastFire;

@@ -16,8 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-*/
 // JIM
 void(vector pos) placebullethole;
 void(entity targ, entity inflictor, entity attacker, float damage) T_Damage;
@@ -619,7 +617,8 @@ vector() wall_velocity =
 	local vector vel;
 
 	vel = normalize (self.velocity);
-	vel = normalize (vel + v_up * (random () - 0.5) + v_right * (random () - 0.5));
+	vel = vel + v_up * (random () - 0.5) + v_right * (random () - 0.5);
+	vel = normalize (vel);
 	vel = vel + 2 * trace_plane_normal;
 	vel = vel * 200;
 
@@ -792,8 +791,8 @@ void(float shotcount, vector dir, vector spread) FireBullets =
 	ClearMultiDamage ();
 	while (shotcount > 0)
 	{
-		direction =
-			dir + crandom () * spread_x * v_right + crandom () * spread_y * v_up;
+		direction = dir + crandom () * spread_x * v_right
+				  + crandom () * spread_y * v_up;
 
 		traceline (src, src + direction * 2048, FALSE, self);
 		if (trace_fraction != 1.0)
@@ -973,49 +972,50 @@ LightningDamage
 */
 void(vector p1, vector p2, entity from, float damage) LightningDamage =
 {
-	local entity e1, e2;
+	local entity e1, e2, e3;
 	local vector f;
+	local float t;
 
 	f = p2 - p1;
-	normalize (f);
+	f = normalize (f);
+	t = f_x;
 	f_x = 0 - f_y;
-	f_y = f_x;
+	f_y = t;
 	f_z = 0;
 	f = f * 16;
 
-	e1 = e2 = world;
+	e1 = e2 = e3 = world;
 
-	traceline (p1, p2, FALSE, self);
+	traceline (p1, p2, FALSE, from);
+	e1 = trace_ent;
 	// JIM
-	if (trace_ent.takedamage && !trace_ent.wetsuit_finished)
+	if (e1.takedamage && !e1.wetsuit_finished)
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from, damage);
-		if (self.classname == "player")
+		T_Damage (e1, from, from, damage);
+		if (from.classname == "player")
 		{
-			if (other.classname == "player")
-				trace_ent.velocity_z = trace_ent.velocity_z + 400;
+			if (e1.classname == "player")
+				e1.velocity_z = e1.velocity_z + 400;
 		}
 	}
-	e1 = trace_ent;
 
-	traceline (p1 + f, p2 + f, FALSE, self);
-	// JIM
-	if (trace_ent != e1 && trace_ent.takedamage &&
-		!trace_ent.wetsuit_finished)
-		{
-		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from, damage);
-	}
+	traceline (p1 + f, p2 + f, FALSE, from);
 	e2 = trace_ent;
-
-	traceline (p1 - f, p2 - f, FALSE, self);
 	// JIM
-	if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage &&
-		!trace_ent.wetsuit_finished)
-		{
+	if (e2 != e1 && e2.takedamage && !e2.wetsuit_finished)
+	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
-		T_Damage (trace_ent, from, from, damage);
+		T_Damage (e2, from, from, damage);
+	}
+
+	traceline (p1 - f, p2 - f, FALSE, from);
+	e3 = trace_ent;
+	// JIM
+	if (e3 != e1 && e3 != e2 && e3.takedamage && !e3.wetsuit_finished)
+	{
+		particle (trace_endpos, '0 0 100', 225, damage * 4);
+		T_Damage (e3, from, from, damage);
 	}
 };
 
@@ -1126,8 +1126,8 @@ void() W_FireGrenade =
 	makevectors (self.v_angle);
 
 	if (self.v_angle_x)
-		missile.velocity = v_forward * 600 + v_up * 200 +
-						   crandom () * v_right * 10 + crandom () * v_up * 10;
+		missile.velocity = v_forward * 600 + v_up * 200
+						 + crandom () * v_right * 10 + crandom () * v_up * 10;
 	else
 	{
 		missile.velocity = aim (self, 10000);
@@ -1475,8 +1475,7 @@ void() W_SetCurrentAmmo =
 {
 	player_run ();  // get out of any weapon firing states
 
-	self.items = self.items -
-				 (self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
+	self.items = self.items - (self.items & IT_AMMO);
 
 	if (self.weapon == IT_AXE)
 	{
@@ -1640,8 +1639,8 @@ void() W_Attack =
 	if (!W_CheckNoAmmo ())
 		return;
 
-	makevectors (self.v_angle);     // calculate forward angle for velocity
-	self.show_hostile = time + 1;  // wake monsters up
+	makevectors (self.v_angle);    // calculate forward angle for velocity wake
+	self.show_hostile = time + 1;  // monsters up
 
 	if (self.weapon == IT_AXE)
 	{
@@ -1856,12 +1855,9 @@ void() CheatCommand =
 	self.ammo_rockets = 100;
 	self.ammo_nails = 200;
 	self.ammo_shells = 100;
-	self.items = self.items | IT_AXE | IT_SHOTGUN | IT_SUPER_SHOTGUN |
-				 IT_NAILGUN | IT_SUPER_NAILGUN | IT_GRENADE_LAUNCHER |
-				 IT_ROCKET_LAUNCHER | IT_KEY1 | IT_KEY2;
+	self.items = self.items | IT_WEAPONS | IT_KEYS;
 
 	self.ammo_cells = 200;
-	self.items = self.items | IT_LIGHTNING;
 	// MED
 	self.items = self.items | IT_LASER_CANNON;
 	self.items = self.items | IT_MJOLNIR;

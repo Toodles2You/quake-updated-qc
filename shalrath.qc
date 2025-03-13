@@ -35,6 +35,7 @@ $frame walk11 walk12
 
 void(entity attacker, float damage) shalrath_pain;
 void() ShalMissile;
+
 void() shal_stand = [$walk1, shal_stand] { ai_stand (); };
 
 void() shal_walk1 = [$walk2, shal_walk2]
@@ -139,6 +140,7 @@ ShalMissile
 */
 void() ShalMissileTouch;
 void() ShalHome;
+
 void() ShalMissile =
 {
 	local entity missile;
