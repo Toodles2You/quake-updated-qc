@@ -183,8 +183,8 @@ void() ZombieGrenadeTouch =
 		remove (self);
 		return;
 	}
-	sound (self, CHAN_WEAPON, "zombie/z_miss.wav", 1,
-		  ATTN_NORM);  // bounce sound
+	// bounce sound
+	sound (self, CHAN_WEAPON, "zombie/z_miss.wav", 1, ATTN_NORM);
 	self.velocity = '0 0 0';
 	self.avelocity = '0 0 0';
 	self.touch = SUB_Remove;

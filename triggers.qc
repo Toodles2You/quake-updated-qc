@@ -72,9 +72,8 @@ void() multi_trigger =
 		self.nextthink = time + self.wait;
 	}
 	else
-	{  // we can't just remove (self) here, because this is a touch
-			  // function
-		// called wheil C code is looping through area links...
+	{  // we can't just remove (self) here, because this is a touch function
+	   // called wheil C code is looping through area links...
 		self.touch = SUB_Null;
 		self.nextthink = time + 0.1;
 		self.think = SUB_Remove;
@@ -240,7 +239,7 @@ void() counter_use =
 	{
 		if (activator.classname == "player" &&
 			(self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-			{
+		{
 			if (self.count >= 4)
 				centerprint (activator, "There are more to go...");
 			else if (self.count == 3)
@@ -411,8 +410,8 @@ void() teleport_touch =
 	if (!other.health)
 	{
 		other.origin = t.origin;
-		other.velocity =
-			(v_forward * other.velocity_x) + (v_forward * other.velocity_y);
+		other.velocity = (v_forward * other.velocity_x)
+					   + (v_forward * other.velocity_y);
 		return;
 	}
 

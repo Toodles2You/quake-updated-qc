@@ -68,9 +68,7 @@ void() SetChangeParms =
 	}
 
 	// remove items
-	self.items =
-		self.items - (self.items & (IT_KEY1 | IT_KEY2 | IT_INVISIBILITY |
-									IT_INVULNERABILITY | IT_SUIT | IT_QUAD));
+	self.items = self.items - (self.items & (IT_KEYS | IT_ARTS));
 
 	// cap super health
 	if (self.health > 100)
@@ -100,7 +98,7 @@ void() SetNewParms =
 	parm5 = 0;
 	parm6 = 0;
 	parm7 = 0;
-	parm8 = 1;
+	parm8 = IT_SHOTGUN;
 	parm9 = 0;
 };
 
@@ -244,8 +242,7 @@ void() ExitIntermission =
 	if (intermission_running == 3)
 	{
 		if (!cvar ("registered"))
-		{  // shareware episode has been completed, go
-									// to sell screen
+		{  // shareware episode has been completed, go to sell screen
 			WriteByte (MSG_ALL, SVC_SELLSCREEN);
 			return;
 		}
@@ -317,12 +314,15 @@ void() execute_changelevel =
 
 void() changelevel_touch =
 {
+	local float noexit;
+
 	if (other.classname != "player")
 		return;
 
-	if ((cvar ("noexit") == 1) ||
-		((cvar ("noexit") == 2) && (mapname != "start")))
-		{
+	noexit = cvar ("noexit");
+
+	if ((noexit == 1) || ((noexit == 2) && (mapname != "start")))
+	{
 		T_Damage (other, self, self, 50000);
 		return;
 	}
@@ -537,8 +537,6 @@ void() PutClientInServer =
 	// paustime is set by teleporters to keep the player from moving a while
 	self.pausetime = 0;
 
-	//	spot = SelectSpawnPoint ();
-
 	self.origin = spot.origin + '0 0 1';
 	self.angles = spot.angles;
 	self.fixangle = TRUE;  // turn this way immediately
@@ -705,7 +703,7 @@ void() PlayerDeathThink =
 {
 	local float forward;
 
-	if ((self.flags & FL_ONGROUND))
+	if (self.flags & FL_ONGROUND)
 	{
 		forward = vlen (self.velocity);
 		forward = forward - 20;
@@ -787,7 +785,8 @@ WaterMove
 
 void() WaterMove =
 {
-	// dprint (ftos (self.waterlevel));
+	local float waterfriction;
+
 	if (self.movetype == MOVETYPE_NOCLIP)
 		return;
 	if (self.health < 0)
@@ -862,8 +861,10 @@ void() WaterMove =
 	}
 
 	if (!(self.flags & FL_WATERJUMP))
-		self.velocity =
-			self.velocity - 0.8 * self.waterlevel * frametime * self.velocity;
+	{
+		waterfriction = 0.8 * self.waterlevel * frametime;
+		self.velocity = self.velocity - waterfriction * self.velocity;
+	}
 };
 
 void() CheckWaterJump =
@@ -943,7 +944,7 @@ void() PlayerPreThink =
 
 	if (time > self.attack_finished && self.currentammo == 0 &&
 		self.weapon != IT_AXE)
-		{
+	{
 		self.weapon = W_BestWeapon ();
 		W_SetCurrentAmmo ();
 	}
@@ -1122,7 +1123,7 @@ void() PlayerPostThink =
 	// check to see if player landed and play landing sound
 	if ((self.jump_flag < -300) && (self.flags & FL_ONGROUND) &&
 		(self.health > 0))
-		{
+	{
 		if (self.watertype == CONTENT_WATER)
 			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
 		else if (self.jump_flag < -650)
@@ -1229,7 +1230,7 @@ void(entity targ, entity attacker) ClientObituary =
 				attacker.frags = attacker.frags - 1;
 				bprint (targ.netname);
 
-				if (targ.weapon == 64 && targ.waterlevel > 1)
+				if (targ.weapon == IT_LIGHTNING && targ.waterlevel > 1)
 				{
 					bprint (" discharges into the water.\n");
 					return;
@@ -1241,7 +1242,7 @@ void(entity targ, entity attacker) ClientObituary =
 				return;
 			}
 			else if ((teamplay == 2) && (targ.team > 0) &&
-					   (targ.team == attacker.team))
+					 (targ.team == attacker.team))
 			{
 				if (rnum < 0.25)
 					deathstring = " mows down a teammate\n";
@@ -1378,7 +1379,7 @@ void(entity targ, entity attacker) ClientObituary =
 			}
 			if (attacker.classname == "trap_shooter" ||
 				attacker.classname == "trap_spikeshooter")
-				{
+			{
 				bprint (" was spiked\n");
 				return;
 			}
@@ -1395,7 +1396,7 @@ void(entity targ, entity attacker) ClientObituary =
 
 			// in-water deaths
 			rnum = targ.watertype;
-			if (rnum == -3)
+			if (rnum == CONTENT_WATER)
 			{
 				if (random () < 0.5)
 					bprint (" sleeps with the fishes\n");
@@ -1403,7 +1404,7 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" sucks it down\n");
 				return;
 			}
-			else if (rnum == -4)
+			else if (rnum == CONTENT_SLIME)
 			{
 				if (random () < 0.5)
 					bprint (" gulped a load of slime\n");
@@ -1411,7 +1412,7 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" can't exist on slime alone\n");
 				return;
 			}
-			else if (rnum == -5)
+			else if (rnum == CONTENT_LAVA)
 			{
 				if (targ.health < -15)
 				{

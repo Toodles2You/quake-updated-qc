@@ -57,9 +57,9 @@ $frame smash1 smash2 smash3 smash4 smash5 smash6 smash7 smash8 smash9 smash10
 $frame smash11
 
 $frame w_attack1 w_attack2 w_attack3 w_attack4 w_attack5 w_attack6 w_attack7
-$frame w_attack8 w_attack9 w_attack10 w_attack11 w_attack12 w_attack13 w_attack14
-$frame w_attack15 w_attack16 w_attack17 w_attack18 w_attack19 w_attack20
-$frame w_attack21 w_attack22
+$frame w_attack8 w_attack9 w_attack10 w_attack11 w_attack12 w_attack13
+$frame w_attack14 w_attack15 w_attack16 w_attack17 w_attack18 w_attack19
+$frame w_attack20 w_attack21 w_attack22
 
 $frame magicc1 magicc2 magicc3 magicc4 magicc5 magicc6 magicc7 magicc8
 $frame magicc9 magicc10 magicc11
@@ -490,9 +490,8 @@ void(entity attacker, float damage) hknight_pain =
 
 	sound (self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
 
-	if (time - self.pain_finished >
-		5)
-		{  // allways go into pain frame if it has been a while
+	if (time - self.pain_finished > 5)
+	{  // allways go into pain frame if it has been a while
 		hknight_pain1 ();
 		self.pain_finished = time + 1;
 		return;

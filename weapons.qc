@@ -16,8 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-*/
 void(entity targ, entity inflictor, entity attacker, float damage) T_Damage;
 void() player_run;
 void(entity bomb, entity attacker, float rad, entity ignore) T_RadiusDamage;
@@ -88,7 +86,8 @@ vector() wall_velocity =
 	local vector vel;
 
 	vel = normalize (self.velocity);
-	vel = normalize (vel + v_up * (random () - 0.5) + v_right * (random () - 0.5));
+	vel = vel + v_up * (random () - 0.5) + v_right * (random () - 0.5);
+	vel = normalize (vel);
 	vel = vel + 2 * trace_plane_normal;
 	vel = vel * 200;
 
@@ -258,8 +257,8 @@ void(float shotcount, vector dir, vector spread) FireBullets =
 	ClearMultiDamage ();
 	while (shotcount > 0)
 	{
-		direction =
-			dir + crandom () * spread_x * v_right + crandom () * spread_y * v_up;
+		direction = dir + crandom () * spread_x * v_right
+				  + crandom () * spread_y * v_up;
 
 		traceline (src, src + direction * 2048, FALSE, self);
 		if (trace_fraction != 1.0)
@@ -574,8 +573,8 @@ void() W_FireGrenade =
 	makevectors (self.v_angle);
 
 	if (self.v_angle_x)
-		missile.velocity = v_forward * 600 + v_up * 200 +
-						   crandom () * v_right * 10 + crandom () * v_up * 10;
+		missile.velocity = v_forward * 600 + v_up * 200
+						 + crandom () * v_right * 10 + crandom () * v_up * 10;
 	else
 	{
 		missile.velocity = aim (self, 10000);
@@ -756,8 +755,7 @@ void() W_SetCurrentAmmo =
 {
 	player_run ();  // get out of any weapon firing states
 
-	self.items = self.items -
-				 (self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
+	self.items = self.items - (self.items & IT_AMMO);
 
 	if (self.weapon == IT_AXE)
 	{
@@ -880,8 +878,8 @@ void() W_Attack =
 	if (!W_CheckNoAmmo ())
 		return;
 
-	makevectors (self.v_angle);     // calculate forward angle for velocity
-	self.show_hostile = time + 1;  // wake monsters up
+	makevectors (self.v_angle);    // calculate forward angle for velocity wake
+	self.show_hostile = time + 1;  // monsters up
 
 	if (self.weapon == IT_AXE)
 	{
@@ -1032,12 +1030,9 @@ void() CheatCommand =
 	self.ammo_rockets = 100;
 	self.ammo_nails = 200;
 	self.ammo_shells = 100;
-	self.items = self.items | IT_AXE | IT_SHOTGUN | IT_SUPER_SHOTGUN |
-				 IT_NAILGUN | IT_SUPER_NAILGUN | IT_GRENADE_LAUNCHER |
-				 IT_ROCKET_LAUNCHER | IT_KEY1 | IT_KEY2;
+	self.items = self.items | IT_WEAPONS | IT_KEYS;
 
 	self.ammo_cells = 200;
-	self.items = self.items | IT_LIGHTNING;
 
 	self.weapon = IT_ROCKET_LAUNCHER;
 	self.impulse = 0;

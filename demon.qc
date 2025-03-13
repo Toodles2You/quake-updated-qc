@@ -264,15 +264,16 @@ CheckDemonJump
 */
 float() CheckDemonJump =
 {
+	local float feet;
 	local vector dist;
 	local float d;
 
-	if (self.origin_z + self.mins_z >
-		self.enemy.origin_z + self.enemy.mins_z + 0.75 * self.enemy.size_z)
+	feet = self.enemy.origin_z + self.enemy.mins_z;
+
+	if (self.origin_z + self.mins_z > feet + 0.75 * self.enemy.size_z)
 		return FALSE;
 
-	if (self.origin_z + self.maxs_z <
-		self.enemy.origin_z + self.enemy.mins_z + 0.25 * self.enemy.size_z)
+	if (self.origin_z + self.maxs_z < feet + 0.25 * self.enemy.size_z)
 		return FALSE;
 
 	dist = self.enemy.origin - self.origin;
@@ -356,15 +357,9 @@ void() Demon_JumpTouch =
 	{
 		if (self.flags & FL_ONGROUND)
 		{  // jump randomly to not get hung up
-										 // dprint ("popjump\n");
 			self.touch = SUB_Null;
 			self.think = demon1_jump1;
 			self.nextthink = time + 0.1;
-
-			//			self.velocity_x = (random () - 0.5) * 600;
-			//			self.velocity_y = (random () - 0.5) * 600;
-			//			self.velocity_z = 200;
-			//			self.flags = self.flags - FL_ONGROUND;
 		}
 		return;  // not on ground yet
 	}

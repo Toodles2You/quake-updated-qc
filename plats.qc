@@ -23,6 +23,7 @@ void() plat_trigger_use;
 void() plat_go_up;
 void() plat_go_down;
 void() plat_crush;
+
 float PLAT_LOW_TRIGGER = 1;
 
 void() plat_spawn_inside_trigger =
@@ -110,7 +111,6 @@ void() plat_outside_touch =
 	if (other.health <= 0)
 		return;
 
-	// dprint ("plat_outside_touch\n");
 	self = self.enemy;
 	if (self.state == STATE_TOP)
 		plat_go_down ();
@@ -125,8 +125,6 @@ void() plat_trigger_use =
 
 void() plat_crush =
 {
-	// dprint ("plat_crush\n");
-
 	T_Damage (other, self, self, 1);
 
 	if (self.state == STATE_UP)
@@ -158,7 +156,6 @@ If the "height" key is set, that will determine the amount the plat moves,
 instead of being implicitly determined by the model's height. Set "sounds" to
 one of the following: 1) base fast 2) chain slow
 */
-
 void() func_plat =
 {
 	if (!self.t_length)

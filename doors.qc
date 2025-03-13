@@ -423,9 +423,9 @@ trigger field activates the door. "health"	if set, door must be shot open
 3)	stone chain
 4)	screechy metal
 */
-
 void() func_door =
 {
+	local float dist;
 
 	if (world.worldtype == 0)
 	{
@@ -515,8 +515,10 @@ void() func_door =
 		self.dmg = 2;
 
 	self.pos1 = self.origin;
-	self.pos2 =
-		self.pos1 + self.movedir * (fabs (self.movedir * self.size) - self.lip);
+
+	dist = fabs (self.movedir * self.size) - self.lip;
+
+	self.pos2 = self.pos1 + self.movedir * dist;
 
 // DOOR_START_OPEN is to allow an entity to be lighted in the closed position
 // but spawn in the open position
@@ -723,7 +725,6 @@ t_length = override LENGTH to move sideways
 If a secret door has a targetname, it will only be opened by it's botton or
 trigger, not by damage. "sounds" 1) medieval 2) metal 3) base
 */
-
 void() func_door_secret =
 {
 	if (self.sounds == 0)

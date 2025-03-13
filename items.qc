@@ -24,8 +24,8 @@ void() SUB_regen =
 {
 	self.model = self.mdl;       // restore original model
 	self.solid = SOLID_TRIGGER;  // allow it to be touched again
-	sound (self, CHAN_VOICE, "items/itembk2.wav", 1,
-		  ATTN_NORM);  // play respawn sound
+	// play respawn sound
+	sound (self, CHAN_VOICE, "items/itembk2.wav", 1, ATTN_NORM);
 	setorigin (self, self.origin);
 };
 
@@ -281,8 +281,7 @@ void() armor_touch =
 
 	other.armortype = type;
 	other.armorvalue = value;
-	other.items =
-		other.items - (other.items & (IT_ARMOR1 | IT_ARMOR2 | IT_ARMOR3)) + bit;
+	other.items = other.items - (other.items & IT_ARMOR) + bit;
 
 	self.solid = SOLID_NOT;
 	self.model = string_null;
@@ -301,7 +300,6 @@ void() armor_touch =
 
 /*QUAKED item_armor1 (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() item_armor1 =
 {
 	self.touch = armor_touch;
@@ -314,7 +312,6 @@ void() item_armor1 =
 
 /*QUAKED item_armor2 (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() item_armor2 =
 {
 	self.touch = armor_touch;
@@ -327,7 +324,6 @@ void() item_armor2 =
 
 /*QUAKED item_armorInv (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() item_armorInv =
 {
 	self.touch = armor_touch;
@@ -380,8 +376,6 @@ float(float w) RankForWeapon =
 Deathmatch_Weapon
 
 Deathmatch weapon change rules for picking up a weapon
-
-.float		ammo_shells, ammo_nails, ammo_rockets, ammo_cells;
 =============
 */
 void(float old, float new) Deathmatch_Weapon =
@@ -516,7 +510,6 @@ void() weapon_touch =
 
 /*QUAKED weapon_supershotgun (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_supershotgun =
 {
 	precache_model ("progs/g_shot.mdl");
@@ -530,7 +523,6 @@ void() weapon_supershotgun =
 
 /*QUAKED weapon_nailgun (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_nailgun =
 {
 	precache_model ("progs/g_nail.mdl");
@@ -544,7 +536,6 @@ void() weapon_nailgun =
 
 /*QUAKED weapon_supernailgun (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_supernailgun =
 {
 	precache_model ("progs/g_nail2.mdl");
@@ -558,7 +549,6 @@ void() weapon_supernailgun =
 
 /*QUAKED weapon_grenadelauncher (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_grenadelauncher =
 {
 	precache_model ("progs/g_rock.mdl");
@@ -572,7 +562,6 @@ void() weapon_grenadelauncher =
 
 /*QUAKED weapon_rocketlauncher (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_rocketlauncher =
 {
 	precache_model ("progs/g_rock2.mdl");
@@ -586,7 +575,6 @@ void() weapon_rocketlauncher =
 
 /*QUAKED weapon_lightning (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_lightning =
 {
 	precache_model ("progs/g_light.mdl");
@@ -696,7 +684,6 @@ float WEAPON_BIG2 = 1;
 
 /*QUAKED item_shells (0 .5 .8) (0 0 0) (32 32 32) big
 */
-
 void() item_shells =
 {
 	self.touch = ammo_touch;
@@ -721,7 +708,6 @@ void() item_shells =
 
 /*QUAKED item_spikes (0 .5 .8) (0 0 0) (32 32 32) big
 */
-
 void() item_spikes =
 {
 	self.touch = ammo_touch;
@@ -746,7 +732,6 @@ void() item_spikes =
 
 /*QUAKED item_rockets (0 .5 .8) (0 0 0) (32 32 32) big
 */
-
 void() item_rockets =
 {
 	self.touch = ammo_touch;
@@ -771,7 +756,6 @@ void() item_rockets =
 
 /*QUAKED item_cells (0 .5 .8) (0 0 0) (32 32 32) big
 */
-
 void() item_cells =
 {
 	self.touch = ammo_touch;
@@ -928,7 +912,6 @@ following:
 1: metal
 2: base
 */
-
 void() item_key1 =
 {
 	if (world.worldtype == 0)
@@ -966,7 +949,6 @@ following:
 1: metal
 2: base
 */
-
 void() item_key2 =
 {
 	if (world.worldtype == 0)
@@ -1025,7 +1007,6 @@ void() sigil_touch =
 /*QUAKED item_sigil (0 .5 .8) (-16 -16 -24) (16 16 32) E1 E2 E3 E4
 End of level sigil, pick up to end episode and return to jrstart.
 */
-
 void() item_sigil =
 {
 	if (!self.spawnflags)
@@ -1320,9 +1301,11 @@ void() DropBackpack =
 {
 	local entity item;
 
-	if (!(self.ammo_shells + self.ammo_nails + self.ammo_rockets +
-		  self.ammo_cells))
+	if (!self.ammo_shells && !self.ammo_nails && !self.ammo_rockets &&
+		!self.ammo_cells)
+	{
 		return;  // nothing in it
+	}
 
 	item = spawn ();
 	item.origin = self.origin - '0 0 24';
