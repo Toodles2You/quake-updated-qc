@@ -33,10 +33,10 @@ void() hip_train_use =
 {
 	if (self.think != hip_func_train_find)
 	{
-		if ( self.velocity != '0 0 0' )
-			return;		// already activated
+		if (self.velocity != '0 0 0')
+			return;  // already activated
 	}
-	hip_train_next();
+	hip_train_next ();
 };
 
 void() hip_train_wait =
@@ -44,7 +44,7 @@ void() hip_train_wait =
 	if (self.wait)
 	{
 		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
-		if ( self.wait != -1 )
+		if (self.wait != -1)
 		{
 			self.nextthink = self.ltime + self.wait;
 			self.wait = 0;
@@ -56,12 +56,11 @@ void() hip_train_wait =
 	self.think = hip_train_next;
 };
 
-
 void() hip_train_next =
 {
-	local entity	targ;
-	local float		current;
-	local string	temp;
+	local entity targ;
+	local float current;
+	local string temp;
 
 	// Get the speed of the current path_corner.
 	// (we must save this off at each path change since
@@ -79,7 +78,7 @@ void() hip_train_next =
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 
 	self.wait = targ.wait;
- 	if (targ.wait)
+	if (targ.wait)
 	{
 		self.think = hip_train_wait;
 	}
@@ -88,13 +87,13 @@ void() hip_train_next =
 		self.think = hip_train_next;
 	}
 
-	if ( self.goalentity.event != "" )
+	if (self.goalentity.event != "")
 	{
 		// Trigger any events that should happen at the corner.
 		temp = self.target;
 		self.target = self.goalentity.event;
 		self.message = self.goalentity.message;
-		SUB_UseTargets();
+		SUB_UseTargets ();
 		self.target = temp;
 		self.message = string_null;
 	}
@@ -102,27 +101,26 @@ void() hip_train_next =
 	// Save the current entity
 	self.goalentity = targ;
 
-	if ( current == -1 )
+	if (current == -1)
 	{
 		// Warp to the next path_corner
-		setorigin (self, targ.origin - self.mins );
+		setorigin (self, targ.origin - self.mins);
 		self.nextthink = self.ltime + 0.01;
 	}
 	else
 	{
 		// check if there's a speed change
-		if (current>0)
-		 	self.speed = current;
+		if (current > 0)
+			self.speed = current;
 
 		// travel to the next path change
-		SUB_CalcMove (targ.origin - self.mins, self.speed, self.think );
+		SUB_CalcMove (targ.origin - self.mins, self.speed, self.think);
 	}
 };
 
 void() hip_func_train_find =
-
 {
-	local entity	targ;
+	local entity targ;
 
 	targ = find (world, targetname, self.target);
 
@@ -135,7 +133,7 @@ void() hip_func_train_find =
 	self.target = targ.target;
 	setorigin (self, targ.origin - self.mins);
 	if (self.targetname == "")
-	{	// not triggered, so start immediately
+	{  // not triggered, so start immediately
 		self.nextthink = self.ltime + 0.1;
 		self.think = hip_train_next;
 	}
@@ -163,11 +161,9 @@ Here is a reiteration of the func_train docs:
 Trains are moving platforms that players can ride.
 The targets origin specifies the min point of the train at each corner.
 The train spawns at the first target it is pointing at.
-If the train is the target of a button or trigger, it will not begin moving until activated.
-speed	default 100
-dmg		default	2
-sounds
-1) ratchet metal
+If the train is the target of a button or trigger, it will not begin moving
+until activated. speed	default 100 dmg		default	2 sounds 1) ratchet
+metal
 
 */
 void() func_train2 =
@@ -179,7 +175,7 @@ void() func_train2 =
 	if (!self.dmg)
 		self.dmg = 2;
 
-	if ( self.noise == "" )
+	if (self.noise == "")
 	{
 		if (self.sounds == 0)
 		{
@@ -191,7 +187,7 @@ void() func_train2 =
 			self.noise = ("plats/train2.wav");
 		}
 	}
-	if ( self.noise1 == "" )
+	if (self.noise1 == "")
 	{
 		if (self.sounds == 0)
 		{
@@ -203,8 +199,8 @@ void() func_train2 =
 		}
 	}
 
-	precache_sound( self.noise );
-	precache_sound( self.noise1 );
+	precache_sound (self.noise);
+	precache_sound (self.noise1);
 
 	self.cnt = 1;
 	self.solid = SOLID_BSP;
@@ -214,11 +210,11 @@ void() func_train2 =
 	self.classname = "train2";
 
 	setmodel (self, self.model);
-	setsize (self, self.mins , self.maxs);
+	setsize (self, self.mins, self.maxs);
 	setorigin (self, self.origin);
 
-// start trains on the second frame, to make sure their targets have had
-// a chance to spawn
+	// start trains on the second frame, to make sure their targets have had
+	// a chance to spawn
 	self.nextthink = self.ltime + 0.1;
 	self.think = hip_func_train_find;
 };

@@ -40,10 +40,9 @@ $frame stand1 stand2 stand3 stand4 stand5
 $frame axstnd1 axstnd2 axstnd3 axstnd4 axstnd5 axstnd6
 $frame axstnd7 axstnd8 axstnd9 axstnd10 axstnd11 axstnd12
 
-
-void()   decoy_stand1 =[  $axstnd1,   decoy_stand1  ]
+void() decoy_stand1 = [$axstnd1, decoy_stand1]
 {
-	ChangeYaw();
+	ChangeYaw ();
 	if (self.walkframe >= 5)
 		self.walkframe = 0;
 	self.frame = $stand1 + self.walkframe;
@@ -52,21 +51,21 @@ void()   decoy_stand1 =[  $axstnd1,   decoy_stand1  ]
 		self.th_walk ();
 };
 
-void()   decoy_walk1 =[  $rockrun1,  decoy_walk1  ]
+void() decoy_walk1 = [$rockrun1, decoy_walk1]
 {
-//	local vector a;
+	//	local vector a;
 	movetogoal (12);
-//	a = '0 0 0';
-//	a_y = self.ideal_yaw;
-//	makevectors(a);
-//	self.velocity = 1*v_forward;
-	self.weaponframe=0;
+	//	a = '0 0 0';
+	//	a_y = self.ideal_yaw;
+	//	makevectors (a);
+	//	self.velocity = 1*v_forward;
+	self.weaponframe = 0;
 	if (self.walkframe == 6)
 		self.walkframe = 0;
 	if (self.walkframe == 2 || self.walkframe == 5)
 	{
 		local float r;
-		r = random();
+		r = random ();
 		if (r < 0.14)
 			sound (self, CHAN_VOICE, "misc/foot1.wav", 0.5, ATTN_NORM);
 		else if (r < 0.29)
@@ -122,10 +121,10 @@ void() monster_decoy =
 {
 	if (deathmatch)
 	{
-		remove(self);
+		remove (self);
 		return;
 	}
-	setup_decoy(self);
+	setup_decoy (self);
 
 	walkmonster_start ();
 	total_monsters = total_monsters - 1;
@@ -136,14 +135,14 @@ void(string targ, vector orig) become_decoy =
 	local entity decoy;
 	local entity temp;
 
-	decoy = hipdecoy = spawn();
+	decoy = hipdecoy = spawn ();
 
 	temp = self;
 	self = decoy;
 
-	setup_decoy(decoy);
+	setup_decoy (decoy);
 
-	setorigin(decoy, orig);
+	setorigin (decoy, orig);
 
 	decoy.origin = orig;
 
@@ -160,20 +159,21 @@ void(string targ, vector orig) become_decoy =
 
 	if (decoy.target != "")
 	{
-		decoy.goalentity = decoy.movetarget = find(world, targetname, decoy.target);
-		decoy.ideal_yaw = vectoyaw(decoy.goalentity.origin - decoy.origin);
+		decoy.goalentity = decoy.movetarget =
+			find (world, targetname, decoy.target);
+		decoy.ideal_yaw = vectoyaw (decoy.goalentity.origin - decoy.origin);
 		if (!decoy.movetarget)
 		{
 			dprint ("Monster can't find target at ");
-			dprint (vtos(decoy.origin));
+			dprint (vtos (decoy.origin));
 			dprint ("\n");
 		}
-// this used to be an objerror
+		// this used to be an objerror
 		if (decoy.movetarget.classname == "path_corner")
 			decoy.th_walk ();
 		else
 			decoy.pausetime = 99999999;
-			decoy.th_stand ();
+		decoy.th_stand ();
 	}
 	else
 	{
@@ -181,7 +181,7 @@ void(string targ, vector orig) become_decoy =
 		decoy.th_stand ();
 	}
 
-// spread think times so they don't all happen at same time
-	decoy.nextthink = decoy.nextthink + random()*0.5;
+	// spread think times so they don't all happen at same time
+	decoy.nextthink = decoy.nextthink + random () * 0.5;
 	self = temp;
 };

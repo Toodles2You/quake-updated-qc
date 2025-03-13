@@ -35,8 +35,8 @@ void() keytrigger_use =
 
 	self.attack_finished = time + 2;
 
-// FIXME: blink key on player's status bar
-	if ( (self.items & activator.items) != self.items )
+	// FIXME: blink key on player's status bar
+	if ((self.items & activator.items) != self.items)
 	{
 		if (self.message != "")
 		{
@@ -91,17 +91,18 @@ void() keytrigger_use =
 
 	sound (self, CHAN_VOICE, self.noise4, 1, ATTN_NORM);
 
-	SUB_UseTargets();
+	SUB_UseTargets ();
 };
 
 void() keytrigger_touch =
 {
 	activator = other;
-	keytrigger_use();
+	keytrigger_use ();
 };
 
 /*QUAKED trigger_usekey (0 .5 0) ? USE_GOLD_KEY
-Variable sized single use trigger that requires a key to trigger targets.  Must be targeted at one or more entities.
+Variable sized single use trigger that requires a key to trigger targets.  Must
+be targeted at one or more entities.
 
 "message" is printed when the trigger is touched without having the right key.
 */
@@ -151,9 +152,9 @@ void() remove_touch =
 		return;
 	other.touch = SUB_Null;
 	other.model = "";
-	remove(self);
-//	other.nextthink = time + 0.1;
-//	other.think = SUB_Remove;
+	remove (self);
+	//	other.nextthink = time + 0.1;
+	//	other.think = SUB_Remove;
 };
 
 /*QUAKED trigger_remove (.5 .5 .5) ? ignoremonsters ignoreplayers
@@ -163,7 +164,7 @@ players.
 */
 void() trigger_remove =
 {
-	self.cnt = FL_CLIENT|FL_MONSTER;
+	self.cnt = FL_CLIENT | FL_MONSTER;
 	if (self.spawnflags & 1)
 		self.cnt = self.cnt - FL_MONSTER;
 	if (self.spawnflags & 2)
@@ -217,8 +218,8 @@ void() trigger_setgravity =
 
 void() trigger_command_use =
 {
-	if ( self.message != "" )
-		localcmd( self.message );
+	if (self.message != "")
+		localcmd (self.message);
 };
 
 /*QUAKED trigger_command (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
@@ -241,7 +242,7 @@ void() trigger_decoy_touch =
 	self.touch = SUB_Null;
 	self.nextthink = time + 0.1;
 	self.think = SUB_Remove;
-	SUB_UseTargets();
+	SUB_UseTargets ();
 };
 
 /*QUAKED trigger_decoy_use (.5 .5 .5) ?
@@ -253,7 +254,7 @@ void() trigger_decoy_use =
 {
 	if (deathmatch)
 	{
-		remove(self);
+		remove (self);
 		return;
 	}
 	InitTrigger ();
@@ -269,8 +270,8 @@ void() trigger_waterfall_touch =
 	}
 
 	other.velocity = other.velocity + self.movedir;
-	other.velocity_x = other.velocity_x + self.count * ( random() - 0.5 );
-	other.velocity_y = other.velocity_y + self.count * ( random() - 0.5 );
+	other.velocity_x = other.velocity_x + self.count * (random () - 0.5);
+	other.velocity_y = other.velocity_y + self.count * (random () - 0.5);
 };
 
 /*QUAKED trigger_waterfall (.2 .5 .2) ?
@@ -285,12 +286,12 @@ void() trigger_waterfall =
 	InitTrigger ();
 	self.touch = trigger_waterfall_touch;
 
-	if ( self.count == 0 )
+	if (self.count == 0)
 	{
 		self.count = 100;
 	}
 
-	if ( self.speed == 0 )
+	if (self.speed == 0)
 	{
 		self.movedir = self.movedir * 50;
 	}

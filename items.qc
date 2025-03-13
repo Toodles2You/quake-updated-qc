@@ -195,8 +195,8 @@ void() health_touch =
 	// Megahealth = rot down the player's super health
 	if (self.healtype == 2)
 	{
-// 11/02/96 removed SUPERHEALTH from defs.qc
-//		other.items = other.items | IT_SUPERHEALTH;
+		// 11/02/96 removed SUPERHEALTH from defs.qc
+		//		other.items = other.items | IT_SUPERHEALTH;
 		self.nextthink = time + 5;
 		self.think = item_megahealth_rot;
 		self.owner = other;
@@ -228,8 +228,8 @@ void() item_megahealth_rot =
 
 	// it is possible for a player to die and respawn between rots, so don't
 	// just blindly subtract the flag off
-// MED 11/02/96 removed SUPERHEALTH
-//	other.items = other.items - (other.items & IT_SUPERHEALTH);
+	// MED 11/02/96 removed SUPERHEALTH
+	//	other.items = other.items - (other.items & IT_SUPERHEALTH);
 
 	if (deathmatch == 1)  // deathmatch 2 is silly old rules
 	{
@@ -360,7 +360,7 @@ void() bound_other_ammo =
 		other.ammo_cells = 100;
 };
 
-//MED 01/06/97 added hipnotic weapons into rankings
+// MED 01/06/97 added hipnotic weapons into rankings
 float(float w) RankForWeapon =
 {
 	if (w == IT_LIGHTNING)
@@ -481,28 +481,28 @@ void() weapon_touch =
 		new = IT_LIGHTNING;
 		other.ammo_cells = other.ammo_cells + 15;
 	}
-//MED
+	// MED
 	else if (self.classname == "weapon_laser_gun")
 	{
-		if (leave && (other.items & IT_LASER_CANNON) )
+		if (leave && (other.items & IT_LASER_CANNON))
 			return;
 		hadammo = other.ammo_rockets;
 		new = IT_LASER_CANNON;
 		other.ammo_cells = other.ammo_cells + 30;
 	}
-//MED
+	// MED
 	else if (self.classname == "weapon_mjolnir")
 	{
-		if (leave && (other.items & IT_MJOLNIR) )
+		if (leave && (other.items & IT_MJOLNIR))
 			return;
 		hadammo = other.ammo_rockets;
 		new = IT_MJOLNIR;
 		other.ammo_cells = other.ammo_cells + 30;
 	}
-//MED
+	// MED
 	else if (self.classname == "weapon_proximity_gun")
 	{
-		if (leave && (other.items & IT_PROXIMITY_GUN) )
+		if (leave && (other.items & IT_PROXIMITY_GUN))
 			return;
 		hadammo = other.ammo_rockets;
 		new = IT_PROXIMITY_GUN;

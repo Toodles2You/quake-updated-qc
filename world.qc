@@ -18,7 +18,7 @@
 */
 
 void() InitBodyQue;
-//JIM
+// JIM
 void() InitBulletHoles;
 
 void() main =
@@ -123,9 +123,9 @@ void() main =
 	precache_sound ("ambience/water1.wav");
 	precache_sound ("ambience/wind2.wav");
 
-//MED
-//Added Hipnotic Pack
-/*
+	// MED
+	// Added Hipnotic Pack
+	/*
 	// shareware
 	precache_file ("maps/start.bsp");
 
@@ -174,7 +174,7 @@ void() main =
 	precache_file2 ("maps/dm4.bsp");
 	precache_file2 ("maps/dm5.bsp");
 	precache_file2 ("maps/dm6.bsp");
-*/
+	*/
 	precache_file ("maps/start.bsp");
 
 	precache_file ("maps/hip1m1.bsp");
@@ -219,8 +219,8 @@ void() worldspawn =
 	lastspawn = world;
 	InitBodyQue ();
 
-//JIM
-	InitBulletHoles();
+	// JIM
+	InitBulletHoles ();
 
 	// custom map attributes
 	if (self.model == "maps/e1m8.bsp")
@@ -302,9 +302,9 @@ void() worldspawn =
 	precache_sound ("misc/water1.wav");  // swimming
 	precache_sound ("misc/water2.wav");  // swimming
 
-//MED 10/21/96 added flies sound
+	// MED 10/21/96 added flies sound
 	precache_sound ("misc/flys.wav");
-//MED 01/13/97 added explosion sounds
+	// MED 01/13/97 added explosion sounds
 	precache_sound ("misc/shortexp.wav");
 	precache_sound ("misc/longexpl.wav");
 	precache_sound ("misc/foot1.wav");
@@ -318,7 +318,7 @@ void() worldspawn =
 	precache_model ("progs/player.mdl");
 	precache_model ("progs/eyes.mdl");
 	precache_model ("progs/h_player.mdl");
-//MED 12/03/96 added player with hammer
+	// MED 12/03/96 added player with hammer
 	precache_model ("progs/playham.mdl");
 	precache_model ("progs/gib1.mdl");
 	precache_model ("progs/gib2.mdl");
@@ -334,7 +334,7 @@ void() worldspawn =
 	precache_model ("progs/v_shot2.mdl");
 	precache_model ("progs/v_nail2.mdl");
 	precache_model ("progs/v_rock2.mdl");
-//MED 10/31/96 added precache for hip view models
+	// MED 10/31/96 added precache for hip view models
 	precache_model ("progs/v_laserg.mdl");
 	precache_model ("progs/v_hammer.mdl");
 	precache_model ("progs/v_prox.mdl");
@@ -344,7 +344,7 @@ void() worldspawn =
 	precache_model ("progs/bolt2.mdl");     // for lightning gun
 	precache_model ("progs/bolt3.mdl");     // for boss shock
 	precache_model ("progs/lavaball.mdl");  // for testing
-//MED 10/18/96 added precache for laser cannon
+	// MED 10/18/96 added precache for laser cannon
 	precache_model ("progs/lasrspik.mdl");
 
 	precache_model ("progs/missile.mdl");
@@ -403,10 +403,10 @@ void() worldspawn =
 	// 63 testing
 	lightstyle (63, "a");
 
-//JIM
-	StopEarthQuake();
-//MED
-	if (cvar("crosshair") == 2)
+	// JIM
+	StopEarthQuake ();
+	// MED
+	if (cvar ("crosshair") == 2)
 		footsteps = 1;
 	else
 		footsteps = 0;
@@ -429,8 +429,7 @@ BODY QUE
 
 entity bodyque_head;
 
-void() bodyque =
-{
+void() bodyque{
 	// just here so spawn functions don't complain after the world
 	// creates bodyques
 };

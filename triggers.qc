@@ -79,7 +79,7 @@ void() multi_trigger =
 		self.nextthink = time + 0.1;
 		self.think = SUB_Remove;
 	}
-//MED 12/01/96 added cnt stuff
+	// MED 12/01/96 added cnt stuff
 	if (self.cnt > 0)
 	{
 		self.cnt = self.cnt - 1;
@@ -121,7 +121,7 @@ void() multi_touch =
 	multi_trigger ();
 };
 
-//MED 12/01/96 added count field
+// MED 12/01/96 added count field
 /*QUAKED trigger_multiple (.5 .5 .5) ? notouch
 Variable sized repeatable trigger.  Must be targeted at one or more entities. If
 "health" is set, the trigger must be killed to activate each time. If "delay" is
@@ -172,7 +172,7 @@ void() trigger_multiple =
 			self.touch = multi_touch;
 		}
 	}
-//MED 12/01/96 added cnt stuff
+	// MED 12/01/96 added cnt stuff
 	if (self.cnt == 0)
 		self.cnt = -1;
 };
@@ -351,8 +351,9 @@ void() tdeath_touch =
 	{
 		if (other.invincible_finished > time)
 			self.classname = "teledeath2";
-		if (self.owner.classname != "player")
-		{  // other monsters explode themselves
+		if (self.owner.classname !=
+			"player")
+			{  // other monsters explode themselves
 			T_Damage (self.owner, self, self, 50000);
 			return;
 		}
@@ -563,11 +564,11 @@ void() trigger_onlyregistered =
 
 //============================================================================
 
-//JIM
-void( entity ent, float amount ) hurt_setdamage =
+// JIM
+void(entity ent, float amount) hurt_setdamage =
 {
 	ent.dmg = amount;
-	if ( !amount )
+	if (!amount)
 	{
 		ent.solid = SOLID_NOT;
 	}
@@ -592,7 +593,7 @@ void() hurt_touch =
 		T_Damage (other, self, self, self.dmg);
 		self.think = hurt_on;
 		self.nextthink = time + 1;
-//MED 12/01/96 added count stuff
+		// MED 12/01/96 added count stuff
 		if (self.cnt > 0)
 		{
 			self.cnt = self.cnt - 1;
@@ -608,7 +609,7 @@ void() hurt_touch =
 	return;
 };
 
-//MED 12/01/96 added count field
+// MED 12/01/96 added count field
 /*QUAKED trigger_hurt (.5 .5 .5) ?
 Any object touching this will be hurt
 set dmg to damage amount
@@ -621,7 +622,7 @@ void() trigger_hurt =
 	self.touch = hurt_touch;
 	if (!self.dmg)
 		self.dmg = 5;
-//MED 12/01/96 added count stuff
+	// MED 12/01/96 added count stuff
 	if (self.cnt == 0)
 		self.cnt = -1;
 };
@@ -679,8 +680,8 @@ void() trigger_monsterjump_touch =
 	other.flags = other.flags - FL_ONGROUND;
 
 	other.velocity_z = self.height;
-//MED 12/01/96 added count stuff
-	if (self.cnt>0)
+	// MED 12/01/96 added count stuff
+	if (self.cnt > 0)
 	{
 		self.cnt = self.cnt - 1;
 		if (self.cnt == 0)
@@ -692,7 +693,7 @@ void() trigger_monsterjump_touch =
 	}
 };
 
-//MED 12/01/96 added count field
+// MED 12/01/96 added count field
 /*QUAKED trigger_monsterjump (.5 .5 .5) ?
 Walking monsters that touch this will jump in the direction of the trigger's
 angle "speed" default to 200, the speed thrown forward "height" default to 200,
@@ -706,7 +707,7 @@ void() trigger_monsterjump =
 		self.height = 200;
 	if (self.angles == '0 0 0')
 		self.angles = '0 360 0';
-//MED 12/01/96 added count stuff
+	// MED 12/01/96 added count stuff
 	if (self.cnt == 0)
 		self.cnt = -1;
 	InitTrigger ();

@@ -314,13 +314,13 @@ void() spikeshooter_use =
 	{
 		if (!(self.spawnflags & SPAWNFLAG_SILENT))
 			sound (self, CHAN_VOICE, "misc/spike.wav", 1, ATTN_NORM);
-		lavaball = spawn();
+		lavaball = spawn ();
 		lavaball.movetype = MOVETYPE_FLYMISSILE;
 		lavaball.solid = SOLID_BBOX;
 		lavaball.classname = "lavaball";
 		// set lavaball speed
 		lavaball.velocity = self.movedir * 300;
-		lavaball.angles = vectoangles(lavaball.velocity);
+		lavaball.angles = vectoangles (lavaball.velocity);
 		lavaball.owner = self;
 		lavaball.touch = T_MissileTouch;
 		setmodel (lavaball, "progs/lavarock.mdl");
@@ -334,9 +334,9 @@ void() spikeshooter_use =
 	{
 		if (!(self.spawnflags & SPAWNFLAG_SILENT))
 			sound (self, CHAN_VOICE, "weapons/sgun1.wav", 1, ATTN_NORM);
-		W_FireRocket();
+		W_FireRocket ();
 		newmis.velocity = self.movedir*1000;
-		newmis.angles = vectoangles(newmis.velocity);
+		newmis.angles = vectoangles (newmis.velocity);
 		setorigin (newmis, self.origin + self.movedir*8);
 	}
 	else

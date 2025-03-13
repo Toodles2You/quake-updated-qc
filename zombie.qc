@@ -62,8 +62,8 @@ $frame paine29 paine30
 $frame cruc_1 cruc_2 cruc_3 cruc_4 cruc_5 cruc_6
 
 float SPAWN_CRUCIFIED = 1;
-//HIPNOTIC
-float SPAWN_LYINGDOWN	= 4;
+// HIPNOTIC
+float SPAWN_LYINGDOWN = 4;
 
 //=============================================================================
 
@@ -532,16 +532,18 @@ void(entity attacker, float take) zombie_pain =
 		zombie_paind1 ();
 };
 
-//HIPNOTIC
-void() zombie_lay12   =[ $paine12,   zombie_paine13 ]
-	{self.th_pain = zombie_pain;};
+// HIPNOTIC
+void() zombie_lay12 = [$paine12, zombie_paine13]
+{
+	self.th_pain = zombie_pain;
+};
 
 void(entity attacker, float damage) zombie_rise =
 {
 	zombie_lay12 ();
 };
 
-void() zombie_lay   =[ $paine11,   zombie_lay ]
+void() zombie_lay = [$paine11, zombie_lay]
 {
 	self.th_stand = zombie_stand1;
 	self.th_pain = zombie_rise;
@@ -551,15 +553,16 @@ void() zombie_lay   =[ $paine11,   zombie_lay ]
 
 	if (FindTarget ())
 	{
-		zombie_lay12();
+		zombie_lay12 ();
 		return;
 	}
 };
 
-//HIPNOTIC
+// HIPNOTIC
 //============================================================================
 
-/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified ambush lying_down
+/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified ambush
+lying_down
 
 If crucified, stick the bounding box 12 pixels back into a wall to look right.
 If lying_down, the zombie will be lying down when spawned and will rise up
@@ -611,7 +614,7 @@ void() monster_zombie =
 	else
 		walkmonster_start ();
 
-	//HIPNOTIC
+	// HIPNOTIC
 	if (self.spawnflags & SPAWN_LYINGDOWN)
 	{
 		self.th_stand = zombie_lay;

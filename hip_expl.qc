@@ -37,13 +37,13 @@ void() exploder_fire =
 	SUB_UseTargets ();
 	self = temp;
 	other = self;
-	if (self.dmg<120)
+	if (self.dmg < 120)
 	{
-		sound (self , CHAN_AUTO, "misc/shortexp.wav", self.volume, self.speed);
+		sound (self, CHAN_AUTO, "misc/shortexp.wav", self.volume, self.speed);
 	}
 	else
 	{
-		sound (self , CHAN_AUTO, "misc/longexpl.wav", self.volume, self.speed);
+		sound (self, CHAN_AUTO, "misc/longexpl.wav", self.volume, self.speed);
 	}
 	T_RadiusDamage (self, self.owner, self.dmg, other);
 	if (self.spawnflags & USE_PARTICLES)
@@ -54,7 +54,7 @@ void() exploder_fire =
 		WriteCoord (MSG_BROADCAST, self.origin_y);
 		WriteCoord (MSG_BROADCAST, self.origin_z);
 	}
-	BecomeExplosion();
+	BecomeExplosion ();
 };
 
 void() exploder_use =
@@ -67,7 +67,7 @@ void() exploder_use =
 	}
 	else
 	{
-		exploder_fire();
+		exploder_fire ();
 	}
 };
 
@@ -85,19 +85,19 @@ void() func_exploder =
 	precache_sound ("misc/longexpl.wav");
 	self.classname = "exploder";
 	self.use = exploder_use;
-	if ( self.dmg == 0 )
+	if (self.dmg == 0)
 	{
 		self.dmg = 120;
 	}
-	if ( self.dmg < 0 )
+	if (self.dmg < 0)
 	{
 		self.dmg = 0;
 	}
-	if ( self.speed == 0 )
+	if (self.speed == 0)
 	{
 		self.speed = 1;
 	}
-	if ( self.volume == 0 )
+	if (self.volume == 0)
 	{
 		self.volume = 1.0;
 	}
@@ -121,16 +121,19 @@ void() multi_exploder_fire =
 	}
 	if (time > self.duration)
 	{
-		remove(self);
+		remove (self);
 		return;
 	}
-	expl = spawn();
+	expl = spawn ();
 	expl.owner = self.owner;
 	expl.dmg = self.dmg;
-	expl.origin_x = self.absmin_x + (random() * (self.absmax_x - self.absmin_x));
-	expl.origin_y = self.absmin_y + (random() * (self.absmax_y - self.absmin_y));
-	expl.origin_z = self.absmin_z + (random() * (self.absmax_z - self.absmin_z));
-	sound (expl , CHAN_VOICE, "misc/shortexp.wav", self.volume, self.speed);
+	expl.origin_x =
+		self.absmin_x + (random () * (self.absmax_x - self.absmin_x));
+	expl.origin_y =
+		self.absmin_y + (random () * (self.absmax_y - self.absmin_y));
+	expl.origin_z =
+		self.absmin_z + (random () * (self.absmax_z - self.absmin_z));
+	sound (expl, CHAN_VOICE, "misc/shortexp.wav", self.volume, self.speed);
 	T_RadiusDamage (expl, self.owner, self.dmg, other);
 	if (self.spawnflags & USE_PARTICLES)
 	{
@@ -142,16 +145,17 @@ void() multi_exploder_fire =
 	}
 	temp = self;
 	self = expl;
-	BecomeExplosion();
+	BecomeExplosion ();
 	self = temp;
 };
 
-void( vector loc, float rad, float damage, float dur, float pause, float vol) multi_explosion =
+void(vector loc, float rad, float damage, float dur, float pause, float vol)
+	multi_explosion =
 {
 	local entity temp;
 
 	temp = self;
-	self = spawn();
+	self = spawn ();
 	self.origin = loc;
 	self.dmg = damage;
 	self.duration = dur;
@@ -161,7 +165,7 @@ void( vector loc, float rad, float damage, float dur, float pause, float vol) mu
 	self.absmax = self.origin + (rad * '1 1 1');
 	self.think = multi_exploder_fire;
 	self.volume = vol;
-	multi_exploder_fire();
+	multi_exploder_fire ();
 	self = temp;
 };
 
@@ -176,7 +180,7 @@ void() multi_exploder_use =
 	else
 	{
 		self.think = multi_exploder_fire;
-		multi_exploder_fire();
+		multi_exploder_fire ();
 	}
 };
 
@@ -199,15 +203,15 @@ void() func_multi_exploder =
 	precache_sound ("misc/longexpl.wav");
 	self.classname = "exploder";
 	self.use = multi_exploder_use;
-	setmodel(self,self.model);
+	setmodel (self, self.model);
 	self.movetype = MOVETYPE_NONE;
 	self.modelindex = 0;
 	self.model = "";
-	if ( self.dmg == 0 )
+	if (self.dmg == 0)
 	{
 		self.dmg = 120;
 	}
-	if ( self.dmg < 0 )
+	if (self.dmg < 0)
 	{
 		self.dmg = 0;
 	}

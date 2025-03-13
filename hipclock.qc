@@ -38,17 +38,17 @@ void() clock_setpos =
 	pos = seconds / self.count;
 
 	// chop off non-fractional component
-	pos = pos - floor( pos );
+	pos = pos - floor (pos);
 
 	ang = 360 * pos;
-	if ( self.event != "" )
+	if (self.event != "")
 	{
-		if ( self.ltime > ang )
+		if (self.ltime > ang)
 		{
 			// past twelve
 			temp = self.target;
 			self.target = self.event;
-			SUB_UseTargets();
+			SUB_UseTargets ();
 			self.target = temp;
 		}
 	}
@@ -56,22 +56,22 @@ void() clock_setpos =
 	self.angles_x = ang * self.movedir_x;
 	self.angles_y = ang * self.movedir_y;
 	self.angles_z = ang * self.movedir_z;
-	RotateTargetsFinal();
+	RotateTargetsFinal ();
 
 	self.ltime = ang;
 };
 
 void() clock_think =
 {
-	clock_setpos();
+	clock_setpos ();
 	self.nextthink = time + 1;
 };
 
 void() clock_firstthink =
 {
-	LinkRotateTargets();
+	LinkRotateTargets ();
 	self.think = clock_think;
-	clock_think();
+	clock_think ();
 };
 
 /*QUAKED func_clock (0 0 0.5) (0 0 0) (32 32 32)
@@ -81,7 +81,8 @@ Set the angle to be the direction the clock is facing.
 
 "event" is the targetname of the entities to trigger when hand strikes 12.
 "cnt" is the time to start at.
-"count" is the # of seconds it takes to make a full revolution (seconds is 60, minutes 3600, hours 43200).  default is 60.
+"count" is the # of seconds it takes to make a full revolution (seconds is 60,
+minutes 3600, hours 43200).  default is 60.
 */
 
 void() func_clock =
@@ -92,15 +93,15 @@ void() func_clock =
 	self.think = clock_firstthink;
 	self.nextthink = time + 0.1;
 	self.ltime = time;
-	SetMovedir();
+	SetMovedir ();
 	temp = self.movedir;
 	self.movedir_x = 0 - temp_y;
 	self.movedir_y = 0 - temp_z;
 	self.movedir_z = 0 - temp_x;
 
-	if ( !self.count )
+	if (!self.count)
 	{
 		self.count = 60;
 	}
-	self.cnt = self.cnt * ( self.count / 12 );
+	self.cnt = self.cnt * (self.count / 12);
 };

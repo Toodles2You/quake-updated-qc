@@ -47,11 +47,11 @@ void() play_sound_use =
 void() PlaySoundThink =
 {
 	local float t;
-	t = self.wait * random();
+	t = self.wait * random ();
 	if (t < self.delay)
 		t = self.delay;
 	self.nextthink = time + t;
-	play_sound_use();
+	play_sound_use ();
 };
 
 /*QUAKED play_sound_triggered (0.3 0.1 0.6) (-8 -8 -8) (8 8 8) toggle
@@ -62,9 +62,9 @@ play a sound when it is used
 "impulse" channel on which to play sound (0-7) (0 automatic is default)
 "speed" attenuation factor
    -1 - no attenuation
-    1 - normal
-    2 - idle
-    3 - static
+	1 - normal
+	2 - idle
+	3 - static
 */
 void() play_sound_triggered =
 {
@@ -91,21 +91,21 @@ play a sound on a periodic basis
 "impulse" channel on which to play sound (0-7) (0 automatic is default)
 "speed" attenuation factor
    -1 - no attenuation
-    1 - normal
-    2 - idle
-    3 - static
+	1 - normal
+	2 - idle
+	3 - static
 */
 void() play_sound =
 {
 	local float t;
 
-	play_sound_triggered();
+	play_sound_triggered ();
 	if (self.wait == 0)
 		self.wait = 20;
 	if (self.delay == 0)
 		self.delay = 2;
 	self.think = PlaySoundThink;
-	t = self.wait * random();
+	t = self.wait * random ();
 	if (t < self.delay)
 		t = self.delay;
 	self.nextthink = time + t;
@@ -117,14 +117,14 @@ void() play_sound =
 "volume" how loud (1 default full volume)
 "speed" attenuation factor
    -1 - no attenuation
-    1 - normal
-    2 - idle
-    3 - static
+	1 - normal
+	2 - idle
+	3 - static
 */
 void() random_thunder =
 {
 	self.noise = "ambience/thunder1.wav";
-	play_sound();
+	play_sound ();
 	self.impulse = 6;
 };
 
@@ -133,14 +133,14 @@ void() random_thunder =
 "volume" how loud (1 default full volume)
 "speed" attenuation factor
    -1 - no attenuation
-    1 - normal
-    2 - idle
-    3 - static
+	1 - normal
+	2 - idle
+	3 - static
 */
 void() random_thunder_triggered =
 {
 	self.noise = "ambience/thunder1.wav";
-	play_sound_triggered();
+	play_sound_triggered ();
 	self.impulse = 6;
 };
 
@@ -149,7 +149,7 @@ void() random_thunder_triggered =
 */
 void() ambient_humming =
 {
-	if (self.volume==0)
+	if (self.volume == 0)
 		self.volume = 0.5;
 	precache_sound ("ambient/humming.wav");
 	ambientsound (self.origin, "ambient/humming.wav", self.volume, ATTN_STATIC);
@@ -160,7 +160,7 @@ void() ambient_humming =
 */
 void() ambient_rushing =
 {
-	if (self.volume==0)
+	if (self.volume == 0)
 		self.volume = 0.5;
 	precache_sound ("ambient/rushing.wav");
 	ambientsound (self.origin, "ambient/rushing.wav", self.volume, ATTN_STATIC);
@@ -171,7 +171,7 @@ void() ambient_rushing =
 */
 void() ambient_running_water =
 {
-	if (self.volume==0)
+	if (self.volume == 0)
 		self.volume = 0.5;
 	precache_sound ("ambient/runwater.wav");
 	ambientsound (self.origin, "ambient/runwater.wav", self.volume, ATTN_STATIC);
@@ -182,7 +182,7 @@ void() ambient_running_water =
 */
 void() ambient_fan_blowing =
 {
-	if (self.volume==0)
+	if (self.volume == 0)
 		self.volume = 0.5;
 	precache_sound ("ambient/fanblow.wav");
 	ambientsound (self.origin, "ambient/fanblow.wav", self.volume, ATTN_STATIC);
@@ -193,7 +193,7 @@ void() ambient_fan_blowing =
 */
 void() ambient_waterfall =
 {
-	if (self.volume==0)
+	if (self.volume == 0)
 		self.volume = 0.5;
 	precache_sound ("ambient/waterfal.wav");
 	ambientsound (self.origin, "ambient/waterfal.wav", self.volume, ATTN_STATIC);
@@ -204,12 +204,11 @@ void() ambient_waterfall =
 */
 void() ambient_riftpower =
 {
-	if (self.volume==0)
+	if (self.volume == 0)
 		self.volume = 0.5;
 	precache_sound ("ambient/riftpowr.wav");
 	ambientsound (self.origin, "ambient/riftpowr.wav", self.volume, ATTN_STATIC);
 };
-
 
 /*QUAKED info_command (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
  Stuffs a command into the console to allow map designers
@@ -220,8 +219,8 @@ void() ambient_riftpower =
 
 void() info_command =
 {
-	if ( self.message != "" )
-		localcmd( self.message );
+	if (self.message != "")
+		localcmd (self.message);
 };
 
 void() effect_teleport_use =
@@ -241,10 +240,9 @@ void() effect_teleport_use =
 
 void() effect_teleport =
 {
-	precache_sound("misc/r_tele1.wav");
+	precache_sound ("misc/r_tele1.wav");
 	self.use = effect_teleport_use;
 };
-
 
 /*
 =============
@@ -254,30 +252,31 @@ camera think function
 ==============
 */
 /*
-void() camerathink =
+void() camerathink
 {
-	local entity   pl;
-	local vector   d_diff;
-	local vector   a_diff;
-	local vector   p;
-	local vector   a;
-	local float    dist;
-	local float    timeelapsed;
+		local entity   pl;
+		local vector   d_diff;
+		local vector   a_diff;
+		local vector   p;
+		local vector   a;
+		local float    dist;
+		local float    timeelapsed;
 
-	timeelapsed = (time - self.cnt) * self.duration;
-	if ( timeelapsed > 1 )
-		timeelapsed = 1;
+		timeelapsed = (time - self.cnt) * self.duration;
+		if ( timeelapsed > 1 )
+				timeelapsed = 1;
 
-	p = self.oldorigin + (timeelapsed * (self.movetarget.origin - self.oldorigin));
-	d_diff = p - self.origin;
+		p = self.oldorigin + (timeelapsed * (self.movetarget.origin -
+self.oldorigin)); d_diff = p - self.origin;
 
-	a = self.mangle + (timeelapsed * (self.movetarget.mangle - self.mangle));
-	a_diff = a - self.angles;
+		a = self.mangle + (timeelapsed * (self.movetarget.mangle -
+self.mangle)); a_diff = a - self.angles;
 
-	self.origin = self.origin + self.pos1 + (1.0 * d_diff);
-	self.angles = self.v_angle = self.angles + self.avelocity + (1.0 * a_diff);
+		self.origin = self.origin + self.pos1 + (1.0 * d_diff);
+		self.angles = self.v_angle = self.angles + self.avelocity + (1.0 *
+a_diff);
 
-	self.nextthink = time + 0.1;
+		self.nextthink = time + 0.1;
 };
 */
 /*
@@ -288,45 +287,45 @@ camera chase function
 ==============
 */
 /*
-void() camerachase =
+void() camerachase
 {
-	local float    timeelapsed;
-	local vector v;
-	local vector a;
+		local float    timeelapsed;
+		local vector v;
+		local vector a;
 
 
-	timeelapsed = time - self.cnt;
-	if ( timeelapsed > 1 )
-		timeelapsed = 1;
-	self.cnt = time;
-
-	self.velocity = (self.movetarget.origin - self.oldorigin)*(1/timeelapsed);
-	self.oldorigin = self.movetarget.origin;
-	if (self.state == 0) // setup
-		{
-		self.velocity = '0 0 0';
+		timeelapsed = time - self.cnt;
+		if ( timeelapsed > 1 )
+				timeelapsed = 1;
 		self.cnt = time;
-		}
-	// calculate new camera position
-	a = '0 0 0';
-	a_y = vectoyaw( normalize( self.movetarget.origin - self.movetarget.movetarget.origin) );
-	makevectors(a);
-	self.origin = self.movetarget.origin + v_forward * self.distance;
-	self.origin_z = self.origin_z + self.height;
 
-	v = normalize( self.movetarget.origin - self.origin );
-	a = self.angles;
-	a_y = vectoyaw(v);
-	v_x = v_y;
-	v_y = 0 - v_z;
-	a_x = vectoyaw(v);
-	self.angles = a;
-//	SetViewPoint(self, self);
-//	UpdateCamera(self, self);
-	SetViewAngle(self, a);
+		self.velocity = (self.movetarget.origin -
+self.oldorigin)*(1/timeelapsed); self.oldorigin = self.movetarget.origin; if
+(self.state == 0) // setup
+				{
+				self.velocity = '0 0 0';
+				self.cnt = time;
+				}
+		// calculate new camera position
+		a = '0 0 0';
+		a_y = vectoyaw ( normalize ( self.movetarget.origin -
+self.movetarget.movetarget.origin) ); makevectors (a); self.origin =
+self.movetarget.origin + v_forward * self.distance; self.origin_z =
+self.origin_z + self.height;
 
-	self.think = camerachase;
-	self.nextthink = time + 0.1;
+		v = normalize ( self.movetarget.origin - self.origin );
+		a = self.angles;
+		a_y = vectoyaw (v);
+		v_x = v_y;
+		v_y = 0 - v_z;
+		a_x = vectoyaw (v);
+		self.angles = a;
+//	SetViewPoint (self, self);
+//	UpdateCamera (self, self);
+		SetViewAngle (self, a);
+
+		self.think = camerachase;
+		self.nextthink = time + 0.1;
 };
 */
 
@@ -338,22 +337,22 @@ camera follow function
 ==============
 */
 /*
-void() camerafollow =
+void() camerafollow
 {
-	local vector v;
-	local vector a;
+		local vector v;
+		local vector a;
 
-	v = normalize( self.movetarget.origin - self.origin );
-	a = self.angles;
-	a_y = vectoyaw(v);
-	v_x = v_y;
-	v_y = 0 - v_z;
-	a_x = vectoyaw(v);
-	self.angles = a;
-	SetViewAngle(self, a);
+		v = normalize ( self.movetarget.origin - self.origin );
+		a = self.angles;
+		a_y = vectoyaw (v);
+		v_x = v_y;
+		v_y = 0 - v_z;
+		a_x = vectoyaw (v);
+		self.angles = a;
+		SetViewAngle (self, a);
 
-	self.think = camerafollow;
-	self.nextthink = time + 0.01;
+		self.think = camerafollow;
+		self.nextthink = time + 0.01;
 };
 */
 /*
@@ -364,46 +363,46 @@ a camera has reached a path trigger
 ==============
 */
 /*
-void() t_cameratarget =
+void() t_cameratarget
 {
 local entity	temp;
 
-	if (other.movetarget != self)
-		return;
+		if (other.movetarget != self)
+				return;
 
-	temp = self;
-	self = other;
-	other = temp;
+		temp = self;
+		self = other;
+		other = temp;
 
-	self.angles = self.movetarget.mangle;
-	self.movetarget = find (world, targetname, other.target);
-	if (!self.movetarget)
-	{
-		self.nextthink = time + 999999;
-	}
-	else
-	{
-		local vector   d_diff;
-		local vector   a_diff;
-		local float    t;
-
-		self.think = camerathink;
-		self.duration = 1 / other.duration;
-		self.cnt = time;
-
-		self.oldorigin = self.origin;
-		d_diff = self.movetarget.origin - self.oldorigin;
-		self.pos1 = d_diff*self.duration;
-
-		self.mangles = self.angles;
-		a_diff = self.movetarget.mangle - self.mangle;
-		self.avelocity = a_diff*self.duration;
-		if (other.delay)
+		self.angles = self.movetarget.mangle;
+		self.movetarget = find (world, targetname, other.target);
+		if (!self.movetarget)
 		{
-			self.nextthink = time + other.delay;
-			self.cnt = time + other.delay;
+				self.nextthink = time + 999999;
 		}
-	}
+		else
+		{
+				local vector   d_diff;
+				local vector   a_diff;
+				local float    t;
+
+				self.think = camerathink;
+				self.duration = 1 / other.duration;
+				self.cnt = time;
+
+				self.oldorigin = self.origin;
+				d_diff = self.movetarget.origin - self.oldorigin;
+				self.pos1 = d_diff*self.duration;
+
+				self.mangles = self.angles;
+				a_diff = self.movetarget.mangle - self.mangle;
+				self.avelocity = a_diff*self.duration;
+				if (other.delay)
+				{
+						self.nextthink = time + other.delay;
+						self.cnt = time + other.delay;
+				}
+		}
 };
 */
 
@@ -412,54 +411,52 @@ path for a camera
 "delay" delay to wait before proceeding to next segment;
 "mangle" position the camera should be when it gets here
 "duration" how long it should take to cover the distance
-           (default 10 seconds)
+		   (default 10 seconds)
 */
 /*
-void() path_camera =
+void() path_camera
 {
-	self.solid = SOLID_TRIGGER;
-	self.touch = t_cameratarget;
-	if (!self.duration)
-		self.duration = 10;
-	setsize (self, '-8 -8 -8', '8 8 8');
+		self.solid = SOLID_TRIGGER;
+		self.touch = t_cameratarget;
+		if (!self.duration)
+				self.duration = 10;
+		setsize (self, '-8 -8 -8', '8 8 8');
 };
 */
-float SVC_UPDATEENTITY = 128; // Net.Protocol 0x80
+float SVC_UPDATEENTITY = 128;  // Net.Protocol 0x80
 void(entity me, entity camera) UpdateCamera =
 {
-	msg_entity = me;                         // target of message
-	WriteByte (MSG_ONE, SVC_UPDATEENTITY|15); // 0x80|1|2|4|8
-	WriteByte (MSG_ONE, 64); // 0x40
-	WriteEntity(MSG_ONE,camera);
-	WriteCoord(MSG_ONE,camera.origin_x);
-	WriteCoord(MSG_ONE,camera.origin_y);
-	WriteCoord(MSG_ONE,camera.origin_z);
+	msg_entity = me;                            // target of message
+	WriteByte (MSG_ONE, SVC_UPDATEENTITY | 15);  // 0x80|1|2|4|8
+	WriteByte (MSG_ONE, 64);                     // 0x40
+	WriteEntity (MSG_ONE, camera);
+	WriteCoord (MSG_ONE, camera.origin_x);
+	WriteCoord (MSG_ONE, camera.origin_y);
+	WriteCoord (MSG_ONE, camera.origin_z);
 };
 
-
-//void() effect_finale_think =
+// void() effect_finale_think =
 //{
 //	self.flags = self.flags - (self.flags & FL_ONGROUND);
 //	self.angles = self.mangle;
 //	self.v_angle = self.mangle;
 //	self.fixangle = TRUE;
-//	NezuUpdateCamera(self,self.trigger_field);
-//	NezuSetViewPoint(self,self.trigger_field);
-//	NezuSetViewAngle(self,self.mangle);
+//	NezuUpdateCamera (self,self.trigger_field);
+//	NezuSetViewPoint (self,self.trigger_field);
+//	NezuSetViewAngle (self,self.mangle);
 //	self.think = effect_finale_think;
 //	self.nextthink = time + 0.05;
-//};
-
+// };
 
 void() effect_finale_use =
 {
-	local entity   pos, pl, targ;
+	local entity pos, pl, targ;
 
 	if (self.state == 1)
 		return;
 
-//	intermission_exittime = time + 10000000;  // never allow exit
-//	intermission_running = 1;
+	//	intermission_exittime = time + 10000000;  // never allow exit
+	//	intermission_running = 1;
 	self.state = 1;
 
 	// find the intermission spot
@@ -467,23 +464,23 @@ void() effect_finale_use =
 	if (!pos)
 		error ("no target in finale");
 
-//	WriteByte (MSG_ALL, SVC_FINALE);
+	//	WriteByte (MSG_ALL, SVC_FINALE);
 	WriteByte (MSG_ALL, SVC_CUTSCENE);
 	WriteString (MSG_ALL, "");
 
-	//setup decoy
+	// setup decoy
 	if (!(self.spawnflags & 2))
 	{
 		if (self.spawnflags & 1)
 		{
 			pl = find (world, classname, "player");
 			targ = find (world, targetname, self.mdl);
-			become_decoy( targ.target, pl.origin );
+			become_decoy (targ.target, pl.origin);
 		}
 		else
 		{
 			targ = find (world, targetname, self.mdl);
-			become_decoy( targ.target, targ.origin );
+			become_decoy (targ.target, targ.origin);
 		}
 	}
 
@@ -493,7 +490,7 @@ void() effect_finale_use =
 		pl.view_ofs = '0 0 0';
 		pl.angles = other.v_angle = pos.mangle;
 		pl.mangle = pos.mangle;
-		pl.fixangle = TRUE;     // turn this way immediately
+		pl.fixangle = TRUE;  // turn this way immediately
 		pl.trigger_field = self;
 		pl.nextthink = time + 0.5;
 		pl.takedamage = DAMAGE_NO;
@@ -503,8 +500,8 @@ void() effect_finale_use =
 		setorigin (pl, pos.origin);
 		pl.origin = pos.origin;
 		pl.oldorigin = pos.origin;
-		UpdateCamera(pl,pl);
-		UpdateCamera(pl,pl.trigger_field);
+		UpdateCamera (pl, pl);
+		UpdateCamera (pl, pl.trigger_field);
 		pl = find (pl, classname, "player");
 	}
 
@@ -514,16 +511,16 @@ void() effect_finale_use =
 		self.nextthink = time + self.wait;
 		self.think = self.spawnfunction;
 	}
-//	intermission_running = 0;
+	//	intermission_running = 0;
 };
 /*
  "count" 0 - static camera
-       1 - path camera
-       2 - chase camera
+	   1 - path camera
+	   2 - chase camera
  "distance" distance from chase guy
-         (default 100)
+		 (default 100)
  "height" height distance from chase guy
-         (default 64)
+		 (default 64)
 */
 
 /*QUAKED effect_finale (0.3 0.1 0.6) (-8 -8 -8) (8 8 8) useplayer nodecoy
@@ -537,7 +534,7 @@ void() effect_finale_use =
  "spawnfunction" next routine to run
  "delay" time to wait until running routine
  useplayer - use the current player as
-             decoy location.
+			 decoy location.
  nodecoy - no decoy, only the camera
 */
 
@@ -545,22 +542,22 @@ void() effect_finale =
 {
 	if (deathmatch)
 	{
-		remove(self);
+		remove (self);
 		return;
 	}
-	setorigin(self,self.origin);
+	setorigin (self, self.origin);
 	self.angles = self.mangle;
 	self.use = effect_finale_use;
-//	setsize(self,'-16 -16 -16','16 16 16');
-//	self.touch = effect_finale_use;
-//	InitTrigger ();
+	//	setsize (self,'-16 -16 -16','16 16 16');
+	//	self.touch = effect_finale_use;
+	//	InitTrigger ();
 	self.state = 0;
 };
 
 void() info_startendtext_use =
 {
 	intermission_running = 1;
-	ExitIntermission();
+	ExitIntermission ();
 };
 
 /*QUAKED info_startendtext (0.3 0.1 0.6) (-8 -8 -8) (8 8 8)

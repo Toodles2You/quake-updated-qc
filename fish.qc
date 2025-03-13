@@ -130,8 +130,8 @@ void() f_death1 = [$death1, f_death2]
 void() f_death2 = [$death2, f_death3] {};
 void() f_death3 = [$death3, f_death4] {};
 void() f_death4 = [$death4, f_death5] {};
-//MED 01/15/97 moved solid to here
-void() f_death5 = [$death5, f_death6] {self.solid = SOLID_NOT;};
+// MED 01/15/97 moved solid to here
+void() f_death5 = [$death5, f_death6] { self.solid = SOLID_NOT; };
 void() f_death6 = [$death6, f_death7] {};
 void() f_death7 = [$death7, f_death8] {};
 void() f_death8 = [$death8, f_death9] {};
@@ -147,14 +147,14 @@ void() f_death17 = [$death17, f_death18] {};
 void() f_death18 = [$death18, f_death19] {};
 void() f_death19 = [$death19, f_death20] {};
 void() f_death20 = [$death20, f_death21] {};
-//MED 01/15/97 removed solid from here
-//void() f_death21 = [$death21, f_death21] { self.solid = SOLID_NOT; };
+// MED 01/15/97 removed solid from here
+// void() f_death21 = [$death21, f_death21] { self.solid = SOLID_NOT; };
 void() f_death21 = [$death21, f_death21] {};
 
-//MED 01/15/97 added fish_die
+// MED 01/15/97 added fish_die
 void() fish_die =
 {
-// check for gib
+	// check for gib
 	if (self.health < -20)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -162,11 +162,11 @@ void() fish_die =
 		ThrowGib ("progs/gib2.mdl", self.health);
 		ThrowGib ("progs/gib3.mdl", self.health);
 		self.think = SUB_Remove;
-		self.nextthink= time + 0.1;
+		self.nextthink = time + 0.1;
 		return;
 	}
 
-// regular death
+	// regular death
 	f_death1 ();
 };
 
@@ -212,8 +212,8 @@ void() monster_fish =
 	self.th_stand = f_stand1;
 	self.th_walk = f_walk1;
 	self.th_run = f_run1;
-//MED 01/15/97 added fish death
-//	self.th_die = f_death1;
+	// MED 01/15/97 added fish death
+	//	self.th_die = f_death1;
 	self.th_die = fish_die;
 	self.th_pain = fish_pain;
 	self.th_melee = f_attack1;

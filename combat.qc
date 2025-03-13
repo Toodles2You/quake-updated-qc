@@ -77,15 +77,15 @@ void(entity targ, entity attacker) Killed =
 
 	oself = self;
 	self = targ;
-	
+
 	if (self.health < -99)
-		self.health = -99;		// don't let sbar look bad if a player
-//MED
+		self.health = -99;  // don't let sbar look bad if a player
+							// MED
 	if (self.charmed)
 	{
 		self.effects = self.effects - (self.effects & EF_DIMLIGHT);
 	}
-//		self.effects = self.effects - EF_BRIGHTFIELD;
+	//		self.effects = self.effects - EF_BRIGHTFIELD;
 
 	if (self.health < -99)
 		self.health = -99;  // don't let sbar look bad if a player
@@ -126,7 +126,7 @@ The damage is coming from inflictor, but get mad at attacker
 This should be the only function that ever reduces health.
 ============
 */
-//MED 01/10/97 added empathyused variable
+// MED 01/10/97 added empathyused variable
 float empathyused;
 void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 {
@@ -138,37 +138,38 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	if (!targ.takedamage)
 		return;
 
-	if (discharged && targ.wetsuit_finished )
+	if (discharged && targ.wetsuit_finished)
 		return;
-//MED moved damage_attacker down a bit
-/*
-	dprint("netname = ");
-	dprint(attacker.netname);
-	dprint(" classname = ");
-	dprint(attacker.classname);
-	dprint(" classname = ");
-	dprint(inflictor.classname);
-	dprint("\n");
-*/
+	// MED moved damage_attacker down a bit
+	/*
+			dprint ("netname = ");
+			dprint (attacker.netname);
+			dprint (" classname = ");
+			dprint (attacker.classname);
+			dprint (" classname = ");
+			dprint (inflictor.classname);
+			dprint ("\n");
+	*/
 	// check for quad damage powerup on the attacker
 	if (attacker.super_damage_finished > time)
 		damage = damage * 4;
 
-//MED
-//check for empathy shields
-	if ((targ.items2 & HIP_IT_EMPATHY_SHIELDS) && !(inflictor.items2 & HIP_IT_EMPATHY_SHIELDS) && (targ != attacker))
-	{
+	// MED
+	// check for empathy shields
+	if ((targ.items2 & HIP_IT_EMPATHY_SHIELDS) &&
+		!(inflictor.items2 & HIP_IT_EMPATHY_SHIELDS) && (targ != attacker))
+		{
 		empathyused = 1;
-		damage = damage/2;
-		T_Damage (attacker,targ,targ,damage);
+		damage = damage / 2;
+		T_Damage (attacker, targ, targ, damage);
 		empathyused = 0;
 	}
-//MED
-	// used by buttons and triggers to set activator for target firing
+	// MED
+	//  used by buttons and triggers to set activator for target firing
 	damage_attacker = attacker;
 
-//MED
-// used to keep track of what hit us
+	// MED
+	//  used to keep track of what hit us
 	damage_inflictor = inflictor;
 
 	// save damage based on the target's armor level
@@ -215,7 +216,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		}
 		return;
 	}
-//MED
+	// MED
 	if (targ.items2 & HIP_IT_EMPATHY_SHIELDS)
 	{
 		if (self.empathy_sound < time)
@@ -242,15 +243,17 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	oldself = self;
 	self = targ;
 
-//MED 10/17/96 added charmed stuff
+	// MED 10/17/96 added charmed stuff
 	if ((self.flags & FL_MONSTER) && attacker != world)
 	{
 		// get mad unless of the same class (except for soldiers)
-		if (self != attacker && attacker != self.enemy && (self.charmer!=attacker))
+		if (self != attacker && attacker != self.enemy &&
+			(self.charmer != attacker))
 		{
 			if ((self.classname != attacker.classname) ||
-				(self.classname == "monster_army") || (self.classname == "monster_armagon" ) )
-				{
+				(self.classname == "monster_army") ||
+				(self.classname == "monster_armagon"))
+			{
 				if (self.enemy.classname == "player")
 					self.oldenemy = self.enemy;
 				self.enemy = attacker;

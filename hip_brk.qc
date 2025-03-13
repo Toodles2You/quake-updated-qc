@@ -31,15 +31,15 @@ void() damagethreshold_killed =
 {
 	self.health = self.max_health;
 
-//	self.solid = SOLID_NOT;
+	//	self.solid = SOLID_NOT;
 	activator = damage_attacker;
 	self.takedamage = DAMAGE_NO;
 	SUB_UseTargets ();
 	self.takedamage = DAMAGE_YES;
 
-	if ( !( self.spawnflags & MULTI_USE ) )
+	if (!(self.spawnflags & MULTI_USE))
 	{
-		remove( self );
+		remove (self);
 	}
 };
 
@@ -64,7 +64,6 @@ Default is 60.
 */
 
 void() trigger_damagethreshold =
-
 {
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
@@ -74,8 +73,8 @@ void() trigger_damagethreshold =
 	self.movetype = MOVETYPE_PUSH;
 	setorigin (self, self.origin);
 	setmodel (self, self.model);
-	setsize (self, self.mins , self.maxs);
-	if ( self.spawnflags & INVISIBLE )
+	setsize (self, self.mins, self.maxs);
+	if (self.spawnflags & INVISIBLE)
 	{
 		self.model = string_null;
 	}
@@ -89,7 +88,7 @@ void() trigger_damagethreshold =
 
 	self.blocked = SUB_Null;
 	self.th_pain = damagethreshold_pain;
-	self.th_die  = damagethreshold_killed;
+	self.th_die = damagethreshold_killed;
 };
 
 /*QUAKED func_breakawaywall (0 .5 .8) ?
@@ -106,6 +105,6 @@ void() func_breakawaywall =
 	self.movetype = MOVETYPE_PUSH;
 	setorigin (self, self.origin);
 	setmodel (self, self.model);
-	setsize (self, self.mins , self.maxs);
+	setsize (self, self.mins, self.maxs);
 	self.use = SUB_Remove;
 };
