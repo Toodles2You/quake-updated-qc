@@ -595,6 +595,7 @@ void() monster_hell_knight =
 			dprint (" at ");
 			dprint (vtos (self.origin));
 			dprint ("\n");
+			return;
 		}
 
 		self.use = hknight_pause;

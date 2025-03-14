@@ -357,6 +357,7 @@ void() monster_knight =
 			dprint (" at ");
 			dprint (vtos (self.origin));
 			dprint ("\n");
+			return;
 		}
 
 		self.use = knight_pause;
