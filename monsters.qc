@@ -74,8 +74,8 @@ void() monster_start_spread =
 	// spread think times so they don't all happen at same time
 	self.nextthink = self.nextthink + random () * 0.5;
 
-	if (self.nextthink <= time)
-		self.think ();
+	if (self.nextthink < time + 0.1)
+		self.nextthink = time + 0.1;
 };
 
 void() monster_start_moving =
