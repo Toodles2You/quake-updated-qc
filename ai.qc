@@ -23,6 +23,8 @@ void() knight_bow6;
 void() knight_bow1;
 void(entity etemp, entity stemp, entity stemp, float dmg) T_Damage;
 
+float MONSTER_AMBUSH = 1;
+
 /*
 .enemy
 Will be world if not currently angry at anyone.
@@ -248,10 +250,7 @@ float() FindTarget =
 	// if the first spawnflag bit is set, the monster will only wake up on
 	// really seeing the player, not another monster getting angry
 
-	// spawnflags & 3 is a big hack, because zombie crucified used the first
-	// spawn flag prior to the ambush flag, and I forgot about it, so the second
-	// spawn flag works as well
-	if (sight_entity_time >= time - 0.1 && !(self.spawnflags & 3))
+	if (sight_entity_time >= time - 0.1 && !(self.spawnflags & MONSTER_AMBUSH))
 	{
 		client = sight_entity;
 		if (client.enemy == self.enemy)

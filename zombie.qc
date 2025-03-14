@@ -55,7 +55,8 @@ $frame paine29 paine30
 
 $frame cruc_1 cruc_2 cruc_3 cruc_4 cruc_5 cruc_6
 
-float SPAWN_CRUCIFIED = 1;
+float ZOMBIE_CRUCIFIED = 1;
+float ZOMBIE_AMBUSH = 2;
 
 .float inpain;
 
@@ -540,11 +541,19 @@ void() monster_zombie =
 	self.th_missile = zombie_missile;
 	self.th_sight = zombie_sight;
 
-	if (self.spawnflags & SPAWN_CRUCIFIED)
+	if (self.spawnflags & ZOMBIE_CRUCIFIED)
 	{
+		self.spawnflags = self.spawnflags - ZOMBIE_CRUCIFIED;
 		self.movetype = MOVETYPE_NONE;
 		zombie_cruc1 ();
 	}
 	else
+	{
+		// spawnflags & 3 is a big hack, because zombie crucified used the first
+		// spawn flag prior to the ambush flag, and I forgot about it, so the
+		// second spawn flag works as well
+		if (self.spawnflags & ZOMBIE_AMBUSH)
+			self.spawnflags = self.spawnflags - ZOMBIE_AMBUSH + MONSTER_AMBUSH;
 		walkmonster_start ();
+	}
 };
