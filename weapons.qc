@@ -47,6 +47,7 @@ float() crandom =
 void() W_FireAxe =
 {
 	local vector source;
+	local entity hit;
 	local vector org;
 
 	makevectors (self.v_angle);
@@ -55,13 +56,15 @@ void() W_FireAxe =
 	if (trace_fraction == 1.0)
 		return;
 
+	hit = trace_ent;
 	org = trace_endpos - v_forward * 4;
 
-	if (SUB_ShouldBleed (trace_ent))
+	if (SUB_ShouldBleed (hit))
 	{
-		trace_ent.axhitme = 1;
+		hit.axhitme = TRUE;
 		SpawnBlood (org, '0 0 0', 20);
-		T_Damage (trace_ent, self, self, 20);
+		T_Damage (hit, self, self, 20);
+		hit.axhitme = FALSE;
 	}
 	else
 	{ // hit wall

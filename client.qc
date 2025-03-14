@@ -351,12 +351,11 @@ void() respawn =
 
 void() ClientKill =
 {
-	bprint (self.netname);
-	bprint (" suicides\n");
-	set_suicide_frame ();
-	self.modelindex = modelindex_player;
-	self.frags = self.frags - 2;
-	respawn ();
+	self.deathtype = "suicide";
+	Killed (self, self);
+	self.deathtype = "";
+	if (coop || deathmatch)
+		respawn ();
 };
 
 float(vector v) CheckSpawnPoint =
@@ -981,9 +980,10 @@ void() PlayerPostThink =
 			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
 		else if (self.jump_flag < -650)
 		{
-			T_Damage (self, world, world, 5);
-			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
 			self.deathtype = "falling";
+			T_Damage (self, world, world, 5);
+			self.deathtype = "";
+			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
 		}
 		else
 			sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
@@ -1058,12 +1058,14 @@ void(entity targ, entity attacker) ClientObituary =
 				attacker.frags = attacker.frags - 1;
 				bprint (targ.netname);
 
-				if (targ.weapon == IT_LIGHTNING && targ.waterlevel > 1)
+				if (targ.deathtype == "suicide")
 				{
-					bprint (" discharges into the water.\n");
-					return;
+					targ.frags = targ.frags - 1;
+					bprint (" suicides\n");
 				}
-				if (targ.weapon == IT_GRENADE_LAUNCHER)
+				else if (targ.weapon == IT_LIGHTNING && targ.waterlevel > 1)
+					bprint (" discharges into the water.\n");
+				else if (targ.weapon == IT_GRENADE_LAUNCHER)
 					bprint (" tries to put the pin back in\n");
 				else if (rnum > 0.4)
 					bprint (" becomes bored with life\n");
@@ -1249,10 +1251,8 @@ void(entity targ, entity attacker) ClientObituary =
 				return;
 			}
 
-			// fell to their death?
 			if (targ.deathtype == "falling")
 			{
-				targ.deathtype = "";
 				bprint (" fell to his death\n");
 				return;
 			}

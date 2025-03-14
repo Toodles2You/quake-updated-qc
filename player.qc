@@ -253,9 +253,6 @@ void() PainSound =
 {
 	local float rs;
 
-	if (self.health < 0)
-		return;
-
 	if (damage_attacker.classname == "teledeath")
 	{
 		sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
@@ -294,18 +291,11 @@ void() PainSound =
 	}
 
 	if (self.pain_finished > time)
-	{
-		self.axhitme = 0;
 		return;
-	}
 	self.pain_finished = time + 0.5;
 
-	// don't make multiple pain sounds right after each other
-
-	// ax pain sound
-	if (self.axhitme == 1)
+	if (self.axhitme)
 	{
-		self.axhitme = 0;
 		sound (self, CHAN_VOICE, "player/axhit1.wav", 1, ATTN_NORM);
 		return;
 	}
@@ -438,7 +428,6 @@ void() DeathSound =
 		self.noise = "player/death5.wav";
 
 	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NONE);
-	return;
 };
 
 void() PlayerDead =
