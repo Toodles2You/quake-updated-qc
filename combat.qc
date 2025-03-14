@@ -240,7 +240,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 						if (points > 0)
 						{
 							if (CanDamage (head, inflictor))
-							{ // shambler takes half damage from all explosions
+							{
 								if (head.classname == "monster_shambler")
 									points = points * 0.5;
 								T_Damage (head, inflictor, attacker, points);

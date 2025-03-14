@@ -535,11 +535,11 @@ void() PlayerDie =
 	local float i;
 
 	self.items = self.items - (self.items & IT_INVISIBILITY);
-	self.invisible_finished = 0; // don't die as eyes
+	self.invisible_finished = 0;
 	self.invincible_finished = 0;
 	self.super_damage_finished = 0;
 	self.radsuit_finished = 0;
-	self.modelindex = modelindex_player; // don't use eyes
+	self.modelindex = modelindex_player;
 
 	if (deathmatch || coop)
 		DropBackpack ();

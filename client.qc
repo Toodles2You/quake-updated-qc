@@ -53,10 +53,8 @@ void() SetChangeParms =
 		return;
 	}
 
-	// remove items
 	parm1 = self.items - (self.items & (IT_KEYS | IT_ARTS | IT_SUPERHEALTH));
 
-	// cap super health
 	if (self.health > 100)
 		parm2 = 100;
 	else if (self.health < 50)
@@ -112,7 +110,6 @@ entity() FindIntermission =
 	local entity spot;
 	local float cyc;
 
-	// look for info_intermission first
 	spot = find (world, classname, "info_intermission");
 	if (spot)
 	{ // pick a random one
@@ -127,12 +124,10 @@ entity() FindIntermission =
 		return spot;
 	}
 
-	// then look for the start position
 	spot = find (world, classname, "info_player_start");
 	if (spot)
 		return spot;
 
-	// testinfo_player_start is only found in regioned levels
 	spot = find (world, classname, "testplayerstart");
 	if (spot)
 		return spot;
@@ -144,7 +139,7 @@ entity() FindIntermission =
 string nextmap;
 void() GotoNextMap =
 {
-	if (cvar ("samelevel")) // if samelevel is set, stay on same level
+	if (cvar ("samelevel"))
 		changelevel (mapname);
 	else
 		changelevel (nextmap);
@@ -152,7 +147,6 @@ void() GotoNextMap =
 
 void() ExitIntermission =
 {
-	// skip any text in deathmatch
 	if (deathmatch)
 	{
 		GotoNextMap ();
@@ -308,7 +302,7 @@ void() changelevel_touch =
 	SUB_UseTargets ();
 
 	if ((self.spawnflags & 1) && (deathmatch == 0))
-	{ // NO_INTERMISSION
+	{
 		GotoNextMap ();
 		return;
 	}
@@ -332,7 +326,6 @@ void() trigger_changelevel =
 
 void() set_suicide_frame;
 
-// called by ClientKill and DeadThink
 void() respawn =
 {
 	if (coop)
@@ -341,20 +334,17 @@ void() respawn =
 		CopyToBodyQue (self);
 		// get the spawn parms as they were at level start
 		setspawnparms (self);
-		// respawn
 		PutClientInServer ();
 	}
 	else if (deathmatch)
 	{
 		// make a copy of the dead body for appearances sake
 		CopyToBodyQue (self);
-		// set default spawn parms
 		SetNewParms ();
-		// respawn
 		PutClientInServer ();
 	}
 	else
-	{ // restart the entire server
+	{
 		restartlevel ();
 	}
 };
@@ -365,7 +355,7 @@ void() ClientKill =
 	bprint (" suicides\n");
 	set_suicide_frame ();
 	self.modelindex = modelindex_player;
-	self.frags = self.frags - 2; // extra penalty
+	self.frags = self.frags - 2;
 	respawn ();
 };
 
@@ -380,12 +370,10 @@ entity() SelectSpawnPoint =
 	local entity thing;
 	local float pcount;
 
-	// testinfo_player_start is only found in regioned levels
 	spot = find (world, classname, "testplayerstart");
 	if (spot)
 		return spot;
 
-	// choose a info_player_deathmatch point
 	if (coop)
 	{
 		lastspawn = find (lastspawn, classname, "info_player_coop");
@@ -435,7 +423,6 @@ entity() SelectSpawnPoint =
 	return spot;
 };
 
-void() DecodeLevelParms;
 void() PlayerDie;
 
 void() PutClientInServer =
@@ -503,7 +490,6 @@ void() info_player_start = {};
 
 void() info_player_start2 = {};
 
-// saved out by quaked in region mode
 void() testplayerstart = {};
 
 void() info_player_deathmatch = {};
@@ -547,10 +533,8 @@ void() NextLevel =
 	}
 	else
 	{
-		// find a trigger changelevel
 		o = find (world, classname, "trigger_changelevel");
 
-		// go back to start if no trigger_changelevel
 		if (!o)
 		{
 			mapname = "start";
@@ -574,7 +558,7 @@ void() CheckRules =
 	local float timelimit;
 	local float fraglimit;
 
-	if (gameover) // someone else quit the game already
+	if (gameover)
 		return;
 
 	timelimit = cvar ("timelimit") * 60;
@@ -616,7 +600,6 @@ void() PlayerDeathThink =
 		return;
 	}
 
-	// wait for any button down
 	if (!self.button2 && !self.button1 && !self.button0)
 		return;
 
@@ -688,7 +671,7 @@ void() WaterMove =
 		self.dmg = 2;
 	}
 	else if (self.air_finished < time)
-	{ // drown!
+	{
 		if (self.pain_finished < time)
 		{
 			self.dmg = self.dmg + 2;
@@ -710,7 +693,7 @@ void() WaterMove =
 	}
 
 	if (self.watertype == CONTENT_LAVA)
-	{ // do damage
+	{
 		if (self.dmgtime < time)
 		{
 			if (self.radsuit_finished > time)
@@ -722,7 +705,7 @@ void() WaterMove =
 		}
 	}
 	else if (self.watertype == CONTENT_SLIME)
-	{ // do damage
+	{
 		if (self.dmgtime < time && self.radsuit_finished < time)
 		{
 			self.dmgtime = time + 1;
@@ -790,14 +773,14 @@ void() PlayerPreThink =
 {
 	if (intermission_running)
 	{
-		IntermissionThink (); // otherwise a button could be missed between
-		return;               // the think tics
+		IntermissionThink ();
+		return;
 	}
 
 	if (self.view_ofs == '0 0 0')
 		return; // intermission or finale
 
-	makevectors (self.v_angle); // is this still used
+	makevectors (self.v_angle);
 
 	CheckRules ();
 	WaterMove ();
@@ -838,10 +821,11 @@ void() CheckPowerups =
 	if (self.health <= 0)
 		return;
 
+	// sound and screen flash when items start to run out
+
 	// invisibility
 	if (self.invisible_finished)
 	{
-		// sound and screen flash when items starts to run out
 		if (self.invisible_sound < time)
 		{
 			sound (self, CHAN_AUTO, "items/inv3.wav", 0.5, ATTN_IDLE);
@@ -866,23 +850,21 @@ void() CheckPowerups =
 		}
 
 		if (self.invisible_finished < time)
-		{ // just stopped
+		{
 			self.items = self.items - IT_INVISIBILITY;
 			self.invisible_finished = 0;
 			self.invisible_time = 0;
 		}
 
-		// use the eyes
 		self.frame = 0;
 		self.modelindex = modelindex_eyes;
 	}
 	else
-		self.modelindex = modelindex_player; // don't use eyes
+		self.modelindex = modelindex_player;
 
 	// invincibility
 	if (self.invincible_finished)
 	{
-		// sound and screen flash when items starts to run out
 		if (self.invincible_finished < time + 3)
 		{
 			if (self.invincible_time == 1)
@@ -901,7 +883,7 @@ void() CheckPowerups =
 		}
 
 		if (self.invincible_finished < time)
-		{ // just stopped
+		{
 			self.items = self.items - IT_INVULNERABILITY;
 			self.invincible_time = 0;
 			self.invincible_finished = 0;
@@ -915,7 +897,6 @@ void() CheckPowerups =
 	// super damage
 	if (self.super_damage_finished)
 	{
-		// sound and screen flash when items starts to run out
 		if (self.super_damage_finished < time + 3)
 		{
 			if (self.super_time == 1)
@@ -934,7 +915,7 @@ void() CheckPowerups =
 		}
 
 		if (self.super_damage_finished < time)
-		{ // just stopped
+		{
 			self.items = self.items - IT_QUAD;
 			self.super_damage_finished = 0;
 			self.super_time = 0;
@@ -950,7 +931,6 @@ void() CheckPowerups =
 	{
 		self.air_finished = time + 12;
 
-		// sound and screen flash when items starts to run out
 		if (self.radsuit_finished < time + 3)
 		{
 			if (self.rad_time == 1)
@@ -969,7 +949,7 @@ void() CheckPowerups =
 		}
 
 		if (self.radsuit_finished < time)
-		{ // just stopped
+		{
 			self.items = self.items - IT_SUIT;
 			self.rad_time = 0;
 			self.radsuit_finished = 0;
@@ -990,8 +970,6 @@ void() PlayerPostThink =
 		return; // intermission or finale
 	if (self.deadflag)
 		return;
-
-	// do weapon stuff
 
 	W_WeaponFrame ();
 
@@ -1033,10 +1011,7 @@ void() ClientDisconnect =
 {
 	if (gameover)
 		return;
-	// if the level end trigger has been activated, just return since they
-	// aren't *really* leaving
 
-	// let everyone else know
 	bprint (self.netname);
 	bprint (" left the game with ");
 	bprint (ftos (self.frags));
@@ -1080,7 +1055,6 @@ void(entity targ, entity attacker) ClientObituary =
 		{
 			if (targ == attacker)
 			{
-				// killed self
 				attacker.frags = attacker.frags - 1;
 				bprint (targ.netname);
 
@@ -1183,7 +1157,6 @@ void(entity targ, entity attacker) ClientObituary =
 			targ.frags = targ.frags - 1;
 			bprint (targ.netname);
 
-			// killed by a montser?
 			if (attacker.flags & FL_MONSTER)
 			{
 				if (attacker.classname == "monster_army")
@@ -1250,9 +1223,7 @@ void(entity targ, entity attacker) ClientObituary =
 				return;
 			}
 
-			// in-water deaths
-			rnum = targ.watertype;
-			if (rnum == CONTENT_WATER)
+			if (targ.watertype == CONTENT_WATER)
 			{
 				if (random () < 0.5)
 					bprint (" sleeps with the fishes\n");
@@ -1260,7 +1231,7 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" sucks it down\n");
 				return;
 			}
-			else if (rnum == CONTENT_SLIME)
+			else if (targ.watertype == CONTENT_SLIME)
 			{
 				if (random () < 0.5)
 					bprint (" gulped a load of slime\n");
@@ -1268,7 +1239,7 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" can't exist on slime alone\n");
 				return;
 			}
-			else if (rnum == CONTENT_LAVA)
+			else if (targ.watertype == CONTENT_LAVA)
 			{
 				if (targ.health < -15)
 				{
