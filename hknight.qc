@@ -124,7 +124,7 @@ void() hknight_stand9 = [$stand9, hknight_stand1] { ai_stand (); };
 
 void() hknight_walk1 = [$walk1, hknight_walk2]
 {
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & KNIGHT_STATUE)
 		SUB_CheckIdle ("statue/idle.wav", ATTN_IDLE);
 	else
 		SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
@@ -152,7 +152,7 @@ void() hknight_walk20 = [$walk20, hknight_walk1] { ai_walk (2); };
 
 void() hknight_run1 = [$run1, hknight_run2]
 {
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & KNIGHT_STATUE)
 		SUB_CheckIdle ("statue/idle.wav", ATTN_IDLE);
 	else
 		SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
@@ -169,7 +169,7 @@ void() hknight_run8 = [$run8, hknight_run1] { ai_run (13); };
 
 void() hknight_pain1 = [$pain1, hknight_pain2]
 {
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & KNIGHT_STATUE)
 		sound (self, CHAN_VOICE, "statue/pain.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
@@ -213,7 +213,7 @@ void() hknight_die =
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		ThrowHead ("progs/h_hellkn.mdl", self.health);
 
-		if (self.spawnflags & 2) // statue
+		if (self.spawnflags & KNIGHT_STATUE)
 		{
 			ThrowGib ("progs/statgib1.mdl", self.health);
 			ThrowGib ("progs/statgib2.mdl", self.health);
@@ -228,7 +228,7 @@ void() hknight_die =
 		return;
 	}
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & KNIGHT_STATUE)
 		sound (self, CHAN_VOICE, "statue/death.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
@@ -464,7 +464,7 @@ void(entity attacker, float damage) hknight_pain =
 	if (self.pain_finished > time)
 		return;
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & KNIGHT_STATUE)
 		sound (self, CHAN_VOICE, "statue/pain.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
@@ -503,15 +503,16 @@ void() hknight_melee =
 
 void() hknight_sight =
 {
-	if (!(self.spawnflags & 2))
+	if (self.spawnflags & KNIGHT_STATUE)
+		sound (self, CHAN_VOICE, "statue/see.wav", 1, ATTN_NORM);
+	else
 		sound (self, CHAN_VOICE, "hknight/sight1.wav", 1, ATTN_NORM);
 };
 
 void() hknight_pause =
 {
-	sound (self, CHAN_VOICE, "statue/see.wav", 1, ATTN_NORM);
-
 	self.takedamage = DAMAGE_AIM;
+	self.flags = self.flags | FL_MONSTER;
 	self.th_stand = hknight_stand1;
 	self.th_walk = hknight_walk1;
 	self.th_run = hknight_run1;
@@ -520,18 +521,15 @@ void() hknight_pause =
 	self.th_pain = hknight_pain;
 	self.th_die = hknight_die;
 	self.th_sight = hknight_sight;
-	self.use = SUB_Null;
-
-	self.enemy = activator;
-	self.nextthink = time + 0.1;
-	self.think = FoundTarget;
-
-	self.delay = 0;
+	self.use = monster_use;
+	self.th_stand ();
+	monster_use ();
 };
 
 void() hknight_pause1 =
 {
 	self.takedamage = DAMAGE_NO;
+	self.flags = self.flags - (self.flags & FL_MONSTER);
 	self.use = hknight_pause;
 	self.think = hknight_pause1;
 	self.nextthink = time + 0.1;
@@ -548,7 +546,7 @@ void() monster_hell_knight =
 	precache_model2 ("progs/k_spike.mdl");
 	precache_model2 ("progs/h_hellkn.mdl");
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & KNIGHT_STATUE)
 	{
 		precache_model ("progs/statgib1.mdl");
 		precache_model ("progs/statgib2.mdl");
@@ -582,7 +580,7 @@ void() monster_hell_knight =
 	setsize (self, '-16 -16 -24', '16 16 40');
 	self.health = 250;
 
-	if (self.spawnflags & 2) // statue
+	if (self.spawnflags & KNIGHT_STATUE)
 	{
 		if (self.frame == 0)
 			self.frame = 73;
