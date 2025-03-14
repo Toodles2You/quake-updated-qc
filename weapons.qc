@@ -927,15 +927,14 @@ void() W_ChangeWeapon =
 
 	if (self.impulse == 1)
 	{
-		if (self.weapon == IT_AXE && deathmatch && teamplay >= TEAM_CTF)
+		if (!(self.items & IT_AXE) || (self.weapon == IT_AXE))
 			fl = IT_GRAPPLE;
 		else
 			fl = IT_AXE;
 	}
 	else if (self.impulse == 22)
 	{
-		if (deathmatch && teamplay >= TEAM_CTF)
-			fl = IT_GRAPPLE;
+		fl = IT_GRAPPLE;
 	}
 	else if (self.impulse == 2)
 	{
@@ -1163,14 +1162,7 @@ void() CycleWeaponCommand =
 		}
 		else if (self.weapon == IT_AXE)
 		{
-			if (deathmatch && teamplay >= TEAM_CTF)
-				self.weapon = IT_GRAPPLE;
-			else
-			{
-				self.weapon = IT_SHOTGUN;
-				if (self.ammo_shells1 < 1)
-					am = 1;
-			}
+			self.weapon = IT_GRAPPLE;
 		}
 		else if (self.weapon == IT_GRAPPLE)
 		{
@@ -1341,10 +1333,7 @@ void() CycleWeaponReverseCommand =
 		}
 		else if (self.weapon == IT_SHOTGUN)
 		{
-			if (deathmatch && teamplay >= TEAM_CTF)
-				self.weapon = IT_GRAPPLE;
-			else
-				self.weapon = IT_AXE;
+			self.weapon = IT_GRAPPLE;
 		}
 		else if (self.weapon == IT_GRAPPLE)
 		{

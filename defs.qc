@@ -309,7 +309,7 @@ float IT_SUIT = 2097152;
 float IT_QUAD = 4194304;
 float IT_GRAPPLE = 8388608;
 
-float IT_WEAPONS = 129151;
+float IT_WEAPONS = 8517759;
 float IT_AMMO = 1920;
 float IT_KEYS = 393216;
 float IT_ARTS = 7864320;

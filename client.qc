@@ -138,15 +138,18 @@ void() DecodeLevelParms =
 	self.ammo_nails1 = parm5;
 	self.ammo_rockets1 = parm6;
 	self.ammo_cells1 = parm7;
-	if (parm8 == IT_GRAPPLE && teamplay < TEAM_CTF)
-		self.weapon = IT_AXE;
-	else
-		self.weapon = parm8;
+	self.weapon = parm8;
 	self.armortype = parm9 * 0.01;
 	self.items2 = parm10;
 	self.ammo_lava_nails = parm11;
 	self.ammo_multi_rockets = parm12;
 	self.ammo_plasma = parm13;
+	if (deathmatch && teamplay < TEAM_CTF)
+	{
+		self.items = self.items - (self.items & IT_GRAPPLE);
+		if (self.weapon == IT_GRAPPLE)
+			self.weapon = IT_AXE;
+	}
 	if (TeamColorIsLegal (parm14))
 	{
 		self.steam = parm14;
