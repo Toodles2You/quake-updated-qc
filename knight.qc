@@ -136,6 +136,23 @@ void() knight_atk8 = [$attackb8, knight_atk9]
 void() knight_atk9 = [$attackb9, knight_atk10] { ai_charge (1); };
 void() knight_atk10 = [$attackb10, knight_run1] { ai_charge (5); };
 
+void() knight_attack =
+{
+	local vector spot1, spot2;
+	local float len;
+
+	spot1 = self.origin + self.view_ofs;
+	spot2 = self.enemy.origin + self.enemy.view_ofs;
+
+	// decide if now is a good swing time
+	len = vlen (spot1 - spot2);
+
+	if (len < 80)
+		knight_atk1 ();
+	else
+		knight_runatk1 ();
+};
+
 void() knight_pain1 = [$pain1, knight_pain2] {};
 void() knight_pain2 = [$pain2, knight_pain3] {};
 void() knight_pain3 = [$pain3, knight_run1] {};
@@ -229,6 +246,11 @@ void() knight_die =
 		knight_dieb1 ();
 };
 
+void() knight_sight =
+{
+	sound (self, CHAN_VOICE, "knight/ksight.wav", 1, ATTN_NORM);
+};
+
 void() monster_knight =
 {
 	if (deathmatch) 
@@ -257,9 +279,10 @@ void() monster_knight =
 	self.th_stand = knight_stand1;
 	self.th_walk = knight_walk1;
 	self.th_run = knight_run1;
-	self.th_melee = knight_atk1;
+	self.th_melee = knight_attack;
 	self.th_pain = knight_pain;
 	self.th_die = knight_die;
+	self.th_sight = knight_sight;
 
 	walkmonster_start ();
 };

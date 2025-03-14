@@ -497,6 +497,11 @@ void(entity attacker, float take) zombie_pain =
 		zombie_paind1 ();
 };
 
+void() zombie_sight =
+{
+	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_NORM);
+};
+
 void() monster_zombie =
 {
 	if (deathmatch)
@@ -534,6 +539,7 @@ void() monster_zombie =
 	self.th_pain = zombie_pain;
 	self.th_die = zombie_die;
 	self.th_missile = zombie_missile;
+	self.th_sight = zombie_sight;
 
 	if (self.spawnflags & SPAWN_CRUCIFIED)
 	{

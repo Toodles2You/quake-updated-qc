@@ -343,6 +343,58 @@ void() sham_die =
 	sham_death1 ();
 };
 
+void() sham_sight =
+{
+	sound (self, CHAN_VOICE, "shambler/ssight.wav", 1, ATTN_NORM);
+};
+
+float() ShamCheckAttack =
+{
+	local vector spot1, spot2;
+	local entity targ;
+
+	if (enemy_range == RANGE_MELEE)
+	{
+		if (CanDamage (self.enemy, self))
+		{
+			self.attack_state = AS_MELEE;
+			return TRUE;
+		}
+	}
+
+	if (time < self.attack_finished)
+		return FALSE;
+
+	if (!enemy_vis)
+		return FALSE;
+
+	targ = self.enemy;
+
+	// see if any entities are in the way of the shot
+	spot1 = self.origin + self.view_ofs;
+	spot2 = targ.origin + targ.view_ofs;
+
+	if (vlen (spot1 - spot2) > 600)
+		return FALSE;
+
+	traceline (spot1, spot2, FALSE, self);
+
+	if (trace_inopen && trace_inwater)
+		return FALSE; // sight line crossed contents
+
+	if (trace_ent != targ)
+	{
+		return FALSE;
+	}
+
+	if (enemy_range == RANGE_FAR)
+		return FALSE;
+
+	self.attack_state = AS_MISSILE;
+	SUB_AttackFinished (2 + 2 * random ());
+	return TRUE;
+};
+
 void() monster_shambler =
 {
 	if (deathmatch)
@@ -379,6 +431,8 @@ void() monster_shambler =
 	self.th_melee = sham_melee;
 	self.th_missile = sham_magic1;
 	self.th_pain = sham_pain;
+	self.th_sight = sham_sight;
+	self.th_checkattack = ShamCheckAttack;
 
 	walkmonster_start ();
 };

@@ -192,6 +192,11 @@ void() ShalMissileTouch =
 	BecomeExplosion ();
 };
 
+void() shal_sight =
+{
+	sound (self, CHAN_VOICE, "shalrath/sight.wav", 1, ATTN_NORM);
+};
+
 void() monster_shalrath =
 {
 	if (deathmatch)
@@ -223,6 +228,7 @@ void() monster_shalrath =
 	self.th_die = shalrath_die;
 	self.th_pain = shalrath_pain;
 	self.th_missile = shal_attack1;
+	self.th_sight = shal_sight;
 
 	self.think = walkmonster_start;
 	self.nextthink = time + 0.1 + random () * 0.1;

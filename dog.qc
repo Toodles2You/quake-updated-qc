@@ -283,6 +283,11 @@ float() CheckDogJump =
 	return TRUE;
 };
 
+void() dog_sight =
+{
+	sound (self, CHAN_VOICE, "dog/dsight.wav", 1, ATTN_NORM);
+};
+
 float() DogCheckAttack =
 {
 	// if close enough for slashing, go for it
@@ -332,6 +337,8 @@ void() monster_dog =
 	self.th_die = dog_die;
 	self.th_melee = dog_atta1;
 	self.th_missile = dog_leap1;
+	self.th_sight = dog_sight;
+	self.th_checkattack = DogCheckAttack;
 
 	walkmonster_start ();
 };

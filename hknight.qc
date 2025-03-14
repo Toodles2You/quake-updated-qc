@@ -482,6 +482,11 @@ void() hknight_melee =
 	}
 };
 
+void() hknight_sight =
+{
+	sound (self, CHAN_VOICE, "hknight/sight1.wav", 1, ATTN_NORM);
+};
+
 void() monster_hell_knight =
 {
 	if (deathmatch)
@@ -520,6 +525,7 @@ void() monster_hell_knight =
 	self.th_missile = hknight_magicc1;
 	self.th_pain = hknight_pain;
 	self.th_die = hknight_die;
+	self.th_sight = hknight_sight;
 
 	walkmonster_start ();
 };

@@ -78,9 +78,6 @@ void() Laser_Touch =
 
 void(vector org, vector vec) LaunchLaser =
 {
-	if (self.classname == "monster_enforcer")
-		sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
-
 	vec = normalize (vec);
 
 	newmis = spawn ();
@@ -105,6 +102,8 @@ void(vector org, vector vec) LaunchLaser =
 void() enforcer_fire =
 {
 	local vector org;
+
+	sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	makevectors (self.angles);
@@ -308,6 +307,21 @@ void() enf_die =
 		enf_fdie1 ();
 };
 
+void() enf_sight =
+{
+	local float rsnd;
+
+	rsnd = rint (random () * 3);
+	if (rsnd == 1)
+		sound (self, CHAN_VOICE, "enforcer/sight1.wav", 1, ATTN_NORM);
+	else if (rsnd == 2)
+		sound (self, CHAN_VOICE, "enforcer/sight2.wav", 1, ATTN_NORM);
+	else if (rsnd == 0)
+		sound (self, CHAN_VOICE, "enforcer/sight3.wav", 1, ATTN_NORM);
+	else
+		sound (self, CHAN_VOICE, "enforcer/sight4.wav", 1, ATTN_NORM);
+};
+
 void() monster_enforcer =
 {
 	if (deathmatch)
@@ -344,6 +358,7 @@ void() monster_enforcer =
 	self.th_pain = enf_pain;
 	self.th_die = enf_die;
 	self.th_missile = enf_atk1;
+	self.th_sight = enf_sight;
 
 	walkmonster_start ();
 };

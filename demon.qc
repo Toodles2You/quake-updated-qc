@@ -104,6 +104,8 @@ void() demon1_jump10 = [$leap10, demon1_jump1]
 void() demon1_jump11 = [$leap11, demon1_jump12] {};
 void() demon1_jump12 = [$leap12, demon1_run1] {};
 
+void(float side) Demon_Melee;
+
 void() demon1_atta1 = [$attacka1, demon1_atta2] { ai_charge (4); };
 void() demon1_atta2 = [$attacka2, demon1_atta3] { ai_charge (0); };
 void() demon1_atta3 = [$attacka3, demon1_atta4] { ai_charge (0); };
@@ -181,6 +183,13 @@ void() Demon_MeleeAttack =
 	demon1_atta1 ();
 };
 
+void() DemonSight =
+{
+	sound (self, CHAN_VOICE, "demon/sight2.wav", 1, ATTN_NORM);
+};
+
+float() DemonCheckAttack;
+
 void() monster_demon1 =
 {
 	if (deathmatch)
@@ -213,6 +222,8 @@ void() monster_demon1 =
 	self.th_melee = Demon_MeleeAttack; // one of two attacks
 	self.th_missile = demon1_jump1; // jump attack
 	self.th_pain = demon1_pain;
+	self.th_sight = DemonSight;
+	self.th_checkattack = DemonCheckAttack;
 
 	walkmonster_start ();
 };

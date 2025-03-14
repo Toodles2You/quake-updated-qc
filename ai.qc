@@ -203,46 +203,6 @@ void() HuntTarget =
 	SUB_AttackFinished (1); // wait a while before first attack
 };
 
-void() SightSound =
-{
-	local float rsnd;
-
-	if (self.classname == "monster_ogre")
-		sound (self, CHAN_VOICE, "ogre/ogwake.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_knight")
-		sound (self, CHAN_VOICE, "knight/ksight.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_shambler")
-		sound (self, CHAN_VOICE, "shambler/ssight.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_demon1")
-		sound (self, CHAN_VOICE, "demon/sight2.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_wizard")
-		sound (self, CHAN_VOICE, "wizard/wsight.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_zombie")
-		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_dog")
-		sound (self, CHAN_VOICE, "dog/dsight.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_hell_knight")
-		sound (self, CHAN_VOICE, "hknight/sight1.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_tarbaby")
-		sound (self, CHAN_VOICE, "blob/sight1.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_enforcer")
-	{
-		rsnd = rint (random () * 3);
-		if (rsnd == 1)
-			sound (self, CHAN_VOICE, "enforcer/sight1.wav", 1, ATTN_NORM);
-		else if (rsnd == 2)
-			sound (self, CHAN_VOICE, "enforcer/sight2.wav", 1, ATTN_NORM);
-		else if (rsnd == 0)
-			sound (self, CHAN_VOICE, "enforcer/sight3.wav", 1, ATTN_NORM);
-		else
-			sound (self, CHAN_VOICE, "enforcer/sight4.wav", 1, ATTN_NORM);
-	}
-	else if (self.classname == "monster_army")
-		sound (self, CHAN_VOICE, "soldier/sight1.wav", 1, ATTN_NORM);
-	else if (self.classname == "monster_shalrath")
-		sound (self, CHAN_VOICE, "shalrath/sight.wav", 1, ATTN_NORM);
-};
-
 void() FoundTarget =
 {
 	if (self.enemy.classname == "player")
@@ -253,7 +213,9 @@ void() FoundTarget =
 
 	self.show_hostile = time + 1; // wake up other monsters
 
-	SightSound ();
+	if (self.th_sight)
+		self.th_sight ();
+
 	HuntTarget ();
 };
 
@@ -427,25 +389,12 @@ float() FacingIdeal =
 	return TRUE;
 };
 
-float() WizardCheckAttack;
-float() DogCheckAttack;
-
 float() CheckAnyAttack =
 {
 	if (!enemy_vis)
 		return FALSE;
-	if (self.classname == "monster_army")
-		return SoldierCheckAttack ();
-	if (self.classname == "monster_ogre")
-		return OgreCheckAttack ();
-	if (self.classname == "monster_shambler")
-		return ShamCheckAttack ();
-	if (self.classname == "monster_demon1")
-		return DemonCheckAttack ();
-	if (self.classname == "monster_dog")
-		return DogCheckAttack ();
-	if (self.classname == "monster_wizard")
-		return WizardCheckAttack ();
+	if (self.th_checkattack)
+		return self.th_checkattack ();
 	return CheckAttack ();
 };
 

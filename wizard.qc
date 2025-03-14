@@ -370,6 +370,11 @@ void() Wiz_Missile =
 	wiz_fast1 ();
 };
 
+void() wiz_sight =
+{
+	sound (self, CHAN_VOICE, "wizard/wsight.wav", 1, ATTN_NORM);
+};
+
 void() monster_wizard =
 {
 	if (deathmatch)
@@ -403,6 +408,7 @@ void() monster_wizard =
 	self.th_missile = Wiz_Missile;
 	self.th_pain = Wiz_Pain;
 	self.th_die = wiz_die;
+	self.th_sight = wiz_sight;
 
 	flymonster_start ();
 };
