@@ -103,9 +103,6 @@ void() GrappleTrack =
 // Tries to anchor the grapple to whatever it touches
 void() GrappleAnchor =
 {
-	if (other == self.owner) // don't hook the guy that fired it
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		GrappleReset ();

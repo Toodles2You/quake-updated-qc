@@ -55,6 +55,7 @@ float() crandom =
 void() W_FireAxe =
 {
 	local vector source;
+	local entity hit;
 	local vector org;
 
 	makevectors (self.v_angle);
@@ -63,13 +64,15 @@ void() W_FireAxe =
 	if (trace_fraction == 1.0)
 		return;
 
+	hit = trace_ent;
 	org = trace_endpos - v_forward * 4;
 
-	if (trace_ent.takedamage)
+	if (SUB_ShouldBleed (hit))
 	{
-		trace_ent.axhitme = 1;
+		hit.axhitme = TRUE;
 		SpawnBlood (org, '0 0 0', 20);
-		T_Damage (trace_ent, self, self, 20);
+		T_Damage (hit, self, self, 20);
+		hit.axhitme = FALSE;
 	}
 	else
 	{ // hit wall
@@ -186,7 +189,7 @@ void(float damage, vector dir) TraceAttack =
 
 	org = trace_endpos - dir * 4;
 
-	if (trace_ent.takedamage)
+	if (SUB_ShouldBleed (trace_ent))
 	{
 		SpawnBlood (org, vel * 0.2, damage);
 		AddMultiDamage (trace_ent, damage);
@@ -268,15 +271,21 @@ void() W_FireSuperShotgun =
 	FireBullets (14, dir, '0.14 0.08 0');
 };
 
-void() s_explode1 = [ 0, s_explode2 ]{};
-void() s_explode2 = [ 1, s_explode3 ]{};
-void() s_explode3 = [ 2, s_explode4 ]{};
-void() s_explode4 = [ 3, s_explode5 ]{};
-void() s_explode5 = [ 4, s_explode6 ]{};
-void() s_explode6 = [ 5, SUB_Remove ]{};
+void() s_explode1 = [0, s_explode2] {};
+void() s_explode2 = [1, s_explode3] {};
+void() s_explode3 = [2, s_explode4] {};
+void() s_explode4 = [3, s_explode5] {};
+void() s_explode5 = [4, s_explode6] {};
+void() s_explode6 = [5, SUB_Remove] {};
 
 void() BecomeExplosion =
 {
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
+	WriteCoord (MSG_BROADCAST, self.origin_x);
+	WriteCoord (MSG_BROADCAST, self.origin_y);
+	WriteCoord (MSG_BROADCAST, self.origin_z);
+
 	self.movetype = MOVETYPE_NONE;
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
@@ -289,9 +298,6 @@ void() T_MissileTouch =
 {
 	local float damg;
 
-	if (other == self.owner)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -303,7 +309,7 @@ void() T_MissileTouch =
 	if (other.health)
 	{
 		if (other.classname == "monster_shambler")
-			damg = damg * 0.5; // mostly immune
+			damg = damg * 0.5;
 		T_Damage (other, self, self.owner, damg);
 	}
 
@@ -311,14 +317,7 @@ void() T_MissileTouch =
 	// was done in the impact
 	T_RadiusDamage (self, self.owner, 120, other);
 
-	//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 	self.origin = self.origin - 8 * normalize (self.velocity);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
 
 	BecomeExplosion ();
 };
@@ -374,7 +373,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage =
 
 	traceline (p1, p2, FALSE, from);
 	e1 = trace_ent;
-	if (e1.takedamage)
+	if (SUB_ShouldBleed (e1))
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
 		T_Damage (e1, from, from, damage);
@@ -387,7 +386,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage =
 
 	traceline (p1 + f, p2 + f, FALSE, from);
 	e2 = trace_ent;
-	if (e2 != e1 && e2.takedamage)
+	if (e2 != e1 && SUB_ShouldBleed (e2))
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
 		T_Damage (e2, from, from, damage);
@@ -395,7 +394,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage =
 
 	traceline (p1 - f, p2 - f, FALSE, from);
 	e3 = trace_ent;
-	if (e3 != e1 && e3 != e2 && e3.takedamage)
+	if (e3 != e1 && e3 != e2 && SUB_ShouldBleed (e3))
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
 		T_Damage (e3, from, from, damage);
@@ -456,20 +455,11 @@ void() W_FireLightning =
 void() GrenadeExplode =
 {
 	T_RadiusDamage (self, self.owner, 120, world);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-
 	BecomeExplosion ();
 };
 
 void() GrenadeTouch =
 {
-	if (other == self.owner)
-		return;
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		GrenadeExplode ();
@@ -542,7 +532,7 @@ void(vector org, vector dir) launch_spike =
 	newmis.think = SUB_Remove;
 	newmis.nextthink = time + 6;
 	setmodel (newmis, "progs/spike.mdl");
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+	setsize (newmis, '0 0 0', '0 0 0');
 	setorigin (newmis, org);
 
 	newmis.velocity = dir * 1000;
@@ -562,7 +552,7 @@ void() W_FireSuperSpikes =
 	launch_spike (self.origin + '0 0 16', dir);
 	newmis.touch = superspike_touch;
 	setmodel (newmis, "progs/s_spike.mdl");
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+	setsize (newmis, '0 0 0', '0 0 0');
 	self.punchangle_x = -2;
 };
 
@@ -596,15 +586,8 @@ void(float ox) W_FireSpikes =
 	self.punchangle_x = -2;
 };
 
-.float hit_z;
 void() spike_touch =
 {
-	if (other == self.owner)
-		return;
-
-	if (other.solid == SOLID_TRIGGER)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -612,7 +595,7 @@ void() spike_touch =
 	}
 
 	// hit something that bleeds
-	if (other.takedamage)
+	if (SUB_ShouldBleed (other))
 	{
 		spawn_touchblood (9);
 		T_Damage (other, self, self.owner, 9);
@@ -637,12 +620,6 @@ void() spike_touch =
 
 void() superspike_touch =
 {
-	if (other == self.owner)
-		return;
-
-	if (other.solid == SOLID_TRIGGER)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -650,7 +627,7 @@ void() superspike_touch =
 	}
 
 	// hit something that bleeds
-	if (other.takedamage)
+	if (SUB_ShouldBleed (other))
 	{
 		spawn_touchblood (18);
 		T_Damage (other, self, self.owner, 18);
@@ -1085,13 +1062,13 @@ void() W_ChangeWeapon =
 
 	if (!(self.items & fl))
 	{
-		sprint (self, "no weapon.\n");
+		sprint (self, "No weapon\n");
 		return;
 	}
 
 	if (am)
 	{
-		sprint (self, "not enough ammo.\n");
+		sprint (self, "Not enough ammo\n");
 		return;
 	}
 
@@ -1443,7 +1420,7 @@ void() W_WeaponFrame =
 	{
 		if (self.weapon == IT_LAVA_NAILGUN ||
 			self.weapon == IT_LAVA_SUPER_NAILGUN)
-			{
+		{
 			sound (self, CHAN_WEAPON, "lavagun/snail.wav", 1, ATTN_NORM);
 		}
 		lavaGunFired = 0;

@@ -28,14 +28,7 @@ void() sphere_impact =
 	// was done in the impact
 	T_RadiusDamage (self, self, 300, other);
 
-	//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 	self.origin = self.origin - 8 * normalize (self.velocity);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
 
 	BecomeExplosion ();
 };
@@ -50,7 +43,7 @@ void(entity ownerEntity) sphere_remove =
 		if (theSphere.owner == self)
 		{
 			bprint (theSphere.owner.netname);
-			bprint (" is denied Vengeance.\n");
+			bprint (" is denied vengeance\n");
 			remove (theSphere);
 			theSphere = find (world, classname, "Vengeance");
 		}
@@ -66,7 +59,7 @@ void() sphere_attack =
 
 	if (self.enemy.health < 1)
 	{
-		sprint (self.owner, "You are denied Vengeance");
+		sprint (self.owner, "You are denied vengeance");
 		remove (self);
 		return;
 	}
@@ -88,7 +81,7 @@ void() sphere_think =
 	{
 		if (self.owner.items2 & IT2_V_SPHERE)
 			self.owner.items2 = self.owner.items2 - IT2_V_SPHERE;
-		sprint (self.owner, "Vengeance Sphere Lost\n");
+		sprint (self.owner, "Vengeance Sphere lost\n");
 		remove (self);
 		return;
 	}

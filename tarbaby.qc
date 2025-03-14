@@ -171,6 +171,11 @@ void() tbaby_die2 = [$exp, tbaby_run1]
 	BecomeExplosion ();
 };
 
+void() tbaby_sight =
+{
+	sound (self, CHAN_VOICE, "blob/sight1.wav", 1, ATTN_NORM);
+};
+
 void(entity attacker, float damage) tbaby_mitosis;
 
 void() tbaby_checknew =
@@ -180,14 +185,15 @@ void() tbaby_checknew =
 		remove (self);
 		return;
 	}
-	
+
 	self.enemy = self.enemy;
 	self.th_stand = tbaby_stand1;
 	self.th_walk = tbaby_walk1;
 	self.th_run = tbaby_run1;
 	self.th_missile = tbaby_jump1;
 	self.th_melee = tbaby_jump1;
-	self.th_die = tbaby_die1;       
+	self.th_die = tbaby_die1;
+	self.th_sight = tbaby_sight;
 	self.origin_z = self.origin_z + 1; // raise off floor a bit
 	droptofloor (0, 0);
 
@@ -210,8 +216,8 @@ void() tbaby_checknew =
 	self.nextthink = self.nextthink + random ()*0.5;
 
 	total_monsters = total_monsters + 1;
-  
-	
+
+
 	WriteByte (MSG_BROADCAST, SVC_UPDATESTAT);
 	WriteByte (MSG_BROADCAST, STAT_TOTALMONSTERS);
 	WriteLong (MSG_BROADCAST, total_monsters);
@@ -220,7 +226,7 @@ void() tbaby_checknew =
 void(entity attacker, float damage) tbaby_mitosis =
 {
 	local entity newSpawn;
-	
+
 	if (random () < 0.35)
 	{
 		newSpawn = spawn ();
@@ -235,12 +241,12 @@ void(entity attacker, float damage) tbaby_mitosis =
 
 		newSpawn.owner = self;
 		self.th_pain = SUB_null_pain;
-		
+
 		setmodel (newSpawn, "progs/tarbaby.mdl");
 		newSpawn.solid = SOLID_SLIDEBOX;
 		newSpawn.skin = self.skin;
-		
-		setorigin (newSpawn, self.origin);              
+
+		setorigin (newSpawn, self.origin);
 		newSpawn.think = tbaby_checknew;
 		newSpawn.nextthink = time + 0.5;
 
@@ -280,7 +286,8 @@ void() monster_tarbaby =
 	self.th_missile = tbaby_jump1;
 	self.th_melee = tbaby_jump1;
 	self.th_die = tbaby_die1;
-	
+	self.th_sight = tbaby_sight;
+
 	if (self.spawnflags & 8)
 	{
 		self.th_pain = tbaby_mitosis;
@@ -302,7 +309,7 @@ void() monster_tarbaby =
 		skillLevel = cvar ("skill");
 		myRand = skillLevel * 0.2;
 		myRand = myRand + random ();
-	
+
 		if (myRand > 0.8 && skillLevel > 1)
 		{
 			self.th_pain = tbaby_mitosis;

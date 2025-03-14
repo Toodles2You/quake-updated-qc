@@ -31,7 +31,7 @@ void(vector org, vector dir) launch_lava_spike =
 	newmis.think = SUB_Remove;
 	newmis.nextthink = time + 6;
 	setmodel (newmis, "progs/lspike.mdl");
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+	setsize (newmis, '0 0 0', '0 0 0');
 	setorigin (newmis, org);
 
 	newmis.velocity = dir * 1000;
@@ -50,7 +50,7 @@ void() W_FireSuperLavaSpikes =
 	launch_lava_spike (self.origin + '0 0 16', dir);
 	newmis.touch = superlavaspike_touch;
 
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+	setsize (newmis, '0 0 0', '0 0 0');
 	self.punchangle_x = -2;
 };
 
@@ -91,12 +91,6 @@ void() lavaspike_touch =
 	local float old_armorvalue;
 	local float old_armormask;
 
-	if (other == self.owner)
-		return;
-
-	if (other.solid == SOLID_TRIGGER)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -104,9 +98,25 @@ void() lavaspike_touch =
 	}
 
 	// hit something that bleeds
+	if (SUB_ShouldBleed (other))
+		spawn_touchblood (9);
+	else
+	{
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+
+		if (self.classname == "wizspike")
+			WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
+		else if (self.classname == "knightspike")
+			WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
+		else
+			WriteByte (MSG_BROADCAST, TE_SPIKE);
+		WriteCoord (MSG_BROADCAST, self.origin_x);
+		WriteCoord (MSG_BROADCAST, self.origin_y);
+		WriteCoord (MSG_BROADCAST, self.origin_z);
+	}
+
 	if (other.takedamage)
 	{
-		spawn_touchblood (9);
 		if (other.classname == "player")
 		{
 			old_armortype = other.armortype;
@@ -127,20 +137,6 @@ void() lavaspike_touch =
 			}
 		}
 	}
-	else
-	{
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-
-		if (self.classname == "wizspike")
-			WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
-		else if (self.classname == "knightspike")
-			WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
-		else
-			WriteByte (MSG_BROADCAST, TE_SPIKE);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-	}
 
 	remove (self);
 };
@@ -149,12 +145,6 @@ void() superlavaspike_touch =
 {
 	local float old_armortype;
 
-	if (other == self.owner)
-		return;
-
-	if (other.solid == SOLID_TRIGGER)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -162,9 +152,19 @@ void() superlavaspike_touch =
 	}
 
 	// hit something that bleeds
+	if (SUB_ShouldBleed (other))
+		spawn_touchblood (18);
+	else
+	{
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, TE_SUPERSPIKE);
+		WriteCoord (MSG_BROADCAST, self.origin_x);
+		WriteCoord (MSG_BROADCAST, self.origin_y);
+		WriteCoord (MSG_BROADCAST, self.origin_z);
+	}
+
 	if (other.takedamage)
 	{
-		spawn_touchblood (18);
 
 		// halve the effectiveness of the armor for players..
 		if (other.classname == "player")
@@ -187,14 +187,6 @@ void() superlavaspike_touch =
 				T_Damage (other, self, self.owner, 30);
 			}
 		}
-	}
-	else
-	{
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_SUPERSPIKE);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
 	}
 
 	remove (self);

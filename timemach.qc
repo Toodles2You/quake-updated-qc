@@ -31,7 +31,6 @@ void() time_chunk =
 	timeChunk.avelocity = '300 300 300';
 	timeChunk.angles = self.owner.angles;
 
-	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NONE);
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
 	WriteCoord (MSG_BROADCAST, timeChunk.origin_x);
@@ -73,8 +72,6 @@ void() time_boom =
 			self.owner.skin = 1;
 		}
 	}
-
-	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NONE);
 
 	if (random () < 0.5)
 	{

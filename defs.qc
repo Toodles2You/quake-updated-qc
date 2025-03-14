@@ -267,6 +267,10 @@ float RANGE_NEAR = 1;
 float RANGE_MID = 2;
 float RANGE_FAR = 3;
 
+float FIND_DIRECT = 0;
+float FIND_INFORM = 1;
+float FIND_DAMAGE = 2;
+
 float DEAD_NO = 0;
 float DEAD_DYING = 1;
 float DEAD_DEAD = 2;
@@ -338,7 +342,6 @@ float STATE_BOTTOM = 1;
 float STATE_UP = 2;
 float STATE_DOWN = 3;
 
-vector VEC_ORIGIN = '0 0 0';
 vector VEC_HULL_MIN = '-16 -16 -24';
 vector VEC_HULL_MAX = '16 16 32';
 
@@ -402,8 +405,6 @@ float MSG_INIT = 3; // write to the init string
 float movedist;
 float gameover; // set when a rule exits
 
-string string_null;
-
 entity newmis; // launch_spike sets this after spawning it
 
 entity activator; // the entity that activated a trigger or brush
@@ -437,6 +438,8 @@ entity tag_token_owner;
 .void() th_melee;
 .void(entity attacker, float damage) th_pain;
 .void() th_die;
+.void() th_sight;
+.float() th_checkattack;
 
 .entity oldenemy; // mad at this player before taking damage
 

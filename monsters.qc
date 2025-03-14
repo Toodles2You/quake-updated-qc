@@ -40,11 +40,7 @@ void() monster_use =
 		return;
 	if (self.health <= 0)
 		return;
-	if (activator.items & IT_INVISIBILITY)
-		return;
-	if (activator.flags & FL_NOTARGET)
-		return;
-	if (activator.classname != "player")
+	if (!CanFindTarget (activator, FIND_DIRECT))
 		return;
 
 	// delay reaction so if the monster is teleported, its sound is still heard
@@ -64,10 +60,7 @@ enemy as activator.
 void() monster_death_use =
 {
 	// fall to ground
-	if (self.flags & FL_FLY)
-		self.flags = self.flags - FL_FLY;
-	if (self.flags & FL_SWIM)
-		self.flags = self.flags - FL_SWIM;
+	self.flags = self.flags - (self.flags & (FL_FLY | FL_SWIM));
 
 	if (self.target == "")
 		return;
@@ -83,6 +76,37 @@ void() monster_start_spread =
 
 	if (self.nextthink <= time)
 		self.think ();
+};
+
+void() monster_start_moving =
+{
+	if (self.target == "")
+	{
+		self.pausetime = 0;
+		self.th_stand ();
+		return;
+	}
+
+	self.movetarget = find (world, targetname, self.target);
+
+	if ((self.movetarget) && (self.movetarget.classname == "path_corner"))
+	{
+		self.goalentity = self.movetarget;
+		self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
+		self.th_walk ();
+	}
+	else
+	{
+		if (!self.movetarget)
+		{
+			dprint ("Monster can't find target at ");
+			dprint (vtos (self.origin));
+			dprint ("\n");
+		}
+		self.movetarget = world;
+		self.pausetime = 0;
+		self.th_stand ();
+	}
 };
 
 void() walkmonster_start_go =
@@ -101,7 +125,7 @@ void() walkmonster_start_go =
 
 	self.takedamage = DAMAGE_AIM;
 
-	self.ideal_yaw = self.angles * '0 1 0';
+	self.ideal_yaw = self.angles_y;
 	if (!self.yaw_speed)
 		self.yaw_speed = 20;
 	self.view_ofs = '0 0 25';
@@ -109,30 +133,7 @@ void() walkmonster_start_go =
 
 	self.flags = self.flags | FL_MONSTER;
 
-	if (self.target != "")
-	{
-		self.movetarget = find (world, targetname, self.target);
-		self.goalentity = self.movetarget;
-		self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
-		if (!self.movetarget)
-		{
-			dprint ("Monster can't find target at ");
-			dprint (vtos (self.origin));
-			dprint ("\n");
-		}
-		// this used to be an objerror
-		if (self.movetarget.classname == "path_corner")
-			self.th_walk ();
-		else
-			self.pausetime = 99999999;
-		self.th_stand ();
-	}
-	else
-	{
-		self.pausetime = 99999999;
-		self.th_stand ();
-	}
-
+	monster_start_moving ();
 	monster_start_spread ();
 };
 
@@ -148,14 +149,13 @@ void() flymonster_start_go =
 {
 	self.takedamage = DAMAGE_AIM;
 
-	self.ideal_yaw = self.angles * '0 1 0';
+	self.ideal_yaw = self.angles_y;
 	if (!self.yaw_speed)
 		self.yaw_speed = 10;
 	self.view_ofs = '0 0 25';
 	self.use = monster_use;
 
-	self.flags = self.flags | FL_FLY;
-	self.flags = self.flags | FL_MONSTER;
+	self.flags = self.flags | FL_MONSTER | FL_FLY;
 
 	if (!walkmove (0, 0))
 	{
@@ -166,28 +166,7 @@ void() flymonster_start_go =
 		dprint ("\n");
 	}
 
-	if (self.target != "")
-	{
-		self.movetarget = find (world, targetname, self.target);
-		self.goalentity = self.movetarget;
-		if (!self.movetarget)
-		{
-			dprint ("Monster can't find target at ");
-			dprint (vtos (self.origin));
-			dprint ("\n");
-		}
-		// this used to be an objerror
-		if (self.movetarget.classname == "path_corner")
-			self.th_walk ();
-		else
-			self.pausetime = 99999999;
-		self.th_stand ();
-	}
-	else
-	{
-		self.pausetime = 99999999;
-		self.th_stand ();
-	}
+	monster_start_moving ();
 };
 
 void() flymonster_start =
@@ -201,35 +180,15 @@ void() swimmonster_start_go =
 {
 	self.takedamage = DAMAGE_AIM;
 
-	self.ideal_yaw = self.angles * '0 1 0';
+	self.ideal_yaw = self.angles_y;
 	if (!self.yaw_speed)
 		self.yaw_speed = 10;
 	self.view_ofs = '0 0 10';
 	self.use = monster_use;
 
-	self.flags = self.flags | FL_SWIM;
-	self.flags = self.flags | FL_MONSTER;
+	self.flags = self.flags | FL_MONSTER | FL_SWIM;
 
-	if (self.target != "")
-	{
-		self.movetarget = find (world, targetname, self.target);
-		self.goalentity = self.movetarget;
-		if (!self.movetarget)
-		{
-			dprint ("Monster can't find target at ");
-			dprint (vtos (self.origin));
-			dprint ("\n");
-		}
-		// this used to be an objerror
-		self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
-		self.th_walk ();
-	}
-	else
-	{
-		self.pausetime = 99999999;
-		self.th_stand ();
-	}
-
+	monster_start_moving ();
 	monster_start_spread ();
 };
 

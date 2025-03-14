@@ -213,6 +213,11 @@ void() wrath_die15 = [$wrthdt15, wrath_die15]
 	remove (self);
 };
 
+void() wrath_sight =
+{
+	sound (self, CHAN_VOICE, "wrath/wsee.wav", 1, ATTN_NORM);
+};
+
 void() monster_wrath =
 {
 	if (deathmatch)
@@ -331,9 +336,9 @@ void() WrathHome =
 
 void() WrathMissileTouch =
 {
-	if (other == self.owner || other.classname == "monster_wrath" ||
+	if (other.classname == "monster_wrath" ||
 		other.classname == "monster_super_wrath")
-		{
+	{
 		remove (self);
 		return; // don't explode on any wraths
 	}
@@ -342,17 +347,6 @@ void() WrathMissileTouch =
 		T_Damage (other, self, self, 110);
 
 	T_RadiusDamage (self, self.owner, 20, world);
-	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-
-	self.velocity = '0 0 0';
-	self.touch = SUB_Null;
-	setmodel (self, "progs/s_explod.spr");
-	self.solid = SOLID_NOT;
-	s_explode1 ();
+	BecomeExplosion ();
 };

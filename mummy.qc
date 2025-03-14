@@ -117,20 +117,20 @@ void() mummy_run16 = [$run16, mummy_run17] { ai_run (14); };
 void() mummy_run17 = [$run17, mummy_run18] { ai_run (6); };
 void() mummy_run18 = [$run18, mummy_run1]
 {
-	ai_run (16);
-	if (random () < 0.2)
+	local float r;
+	r = (random () + random ()) * 0.5;
+	if (r < 0.2)
 		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-	if (random () > 0.8)
+	else if (r > 0.8)
 		sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
+	ai_run (16);
 };
 
 void() mummyGrenadeTouch =
 {
 	local float mummyDamage;
 
-	if (other == self.owner)
-		return;
-	if (other.takedamage)
+	if (SUB_ShouldBleed (other))
 	{
 		mummyDamage = 15 + random () * 15;
 
@@ -369,15 +369,15 @@ void() mummy_paine11 = [$paine11, mummy_paine12]
 void() mummy_paine12 = [$paine12, mummy_paine13]
 {
 	// see if ok to stand up
-	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.solid = SOLID_SLIDEBOX;
 	if (!walkmove (0, 0))
 	{
-		self.think = mummy_paine11;
 		self.solid = SOLID_NOT;
+		mummy_paine11 ();
 		return;
 	}
+	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 };
 void() mummy_paine13 = [$paine13, mummy_paine14] {};
 void() mummy_paine14 = [$paine14, mummy_paine15] {};
@@ -497,7 +497,7 @@ void() monster_mummy =
 	self.th_die = mummy_die;
 	self.th_missile = mummy_missile;
 
-	if (self.spawnflags & SPAWN_LYING)
+	if (self.spawnflags & ZOMBIE_LYING)
 	{
 		setsize (self, '-16 -16 -24', '16 16 -16');
 		self.solid = SOLID_NOT;

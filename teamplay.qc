@@ -482,7 +482,7 @@ void() TeamCheckTeam =
 	n = GetCTFTeam (newcolor);
 	sprint (self, "You have been assigned to ");
 	sprint (self, n);
-	sprint (self, " team.\n");
+	sprint (self, " team\n");
 
 	self.steam = newcolor; // Remember what team we're on
 	self.team = newcolor;
@@ -531,7 +531,7 @@ void() TeamCheckLock =
 					// times, kick him off the server.
 					if (self.suicide_count > 3)
 					{
-						sprint (self, "You were told you can't change teams.\nGo play color games somewhere else.\n");
+						sprint (self, "You were told you can't change teams.\nGo play color games somewhere else\n");
 						stuffcmd (self, "disconnect\n");
 						bprint (self.netname);
 						bprint (" has bad color sense\n");
@@ -543,7 +543,7 @@ void() TeamCheckLock =
 					// trying to change teams counts as a suicide
 					self.suicide_count = self.suicide_count + 1;
 
-					sprint (self, "You cannot change teams.\n");
+					sprint (self, "You cannot change teams\n");
 					stuffcmd (self, "color ");
 					n = self.steam - 1;
 					s = ftos (n);
@@ -1543,7 +1543,7 @@ void() TeamFlagStatusReport =
 	if (teamplay != TEAM_CTF && teamplay != TEAM_CTF_ONEFLAG &&
 		teamplay != TEAM_CTF_ALT)
 	{
-		sprint (self, "Capture the Flag is not enabled.\n");
+		sprint (self, "Capture the Flag is not enabled\n");
 		return;
 	}
 
@@ -1600,21 +1600,21 @@ void() TeamFlagStatusReport =
 			if (flag1 == world)
 				sprint (self, "missing!\n");
 			if (flag1.cnt == FLAG_AT_BASE)
-				sprint (self, "in your base.\n");
+				sprint (self, "in your base\n");
 			else if (flag1.cnt == FLAG_DROPPED)
-				sprint (self, "lying about.\n");
+				sprint (self, "lying about\n");
 			else
-				sprint (self, " corrupt.\n");
+				sprint (self, " corrupt\n");
 		}
 
 		if (flag2 != world && flag2.cnt == FLAG_CARRIED)
 		{
 			if (self == flag2.owner)
-				sprint (self, "You have the enemy flag.\n");
+				sprint (self, "You have the enemy flag\n");
 			else
 			{
 				sprint (self, flag2.owner.netname);
-				sprint (self, " has the enemy flag.\n");
+				sprint (self, " has the enemy flag\n");
 			}
 		}
 		else
@@ -1623,11 +1623,11 @@ void() TeamFlagStatusReport =
 			if (flag2 == world)
 				sprint (self, "missing!\n");
 			if (flag2.cnt == FLAG_AT_BASE)
-				sprint (self, "in their base.\n");
+				sprint (self, "in their base\n");
 			else if (flag2.cnt == FLAG_DROPPED)
-				sprint (self, "lying about.\n");
+				sprint (self, "lying about\n");
 			else
-				sprint (self, " corrupt.\n");
+				sprint (self, " corrupt\n");
 		}
 	}
 
@@ -1648,7 +1648,7 @@ void() TeamFlagStatusReport =
 				n = GetCTFTeam (flag1.owner.steam);
 				sprint (self, " of the ");
 				sprint (self, n);
-				sprint (self, " team has the ��� flag.\n");
+				sprint (self, " team has the ��� flag\n");
 			}
 		}
 		else
@@ -1660,24 +1660,24 @@ void() TeamFlagStatusReport =
 			if (flag1 == world)
 				sprint (self, "missing!\n");
 			if (flag1.cnt == FLAG_AT_BASE)
-				sprint (self, "at base.\n");
+				sprint (self, "at base\n");
 			else if (flag1.cnt == FLAG_DROPPED)
-				sprint (self, "lying about.\n");
+				sprint (self, "lying about\n");
 			else
-				sprint (self, " corrupt.\n");
+				sprint (self, " corrupt\n");
 		}
 
 		if (flag2 != world && flag2.cnt == FLAG_CARRIED)
 		{
 			if (flag2.owner == self)
-				sprint (self, "You have the ���� flag.\n");
+				sprint (self, "You have the ���� flag\n");
 			else
 			{
 				sprint (self, flag2.owner.netname);
 				n = GetCTFTeam (flag2.owner.steam);
 				sprint (self, " of the ");
 				sprint (self, n);
-				sprint (self, " team has the ���� flag.\n");
+				sprint (self, " team has the ���� flag\n");
 			}
 		}
 		else
@@ -1689,11 +1689,11 @@ void() TeamFlagStatusReport =
 			if (flag2 == world)
 				sprint (self, "missing!\n");
 			if (flag2.cnt == FLAG_AT_BASE)
-				sprint (self, "at base.\n");
+				sprint (self, "at base\n");
 			else if (flag2.cnt == FLAG_DROPPED)
-				sprint (self, "lying about.\n");
+				sprint (self, "lying about\n");
 			else
-				sprint (self, " corrupt.\n");
+				sprint (self, " corrupt\n");
 		}
 	}
 };

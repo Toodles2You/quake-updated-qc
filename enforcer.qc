@@ -47,9 +47,6 @@ void() Laser_Touch =
 {
 	local vector org;
 
-	if (other == self.owner)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -78,9 +75,6 @@ void() Laser_Touch =
 
 void(vector org, vector vec) LaunchLaser =
 {
-	if (self.classname == "monster_enforcer")
-		sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
-
 	vec = normalize (vec);
 
 	newmis = spawn ();
@@ -113,6 +107,8 @@ void() enforcer_fire =
 {
 	local vector org;
 
+	sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
+
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	makevectors (self.angles);
 
@@ -131,8 +127,7 @@ void() enf_stand7 = [$stand7, enf_stand1] { ai_stand (); };
 
 void() enf_walk1 = [$walk1, enf_walk2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "enforcer/idle1.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("enforcer/idle1.wav", ATTN_IDLE);
 	ai_walk (2);
 };
 void() enf_walk2 = [$walk2, enf_walk3] { ai_walk (4); };
@@ -153,8 +148,7 @@ void() enf_walk16 = [$walk16, enf_walk1] { ai_walk (2); };
 
 void() enf_run1 = [$run1, enf_run2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "enforcer/idle1.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("enforcer/idle1.wav", ATTN_IDLE);
 	ai_run (18);
 };
 void() enf_run2 = [$run2, enf_run3] { ai_run (14); };
@@ -315,6 +309,21 @@ void() enf_die =
 		enf_fdie1 ();
 };
 
+void() enf_sight =
+{
+	local float rsnd;
+
+	rsnd = rint (random () * 3);
+	if (rsnd == 1)
+		sound (self, CHAN_VOICE, "enforcer/sight1.wav", 1, ATTN_NORM);
+	else if (rsnd == 2)
+		sound (self, CHAN_VOICE, "enforcer/sight2.wav", 1, ATTN_NORM);
+	else if (rsnd == 0)
+		sound (self, CHAN_VOICE, "enforcer/sight3.wav", 1, ATTN_NORM);
+	else
+		sound (self, CHAN_VOICE, "enforcer/sight4.wav", 1, ATTN_NORM);
+};
+
 void() monster_enforcer =
 {
 	if (deathmatch)
@@ -351,6 +360,7 @@ void() monster_enforcer =
 	self.th_pain = enf_pain;
 	self.th_die = enf_die;
 	self.th_missile = enf_atk1;
+	self.th_sight = enf_sight;
 
 	walkmonster_start ();
 };

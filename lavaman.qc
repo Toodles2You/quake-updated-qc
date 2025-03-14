@@ -143,8 +143,7 @@ void() lavaman_stand =
 
 void() lavaman_idle1 = [$walk1, lavaman_idle2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "boss1/sight1.wav", 1, ATTN_NORM);
+	SUB_CheckIdle ("boss1/sight1.wav", ATTN_NORM);
 	// look for other players
 };
 void() lavaman_idle2 = [$walk2, lavaman_idle3] { lavaman_stand (); };
@@ -312,9 +311,6 @@ void() lavaman_touch =
 {
 	local float damg;
 
-	if (other == self.owner)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -325,7 +321,7 @@ void() lavaman_touch =
 	if (other.health)
 	{
 		if (other.classname == "monster_shambler")
-			damg = damg * 0.5; // mostly immune
+			damg = damg * 0.5;
 		T_Damage (other, self, self.owner, damg);
 	}
 
@@ -333,16 +329,9 @@ void() lavaman_touch =
 	// was done in the impact
 	T_RadiusDamage (self, self.owner, 40, other);
 
-	//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 	self.origin = self.origin - 8 * normalize (self.velocity);
 
 	// Change to an explosion2!!! Ramp in the non-diminishing reds...
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-
 	BecomeExplosion ();
 };
 

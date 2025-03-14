@@ -79,7 +79,7 @@ void() newitems_touch =
 	self.solid = SOLID_NOT;
 	other.items = other.items | self.items;
 	other.items2 = other.items2 | self.items2;
-	self.model = string_null;
+	self.model = "";
 
 	// do the apropriate action
 	if (self.netname == "Power Shield")

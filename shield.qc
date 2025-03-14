@@ -28,7 +28,7 @@ void() shield_think =
 
 	if ((self.owner.shield_death_time - 0.25) <= time)
 	{
-		self.model = string_null;
+		self.model = "";
 	}
 	else
 	{

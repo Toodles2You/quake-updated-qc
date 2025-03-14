@@ -61,7 +61,7 @@ void() RuneTouch =
 	else if (self.rune & ITEM_RUNE3)
 		centerprint (other, "Hell Magic\n\nHASTE");
 	else if (self.rune & ITEM_RUNE4)
-		centerprint (other, "Edler Magic\n\nRegeneration");
+		centerprint (other, "Edler Magic\n\nREGENERATION");
 	remove (self);
 };
 

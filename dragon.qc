@@ -380,15 +380,11 @@ void() dragon_walk13 = [$drgfly13, dragon_walk1]
 
 void() FireballTouch =
 {
-	if (other == self.owner)
-		return;
-
 	if (self.owner.classname == "monster_dragon")
 		T_RadiusDamage (self, self.owner, 90, self.owner);
 	else
 		T_RadiusDamage (self, self.owner, 30, world);
 
-	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -706,8 +702,7 @@ void() dragon_activate =
 		self.yaw_speed = 10;
 	self.view_ofs = '0 0 25';
 
-	self.flags = self.flags | FL_FLY;
-	self.flags = self.flags | FL_MONSTER;
+	self.flags = self.flags | FL_MONSTER | FL_FLY;
 
 	if (!walkmove (0, 0))
 	{
@@ -721,8 +716,9 @@ void() dragon_activate =
 	if (self.target != "")
 	{
 		self.movetarget = find (world, targetname, self.target);
-		self.goalentity = self.movetarget;
-		if (!self.movetarget)
+		if (self.movetarget)
+			self.goalentity = self.movetarget;
+		else
 		{
 			dprint ("Monster can't find target at ");
 			dprint (vtos (self.origin));
@@ -734,6 +730,11 @@ void() dragon_activate =
 		self.use = dragon_use;
 	else
 	dragon_use ();
+};
+
+void() dragon_sight =
+{
+	sound (self, CHAN_VOICE, "dragon/see.wav", 1, ATTN_NORM);
 };
 
 void() monster_dragon =
@@ -771,6 +772,7 @@ void() monster_dragon =
 	self.th_run = dragon_walk1;
 	self.th_pain = dragon_pain;
 	self.th_die = dragon_death1;
+	self.th_sight = dragon_sight;
 
 	self.dragonPainSequence = 1;
 
@@ -793,13 +795,12 @@ void() dragon_corner_touch =
 		return;
 
 	other.movetarget = find (world, targetname, self.target);
-	other.goalentity = other.movetarget;
 	other.target = self.target;
 
-	if (!other.movetarget)
-	{
+	if (other.movetarget)
+		other.goalentity = other.movetarget;
+	else
 		objerror ("dragon_corner: no target found");
-	}
 };
 
 void() dragon_corner =

@@ -284,7 +284,7 @@ void() actor_fire21 = [$stand5, actor_control]
 void() actor_teleport =
 {
 	spawn_tfog (self.origin);
-	self.model = string_null;
+	self.model = "";
 	self.think = SUB_Null;
 	self.nextthink = time + 999999;
 };

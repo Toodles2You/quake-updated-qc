@@ -106,8 +106,7 @@ void() dog_stand9 = [$stand9, dog_stand1] { ai_stand (); };
 
 void() dog_walk1 = [$walk1, dog_walk2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "dog/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("dog/idle.wav", ATTN_IDLE);
 	ai_walk (8);
 };
 void() dog_walk2 = [$walk2, dog_walk3] { ai_walk (8); };
@@ -120,8 +119,7 @@ void() dog_walk8 = [$walk8, dog_walk1] { ai_walk (8); };
 
 void() dog_run1 = [$run1, dog_run2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "dog/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("dog/idle.wav", ATTN_IDLE);
 	ai_run (16);
 };
 void() dog_run2 = [$run2, dog_run3] { ai_run (32); };
@@ -283,6 +281,11 @@ float() CheckDogJump =
 	return TRUE;
 };
 
+void() dog_sight =
+{
+	sound (self, CHAN_VOICE, "dog/dsight.wav", 1, ATTN_NORM);
+};
+
 float() DogCheckAttack =
 {
 	// if close enough for slashing, go for it
@@ -332,6 +335,8 @@ void() monster_dog =
 	self.th_die = dog_die;
 	self.th_melee = dog_atta1;
 	self.th_missile = dog_leap1;
+	self.th_sight = dog_sight;
+	self.th_checkattack = DogCheckAttack;
 
 	walkmonster_start ();
 };

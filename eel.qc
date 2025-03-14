@@ -80,8 +80,7 @@ void() eel_stand6 = [$eelswim6, eel_stand1]
 
 void() eel_walk1 = [$eelswim1, eel_walk2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "eel/eactive1.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("eel/eactive1.wav", ATTN_IDLE);
 	ai_walk (6);
 	eel_pitch_change ();
 };
@@ -113,8 +112,7 @@ void() eel_walk6 = [$eelswim6, eel_walk1]
 
 void() eel_run1 = [$eelswim1, eel_run2]
 {
-	if (random () < 0.4)
-		sound (self, CHAN_VOICE, "eel/eactive1.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle3 ("eel/eactive1.wav", ATTN_IDLE);
 	ai_run (10);
 	eel_pitch_change ();
 };
@@ -298,6 +296,11 @@ void(entity attacker, float damage) eel_pain =
 	eel_pain1 ();
 };
 
+void() eel_sight =
+{
+	sound (self, CHAN_VOICE, "eel/eelc5.wav", 1, ATTN_NORM);
+};
+
 void() monster_eel =
 {
 	if (deathmatch)
@@ -329,6 +332,7 @@ void() monster_eel =
 	self.th_die = eel_death;
 	self.th_pain = eel_pain;
 	self.th_melee = eel_attack1;
+	self.th_sight = eel_sight;
 
 	self.delay = time + random () * 6;
 	self.weapon = 0;

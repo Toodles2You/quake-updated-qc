@@ -57,10 +57,10 @@ $frame cruc_1 cruc_2 cruc_3 cruc_4 cruc_5 cruc_6
 $frame cruc_7 cruc_8 cruc_9 cruc_10 cruc_11 cruc_12 cruc_13
 $frame cruc_14 cruc_15 cruc_16
 
-float SPAWN_CRUCIFIED = 1;
-float SPAWN_LYING = 2;
-float SPAWN_AMBUSH = 4;
-float SPAWN_SNEAKY = 8;
+float ZOMBIE_CRUCIFIED = 1;
+float ZOMBIE_LYING = 2;
+float ZOMBIE_AMBUSH = 4;
+float ZOMBIE_SNEAKY = 8;
 
 .float inpain;
 void() zombie_escape1;
@@ -85,7 +85,7 @@ void() zombie_stand15 = [$stand15, zombie_stand1] { ai_stand (); };
 // with an added check for enemies if they're sneaky types...
 void() zombie_lurk =
 {
-	if (self.spawnflags & SPAWN_SNEAKY)
+	if (self.spawnflags & ZOMBIE_SNEAKY)
 	{
 		// not pausing before attack, but looking for player.
 		if (!self.pain_finished)
@@ -139,9 +139,9 @@ void() zombie_walk17 = [$walk17, zombie_walk18] { ai_walk (0); };
 void() zombie_walk18 = [$walk18, zombie_walk19] { ai_walk (0); };
 void() zombie_walk19 = [$walk19, zombie_walk1]
 {
-	ai_walk (0);
 	if (random () < 0.2)
 		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
+	ai_walk (0);
 };
 
 void() zombie_run1 = [$run1, zombie_run2]
@@ -167,18 +167,18 @@ void() zombie_run16 = [$run16, zombie_run17] { ai_run (7); };
 void() zombie_run17 = [$run17, zombie_run18] { ai_run (3); };
 void() zombie_run18 = [$run18, zombie_run1]
 {
-	ai_run (8);
-	if (random () < 0.2)
+	local float r;
+	r = (random () + random ()) * 0.5;
+	if (r < 0.2)
 		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-	if (random () > 0.8)
+	else if (r > 0.8)
 		sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
+	ai_run (8);
 };
 
 void() ZombieGrenadeTouch =
 {
-	if (other == self.owner)
-		return;
-	if (other.takedamage)
+	if (SUB_ShouldBleed (other))
 	{
 		T_Damage (other, self, self.owner, 10);
 		sound (self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
@@ -205,7 +205,6 @@ void(vector st) ZombieFireGrenade =
 
 	// calc org
 	org = self.origin + st_x * v_forward + st_y * v_right + (st_z - 24) * v_up;
-
 
 	makevectors (self.angles);
 
@@ -413,15 +412,15 @@ void() zombie_paine12 = [$paine12, zombie_paine13]
 	// see if ok to stand up
 	droptofloor (0, 0);
 	self.health = 60;
-	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.solid = SOLID_SLIDEBOX;
 	if (!walkmove (0, 0))
 	{
-		self.think = zombie_paine11;
 		self.solid = SOLID_NOT;
+		zombie_paine11 ();
 		return;
 	}
+	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 };
 void() zombie_paine13 = [$paine13, zombie_paine14] {};
 void() zombie_paine14 = [$paine14, zombie_paine15] {};
@@ -517,6 +516,11 @@ void(entity attacker, float take) zombie_pain =
 		zombie_painc1 ();
 	else
 		zombie_paind1 ();
+};
+
+void() zombie_sight =
+{
+	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_NORM);
 };
 
 void() zombie_sleep = [$paine11, zombie_sleep] { ai_stand (); };
@@ -669,13 +673,15 @@ void() monster_zombie =
 	self.th_pain = zombie_pain;
 	self.th_die = zombie_die;
 	self.th_missile = zombie_missile;
+	self.th_sight = zombie_sight;
 
-	if (self.spawnflags & SPAWN_CRUCIFIED)
+	if (self.spawnflags & ZOMBIE_CRUCIFIED)
 	{
+		self.spawnflags = self.spawnflags - ZOMBIE_CRUCIFIED;
 		self.movetype = MOVETYPE_NONE;
 		zombie_cruc1 ();
 	}
-	else if (self.spawnflags & SPAWN_LYING)
+	else if (self.spawnflags & ZOMBIE_LYING)
 	{
 		self.solid = SOLID_NOT;
 		self.th_stand = zombie_sleep;
@@ -686,13 +692,17 @@ void() monster_zombie =
 		setsize (self, '-16 -16 -24', '16 16 -16');
 
 		// HOLY HACK, BATMAN! - Don't blame me. Check out FindTarget in ai.qc!
-		if (self.spawnflags & SPAWN_AMBUSH)
-			self.spawnflags = SPAWN_LYING;
+		if (self.spawnflags & ZOMBIE_AMBUSH)
+			self.spawnflags = self.spawnflags - ZOMBIE_AMBUSH + MONSTER_AMBUSH;
 
 		walkmonster_start ();
 	}
-	else if (self.spawnflags & SPAWN_SNEAKY)
+	else if (self.spawnflags & ZOMBIE_SNEAKY)
 	{
+		// HOLY HACK, BATMAN! - Don't blame me. Check out FindTarget in ai.qc!
+		if (self.spawnflags & ZOMBIE_AMBUSH)
+			self.spawnflags = self.spawnflags - ZOMBIE_AMBUSH + MONSTER_AMBUSH;
+
 		self.movetype = MOVETYPE_NONE;
 		self.solid = SOLID_NOT;
 		self.th_stand = zombie_cruc1;
@@ -704,7 +714,7 @@ void() monster_zombie =
 		if (!self.delay)
 			self.delay = 3;
 
-		self.ideal_yaw = self.angles * '0 1 0';
+		self.ideal_yaw = self.angles_y;
 		if (!self.yaw_speed)
 			self.yaw_speed = 20;
 		self.view_ofs = '0 0 25';
@@ -715,8 +725,11 @@ void() monster_zombie =
 	}
 	else
 	{
-		if (self.spawnflags & SPAWN_AMBUSH)
-			self.spawnflags = SPAWN_LYING;
+		// spawnflags & 3 is a big hack, because zombie crucified used the first
+		// spawn flag prior to the ambush flag, and I forgot about it, so the
+		// second spawn flag works as well
+		if (self.spawnflags & ZOMBIE_AMBUSH)
+			self.spawnflags = self.spawnflags - ZOMBIE_AMBUSH + MONSTER_AMBUSH;
 		walkmonster_start ();
 	}
 };

@@ -59,25 +59,11 @@ float OGRE_NORMAL = 4;
 void() OgreGrenadeExplode =
 {
 	T_RadiusDamage (self, self.owner, 40, world);
-	sound (self, CHAN_VOICE, "weapons/r_exp3.wav", 1, ATTN_NORM);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-
-	self.velocity = '0 0 0';
-	self.touch = SUB_Null;
-	setmodel (self, "progs/s_explod.spr");
-	self.solid = SOLID_NOT;
-	s_explode1 ();
+	BecomeExplosion ();
 };
 
 void() OgreGrenadeTouch =
 {
-	if (other == self.owner)
-		return;
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		OgreGrenadeExplode ();
@@ -176,8 +162,7 @@ void() ogre_stand3 = [$stand3, ogre_stand4] { ai_stand (); };
 void() ogre_stand4 = [$stand4, ogre_stand5] { ai_stand (); };
 void() ogre_stand5 = [$stand5, ogre_stand6]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "ogre/ogidle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("ogre/ogidle.wav", ATTN_IDLE);
 	ai_stand ();
 };
 void() ogre_stand6 = [$stand6, ogre_stand7] { ai_stand (); };
@@ -189,17 +174,16 @@ void() ogre_walk1 = [$walk1, ogre_walk2] { ai_walk (3); };
 void() ogre_walk2 = [$walk2, ogre_walk3] { ai_walk (2); };
 void() ogre_walk3 = [$walk3, ogre_walk4]
 {
+	SUB_CheckIdle ("ogre/ogidle.wav", ATTN_IDLE);
 	ai_walk (2);
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "ogre/ogidle.wav", 1, ATTN_IDLE);
 };
 void() ogre_walk4 = [$walk4, ogre_walk5] { ai_walk (2); };
 void() ogre_walk5 = [$walk5, ogre_walk6] { ai_walk (2); };
 void() ogre_walk6 = [$walk6, ogre_walk7]
 {
-	ai_walk (5);
 	if (random () < 0.1)
 		sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
+	ai_walk (5);
 };
 void() ogre_walk7 = [$walk7, ogre_walk8] { ai_walk (3); };
 void() ogre_walk8 = [$walk8, ogre_walk9] { ai_walk (2); };
@@ -214,9 +198,8 @@ void() ogre_walk16 = [$walk16, ogre_walk1] { ai_walk (4); };
 
 void() ogre_run1 = [$run1, ogre_run2]
 {
+	SUB_CheckIdle ("ogre/ogidle2.wav", ATTN_IDLE);
 	ai_run (9);
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "ogre/ogidle2.wav", 1, ATTN_IDLE);
 };
 void() ogre_run2 = [$run2, ogre_run3] { ai_run (12); };
 void() ogre_run3 = [$run3, ogre_run4] { ai_run (8); };
@@ -485,6 +468,66 @@ void() ogre_melee =
 		ogre_swing1 ();
 };
 
+void() ogre_sight =
+{
+	sound (self, CHAN_VOICE, "ogre/ogwake.wav", 1, ATTN_NORM);
+};
+
+float() OgreCheckAttack =
+{
+	local vector spot1, spot2;
+	local entity targ;
+	local float chance;
+
+	if (enemy_range == RANGE_MELEE)
+	{
+		if (CanDamage (self.enemy, self))
+		{
+			self.attack_state = AS_MELEE;
+			return TRUE;
+		}
+	}
+
+	if (time < self.attack_finished)
+		return FALSE;
+
+	if (!enemy_vis)
+		return FALSE;
+
+	targ = self.enemy;
+
+	// see if any entities are in the way of the shot
+	spot1 = self.origin + self.view_ofs;
+	spot2 = targ.origin + targ.view_ofs;
+
+	traceline (spot1, spot2, FALSE, self);
+
+	if (trace_inopen && trace_inwater)
+		return FALSE; // sight line crossed contents
+
+	if (trace_ent != targ)
+	{
+		return FALSE;
+	}
+
+	if (time < self.attack_finished)
+		return FALSE;
+
+	if (enemy_range == RANGE_FAR)
+		return FALSE;
+
+	else if (enemy_range == RANGE_NEAR)
+		chance = 0.10;
+	else if (enemy_range == RANGE_MID)
+		chance = 0.05;
+	else
+		chance = 0;
+
+	self.attack_state = AS_MISSILE;
+	SUB_AttackFinished (1 + 2 * random ());
+	return TRUE;
+};
+
 void() monster_ogre =
 {
 	if (deathmatch)
@@ -535,6 +578,8 @@ void() monster_ogre =
 	self.th_melee = ogre_melee;
 	self.th_missile = ogre_nail1;
 	self.th_pain = ogre_pain;
+	self.th_sight = ogre_sight;
+	self.th_checkattack = OgreCheckAttack;
 
 	walkmonster_start ();
 };

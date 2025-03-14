@@ -85,19 +85,14 @@ void() MultiGrenadeExplode =
 
 void() MultiGrenadeTouch =
 {
-	if (other == self.owner)
-		return;
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		if (self.classname == "MiniGrenade")
 			MiniGrenadeExplode ();
+		else if (self.owner.classname == "player")
+			GrenadeExplode ();
 		else
-		{
-			if (self.owner.classname == "player")
-				GrenadeExplode ();
-			else
-				MiniGrenadeExplode ();
-		}
+			MiniGrenadeExplode ();
 		return;
 	}
 	sound (self, CHAN_WEAPON, "weapons/bounce.wav", 1, ATTN_NORM);
@@ -154,31 +149,21 @@ void() MultiRocketExplode =
 	if (other.health)
 	{
 		if (other.classname == "monster_shambler")
-			damg = damg * 0.5; // mostly immune
+			damg = damg * 0.5;
 		if (other.classname == "monster_dragon")
-			damg = damg * 0.5; // mostly immune
+			damg = damg * 0.5;
 		T_Damage (other, self, self.owner, damg);
 	}
 
 	T_RadiusDamage (self, self.owner, 75, other);
 
-	//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 	self.origin = self.origin - 8 * normalize (self.velocity);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
 
 	BecomeExplosion ();
 };
 
 void() MultiRocketTouch =
 {
-	if (other == self.owner)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -373,9 +358,6 @@ void() PlasmaTouch =
 {
 	local float damg;
 
-	if (other == self.owner)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -388,7 +370,7 @@ void() PlasmaTouch =
 	if (other.health)
 	{
 		if (other.classname == "monster_shambler")
-			damg = damg * 0.5; // mostly immune
+			damg = damg * 0.5;
 		T_Damage (other, self, self.owner, damg);
 	}
 
