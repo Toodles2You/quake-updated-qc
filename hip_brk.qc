@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Breakaway walls QuickC program
-	By Jim Dose'  9/11/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 float MULTI_USE = 1;
 float INVISIBLE = 2;
 
@@ -48,20 +41,6 @@ void(entity attacker, float damage) damagethreshold_pain =
 	self.health = self.max_health;
 };
 
-/*QUAKED trigger_damagethreshold (0 .5 .8) ? MULTI_USE INVISIBLE
-Triggers only when a threshold of damage is exceeded.
-When used in conjunction with func_breakawaywall, allows
-walls that may be destroyed with a rocket blast.
-
-MULTI_USE tells the trigger to not to remove itself after
-being fired.  Allows the trigger to be used multiple times.
-
-INVISIBLE tells the trigger to not be visible.
-
-"health" specifies how much damage must occur before trigger fires.
-Default is 60.
-
-*/
 void() trigger_damagethreshold =
 {
 	self.mangle = self.angles;
@@ -90,9 +69,6 @@ void() trigger_damagethreshold =
 	self.th_die = damagethreshold_killed;
 };
 
-/*QUAKED func_breakawaywall (0 .5 .8) ?
-Special walltype that removes itself when triggered.
-*/
 void() func_breakawaywall =
 {
 	self.mangle = self.angles;

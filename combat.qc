@@ -23,16 +23,6 @@ void(entity targ, entity attacker) ClientObituary;
 
 void() monster_death_use;
 
-//============================================================================
-
-/*
-============
-CanDamage
-
-Returns true if the inflictor can directly damage the target.  Used for
-explosions and melee attacks.
-============
-*/
 float(entity targ, entity inflictor) CanDamage =
 {
 	local vector center;
@@ -68,11 +58,6 @@ float(entity targ, entity inflictor) CanDamage =
 	return FALSE;
 };
 
-/*
-============
-Killed
-============
-*/
 void(entity targ, entity attacker) Killed =
 {
 	local entity oself;
@@ -81,20 +66,16 @@ void(entity targ, entity attacker) Killed =
 	self = targ;
 
 	if (self.health < -99)
-		self.health = -99;  // don't let sbar look bad if a player
-							// MED
+		self.health = -99; // don't let sbar look bad if a player
+
 	if (self.charmed)
 	{
 		self.effects = self.effects - (self.effects & EF_DIMLIGHT);
 	}
-	//		self.effects = self.effects - EF_BRIGHTFIELD;
-
-	if (self.health < -99)
-		self.health = -99;  // don't let sbar look bad if a player
 
 	if (self.movetype == MOVETYPE_PUSH ||
 		self.movetype == MOVETYPE_NONE)
-		{  // doors, triggers, etc
+		{ // doors, triggers, etc
 		self.th_die ();
 		self = oself;
 		return;
@@ -120,16 +101,16 @@ void(entity targ, entity attacker) Killed =
 	self = oself;
 };
 
+float empathyused;
+
 /*
-============
+==============================================================================
 T_Damage
 
 The damage is coming from inflictor, but get mad at attacker
 This should be the only function that ever reduces health.
-============
+==============================================================================
 */
-// MED 01/10/97 added empathyused variable
-float empathyused;
 void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 {
 	local vector dir;
@@ -142,13 +123,11 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 
 	if (discharged && targ.wetsuit_finished)
 		return;
-	// MED moved damage_attacker down a bit
 
 	// check for quad damage powerup on the attacker
 	if (attacker.super_damage_finished > time)
 		damage = damage * 4;
 
-	// MED
 	// check for empathy shields
 	if ((targ.items2 & HIP_IT_EMPATHY_SHIELDS) &&
 		!(inflictor.items2 & HIP_IT_EMPATHY_SHIELDS) && (targ != attacker))
@@ -158,11 +137,9 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		T_Damage (attacker, targ, targ, damage);
 		empathyused = 0;
 	}
-	// MED
 	// used by buttons and triggers to set activator for target firing
 	damage_attacker = attacker;
 
-	// MED
 	// used to keep track of what hit us
 	damage_inflictor = inflictor;
 
@@ -172,7 +149,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	if (save >= targ.armorvalue)
 	{
 		save = targ.armorvalue;
-		targ.armortype = 0;  // lost all armor
+		targ.armortype = 0; // lost all armor
 		targ.items = targ.items - (targ.items & IT_ARMOR);
 	}
 
@@ -209,7 +186,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		}
 		return;
 	}
-	// MED
 	if (targ.items2 & HIP_IT_EMPATHY_SHIELDS)
 	{
 		if (targ.empathy_sound < time)
@@ -236,7 +212,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	oldself = self;
 	self = targ;
 
-	// MED 10/17/96 added charmed stuff
 	if ((self.flags & FL_MONSTER) && attacker != world)
 	{
 		// get mad unless of the same class (except for soldiers)
@@ -266,11 +241,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	self = oldself;
 };
 
-/*
-============
-T_RadiusDamage
-============
-*/
 void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDamage =
 {
 	local float points;
@@ -302,7 +272,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 						if (points > 0)
 						{
 							if (CanDamage (head, inflictor))
-							{  // shambler takes half damage from all explosions
+							{ // shambler takes half damage from all explosions
 								if (head.classname == "monster_shambler")
 									points = points * 0.5;
 								T_Damage (head, inflictor, attacker, points);

@@ -17,14 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/*
-==============================================================================
-
-armagon
-
-==============================================================================
-*/
-
 $frame lwalk1 lwalk2 lwalk3 lwalk4 lwalk5 lwalk6 lwalk7
 $frame lwalk8 lwalk9 lwalk10 lwalk11 lwalk12
 
@@ -250,7 +242,7 @@ void() armagon_walkthink =
 	}
 	client = checkclient ();
 	if (!client)
-		return;  // current check entity isn't in PVS
+		return; // current check entity isn't in PVS
 	if (visible (client))
 	{
 		self.enemy = client;
@@ -1164,7 +1156,7 @@ void() armagon_body_explode1 =
 void(entity attacker, float damage) armagon_pain =
 {
 	if (self.health <= 0)
-		return;  // allready dying, don't go into pain frame
+		return; // allready dying, don't go into pain frame
 
 	if (damage < 25)
 		return;
@@ -1291,10 +1283,10 @@ float() ArmagonCheckAttack =
 	traceline (spot1, spot2, FALSE, self);
 
 	if ((trace_ent != targ) && (!self.charmed))
-		return FALSE;  // don't have a clear shot
+		return FALSE;
 
 	if (trace_inopen && trace_inwater)
-		return FALSE;  // sight line crossed contents
+		return FALSE; // sight line crossed contents
 
 	if (time < self.attack_finished)
 		return FALSE;
@@ -1306,17 +1298,14 @@ float() ArmagonCheckAttack =
 		(self.enemy.classname != "player"))
 		return FALSE;
 	if (dist < 400)
-	{  // melee attack
+	{
 		self.th_melee ();
 		return TRUE;
 	}
-	// missile attack
 	self.lefty = 1;
 	return FALSE;
 };
 
-/*QUAKED monster_armagon (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-*/
 void() monster_armagon =
 {
 	local entity body;

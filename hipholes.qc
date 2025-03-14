@@ -17,18 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Bullet holes QuickC program
-	By Jim Dose'  11/20/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
-/*QUAKED wallsprite (0 1 0) (-8 -8 -8) (8 8 8)
-Places a sprite on a wall.  Angles should be opposite of face.
-
-"model" sprite to place on wall.  Default is "progs/s_blood1.spr".
-*/
 void() wallsprite =
 {
 	if (self.model == "")

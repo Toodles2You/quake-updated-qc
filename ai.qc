@@ -22,8 +22,8 @@ void() knight_walk1;
 void() knight_bow6;
 void() knight_bow1;
 void(entity etemp, entity stemp, entity stemp, float dmg) T_Damage;
-/*
 
+/*
 .enemy
 Will be world if not currently angry at anyone.
 
@@ -48,11 +48,9 @@ time > .pausetime.
 walkmove (angle, speed) primitive is all or nothing
 */
 
-//
 // when a monster becomes angry at a player, that monster will be used
 // as the sight target the next frame so that monsters near that one
 // will wake up even if they wouldn't have noticed the player
-//
 entity sight_entity;
 float sight_entity_time;
 void() FoundTarget;
@@ -96,22 +94,18 @@ void() movetarget_f =
 	setsize (self, '-8 -8 -8', '8 8 8');
 };
 
-/*QUAKED path_corner (0.5 0.3 0) (-8 -8 -8) (8 8 8)
-Monsters will continue walking towards the next target corner.
-"delay" delay to wait before proceeding to next segment;
-*/
 void() path_corner =
 {
 	movetarget_f ();
 };
 
 /*
-=============
+==============================================================================
 t_movetarget
 
 Something has bumped into a movetarget.  If it is a monster
 moving towards it, change the next destination and continue.
-==============
+==============================================================================
 */
 void() t_movetarget =
 {
@@ -121,17 +115,15 @@ void() t_movetarget =
 		return;
 
 	if (other.enemy)
-		return;  // fighting, not following a path
+		return; // fighting, not following a path
 
 	temp = self;
 	self = other;
 	other = temp;
 
 	if (self.classname == "monster_ogre")
-		// play chainsaw drag sound
 		sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 
-	// MED
 	if (other.target != "")
 	{
 		self.movetarget = find (world, targetname, other.target);
@@ -143,7 +135,6 @@ void() t_movetarget =
 			self.th_stand ();
 			return;
 		}
-		// MED 01/20/97
 		else if (other.delay)
 		{
 			self.pausetime = time + other.delay;
@@ -157,8 +148,6 @@ void() t_movetarget =
 		return;
 	}
 };
-
-// MED 01/20/97
 
 /*
 =============
@@ -234,23 +223,17 @@ void() followtarget_f =
 {
 	self.solid = SOLID_TRIGGER;
 	self.touch = t_followtarget;
-	setmodel (self, self.model);  // set size and link into world
+	setmodel (self, self.model); // set size and link into world
 	self.movetype = MOVETYPE_NONE;
 	self.modelindex = 0;
 	self.model = "";
 };
 
-/*QUAKED path_follow (0.5 0.3 0) ?
-Monsters will stop what they are doing and follow to the path
-*/
 void() path_follow =
 {
 	followtarget_f ();
 };
 
-/*QUAKED path_follow2 (0.5 0.3 0) (-8 -8 -8) (8 8 8)
-Monsters will stop what they are doing and follow to the path
-*/
 void() path_follow2 =
 {
 	self.solid = SOLID_TRIGGER;
@@ -258,10 +241,8 @@ void() path_follow2 =
 	setsize (self, '-8 -8 -8', '8 8 8');
 };
 
-//============================================================================
-
 /*
-=============
+==============================================================================
 range
 
 returns the range catagorization of an entity reletive to self
@@ -269,7 +250,7 @@ returns the range catagorization of an entity reletive to self
 1	visibility and infront, or visibility and show hostile
 2	infront and show hostile
 3	only triggered by damage
-=============
+==============================================================================
 */
 float(entity targ) range =
 {
@@ -288,25 +269,17 @@ float(entity targ) range =
 	return RANGE_FAR;
 };
 
-/*
-=============
-visible
-
-returns 1 if the entity is visible to self, even if not infront ()
-=============
-*/
 float(entity targ) visible =
 {
 	local vector spot1, spot2;
 
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
-	traceline (spot1, spot2, TRUE, self);  // see through other monsters
+	traceline (spot1, spot2, TRUE, self);
 
 	if (trace_inopen && trace_inwater)
-		return FALSE;  // sight line crossed contents
+		return FALSE; // sight line crossed contents
 
-	// MED 11/21/96
 	if (trace_fraction == 1)
 	{
 		visible_distance = vlen (spot2 - spot1);
@@ -315,13 +288,6 @@ float(entity targ) visible =
 	return FALSE;
 };
 
-/*
-=============
-infront
-
-returns 1 if the entity is in front (in sight) of self
-=============
-*/
 float(entity targ) infront =
 {
 	local vector vec;
@@ -338,10 +304,6 @@ float(entity targ) infront =
 	return FALSE;
 };
 
-//============================================================================
-
-// MED 10/18/96 added charmed stuff
-//============================================================================
 void() UpdateCharmerGoal =
 {
 	local entity targ;
@@ -411,15 +373,13 @@ void() StopHuntingCharmer =
 	self.nextthink = time + 0.1;
 };
 
-//============================================================================
-
 void() HuntTarget =
 {
 	self.goalentity = self.enemy;
 	self.think = self.th_run;
 	self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin);
 	self.nextthink = time + 0.1;
-	SUB_AttackFinished (1);  // wait a while before first attack
+	SUB_AttackFinished (1); // wait a while before first attack
 };
 
 void() SightSound =
@@ -460,25 +420,21 @@ void() SightSound =
 		sound (self, CHAN_VOICE, "soldier/sight1.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_shalrath")
 		sound (self, CHAN_VOICE, "shalrath/sight.wav", 1, ATTN_NORM);
-	// MED
 	else if (self.classname == "monster_gremlin")
 	{
 		if (self.stoleweapon == 0)
 			sound (self, CHAN_VOICE, "grem/sight1.wav", 1, ATTN_NORM);
 	}
-	// MED
 	else if (self.classname == "monster_scourge")
 		sound (self, CHAN_VOICE, "scourge/sight.wav", 1, ATTN_NORM);
-	// MED
 	else if (self.classname == "monster_armagon")
 		sound (self, CHAN_VOICE, "armagon/sight.wav", 1, 0.1);
 };
 
 void() FoundTarget =
 {
-	// MED
 	if (self.enemy.classname == "player")
-	{  // let other monsters see this monster for a while
+	{ // let other monsters see this monster for a while
 		if (self.charmed)
 		{
 			if ((self.charmer == self.enemy) ||
@@ -501,14 +457,14 @@ void() FoundTarget =
 		}
 	}
 
-	self.show_hostile = time + 1;  // wake up other monsters
+	self.show_hostile = time + 1; // wake up other monsters
 
 	SightSound ();
 	HuntTarget ();
 };
 
 /*
-===========
+==============================================================================
 FindTarget
 
 Self is currently not attacking anything, so try to find a target
@@ -522,7 +478,7 @@ player.
 To avoid spending too much time, only a single client (or fakeclient) is
 checked each frame.  This means multi player games will have slightly
 slower noticing monsters.
-============
+==============================================================================
 */
 float() FindTarget =
 {
@@ -539,7 +495,6 @@ float() FindTarget =
 	// spawn flag prior to the ambush flag, and I forgot about it, so the second
 	// spawn flag works as well
 
-	// MED 10/17/96 added charmed stuff
 	if (self.charmed)
 	{
 		self.effects = self.effects | EF_DIMLIGHT;
@@ -583,7 +538,6 @@ float() FindTarget =
 		if (client.enemy == self.enemy)
 			return FALSE;
 	}
-	// MED 10/17/96 added charmed clause
 	else if (self.charmed)
 	{
 		selected = world;
@@ -615,13 +569,12 @@ float() FindTarget =
 	{
 		client = checkclient ();
 		if (!client)
-			return FALSE;  // current check entity isn't in PVS
+			return FALSE; // current check entity isn't in PVS
 	}
 
 	if (client == self.enemy)
 		return FALSE;
 
-	// MED 10/17/96 added charmed stuff
 	if (!self.charmed)
 	{
 		if (client.flags & FL_NOTARGET)
@@ -637,7 +590,6 @@ float() FindTarget =
 	if (!visible (client))
 		return FALSE;
 
-	// MED 10/17/96 added charmed stuff
 	if (!self.charmed)
 	{
 		if (r == RANGE_NEAR)
@@ -652,12 +604,9 @@ float() FindTarget =
 		}
 	}
 
-	//
 	// got one
-	//
 	self.enemy = client;
 
-	// MED 10/17/96 added charmed stuff
 	if ((!self.charmed) && (!self.enemy.charmed))
 	{
 		if (self.enemy.classname != "player")
@@ -676,8 +625,6 @@ float() FindTarget =
 	return TRUE;
 };
 
-//=============================================================================
-
 void(float dist) ai_forward =
 {
 	walkmove (self.angles_y, dist);
@@ -688,47 +635,24 @@ void(float dist) ai_back =
 	walkmove ((self.angles_y + 180), dist);
 };
 
-/*
-=============
-ai_pain
-
-stagger back a bit
-=============
-*/
 void(float dist) ai_pain =
 {
 	ai_back (dist);
 };
 
-/*
-=============
-ai_painforward
-
-stagger back a bit
-=============
-*/
 void(float dist) ai_painforward =
 {
 	walkmove (self.ideal_yaw, dist);
 };
 
-/*
-=============
-ai_walk
-
-The monster is walking it's beat
-=============
-*/
 void(float dist) ai_walk =
 {
 	movedist = dist;
 
-	// MED 01/20/97
 	// check for noticing a player
 	if (FindTarget ())
 		return;
 
-	// MED 11/02/96
 	if (self.huntingcharmer)
 	{
 		movetogoal (dist);
@@ -738,13 +662,6 @@ void(float dist) ai_walk =
 		movetogoal (dist);
 };
 
-/*
-=============
-ai_stand
-
-The monster is staying in one place for a while, with slight angle turns
-=============
-*/
 void() ai_stand =
 {
 	if (FindTarget ())
@@ -755,17 +672,8 @@ void() ai_stand =
 		self.th_walk ();
 		return;
 	}
-
-	// change angle slightly
 };
 
-/*
-=============
-ai_turn
-
-don't move, but turn towards ideal_yaw
-=============
-*/
 void() ai_turn =
 {
 	if (FindTarget ())
@@ -774,14 +682,6 @@ void() ai_turn =
 	ChangeYaw ();
 };
 
-// MED 11/10/96 added ai_turn_in_place
-/*
-=============
-ai_turn_in_place
-
-don't move, but turn towards ideal_yaw
-=============
-*/
 void() ai_turn_in_place =
 {
 	local float delta;
@@ -800,13 +700,6 @@ void() ai_turn_in_place =
 	}
 };
 
-//=============================================================================
-
-/*
-=============
-ChooseTurn
-=============
-*/
 void(vector dest3) ChooseTurn =
 {
 	local vector dir, newdir;
@@ -832,12 +725,6 @@ void(vector dest3) ChooseTurn =
 	self.ideal_yaw = vectoyaw (dir);
 };
 
-/*
-============
-FacingIdeal
-
-============
-*/
 float() FacingIdeal =
 {
 	local float delta;
@@ -848,11 +735,8 @@ float() FacingIdeal =
 	return TRUE;
 };
 
-//=============================================================================
-
 float() WizardCheckAttack;
 float() DogCheckAttack;
-// MED
 float() GremlinCheckAttack;
 float() ScourgeCheckAttack;
 float() ArmagonCheckAttack;
@@ -882,18 +766,10 @@ float() CheckAnyAttack =
 	return CheckAttack ();
 };
 
-/*
-=============
-ai_run_melee
-
-Turn and close until within an angle to launch a melee attack
-=============
-*/
 void() ai_run_melee =
 {
 	self.ideal_yaw = enemy_yaw;
 	ChangeYaw ();
-
 	if (FacingIdeal ())
 	{
 		self.th_melee ();
@@ -901,13 +777,6 @@ void() ai_run_melee =
 	}
 };
 
-/*
-=============
-ai_run_missile
-
-Turn in place until within an angle to launch a missile attack
-=============
-*/
 void() ai_run_missile =
 {
 	self.ideal_yaw = enemy_yaw;
@@ -919,13 +788,6 @@ void() ai_run_missile =
 	}
 };
 
-/*
-=============
-ai_run_slide
-
-Strafe sideways, but stay at aproximately the same range
-=============
-*/
 void() ai_run_slide =
 {
 	local float ofs;
@@ -945,7 +807,6 @@ void() ai_run_slide =
 	walkmove (self.ideal_yaw - ofs, movedist);
 };
 
-// MED
 /*
 =============
 ai_run_dodge
@@ -959,19 +820,6 @@ void() ai_run_dodge =
 	local float ofs;
 	local float newyaw;
 
-	/*
-	// attempt to jump over missiles
-	if (self.enemy.weaponframe == 1)
-	{
-		if (self.flags & FL_ONGROUND)
-		{
-			self.origin_z = self.origin_z + 1;
-			self.velocity = self.velocity + '0 0 500';
-			self.flags = self.flags - FL_ONGROUND;
-		}
-		self.ltime = self.ltime + 1.0;
-	}
-	*/
 	self.nextthink = time + 0.1;
 	if (self.lefty)
 		ofs = 40;
@@ -1001,11 +849,11 @@ void() ai_run_dodge =
 };
 
 /*
-=============
+==============================================================================
 ai_run
 
 The monster has an enemy it is trying to kill
-=============
+==============================================================================
 */
 float RUN_STRAIGHT;
 void(float dist) ai_run =
@@ -1017,15 +865,13 @@ void(float dist) ai_run =
 	// see if the enemy is dead
 	if (self.enemy.health <= 0 ||
 		(self.charmed && (self.charmer == self.enemy)))
-		{
+	{
 		self.enemy = world;
-		// MED 10/30/96 added charmed stuff
 		if (self.charmed)
 		{
 			HuntCharmer ();
 			return;
 		}
-		// FIXME: look all around for other targets
 		if (self.oldenemy.health > 0)
 		{
 			self.enemy = self.oldenemy;
@@ -1041,7 +887,7 @@ void(float dist) ai_run =
 		}
 	}
 
-	self.show_hostile = time + 1;  // wake up other monsters
+	self.show_hostile = time + 1; // wake up other monsters
 
 	// check knowledge of enemy
 	enemy_vis = visible (self.enemy);
@@ -1049,7 +895,6 @@ void(float dist) ai_run =
 		self.search_time = time + 5;
 
 	// look for other coop players
-	// MED 10/17/96 added charmed stuff
 	if (coop && self.search_time < time && !self.charmed)
 	{
 		if (FindTarget ())
@@ -1060,7 +905,6 @@ void(float dist) ai_run =
 	enemy_range = range (self.enemy);
 	enemy_yaw = vectoyaw (self.enemy.origin - self.origin);
 
-	// MED
 	if (self.th_turn)
 	{
 		angledelta = fabs (self.angles_y - enemy_yaw);
@@ -1084,7 +928,7 @@ void(float dist) ai_run =
 
 	if (CheckAnyAttack ())
 	{
-		return;  // beginning an attack
+		return;
 	}
 
 	if (self.attack_state == AS_SLIDING)
@@ -1099,7 +943,6 @@ void(float dist) ai_run =
 		return;
 	}
 
-	// MED 11/11/96
 	if (RUN_STRAIGHT && time > self.endtime)
 	{
 		RUN_STRAIGHT = 0;
@@ -1107,14 +950,12 @@ void(float dist) ai_run =
 		if (!axis)
 		{
 			self.endtime = time + 3;
-			movetogoal (dist);  // done in C code...
+			movetogoal (dist); // done in C code...
 		}
-//		else
-//			ChangeYaw ();
 	}
 	else
 	{
 		// head straight in
-		movetogoal (dist);  // done in C code...
+		movetogoal (dist); // done in C code...
 	}
 };

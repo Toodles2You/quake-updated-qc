@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Water QuickC program
-	By Jim Dose'  12/16/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 void() bobbingwater_think =
 {
 	local vector ang;
@@ -43,13 +36,6 @@ void() bobbingwater_think =
 	self.nextthink = time + 0.02;
 };
 
-/*QUAKED func_bobbingwater (0 .5 .8) ?
-Used to emulate water.  To use, create a thin water brush and center it
-on the water line of the body of water to bob.  The amount of the bob
-is the depth of the brush.
-
-"speed" is how long in seconds it takes the brush to do one full bob.
-*/
 void() func_bobbingwater =
 {
 	self.angles = '0 0 0';

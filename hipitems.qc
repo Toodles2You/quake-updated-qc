@@ -17,25 +17,8 @@
     See file, 'COPYING', for details.
 */
 
-/* Items QuickC program
-	By Jim Dose'  9/13/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 float UNDERWATER = 2;
 
-/*
-===============================================================================
-
-HIPNOTIC ITEMS
-
-===============================================================================
-*/
-//
-// hip_powerup_touch function
-//
 void() hip_powerup_touch =
 {
 	if (other.classname != "player")
@@ -75,12 +58,9 @@ void() hip_powerup_touch =
 	}
 
 	activator = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets (); // fire all targets / killtargets
 };
 
-/*QUAKED item_artifact_wetsuit (0 .5 .8) (-16 -16 -24) (16 16 32)
-Player takes no damage from electrical attacks and swims faster for 30 seconds
-*/
 void() item_artifact_wetsuit =
 {
 	self.touch = hip_powerup_touch;
@@ -97,14 +77,6 @@ void() item_artifact_wetsuit =
 
 	StartItem ();
 };
-
-/*
-===============================================================================
-//
-// Horn of Conjuring
-//
-===============================================================================
-*/
 
 void() horn_touch =
 {
@@ -128,15 +100,10 @@ void() horn_touch =
 	activator = other;
 	horn_active = 1;
 	horn_charmer = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets (); // fire all targets / killtargets
 	horn_active = 0;
 };
 
-/*QUAKED item_hornofconjuring (0 .5 .8) (-16 -16 0) (16 16 32)
-Horn of Conjuring.
-You must make func_spawn entities connected to this entity
-to spawn the charmed creature.
-*/
 void() item_hornofconjuring =
 {
 	self.touch = horn_touch;
@@ -149,9 +116,6 @@ void() item_hornofconjuring =
 	StartItem ();
 };
 
-/*QUAKED item_artifact_empathy_shields (0 .5 .8) (-16 -16 0) (16 16 32)
-Empathy Shield.
-*/
 void() item_artifact_empathy_shields =
 {
 	self.touch = hip_powerup_touch;
@@ -167,16 +131,7 @@ void() item_artifact_empathy_shields =
 	setsize (self, '-16 -16 0', '16 16 32');
 	StartItem ();
 };
-/*
-===============================================================================
 
-HIPNOTIC WEAPONS
-
-===============================================================================
-*/
-
-/*QUAKED weapon_mjolnir (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() weapon_mjolnir =
 {
 	precache_model ("progs/g_hammer.mdl");
@@ -189,8 +144,6 @@ void() weapon_mjolnir =
 	StartItem ();
 };
 
-/*QUAKED weapon_laser_gun (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() weapon_laser_gun =
 {
 	precache_model ("progs/g_laserg.mdl");
@@ -203,8 +156,6 @@ void() weapon_laser_gun =
 	StartItem ();
 };
 
-/*QUAKED weapon_proximity_gun (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() weapon_proximity_gun =
 {
 	precache_model ("progs/g_prox.mdl");
@@ -216,14 +167,6 @@ void() weapon_proximity_gun =
 	setsize (self, '-16 -16 0', '16 16 56');
 	StartItem ();
 };
-
-/*
-===============================================================================
-
-HIPNOTIC HAZARDS
-
-===============================================================================
-*/
 
 void() spikemine_Home =
 {
@@ -320,10 +263,6 @@ void() spikemine_Touch =
 	s_explode1 ();
 };
 
-/*
-spike_mine_first_think
-*/
-
 void() spike_mine_first_think =
 {
 	self.think = spikemine_Home;
@@ -333,8 +272,6 @@ void() spike_mine_first_think =
 	self.use = monster_use;
 };
 
-/*QUAKED trap_spike_mine (0 .5 .8) (-16 -16 0) (16 16 32)
-*/
 void() trap_spike_mine =
 {
 	if (deathmatch)
@@ -371,7 +308,6 @@ void() trap_spike_mine =
 	self.deathtype = "was blasted by a spike mine";
 };
 
-//============================================================================
 float LIGHTNING_RANDOM = 1;
 float LIGHTNING_BOOM = 2;
 
@@ -528,13 +464,6 @@ void() lightning_firstthink =
 	}
 };
 
-/*QUAKED trap_lightning_triggered (0 .5 .8) (-8 -8 -8) (8 8 8) random boom
-When triggered, fires lightning in the direction set in QuakeEd.
-"wait" how long to wait between blasts (1.0 default)
-				 if in random mode wait is multiplied by random
-"dmg" how much damage lightning should inflict (30 default)
-"duration" how long each lightning attack should last (0.1 default)
-*/
 void() trap_lightning_triggered =
 {
 	if (self.wait == 0)
@@ -553,14 +482,6 @@ void() trap_lightning_triggered =
 	self.deathtype = "is electrocuted";
 };
 
-/*QUAKED trap_lightning (0 .5 .8) (-8 -8 -8) (8 8 8) random boom
-Continuously fire lightning.
-"wait" how long to wait between blasts (1.0 default)
-				 if in random mode wait is multiplied by random
-"nextthink" delay before firing first lightning, so multiple traps can be
-stagered. "dmg" how much damage lightning should inflict (30 default) "duration"
-how long each lightning attack should last (0.1 default)
-*/
 void() trap_lightning =
 {
 	trap_lightning_triggered ();
@@ -573,15 +494,7 @@ void() trap_lightning_switched_use =
 	if (self.state == 1)
 		self.nextthink = self.huntingcharmer;
 };
-/*QUAKED trap_lightning_switched (0 .5 .8) (-8 -8 -8) (8 8 8) random boom
-Continuously fires lightning.
-"wait" how long to wait between blasts (1.0 default)
-				 if in random mode wait is multiplied by random
-"nextthink" delay before firing first lightning, so multiple traps can be
-stagered. "dmg" how much damage lightning should inflict (30 default) "duration"
-how long each lightning attack should last (0.1 default) "state" 0 (default)
-initially off, 1 initially on.
-*/
+
 void() trap_lightning_switched =
 {
 	trap_lightning_triggered ();
@@ -738,19 +651,10 @@ void() trap_tesla_think =
 	}
 };
 
-/*QUAKED trap_tesla_coil (0 .5 .8) (-8 -8 -8) (8 8 8) targetenemies
-targets enemies in vicinity and fires at them
-"wait" how long build up should be (2 second default)
-"dmg" how much damage lightning should inflict (2 + 5*skill default)
-"duration" how long each lightning attack should last (continuous default)
-"distance" how far the tesla coil should reach (600 default)
-"state" on/off for the coil (0 default is off)
-"count" number of people to target (2 default)
-*/
 void() trap_tesla_coil =
 {
 	precache_sound ("misc/tesla.wav");
-	precache_sound ("hipweap/mjolhit.wav");  // lightning sound
+	precache_sound ("hipweap/mjolhit.wav"); // lightning sound
 	if (self.wait == 0)
 		self.wait = 2;
 	if (self.dmg == 0)
@@ -784,15 +688,6 @@ void() trap_gods_wrath_use =
 	}
 };
 
-/*QUAKED trap_gods_wrath (0 .5 .8) (-8 -8 -8) (8 8 8) targetenemies
-targets enemies in vicinity and fires at them
-"dmg" how much damage lightning should inflict (5 default)
-"duration" how long each lightning attack should last (continuous default)
-"distance" how far god's wrath should reach (600 default)
-"delay" how long to wait until god calms down
-		this is only needed if no one is targetted (5 seconds default)
-"count" number of people to target (2 default)
-*/
 void() trap_gods_wrath =
 {
 	if (self.delay == 0)
@@ -843,16 +738,6 @@ void() trap_gravity_think =
 	self.nextthink = time + 0.1;
 };
 
-/*QUAKED trap_gravity_well (.8 .5 0) (-8 -8 -8) (8 8 8) targetenemies UNDERWATER
-targets enemies in vicinity and draws them near, gibbing them on contact.
-
-UNDERWATER cuts the pull in half for players wearing the wetsuit
-
-"distance" how far the gravity well should reach (600 default)
-"count" number of people to target (2 default)
-"speed" is how strong the pull is. (210 default)
-"dmg" is how much damage to do each touch. (10000 default)
-*/
 void() trap_gravity_well =
 {
 	self.solid = SOLID_TRIGGER;

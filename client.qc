@@ -17,7 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// prototypes
 void() W_WeaponFrame;
 void() W_SetCurrentAmmo;
 void(entity attacker, float damage) player_pain;
@@ -26,14 +25,6 @@ void(vector org) spawn_tfog;
 void(vector org, entity death_owner) spawn_tdeath;
 
 float modelindex_eyes, modelindex_player, modelindex_hammer;
-
-/*
-=============================================================================
-
-LEVEL CHANGING / INTERMISSION
-
-=============================================================================
-*/
 
 float intermission_running;
 float intermission_exittime;
@@ -46,11 +37,6 @@ void() restartlevel =
 	changelevel (mapname);
 };
 
-/*QUAKED info_intermission (1 0.5 0.5) (-16 -16 -16) (16 16 16)
-This is the camera point for the intermission.
-Use mangle instead of angle, so you can set pitch or roll as well as yaw. 'pitch
-roll yaw'
-*/
 void() info_intermission = {};
 
 void() SetChangeParms =
@@ -67,10 +53,8 @@ void() SetChangeParms =
 		return;
 	}
 
-	// JIM
 	// remove items
 	parm1 = self.items - (self.items & (IT_KEYS | IT_ARTS));
-	// MED
 	// parm10 = self.items2 - (self.items2 & HIP_IT_ARTS);
 
 	// cap super health
@@ -109,13 +93,13 @@ void() DecodeLevelParms =
 {
 	// HIPNOTIC
 	if (world.model == "maps/start.bsp")
-		SetNewParms ();  // take away all stuff on starting new episode
+		SetNewParms (); // take away all stuff on starting new episode
 	if (world.model == "maps/hip1m1.bsp")
-		SetNewParms ();  // take away all stuff on starting new episode
+		SetNewParms (); // take away all stuff on starting new episode
 	if (world.model == "maps/hip2m1.bsp")
-		SetNewParms ();  // take away all stuff on starting new episode
+		SetNewParms (); // take away all stuff on starting new episode
 	if (world.model == "maps/hip3m1.bsp")
-		SetNewParms ();  // take away all stuff on starting new episode
+		SetNewParms (); // take away all stuff on starting new episode
 
 	self.items = parm1;
 	self.health = parm2;
@@ -128,13 +112,6 @@ void() DecodeLevelParms =
 	self.armortype = parm9 * 0.01;
 };
 
-/*
-============
-FindIntermission
-
-Returns the entity to view from
-============
-*/
 entity() FindIntermission =
 {
 	local entity spot;
@@ -143,7 +120,7 @@ entity() FindIntermission =
 	// look for info_intermission first
 	spot = find (world, classname, "info_intermission");
 	if (spot)
-	{  // pick a random one
+	{ // pick a random one
 		cyc = random () * 4;
 		while (cyc > 1)
 		{
@@ -172,7 +149,7 @@ entity() FindIntermission =
 string nextmap;
 void() GotoNextMap =
 {
-	if (cvar ("samelevel"))  // if samelevel is set, stay on same level
+	if (cvar ("samelevel")) // if samelevel is set, stay on same level
 		changelevel (mapname);
 	else
 		changelevel (nextmap);
@@ -190,9 +167,7 @@ void() ExitIntermission =
 	intermission_exittime = time + 1;
 	intermission_running = intermission_running + 1;
 
-	//
 	// run some text if at the end of an episode
-	//
 	if (intermission_running == 2)
 	{
 		if (world.model == "maps/e1m7.bsp")
@@ -280,7 +255,7 @@ void() ExitIntermission =
 	if (intermission_running == 3)
 	{
 		if (!cvar ("registered"))
-		{  // shareware episode has been completed, go to sell screen
+		{ // shareware episode has been completed, go to sell screen
 			WriteByte (MSG_ALL, SVC_SELLSCREEN);
 			return;
 		}
@@ -309,7 +284,7 @@ void() ExitIntermission =
 		{
 			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "Congratulations!  You are victorious!\nThe minions of Quake have once again\nfallen before your mighty hand.\nIs this the last you will see of\nQuake's hellions?\n\nOnly time will tell...");
-			intermission_exittime = time + 10000000;  // never allow exit
+			intermission_exittime = time + 10000000;
 			return;
 		}
 	}
@@ -317,13 +292,6 @@ void() ExitIntermission =
 	GotoNextMap ();
 };
 
-/*
-============
-IntermissionThink
-
-When the player presses attack or jump, change to the next level
-============
-*/
 void() IntermissionThink =
 {
 	if (time < intermission_exittime)
@@ -358,7 +326,7 @@ void() execute_changelevel =
 	{
 		other.view_ofs = '0 0 0';
 		other.angles = other.v_angle = pos.mangle;
-		other.fixangle = TRUE;  // turn this way immediately
+		other.fixangle = TRUE;
 		other.nextthink = time + 0.5;
 		other.takedamage = DAMAGE_NO;
 		other.solid = SOLID_NOT;
@@ -397,24 +365,19 @@ void() changelevel_touch =
 	SUB_UseTargets ();
 
 	if ((self.spawnflags & 1) && (deathmatch == 0))
-	{  // NO_INTERMISSION
+	{ // NO_INTERMISSION
 		GotoNextMap ();
 		return;
 	}
 
 	self.touch = SUB_Null;
 
-	// we can't move people right now, because touch functions are called
-	// in the middle of C movement code, so set a think time to do it
+	// we can't move people right now, because touch functions are called in the
+	// middle of C movement code, so set a think time to do it
 	self.think = execute_changelevel;
 	self.nextthink = time + 0.1;
 };
 
-/*QUAKED trigger_changelevel (0.5 0.5 0.5) ? NO_INTERMISSION
-When the player touches this, he gets sent to the map listed in the "map"
-variable.  Unless the NO_INTERMISSION flag is set, the view will go to the
-info_intermission spot and display stats.
-*/
 void() trigger_changelevel =
 {
 	if (self.map == "")
@@ -423,14 +386,6 @@ void() trigger_changelevel =
 	InitTrigger ();
 	self.touch = changelevel_touch;
 };
-
-/*
-=============================================================================
-
-PLAYER GAME EDGE FUNCTIONS
-
-=============================================================================
-*/
 
 void() set_suicide_frame;
 
@@ -456,25 +411,18 @@ void() respawn =
 		PutClientInServer ();
 	}
 	else
-	{  // restart the entire server
+	{ // restart the entire server
 		restartlevel ();
 	}
 };
 
-/*
-============
-ClientKill
-
-Player entered the suicide command
-============
-*/
 void() ClientKill =
 {
 	bprint (self.netname);
 	bprint (" suicides\n");
 	set_suicide_frame ();
 	self.modelindex = modelindex_player;
-	self.frags = self.frags - 2;  // extra penalty
+	self.frags = self.frags - 2; // extra penalty
 	respawn ();
 };
 
@@ -483,13 +431,6 @@ float(vector v) CheckSpawnPoint =
 	return FALSE;
 };
 
-/*
-============
-SelectSpawnPoint
-
-Returns the entity to spawn at
-============
-*/
 entity() SelectSpawnPoint =
 {
 	local entity spot;
@@ -538,7 +479,7 @@ entity() SelectSpawnPoint =
 	}
 
 	if (serverflags)
-	{  // return with a rune to start
+	{ // return with a rune to start
 		spot = find (world, classname, "info_player_start2");
 		if (spot)
 			return spot;
@@ -551,13 +492,6 @@ entity() SelectSpawnPoint =
 	return spot;
 };
 
-/*
-===========
-PutClientInServer
-
-called each time a player is spawned
-============
-*/
 void() DecodeLevelParms;
 void() PlayerDie;
 
@@ -576,18 +510,15 @@ void() PutClientInServer =
 	self.max_health = 100;
 	self.flags = FL_CLIENT;
 	self.air_finished = time + 12;
-	self.dmg = 2;  // initial water damage
+	self.dmg = 2; // initial water damage
 	self.super_damage_finished = 0;
 	self.radsuit_finished = 0;
 	self.invisible_finished = 0;
 	self.invincible_finished = 0;
 	self.effects = 0;
 	self.invincible_time = 0;
-	// JIM
 	self.wetsuit_finished = 0;
-	// MED
 	self.empathy_finished = 0;
-	// MED
 	self.items2 = 0;
 	self.gravity = 1.0;
 
@@ -605,9 +536,8 @@ void() PutClientInServer =
 
 	self.origin = spot.origin + '0 0 1';
 	self.angles = spot.angles;
-	self.fixangle = TRUE;  // turn this way immediately
+	self.fixangle = TRUE;
 
-	// JIM
 	// Clear out velocity so you're not launched into the air when you respawn.
 	self.velocity = '0 0 0';
 
@@ -636,57 +566,21 @@ void() PutClientInServer =
 	spawn_tdeath (self.origin, self);
 };
 
-/*
-=============================================================================
-
-QUAKED FUNCTIONS
-
-=============================================================================
-*/
-
-/*QUAKED info_player_start (1 0 0) (-16 -16 -24) (16 16 24)
-The normal starting point for a level.
-*/
 void() info_player_start = {};
 
-/*QUAKED info_player_start2 (1 0 0) (-16 -16 -24) (16 16 24)
-Only used on start map for the return point from an episode.
-*/
 void() info_player_start2 = {};
 
-/*
-saved out by quaked in region mode
-*/
+// saved out by quaked in region mode
 void() testplayerstart = {};
 
-/*QUAKED info_player_deathmatch (1 0 1) (-16 -16 -24) (16 16 24)
-potential spawning position for deathmatch games
-*/
 void() info_player_deathmatch = {};
 
-/*QUAKED info_player_coop (1 0 1) (-16 -16 -24) (16 16 24)
-potential spawning position for coop games
-*/
 void() info_player_coop = {};
 
-/*
-===============================================================================
-
-RULES
-
-===============================================================================
-*/
-
-/*
-go to the next level for deathmatch
-only called if a time or frag limit has expired
-*/
+// for deathmatch; only called if a time or frag limit has expired
 void() NextLevel =
 {
 	local entity o;
-
-	// HIPNOTIC
-	// Commented out so that timelimit and fraglimit work on start map
 
 	// find a trigger changelevel
 	o = find (world, classname, "trigger_changelevel");
@@ -709,19 +603,12 @@ void() NextLevel =
 	}
 };
 
-/*
-============
-CheckRules
-
-Exit deathmatch games upon conditions
-============
-*/
 void() CheckRules =
 {
 	local float timelimit;
 	local float fraglimit;
 
-	if (gameover)  // someone else quit the game already
+	if (gameover) // someone else quit the game already
 		return;
 
 	timelimit = cvar ("timelimit") * 60;
@@ -739,8 +626,6 @@ void() CheckRules =
 		return;
 	}
 };
-
-//============================================================================
 
 void() PlayerDeathThink =
 {
@@ -789,7 +674,6 @@ void() PlayerJump =
 		else
 			self.velocity_z = 50;
 
-		// play swiming sound
 		if (self.swim_flag < time)
 		{
 			self.swim_flag = time + 1;
@@ -806,24 +690,17 @@ void() PlayerJump =
 		return;
 
 	if (!(self.flags & FL_JUMPRELEASED))
-		return;  // don't pogo stick
+		return;
 
 	self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
 
-	self.flags = self.flags - FL_ONGROUND;  // don't stairwalk
+	self.flags = self.flags - FL_ONGROUND;
 
 	self.button2 = 0;
-	// player jumping sound
 	sound (self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM);
 	self.velocity_z = self.velocity_z + 270;
 };
 
-/*
-===========
-WaterMove
-
-============
-*/
 .float dmgtime;
 
 void() WaterMove =
@@ -845,7 +722,7 @@ void() WaterMove =
 		self.dmg = 2;
 	}
 	else if (self.air_finished < time)
-	{  // drown!
+	{ // drown!
 		if (self.pain_finished < time)
 		{
 			self.dmg = self.dmg + 2;
@@ -860,7 +737,6 @@ void() WaterMove =
 	{
 		if (self.flags & FL_INWATER)
 		{
-			// play leave water sound
 			sound (self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM);
 			self.flags = self.flags - FL_INWATER;
 		}
@@ -868,7 +744,7 @@ void() WaterMove =
 	}
 
 	if (self.watertype == CONTENT_LAVA)
-	{  // do damage
+	{ // do damage
 		if (self.dmgtime < time)
 		{
 			if (self.radsuit_finished > time)
@@ -880,7 +756,7 @@ void() WaterMove =
 		}
 	}
 	else if (self.watertype == CONTENT_SLIME)
-	{  // do damage
+	{ // do damage
 		if (self.dmgtime < time && self.radsuit_finished < time)
 		{
 			self.dmgtime = time + 1;
@@ -890,8 +766,6 @@ void() WaterMove =
 
 	if (!(self.flags & FL_INWATER))
 	{
-		// player enter water sound
-
 		if (self.watertype == CONTENT_LAVA)
 			sound (self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
 		if (self.watertype == CONTENT_WATER)
@@ -923,44 +797,43 @@ void() CheckWaterJump =
 	end = start + v_forward * 24;
 	traceline (start, end, TRUE, self);
 	if (trace_fraction < 1)
-	{  // solid at waist
+	{ // solid at waist
 		start_z = start_z + self.maxs_z - 8;
 		end = start + v_forward * 24;
 		self.movedir = trace_plane_normal * -50;
 		traceline (start, end, TRUE, self);
 		if (trace_fraction == 1)
-		{  // open at eye level
+		{ // open at eye level
 			self.flags = self.flags | FL_WATERJUMP;
 			self.velocity_z = 225;
 			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
-			self.teleport_time = time + 2;  // safety net
+			self.teleport_time = time + 2; // safety net
 			return;
 		}
 	}
 };
 
+void(float num_bubbles) DeathBubbles;
+
 /*
-================
+==============================================================================
 PlayerPreThink
 
 Called every frame before physics are run
-================
+==============================================================================
 */
-// MED 01/17/97
-void(float num_bubbles) DeathBubbles;
 void() PlayerPreThink =
 {
 	if (intermission_running)
 	{
 		earthquake_prethink ();
-		IntermissionThink ();  // otherwise a button could be missed between
-		return;                // the think tics
+		IntermissionThink (); // otherwise a button could be missed between
+		return;               // the think tics
 	}
 
 	if (self.view_ofs == '0 0 0')
-		return;  // intermission or finale
+		return; // intermission or finale
 
-	// JIM
 	// Kill player on Edge of Oblivion
 	if ((self.origin_z < -1300) && (world.model == "maps/hipdm1.bsp") &&
 		(self.health > 0))
@@ -978,15 +851,13 @@ void() PlayerPreThink =
 		T_Damage (self, self, world, self.health + 1000);
 	}
 
-	// JIM
 	earthquake_prethink ();
 
-	makevectors (self.v_angle);  // is this still used
+	makevectors (self.v_angle); // is this still used
 
 	CheckRules ();
 	WaterMove ();
 
-	// JIM
 	// WETSUIT
 	if (self.wetsuit_finished > time)
 	{
@@ -1006,7 +877,6 @@ void() PlayerPreThink =
 				self.swim_flag = time + 7;
 				sound (self, CHAN_BODY, "misc/wetsuit.wav", 1, ATTN_NORM);
 			}
-			// MED 01/17/97
 			else
 			{
 				if (fabs (self.swim_flag - time - 6) < 0.04)
@@ -1035,7 +905,7 @@ void() PlayerPreThink =
 	}
 
 	if (self.deadflag == DEAD_DYING)
-		return;  // dying, so do nothing
+		return;
 
 	if (self.button2)
 	{
@@ -1056,13 +926,6 @@ void() PlayerPreThink =
 	}
 };
 
-/*
-================
-CheckPowerups
-
-Check for turning off powerups
-================
-*/
 void() CheckPowerups =
 {
 	if (self.health <= 0)
@@ -1096,7 +959,7 @@ void() CheckPowerups =
 		}
 
 		if (self.invisible_finished < time)
-		{  // just stopped
+		{ // just stopped
 			self.items = self.items - IT_INVISIBILITY;
 			self.invisible_finished = 0;
 			self.invisible_time = 0;
@@ -1106,11 +969,10 @@ void() CheckPowerups =
 		self.frame = 0;
 		self.modelindex = modelindex_eyes;
 	}
-	// MED 12/04/96 added mjolnir stuff
 	else if (self.weapon == IT_MJOLNIR)
-		self.modelindex = modelindex_hammer;  // don't use eyes
+		self.modelindex = modelindex_hammer; // don't use eyes
 	else
-		self.modelindex = modelindex_player;  // don't use eyes
+		self.modelindex = modelindex_player; // don't use eyes
 
 	// invincibility
 	if (self.invincible_finished)
@@ -1134,7 +996,7 @@ void() CheckPowerups =
 		}
 
 		if (self.invincible_finished < time)
-		{  // just stopped
+		{ // just stopped
 			self.items = self.items - IT_INVULNERABILITY;
 			self.invincible_time = 0;
 			self.invincible_finished = 0;
@@ -1149,7 +1011,6 @@ void() CheckPowerups =
 	if (self.super_damage_finished)
 	{
 		// sound and screen flash when items starts to run out
-
 		if (self.super_damage_finished < time + 3)
 		{
 			if (self.super_time == 1)
@@ -1168,7 +1029,7 @@ void() CheckPowerups =
 		}
 
 		if (self.super_damage_finished < time)
-		{  // just stopped
+		{ // just stopped
 			self.items = self.items - IT_QUAD;
 			self.super_damage_finished = 0;
 			self.super_time = 0;
@@ -1182,7 +1043,7 @@ void() CheckPowerups =
 	// suit
 	if (self.radsuit_finished)
 	{
-		self.air_finished = time + 12;  // don't drown
+		self.air_finished = time + 12;
 
 		// sound and screen flash when items starts to run out
 		if (self.radsuit_finished < time + 3)
@@ -1203,18 +1064,17 @@ void() CheckPowerups =
 		}
 
 		if (self.radsuit_finished < time)
-		{  // just stopped
+		{ // just stopped
 			self.items = self.items - IT_SUIT;
 			self.rad_time = 0;
 			self.radsuit_finished = 0;
 		}
 	}
 
-	// JIM
 	// wetsuit
 	if (self.wetsuit_finished)
 	{
-		self.air_finished = time + 12;  // don't drown
+		self.air_finished = time + 12;
 
 		// sound and screen flash when items starts to run out
 		if (self.wetsuit_finished < time + 3)
@@ -1235,15 +1095,13 @@ void() CheckPowerups =
 		}
 
 		if (self.wetsuit_finished < time)
-		{  // just stopped
-			// MED
+		{ // just stopped
 			self.items2 = self.items2 - HIP_IT_WETSUIT;
 			self.wetsuit_time = 0;
 			self.wetsuit_finished = 0;
 		}
 	}
 
-	// MED
 	// empathy shields
 	if (self.empathy_finished)
 	{
@@ -1266,13 +1124,11 @@ void() CheckPowerups =
 		}
 
 		if (self.empathy_finished < time)
-		{  // just stopped
-			// MED
+		{ // just stopped
 			self.items2 = self.items2 - HIP_IT_EMPATHY_SHIELDS;
 			self.empathy_time = 0;
 			self.empathy_finished = 0;
 		}
-		// MED
 		if (self.empathy_finished > time)
 			self.effects = self.effects | EF_DIMLIGHT;
 		else
@@ -1281,22 +1137,20 @@ void() CheckPowerups =
 };
 
 /*
-================
+==============================================================================
 PlayerPostThink
 
 Called every frame after physics are run
-================
+==============================================================================
 */
 void() PlayerPostThink =
 {
 	if (self.view_ofs == '0 0 0')
 	{
 		earthquake_postthink ();
-		return;  // intermission or finale
+		return; // intermission or finale
 	}
 
-	// JIM
-	// WETSUIT
 	if (self.wetsuit_finished > time)
 	{
 		if (self.waterlevel == 2)
@@ -1309,7 +1163,6 @@ void() PlayerPostThink =
 		}
 	}
 
-	// JIM
 	earthquake_postthink ();
 
 	if (self.deadflag)
@@ -1343,13 +1196,6 @@ void() PlayerPostThink =
 	CheckPowerups ();
 };
 
-/*
-===========
-ClientConnect
-
-called when a player connects to a server
-============
-*/
 void() ClientConnect =
 {
 	bprint (self.netname);
@@ -1360,19 +1206,12 @@ void() ClientConnect =
 		ExitIntermission ();
 };
 
-/*
-===========
-ClientDisconnect
-
-called when a player disconnects from a server
-============
-*/
 void() ClientDisconnect =
 {
 	if (gameover)
 		return;
-	// if the level end trigger has been activated, just return
-	// since they aren't *really* leaving
+	// if the level end trigger has been activated, just return since they
+	// aren't *really* leaving
 
 	// let everyone else know
 	bprint (self.netname);
@@ -1383,13 +1222,6 @@ void() ClientDisconnect =
 	set_suicide_frame ();
 };
 
-/*
-===========
-ClientObituary
-
-called when a player dies
-============
-*/
 void(entity targ, entity attacker) ClientObituary =
 {
 	local float rnum;
@@ -1436,7 +1268,7 @@ void(entity targ, entity attacker) ClientObituary =
 				}
 				if (targ.weapon == IT_GRENADE_LAUNCHER)
 					bprint (" tries to put the pin back in\n");
-				// JIM
+		
 				else if (rnum > 0.4)
 					bprint (" becomes bored with life\n");
 				else
@@ -1462,7 +1294,6 @@ void(entity targ, entity attacker) ClientObituary =
 			else
 			{
 				attacker.frags = attacker.frags + 1;
-				// MED 01/19/97
 				if (empathyused == 1)
 				{
 					bprint (targ.netname);
@@ -1475,7 +1306,6 @@ void(entity targ, entity attacker) ClientObituary =
 					return;
 				}
 
-				// MED 11/18/96
 				if (targ.dmg_inflictor.classname == "proximity_grenade")
 				{
 					bprint (targ.netname);
@@ -1541,8 +1371,7 @@ void(entity targ, entity attacker) ClientObituary =
 					else
 						deathstring2 = "'s shaft\n";
 				}
-				// MED
-				if (rnum == IT_LASER_CANNON)
+				else if (rnum == IT_LASER_CANNON)
 				{
 					if (random () < 0.5)
 					{
@@ -1554,8 +1383,7 @@ void(entity targ, entity attacker) ClientObituary =
 					}
 					deathstring2 = "'s laser\n";
 				}
-				// MED
-				if (rnum == IT_MJOLNIR)
+				else if (rnum == IT_MJOLNIR)
 				{
 					deathstring = " was slammed by ";
 					deathstring2 = "'s hammer\n";
@@ -1572,7 +1400,7 @@ void(entity targ, entity attacker) ClientObituary =
 			targ.frags = targ.frags - 1;
 			bprint (targ.netname);
 
-			// JIM
+	
 			if (attacker.deathtype != "")
 			{
 				bprint (" ");
@@ -1615,14 +1443,11 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" was scragged by a Scrag\n");
 				else if (attacker.classname == "monster_zombie")
 					bprint (" joins the Zombies\n");
-				// MED
-				if (attacker.classname == "monster_gremlin")
+				else if (attacker.classname == "monster_gremlin")
 					bprint (" was outsmarted by a Gremlin\n");
-				// MED
-				if (attacker.classname == "monster_scourge")
+				else if (attacker.classname == "monster_scourge")
 					bprint (" was stung by a Centroid\n");
-				// MED
-				if (attacker.classname == "monster_armagon")
+				else if (attacker.classname == "monster_armagon")
 					bprint (" was outgunned by Armagon\n");
 
 				return;

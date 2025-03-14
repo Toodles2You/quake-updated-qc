@@ -17,14 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/*
-==============================================================================
-
-gremlin
-
-==============================================================================
-*/
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6
 $frame stand7 stand8 stand9 stand10 stand11 stand12
 $frame stand13 stand14 stand15 stand16 stand17
@@ -72,19 +64,9 @@ $frame gpain1 gpain2 gpain3
 $frame grun1 grun2 grun3 grun4 grun5 grun6 grun7
 $frame grun8 grun9 grun10 grun11 grun12 grun13 grun14 grun15
 
-//============================================================================
-
 float NumGremlins;
 float NumSpawnGremlins;
 
-/*
-===========
-GremlinAttemptWeaponSteal
-
-see if we can steal enemy's weapon
-
-============
-*/
 entity() GremlinFindVictim;
 float() GremlinFindTarget;
 
@@ -112,9 +94,7 @@ float() GremlinAttemptWeaponSteal =
 		return FALSE;
 	if (random () < 0.5)
 		return FALSE;
-	//
 	// we are within range so lets go for it
-	//
 	victim = self.enemy;
 	best = victim.weapon;
 	if (best == IT_AXE || best == IT_SHOTGUN || best == IT_MJOLNIR)
@@ -242,16 +222,6 @@ float() GremlinAttemptWeaponSteal =
 	return TRUE;
 };
 
-//============================================================================
-
-/*
-===========
-GremlinFindTarget
-
-gremlin is currently not attacking anything, so try to find a target
-
-============
-*/
 float() GremlinFindTarget =
 {
 	local entity head;
@@ -306,15 +276,6 @@ float() GremlinFindTarget =
 	return result;
 };
 
-//============================================================================
-
-/*
-=============
-gremlin_walk
-
-The monster is walking it's beat
-=============
-*/
 void(float dist) gremlin_walk =
 {
 	movedist = dist;
@@ -326,15 +287,6 @@ void(float dist) gremlin_walk =
 	movetogoal (dist);
 };
 
-//============================================================================
-
-/*
-=============
-gremlin_stand
-
-The monster is staying in one place for a while, with slight angle turns
-=============
-*/
 void() gremlin_stand =
 {
 	if (FindTarget ())
@@ -346,8 +298,6 @@ void() gremlin_stand =
 		return;
 	}
 };
-
-//============================================================================
 
 float() GremlinCheckNoAmmo;
 void() gremlin_glook1;
@@ -369,7 +319,7 @@ void(float dist) gremlin_run =
 	local float c;
 
 	if (self.watertype == CONTENT_LAVA)
-	{  // do damage
+	{ // do damage
 		T_Damage (self, world, world, 2000);
 	}
 	movedist = dist;
@@ -406,7 +356,7 @@ void(float dist) gremlin_run =
 			}
 			return;
 		}
-		movetogoal (dist);  // done in C code...
+		movetogoal (dist); // done in C code...
 	}
 	else
 	{
@@ -484,7 +434,7 @@ void(float dist) gremlin_run =
 					self.ideal_yaw = vectoyaw (
 						normalize (self.goalentity.origin - self.origin));
 					ChangeYaw ();
-					movetogoal (dist);  // done in C code...
+					movetogoal (dist); // done in C code...
 					self.nextthink = time + 0.1;
 					return;
 				}
@@ -494,8 +444,6 @@ void(float dist) gremlin_run =
 		self.nextthink = time + 0.1;
 	}
 };
-
-//============================================================================
 
 void() Gremlin_JumpTouch;
 void() Gremlin_FlipTouch;
@@ -675,8 +623,6 @@ void() gremlin_shot4 = [$gfire4, gremlin_shot5] {};
 void() gremlin_shot5 = [$gfire5, gremlin_shot6] {};
 void() gremlin_shot6 = [$gfire6, gremlin_run1] {};
 
-//============================================================================
-
 void(float ox) Gremlin_FireNailGun;
 
 void() gremlin_nail1 = [$gfire1, gremlin_nail2]
@@ -745,8 +691,6 @@ void() gremlin_laser6 = [$gfire1, gremlin_laser7]
 };
 void() gremlin_laser7 = [$gfire1, gremlin_run1] {};
 
-//============================================================================
-
 void() Gremlin_FireLightningGun;
 void() gremlin_light1 = [$gfire1, gremlin_light2]
 {
@@ -765,8 +709,6 @@ void() gremlin_light4 = [$gfire1, gremlin_light5]
 	Gremlin_FireLightningGun ();
 };
 void() gremlin_light5 = [$gfire1, gremlin_run1] {};
-
-//============================================================================
 
 void() gremlin_rocket1 = [$gfire1, gremlin_rocket2]
 {
@@ -1039,11 +981,6 @@ void() gremlin_flip7 = [$flip7, gremlin_gib]
 };
 void() gremlin_flip8 = [$flip8, gremlin_flip8] { self.solid = SOLID_NOT; };
 
-/*
-===============
-GremlinDropBackpack
-===============
-*/
 void() GremlinDropBackpack =
 {
 	local entity item;
@@ -1103,7 +1040,7 @@ void() GremlinDropBackpack =
 	setsize (item, '-16 -16 0', '16 16 56');
 	item.touch = BackpackTouch;
 
-	item.nextthink = time + 120;  // remove after 2 minutes
+	item.nextthink = time + 120; // remove after 2 minutes
 	item.think = SUB_Remove;
 };
 
@@ -1112,7 +1049,6 @@ void() gremlin_die =
 	local vector vec;
 	local float dot;
 
-	// check for gib
 	if (self.items & IT_WEAPONS)
 	{
 		GremlinDropBackpack ();
@@ -1137,7 +1073,6 @@ void() gremlin_die =
 		gremlin_flip1 ();
 		return;
 	}
-	// regular death
 	gremlin_die1 ();
 };
 
@@ -1177,13 +1112,6 @@ void() Gremlin_MeleeAttack =
 	}
 };
 
-/*
-============
-GremlinCheckNoAmmo
-
-attack with a weapon
-============
-*/
 float() GremlinCheckNoAmmo =
 {
 	if (self.currentammo > 0)
@@ -1195,13 +1123,6 @@ float() GremlinCheckNoAmmo =
 	}
 };
 
-/*
-============
-GremlinFindVictim
-
-find a victim to shoot at
-============
-*/
 entity() GremlinFindVictim =
 {
 	local entity head;
@@ -1243,13 +1164,6 @@ entity() GremlinFindVictim =
 	return selected;
 };
 
-/*
-============
-Gremlin_FireRocket
-
-fire a rocket
-============
-*/
 void() Gremlin_FireRocket =
 {
 	local entity missile;
@@ -1289,13 +1203,6 @@ void() Gremlin_FireRocket =
 	setorigin (missile, self.origin + v_forward * 8 + '0 0 16');
 };
 
-/*
-============
-Gremlin_FireNailGun
-
-fire a nailgun
-============
-*/
 void(float ox) Gremlin_FireNailGun =
 {
 	local vector dir;
@@ -1312,13 +1219,6 @@ void(float ox) Gremlin_FireNailGun =
 	launch_spike (self.origin + '0 0 16', dir);
 };
 
-/*
-============
-Gremlin_FireLaserGun
-
-fire a laser cannon
-============
-*/
 void(float ox) Gremlin_FireLaserGun =
 {
 	local vector dir;
@@ -1335,13 +1235,6 @@ void(float ox) Gremlin_FireLaserGun =
 	HIP_LaunchLaser (self.origin + '0 0 16', dir, 0);
 };
 
-/*
-============
-Gremlin_FireShotGun
-
-fire a shotgun
-============
-*/
 void() Gremlin_FireShotGun =
 {
 	local vector dir;
@@ -1359,13 +1252,6 @@ void() Gremlin_FireShotGun =
 	FireBullets (6, dir, '0.04 0.04 0');
 };
 
-/*
-============
-Gremlin_FireSuperShotGun
-
-fire a shotgun
-============
-*/
 void() Gremlin_FireSuperShotGun =
 {
 	local vector dir;
@@ -1383,13 +1269,6 @@ void() Gremlin_FireSuperShotGun =
 	FireBullets (14, dir, '0.14 0.08 0');
 };
 
-/*
-============
-Gremlin_FireLightningGun
-
-fire lightning gun
-============
-*/
 void() Gremlin_FireLightningGun =
 {
 	local vector org, dir;
@@ -1436,11 +1315,6 @@ void() Gremlin_FireLightningGun =
 	LightningDamage (org, trace_endpos + (dir * 4), self, 30);
 };
 
-/*
-================
-GremlinFireProximityGrenade
-================
-*/
 void() GremlinFireProximityGrenade =
 {
 	local entity missile;
@@ -1488,13 +1362,6 @@ void() GremlinFireProximityGrenade =
 	setsize (missile, '-1 -1 -1', '1 1 1');
 };
 
-/*
-============
-GremlinWeaponAttack
-
-attack with a weapon
-============
-*/
 void() gremlin_shot1;
 void() gremlin_nail1;
 void() gremlin_light1;
@@ -1505,7 +1372,7 @@ float() GremlinWeaponAttack =
 	if (!GremlinCheckNoAmmo ())
 		return FALSE;
 
-	self.show_hostile = time + 1;  // wake monsters up
+	self.show_hostile = time + 1; // wake monsters up
 
 	if (self.weapon == IT_SHOTGUN)
 	{
@@ -1578,9 +1445,6 @@ void() Gremlin_MissileAttack =
 		gremlin_jump1 ();
 };
 
-/*QUAKED monster_gremlin (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-
-*/
 void() monster_gremlin =
 {
 	if (deathmatch)
@@ -1616,9 +1480,9 @@ void() monster_gremlin =
 	self.th_walk = gremlin_walk1;
 	self.th_run = gremlin_run1;
 	self.th_die = gremlin_die;
-	self.th_melee = Gremlin_MeleeAttack;  // one of two attacks
+	self.th_melee = Gremlin_MeleeAttack; // one of two attacks
 	self.th_missile =
-		Gremlin_MissileAttack;  // check for random jump or firing of weapon
+		Gremlin_MissileAttack; // check for random jump or firing of weapon
 	self.th_pain = gremlin_pain;
 
 	walkmonster_start ();
@@ -1644,7 +1508,6 @@ float() GremlinCheckAttack =
 		self.attack_state = AS_MELEE;
 		return TRUE;
 	}
-	// missile attack
 	chance = 0.03 + self.stoleweapon;
 	if (random () < chance)
 	{
@@ -1653,8 +1516,6 @@ float() GremlinCheckAttack =
 	}
 	return FALSE;
 };
-
-//===========================================================================
 
 void(float side) Gremlin_Melee =
 {
@@ -1678,7 +1539,6 @@ void(float side) Gremlin_Melee =
 	SpawnMeatSpray (self.origin + v_forward * 16, side * v_right);
 };
 
-//===========================================================================
 void(float dm) Gremlin_ThrowHead =
 {
 	local string gibname;
@@ -1714,20 +1574,13 @@ void(float dm) Gremlin_ThrowHead =
 		gibname = "progs/h_player.mdl";
 	ThrowHead (gibname, dm);
 };
-//===========================================================================
 
-/*
-============
-Gremlin_Damage
-
-The damage is coming from inflictor, but get mad at attacker
-============
-*/
 void(entity targ, entity inflictor, entity attacker, float damage)
 	Gremlin_Damage =
 {
 	// check for godmode or invincibility
-	if (targ.flags & FL_GODMODE) return;
+	if (targ.flags & FL_GODMODE)
+		return;
 	if (targ.invincible_finished >= time)
 	{
 		if (self.invincible_sound < time)
@@ -1880,7 +1733,7 @@ void() Gremlin_JumpTouch =
 			self.think = gremlin_jump1;
 			self.nextthink = time + 0.1;
 		}
-		return;  // not on ground yet
+		return; // not on ground yet
 	}
 
 	self.touch = SUB_Null;
@@ -1898,7 +1751,7 @@ void() Gremlin_FlipTouch =
 			self.think = gremlin_flip1;
 			self.nextthink = time + 0.1;
 		}
-		return;  // not on ground yet
+		return; // not on ground yet
 	}
 
 	self.touch = SUB_Null;

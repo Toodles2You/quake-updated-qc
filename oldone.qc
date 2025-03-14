@@ -16,13 +16,7 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
 
-OLD ONE
-
-==============================================================================
-*/
 void() finale_1;
 void() finale_2;
 void() finale_3;
@@ -114,17 +108,14 @@ void() old_thrash18 = [$shake18, old_thrash19] { lightstyle (0, "b"); };
 void() old_thrash19 = [$shake19, old_thrash20] { lightstyle (0, "a"); };
 void() old_thrash20 = [$shake20, old_thrash20] { finale_4 (); };
 
-//============================================================================
-
 void() finale_1 =
 {
 	local entity pos, pl;
 	local entity timer;
 
-	intermission_exittime = time + 10000000;  // never allow exit
+	intermission_exittime = time + 10000000;
 	intermission_running = 1;
 
-	// find the intermission spot
 	pos = find (world, classname, "info_intermission");
 	if (!pos)
 		error ("no info_intermission");
@@ -141,7 +132,7 @@ void() finale_1 =
 	{
 		pl.view_ofs = '0 0 0';
 		pl.angles = other.v_angle = pos.mangle;
-		pl.fixangle = TRUE;  // turn this way immediately
+		pl.fixangle = TRUE;
 		pl.map = self.map;
 		pl.nextthink = time + 0.5;
 		pl.takedamage = DAMAGE_NO;
@@ -152,10 +143,6 @@ void() finale_1 =
 		pl = find (pl, classname, "player");
 	}
 
-	// make fake versions of all players as standins, and move the real
-	// players to the intermission spot
-
-	// wait for 1 second
 	timer = spawn ();
 	timer.nextthink = time + 1;
 	timer.think = finale_2;
@@ -164,8 +151,6 @@ void() finale_1 =
 void() finale_2 =
 {
 	local vector o;
-
-	// start a teleport splash inside shub
 
 	o = shub.origin - '0 100 0';
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -182,7 +167,6 @@ void() finale_2 =
 
 void() finale_3 =
 {
-	// start shub thrashing wildly
 	shub.think = old_thrash1;
 	sound (shub, CHAN_VOICE, "boss2/death.wav", 1, ATTN_NORM);
 	lightstyle (0, "abcdefghijklmlkjihgfedcb");
@@ -190,7 +174,6 @@ void() finale_3 =
 
 void() finale_4 =
 {
-	// throw tons of meat chunks
 	local vector oldo;
 	local float x, y, z;
 	local float r;
@@ -226,11 +209,10 @@ void() finale_4 =
 		}
 		z = z + 96;
 	}
-	// start the end text
+
 	WriteByte (MSG_ALL, SVC_FINALE);
 	WriteString (MSG_ALL, "Congratulations and well done! You have\nbeaten the hideous Shub-Niggurath, and\nher hundreds of ugly changelings and\nmonsters. You have proven that your\nskill and your cunning are greater than\nall the powers of Quake. You are the\nmaster now. Id Software salutes you.");
 
-	// put a player model down
 	n = spawn ();
 	setmodel (n, "progs/player.mdl");
 	oldo = oldo - '32 264 0';
@@ -240,24 +222,17 @@ void() finale_4 =
 
 	remove (self);
 
-	// switch cd track
 	WriteByte (MSG_ALL, SVC_CDTRACK);
 	WriteByte (MSG_ALL, 3);
 	WriteByte (MSG_ALL, 3);
 	lightstyle (0, "m");
 };
 
-//============================================================================
-
 void(entity attacker, float damage) nopain =
 {
 	self.health = 40000;
 };
 
-//============================================================================
-
-/*QUAKED monster_oldone (1 0 0) (-16 -16 -24) (16 16 32)
-*/
 void() monster_oldone =
 {
 	if (deathmatch)
@@ -279,7 +254,7 @@ void() monster_oldone =
 	setmodel (self, "progs/oldone.mdl");
 	setsize (self, '-160 -128 -24', '160 128 256');
 
-	self.health = 40000;  // kill by telefrag
+	self.health = 40000; // kill by telefrag
 	self.think = old_idle1;
 	self.nextthink = time + 0.1;
 	self.takedamage = DAMAGE_YES;

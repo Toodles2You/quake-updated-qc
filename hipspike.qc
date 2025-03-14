@@ -17,14 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/*
-==============================================================================
-
-spike mine
-
-==============================================================================
-*/
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 $frame stand10 stand11 stand12 stand13
 

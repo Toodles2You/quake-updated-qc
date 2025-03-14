@@ -16,13 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
-
-DEMON
-
-==============================================================================
-*/
 
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 $frame stand10 stand11 stand12 stand13
@@ -40,8 +33,6 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8 death9
 
 $frame attacka1 attacka2 attacka3 attacka4 attacka5 attacka6 attacka7 attacka8
 $frame attacka9 attacka10 attacka11 attacka12 attacka13 attacka14 attacka15
-
-//============================================================================
 
 void() Demon_JumpTouch;
 
@@ -152,7 +143,7 @@ void(entity attacker, float damage) demon1_pain =
 	sound (self, CHAN_VOICE, "demon/dpain1.wav", 1, ATTN_NORM);
 
 	if (random () * 200 > damage)
-		return;  // didn't flinch
+		return;
 
 	demon1_pain1 ();
 };
@@ -172,7 +163,6 @@ void() demon1_die9 = [$death9, demon1_die9] {};
 
 void() demon_die =
 {
-	// check for gib
 	if (self.health < -80)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -183,7 +173,6 @@ void() demon_die =
 		return;
 	}
 
-	// regular death
 	demon1_die1 ();
 };
 
@@ -192,9 +181,6 @@ void() Demon_MeleeAttack =
 	demon1_atta1 ();
 };
 
-/*QUAKED monster_demon1 (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-
-*/
 void() monster_demon1 =
 {
 	if (deathmatch)
@@ -224,44 +210,23 @@ void() monster_demon1 =
 	self.th_walk = demon1_walk1;
 	self.th_run = demon1_run1;
 	self.th_die = demon_die;
-	self.th_melee = Demon_MeleeAttack;  // one of two attacks
-	self.th_missile = demon1_jump1;     // jump attack
+	self.th_melee = Demon_MeleeAttack; // one of two attacks
+	self.th_missile = demon1_jump1; // jump attack
 	self.th_pain = demon1_pain;
 
 	walkmonster_start ();
 };
 
-/*
-==============================================================================
-
-DEMON
-
-==============================================================================
-*/
-
-/*
-==============
-CheckDemonMelee
-
-Returns TRUE if a melee attack would hit right now
-==============
-*/
 float() CheckDemonMelee =
 {
 	if (enemy_range == RANGE_MELEE)
-	{  // FIXME: check canreach
+	{ // FIXME: check canreach
 		self.attack_state = AS_MELEE;
 		return TRUE;
 	}
 	return FALSE;
 };
 
-/*
-==============
-CheckDemonJump
-
-==============
-*/
 float() CheckDemonJump =
 {
 	local float feet;
@@ -312,15 +277,13 @@ float() DemonCheckAttack =
 	return FALSE;
 };
 
-//===========================================================================
-
 void(float side) Demon_Melee =
 {
 	local float ldmg;
 	local vector delta;
 
 	ai_face ();
-	walkmove (self.ideal_yaw, 12);  // allow a little closing
+	walkmove (self.ideal_yaw, 12); // allow a little closing
 
 	delta = self.enemy.origin - self.origin;
 
@@ -356,12 +319,12 @@ void() Demon_JumpTouch =
 	if (!checkbottom (self))
 	{
 		if (self.flags & FL_ONGROUND)
-		{  // jump randomly to not get hung up
+		{ // jump randomly to not get hung up
 			self.touch = SUB_Null;
 			self.think = demon1_jump1;
 			self.nextthink = time + 0.1;
 		}
-		return;  // not on ground yet
+		return;
 	}
 
 	self.touch = SUB_Null;

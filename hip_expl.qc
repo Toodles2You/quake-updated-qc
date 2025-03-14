@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Exploder QuickC program
-	By Jim Dose'  9/13/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 float USE_PARTICLES = 1;
 
 void() BecomeExplosion;
@@ -71,14 +64,6 @@ void() exploder_use =
 	}
 };
 
-/*QUAKED func_exploder (0.4 0 0) (0 0 0) (8 8 8) particles
-  Spawns an explosion when triggered.  Triggers any targets.
-
-  "dmg" specifies how much damage to cause.  Negative values
-  indicate no damage.  Default or 0 indicates 120.
-  "volume" volume at which to play explosions (default 1.0)
-  "speed" attenuation for explosions (default normal)
-*/
 void() func_exploder =
 {
 	precache_sound ("misc/shortexp.wav");
@@ -183,19 +168,6 @@ void() multi_exploder_use =
 	}
 };
 
-/*QUAKED func_multi_exploder (0.4 0 0) ?
-  Spawns an explosion when triggered.  Triggers any targets.
-  size of brush determines where explosions will occur.
-
-  "dmg" specifies how much damage to cause from each explosion
-  Negative values indicate no damage.  Default or 0 indicates 120.
-  "delay" delay before exploding (Default 0 seconds)
-  "duration" how long to explode for (Default 1 second)
-  "wait" time between each explosion (default 0.25 seconds)
-  "volume" volume to play explosion sound at (default 0.5)
-  "speed" attenuation for explosions (default normal)
-
-*/
 void() func_multi_exploder =
 {
 	precache_sound ("misc/shortexp.wav");

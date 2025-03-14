@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Clock QuickC program
-	By Jim Dose'  11/25/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 void() clock_setpos =
 {
 	local float pos;
@@ -74,16 +67,6 @@ void() clock_firstthink =
 	clock_think ();
 };
 
-/*QUAKED func_clock (0 0 0.5) (0 0 0) (32 32 32)
-Creates one hand of a "clock".
-
-Set the angle to be the direction the clock is facing.
-
-"event" is the targetname of the entities to trigger when hand strikes 12.
-"cnt" is the time to start at.
-"count" is the # of seconds it takes to make a full revolution (seconds is 60,
-minutes 3600, hours 43200).  default is 60.
-*/
 void() func_clock =
 {
 	local vector temp;

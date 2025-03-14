@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Rotate QuickC program
-	By Jim Dose'  10/17/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 float STATE_ACTIVE = 0;
 float STATE_INACTIVE = 1;
 float STATE_SPEEDINGUP = 2;
@@ -61,9 +54,6 @@ float NONBLOCKING = 4;
 
 float STAYOPEN = 1;
 
-/*QUAKED info_rotate (0 0.5 0) (-4 -4 -4) (4 4 4)
-Used as the point of rotation for rotatable objects.
-*/
 void() info_rotate =
 {
 	// remove self after a little while, to make sure that entities that
@@ -212,12 +202,6 @@ void(float amount) SetDamageOnTargets =
 	}
 };
 
-//************************************************
-//
-// Simple continual rotatation
-//
-//************************************************
-
 void() rotate_entity_think =
 {
 	local float t;
@@ -324,23 +308,6 @@ void() rotate_entity_firstthink =
 	self.use = rotate_entity_use;
 };
 
-/*QUAKED func_rotate_entity(0 .5 .8) (-8 -8 -8) (8 8 8) TOGGLE START_ON
-Creates an entity that continually rotates.  Can be toggled on and
-off if targeted.
-
-TOGGLE = allows the rotation to be toggled on/off
-
-START_ON = wether the entity is spinning when spawned.  If TOGGLE is 0, entity
-can be turned on, but not off.
-
-If "deathtype" is set with a string, this is the message that will appear when a
-player is killed by the train.
-
-"rotate" is the rate to rotate.
-"target" is the center of rotation.
-"speed"  is how long the entity takes to go from standing still to full speed
-and vice-versa.
-*/
 void() func_rotate_entity =
 {
 	self.solid = SOLID_NOT;
@@ -359,38 +326,6 @@ void() func_rotate_entity =
 	self.ltime = time;
 };
 
-//************************************************
-//
-// Train with rotation functionality
-//
-//************************************************
-
-/*QUAKED path_rotate (0.5 0.3 0) (-8 -8 -8) (8 8 8) ROTATION ANGLES STOP
- NO_ROTATE DAMAGE MOVETIME SET_DAMAGE Path for rotate_train.
-
- ROTATION tells train to rotate at rate specified by "rotate".  Use '0 0 0' to
- stop rotation.
-
- ANGLES tells train to rotate to the angles specified by "angles" while
- traveling to this path_rotate.  Use values < 0 or > 360 to guarantee that it
- turns in a certain direction.  Having this flag set automatically clears any
- rotation.
-
- STOP tells the train to stop and wait to be retriggered.
-
- NO_ROTATE tells the train to stop rotating when waiting to be triggered.
-
- DAMAGE tells the train to cause damage based on "dmg".
-
- MOVETIME tells the train to interpret "speed" as the length of time to take
- moving from one corner to another.
-
- SET_DAMAGE tells the train to set all targets damage to "dmg"
-
- "noise" contains the name of the sound to play when train stops.
- "noise1" contains the name of the sound to play when train moves.
- "event" is a target to trigger when train arrives at path_rotate.
-*/
 void() path_rotate =
 {
 	if (self.noise != "")
@@ -447,7 +382,7 @@ void() rotate_train_use =
 	if (self.think1 != rotate_train_find)
 	{
 		if (self.velocity != '0 0 0')
-			return;  // already activated
+			return; // already activated
 		if (self.think1)
 		{
 			self.think1 ();
@@ -589,10 +524,10 @@ void() rotate_train_next =
 			self.angles = targ.angles;
 		}
 
-		self.duration = 1;         // 1 / duration
-		self.cnt = time;           // start time
-		self.dest2 = '0 0 0';      // delta
-		self.dest1 = self.origin;  // original position
+		self.duration = 1;        // 1 / duration
+		self.cnt = time;          // start time
+		self.dest2 = '0 0 0';     // delta
+		self.dest1 = self.origin; // original position
 		self.finaldest = self.origin;
 	}
 	else
@@ -605,10 +540,10 @@ void() rotate_train_next =
 			self.velocity = '0 0 0';
 			self.endtime = self.ltime + 0.1;
 
-			self.duration = 1;         // 1 / duration
-			self.cnt = time;           // start time
-			self.dest2 = '0 0 0';      // delta
-			self.dest1 = self.origin;  // original position
+			self.duration = 1;        // 1 / duration
+			self.cnt = time;          // start time
+			self.dest2 = '0 0 0';     // delta
+			self.dest1 = self.origin; // original position
 			self.finaldest = self.origin;
 			return;
 		}
@@ -662,10 +597,10 @@ void() rotate_train_next =
 		// velocity
 		self.velocity = vdestdelta * div;
 
-		self.duration = div;       // 1 / duration
-		self.cnt = time;           // start time
-		self.dest2 = vdestdelta;   // delta
-		self.dest1 = self.origin;  // original position
+		self.duration = div;      // 1 / duration
+		self.cnt = time;          // start time
+		self.dest2 = vdestdelta;  // delta
+		self.dest1 = self.origin; // original position
 	}
 };
 
@@ -707,41 +642,12 @@ void() rotate_train_find =
 		self.endtime = 0;
 	}
 
-	self.duration = 1;         // 1 / duration
-	self.cnt = time;           // start time
-	self.dest2 = '0 0 0';      // delta
-	self.dest1 = self.origin;  // original position
+	self.duration = 1;        // 1 / duration
+	self.cnt = time;          // start time
+	self.dest2 = '0 0 0';     // delta
+	self.dest1 = self.origin; // original position
 };
 
-/*QUAKED func_rotate_train (0 .5 .8) (-8 -8 -8) (8 8 8)
-In path_rotate, set speed to be the new speed of the train after it reaches
-the path change.  If speed is -1, the train will warp directly to the next
-path change after the specified wait time.  If MOVETIME is set on the
-path_rotate, the train to interprets "speed" as the length of time to
-take moving from one corner to another.
-
-"noise" contains the name of the sound to play when train stops.
-"noise1" contains the name of the sound to play when train moves.
-Both "noise" and "noise1" defaults depend upon "sounds" variable and
-can be overridden by the "noise" and "noise1" variable in path_rotate.
-
-Also in path_rotate, if STOP is set, the train will wait until it is
-retriggered before moving on to the next goal.
-
-Trains are moving platforms that players can ride.
-"path" specifies the first path_rotate and is the starting position.
-If the train is the target of a button or trigger, it will not begin moving
-until activated. The func_rotate_train entity is the center of rotation of all
-objects targeted by it.
-
-If "deathtype" is set with a string, this is the message that will appear when a
-player is killed by the train.
-
-speed	default 100
-dmg      default  0
-sounds
-1) ratchet metal
-*/
 void() rotate_train =
 {
 	objerror ("rotate_train entities should be changed to rotate_object with\nfunc_rotate_train controllers\n");
@@ -799,19 +705,13 @@ void() func_rotate_train =
 	self.think1 = rotate_train_find;
 	self.state = STATE_FIND;
 
-	self.duration = 1;         // 1 / duration
-	self.cnt = 0.1;            // start time
-	self.dest2 = '0 0 0';      // delta
-	self.dest1 = self.origin;  // original position
+	self.duration = 1;        // 1 / duration
+	self.cnt = 0.1;           // start time
+	self.dest2 = '0 0 0';     // delta
+	self.dest1 = self.origin; // original position
 
 	self.flags = self.flags | FL_ONGROUND;
 };
-
-//************************************************
-//
-// Moving clip walls
-//
-//************************************************
 
 void() rotate_door_reversedirection;
 void() rotate_door_group_reversedirection;
@@ -868,17 +768,6 @@ void() movewall_think =
 	self.nextthink = time + 0.02;
 };
 
-/*QUAKED func_movewall (0 .5 .8) ? VISIBLE TOUCH NONBLOCKING
-Used to emulate collision on rotating objects.
-
-VISIBLE causes brush to be displayed.
-
-TOUCH specifies whether to cause damage when touched by player.
-
-NONBLOCKING makes the brush non-solid.  This is useless if VISIBLE is set.
-
-"dmg" specifies the damage to cause when touched or blocked.
-*/
 void() func_movewall =
 {
 	self.angles = '0 0 0';
@@ -906,9 +795,6 @@ void() func_movewall =
 	self.ltime = time;
 };
 
-/*QUAKED rotate_object (0 .5 .8) ?
-This defines an object to be rotated.  Used as the target of func_rotate_door.
-*/
 void() rotate_object =
 {
 	self.classname = "rotate_object";
@@ -918,12 +804,6 @@ void() rotate_object =
 	setsize (self, self.mins, self.maxs);
 	self.think = SUB_Null;
 };
-
-//************************************************
-//
-// Rotating doors
-//
-//************************************************
 
 void() rotate_door_think2 =
 {
@@ -1067,21 +947,6 @@ void() rotate_door_use =
 	self.ltime = time;
 };
 
-/*QUAKED func_rotate_door (0 .5 .8) (-8 -8 -8) (8 8 8) STAYOPEN
-Creates a door that rotates between two positions around a point of
-rotation each time it's triggered.
-
-STAYOPEN tells the door to reopen after closing.  This prevents a trigger-
-once door from closing again when it's blocked.
-
-"dmg" specifies the damage to cause when blocked.  Defaults to 2.  Negative
-numbers indicate no damage. "speed" specifies how the time it takes to rotate
-
-"sounds"
-1) medieval (default)
-2) metal
-3) base
-*/
 void() func_rotate_door =
 {
 	if (self.target == "")

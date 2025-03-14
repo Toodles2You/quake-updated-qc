@@ -1,7 +1,7 @@
 ../progs.dat
 
 defs.qc
-hipdefs.qc   //JIM
+hipdefs.qc
 subs.qc
 fight.qc
 ai.qc
@@ -28,14 +28,12 @@ dog.qc
 zombie.qc
 boss.qc
 
-tarbaby.qc		// registered
-hknight.qc		// registered
-fish.qc			// registered
-shalrath.qc		// registered
-enforcer.qc		// registered
-oldone.qc		// registered
-
-// Hipnotic Quake additions
+tarbaby.qc
+hknight.qc
+fish.qc
+shalrath.qc
+enforcer.qc
+oldone.qc
 
 hipsubs.qc
 hip_brk.qc

@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Pushable walls QuickC program
-	By Jim Dose'  9/16/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 void() push_use =
 {
 	local vector delta;
@@ -66,9 +59,6 @@ void() push_use =
 	setorigin (self.owner, self.owner.oldorigin + delta);
 };
 
-/*QUAKED func_pushable (0 .5 .8) ?
-Pushable walls.
-*/
 void() func_pushable =
 {
 	local entity new;

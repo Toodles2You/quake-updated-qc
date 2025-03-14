@@ -17,24 +17,12 @@
     See file, 'COPYING', for details.
 */
 
-/*
-==============================================================================
-
-PLAYER decoy
-
-==============================================================================
-*/
-
-//
 // running
-//
 $frame axrun1 axrun2 axrun3 axrun4 axrun5 axrun6
 
 $frame rockrun1 rockrun2 rockrun3 rockrun4 rockrun5 rockrun6
 
-//
 // standing
-//
 $frame stand1 stand2 stand3 stand4 stand5
 
 $frame axstnd1 axstnd2 axstnd3 axstnd4 axstnd5 axstnd6
@@ -111,8 +99,6 @@ void(entity decoy) setup_decoy =
 	decoy.colormap = pl.colormap;
 };
 
-/*QUAKED monster_decoy (1 0 0) (-16 -16 -24) (16 16 40)
-*/
 void() monster_decoy =
 {
 	if (deathmatch)

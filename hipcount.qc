@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Counter QuickC program
-	By Jim Dose'  9/13/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 float COUNTER_TOGGLE = 1;
 float COUNTER_LOOP = 2;
 float COUNTER_STEP = 4;
@@ -124,33 +117,6 @@ float(entity counter) counter_GetCount =
 	return 0;
 };
 
-/*QUAKED func_counter (0 0 0.5) (0 0 0) (32 32 32) TOGGLE LOOP STEP RESET RANDOM
-FINISHCOUNT START_ON TOGGLE causes the counter to switch between an on and off
-state each time the counter is triggered.
-
-LOOP causes the counter to repeat infinitly.  The count resets to zero
-after reaching the value in "count".
-
-STEP causes the counter to only increment when triggered.  Effectively,
-this turns the counter into a relay with counting abilities.
-
-RESET causes the counter to reset to 0 when restarted.
-
-RANDOM causes the counter to generate random values in the range 1 to "count"
-at the specified interval.
-
-FINISHCOUNT causes the counter to continue counting until it reaches "count"
-before shutting down even after being set to an off state.
-
-START_ON causes the counter to be on when the level starts.
-
-"count" specifies how many times to repeat the event.  If LOOP is set,
-it specifies how high to count before reseting to zero.  Default is 10.
-
-"wait"  the length of time between each trigger event. Default is 1 second.
-
-"delay" how much time to wait before firing after being switched on.
-*/
 void() func_counter =
 {
 	if (!self.wait)
@@ -185,14 +151,6 @@ void() oncount_use =
 	}
 };
 
-/*QUAKED func_oncount (0 0 0.5) (0 0 0) (16 16 16)
-Must be used as the target for func_counter.  When the counter
-reaches the value set by count, func_oncount triggers its targets.
-
-"count" specifies the value to trigger on.  Default is 1.
-
-"delay" how much time to wait before firing after being triggered.
-*/
 void() func_oncount =
 {
 	self.count = floor (self.count);

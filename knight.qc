@@ -16,13 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
-
-KNIGHT
-
-==============================================================================
-*/
 
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 
@@ -143,8 +136,6 @@ void() knight_atk8 = [$attackb8, knight_atk9]
 void() knight_atk9 = [$attackb9, knight_atk10] { ai_charge (1); };
 void() knight_atk10 = [$attackb10, knight_run1] { ai_charge (5); };
 
-//===========================================================================
-
 void() knight_pain1 = [$pain1, knight_pain2] {};
 void() knight_pain2 = [$pain2, knight_pain3] {};
 void() knight_pain3 = [$pain3, knight_run1] {};
@@ -182,8 +173,6 @@ void(entity attacker, float damage) knight_pain =
 		self.pain_finished = time + 1;
 	}
 };
-
-//===========================================================================
 
 void() knight_bow1 = [$kneel1, knight_bow2] { ai_turn (); };
 void() knight_bow2 = [$kneel2, knight_bow3] { ai_turn (); };
@@ -223,7 +212,6 @@ void() knight_dieb11 = [$deathb11, knight_dieb11] {};
 
 void() knight_die =
 {
-	// check for gib
 	if (self.health < -40) 
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -234,7 +222,6 @@ void() knight_die =
 		return;
 	}
 
-	// regular death
 	sound (self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
 	if (random () < 0.5)
 		knight_die1 ();
@@ -242,8 +229,6 @@ void() knight_die =
 		knight_dieb1 ();
 };
 
-/*QUAKED monster_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-*/
 void() monster_knight =
 {
 	if (deathmatch) 

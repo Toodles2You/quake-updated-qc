@@ -16,13 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
-
-SHAMBLER
-
-==============================================================================
-*/
 
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 $frame stand10 stand11 stand12 stand13 stand14 stand15 stand16 stand17
@@ -223,8 +216,6 @@ void() sham_melee =
 		sham_swingl1 ();
 };
 
-//============================================================================
-
 void() CastLightning =
 {
 	local vector org, dir;
@@ -312,10 +303,10 @@ void(entity attacker, float damage) sham_pain =
 	sound (self, CHAN_VOICE, "shambler/shurt2.wav", 1, ATTN_NORM);
 
 	if (self.health <= 0)
-		return;  // allready dying, don't go into pain frame
+		return;
 
 	if (random () * 400 > damage)
-		return;  // didn't flinch
+		return;
 
 	if (self.pain_finished > time)
 		return;
@@ -323,8 +314,6 @@ void(entity attacker, float damage) sham_pain =
 
 	sham_pain1 ();
 };
-
-//============================================================================
 
 void() sham_death1 = [$death1, sham_death2] {};
 void() sham_death2 = [$death2, sham_death3] {};
@@ -340,7 +329,6 @@ void() sham_death11 = [$death11, sham_death11] {};
 
 void() sham_die =
 {
-	// check for gib
 	if (self.health < -60)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -351,15 +339,10 @@ void() sham_die =
 		return;
 	}
 
-	// regular death
 	sound (self, CHAN_VOICE, "shambler/sdeath.wav", 1, ATTN_NORM);
 	sham_death1 ();
 };
 
-//============================================================================
-
-/*QUAKED monster_shambler (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-*/
 void() monster_shambler =
 {
 	if (deathmatch)

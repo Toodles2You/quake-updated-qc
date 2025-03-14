@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Particle effects QuickC program
-	By Jim Dose'  9/19/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 float USE_COUNT = 1;
 
 void() particlefield_XZ =
@@ -161,20 +154,6 @@ void() particlefield_touch =
 	T_Damage (other, self, self, self.dmg);
 };
 
-/*QUAKED func_particlefield (0 .5 .8) ? USE_COUNT
-Creates a brief particle flash roughly the size of the defining
-brush each time it is triggered.
-
-USE_COUNT when the activator is a func_counter, the field will only
-   activate when count is equal to "cnt".  Same as using a func_oncount
-   to trigger.
-
-"cnt" is the count to activate on when USE_COUNT is set.
-"color" is the color of the particles.  Default is 192 (yellow).
-"count" is the density of the particles.  Default is 2.
-"noise" is the sound to play when triggered.  Do not use a looping sound here.
-"dmg" is the amount of damage to cause when touched.
-*/
 void() func_particlefield =
 {
 	if (!self.color)
@@ -260,15 +239,6 @@ void() blocker_use =
 	}
 };
 
-/*QUAKED func_togglewall (0 .5 .8) ? START_OFF
-Creates a invisible wall that can be toggled on and off.
-
-START_OFF wall doesn't block until triggered.
-
-"noise" is the sound to play when wall is turned off.
-"noise1" is the sound to play when wall is blocking.
-"dmg" is the amount of damage to cause when touched.
-*/
 void() func_togglewall =
 {
 	self.classname = "togglewall";

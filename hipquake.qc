@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Earthquake QuickC program
-	By Jim Dose'  9/13/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-// JIM
 float earthquake;
 float quakeactive;
 
@@ -72,11 +65,6 @@ void() earthquake_use =
 	EarthQuakeTime (self.dmg);
 };
 
-/*QUAKED func_earthquake (0 0 0.5) (0 0 0) (32 32 32)
-Causes an earthquake.  Triggers targets.
-
-"dmg" is the duration of the earthquake.  Default is 0.8 seconds.
-*/
 void() func_earthquake =
 {
 	quakeactive = 0;

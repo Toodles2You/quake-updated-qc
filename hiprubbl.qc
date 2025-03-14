@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Rubble QuickC program
-	By Jim Dose'  9/15/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 void() hipRubbleTouch =
 {
 	if (self.ltime < self.pausetime)
@@ -92,11 +85,6 @@ void() rubble_use =
 	} while (index < self.count);
 };
 
-/*QUAKED func_rubble (0.4 0.4 0.2) (0 0 0) (32 32 32)
-  Spawns random sized rubble when triggered.
-
-  "count" is the number of pieces of rubble to spawn.  Default is 1.
-*/
 void() func_rubble =
 {
 	precache_model ("progs/rubble1.mdl");
@@ -108,11 +96,6 @@ void() func_rubble =
 	self.use = rubble_use;
 };
 
-/*QUAKED func_rubble1 (0.4 0.4 0.2) (0 0 0) (8 8 8)
-  Spawns small rubble when triggered.
-
-  "count" is the number of pieces of rubble to spawn.  Default is 1.
-*/
 void() func_rubble1 =
 {
 	precache_model ("progs/rubble1.mdl");
@@ -122,11 +105,6 @@ void() func_rubble1 =
 	self.use = rubble_use;
 };
 
-/*QUAKED func_rubble2 (0.4 0.4 0.2) (0 0 0) (16 16 16)
-  Spawns medium rubble when triggered.
-
-  "count" is the number of pieces of rubble to spawn.  Default is 1.
-*/
 void() func_rubble2 =
 {
 	precache_model ("progs/rubble3.mdl");
@@ -136,11 +114,6 @@ void() func_rubble2 =
 	self.use = rubble_use;
 };
 
-/*QUAKED func_rubble3 (0.4 0.4 0.2) (0 0 0) (32 32 32)
-  Spawns large rubble when triggered.
-
-  "count" is the number of pieces of rubble to spawn.  Default is 1.
-*/
 void() func_rubble3 =
 {
 	precache_model ("progs/rubble2.mdl");

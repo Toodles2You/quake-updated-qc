@@ -16,13 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
-
-OGRE
-
-==============================================================================
-*/
 
 $frame	stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 
@@ -60,8 +53,6 @@ $frame bdeath7 bdeath8 bdeath9 bdeath10
 
 $frame pull1 pull2 pull3 pull4 pull5 pull6 pull7 pull8 pull9 pull10 pull11
 
-//=============================================================================
-
 void() OgreGrenadeExplode =
 {
 	T_RadiusDamage (self, self.owner, 40, world);
@@ -83,23 +74,17 @@ void() OgreGrenadeExplode =
 void() OgreGrenadeTouch =
 {
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		OgreGrenadeExplode ();
 		return;
 	}
-	// bounce sound
 	sound (self, CHAN_VOICE, "weapons/bounce.wav", 1, ATTN_NORM);
 	if (self.velocity == '0 0 0')
 		self.avelocity = '0 0 0';
 };
 
-/*
-================
-OgreFireGrenade
-================
-*/
 void() OgreFireGrenade =
 {
 	local entity missile;
@@ -117,7 +102,6 @@ void() OgreFireGrenade =
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;
 
-	// set missile speed
 
 	makevectors (self.angles);
 
@@ -131,7 +115,6 @@ void() OgreFireGrenade =
 
 	missile.touch = OgreGrenadeTouch;
 
-	// set missile duration
 	missile.nextthink = time + 2.5;
 	missile.think = OgreGrenadeExplode;
 
@@ -140,15 +123,6 @@ void() OgreFireGrenade =
 	setorigin (missile, self.origin);
 };
 
-//=============================================================================
-
-/*
-================
-chainsaw
-
-FIXME
-================
-*/
 void(float side) chainsaw =
 {
 	local vector delta;
@@ -320,7 +294,7 @@ void() ogre_smash11 = [$smash11, ogre_smash12]
 {
 	ai_charge (2);
 	chainsaw (0);
-	self.nextthink = self.nextthink + random () * 0.2;  // slight variation
+	self.nextthink = self.nextthink + random () * 0.2; // slight variation
 };
 void() ogre_smash12 = [$smash12, ogre_smash13] { ai_charge (0); };
 void() ogre_smash13 = [$smash13, ogre_smash14] { ai_charge (4); };
@@ -465,7 +439,6 @@ void() ogre_bdie10 = [$bdeath10, ogre_bdie10] {};
 
 void() ogre_die =
 {
-	// check for gib
 	if (self.health < -80)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -492,9 +465,6 @@ void() ogre_melee =
 		ogre_swing1 ();
 };
 
-/*QUAKED monster_ogre (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-
-*/
 void() monster_ogre =
 {
 	if (deathmatch)

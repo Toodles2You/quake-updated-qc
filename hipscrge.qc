@@ -17,14 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/*
-==============================================================================
-
-SCOURGE
-
-==============================================================================
-*/
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6
 $frame stand7 stand8 stand9 stand10 stand11 stand12
 
@@ -38,16 +30,7 @@ $frame sting7 sting8 sting9 sting10 sting11
 $frame pain1 pain2 pain3 pain4 pain5
 
 $frame death1 death2 death3 death4 death5
-//
 
-/*
-===========
-ScourgeCheckAttack
-
-The player is in view, so decide to move or launch an attack
-Returns FALSE if movement should continue
-============
-*/
 float() ScourgeCheckAttack =
 {
 	local vector spot1, spot2;
@@ -88,14 +71,12 @@ float() ScourgeCheckAttack =
 	traceline (spot1, spot2, FALSE, self);
 
 	if (trace_inopen && trace_inwater)
-		return FALSE;  // sight line crossed contents
+		return FALSE; // sight line crossed contents
 
 	if (trace_ent != targ)
 	{
-		return FALSE;  // don't have a clear shot
+		return FALSE;
 	}
-
-	// missile attack
 
 	self.attack_state = AS_MISSILE;
 	SUB_AttackFinished (2 + 2 * random ());
@@ -117,8 +98,6 @@ void(float ox) SCOURGE_FireSpikes =
 	self.attack_finished = time + 0.2;
 };
 
-// Attack_With_Tail
-//
 void() Attack_With_Tail =
 {
 	local float ldmg;
@@ -184,9 +163,7 @@ void(float dist) ai_left =
 {
 	walkmove ((self.angles_y + 270), dist);
 };
-//============================================================================
 
-// void() scourge_wake1;
 void() scourge_stand1 = [$stand1, scourge_stand2]
 {
 	self.spawnsilent = 0;
@@ -424,7 +401,7 @@ void(entity attacker, float damage) scourge_pain =
 	local float r;
 
 	if (random () * 50 > damage)
-		return;  // didn't flinch
+		return;
 
 	if (self.pain_finished > time)
 		return;
@@ -435,8 +412,6 @@ void(entity attacker, float damage) scourge_pain =
 	self.pain_finished = time + 2.0;
 	scourge_pain1 ();
 };
-
-//============================================================================
 
 void() scourge_die1 = [$death1, scourge_die2]
 {
@@ -450,8 +425,6 @@ void() scourge_die5 = [$death5, scourge_die5] {};
 
 void() scourge_die =
 {
-	// check for gib
-	// stop sound
 	remove (self.lastvictim);
 	self.spawnsilent = 0;
 	scourge_think ();
@@ -465,23 +438,16 @@ void() scourge_die =
 		return;
 	}
 
-	// regular death
 	sound (self, CHAN_VOICE, "scourge/pain2.wav", 1, ATTN_NORM);
 	scourge_die1 ();
 };
 
-//
-// scourge_melee
-//
 void() scourge_melee =
 {
 	scourge_melee1 ();
 	SUB_AttackFinished (2 * random ());
 };
 
-//
-// ScourgeTriggerThink
-//
 void() ScourgeTriggerThink =
 {
 	local entity targ;
@@ -497,9 +463,6 @@ void() ScourgeTriggerThink =
 	self.nextthink = time + 0.1;
 };
 
-//
-// ScourgeTriggerTouch
-//
 void() ScourgeTriggerTouch =
 {
 	local entity targ;
@@ -536,9 +499,6 @@ void() ScourgeTriggerTouch =
 	self = tempent;
 };
 
-/*QUAKED monster_scourge (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-
-*/
 void() monster_scourge =
 {
 	if (deathmatch)

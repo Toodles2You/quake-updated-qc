@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 $frame attack1 attack2 attack3 attack4 attack5 attack6
 $frame attack7 attack8 attack9 attack10 attack11 attack12 attack13
 $frame attack14 attack15 attack16 attack17 attack18
@@ -92,7 +93,7 @@ void() fish_melee =
 	local float ldmg;
 
 	if (!self.enemy)
-		return;  // removed before stroke
+		return;
 
 	delta = self.enemy.origin - self.origin;
 
@@ -130,7 +131,6 @@ void() f_death1 = [$death1, f_death2]
 void() f_death2 = [$death2, f_death3] {};
 void() f_death3 = [$death3, f_death4] {};
 void() f_death4 = [$death4, f_death5] {};
-// MED 01/15/97 moved solid to here
 void() f_death5 = [$death5, f_death6] { self.solid = SOLID_NOT; };
 void() f_death6 = [$death6, f_death7] {};
 void() f_death7 = [$death7, f_death8] {};
@@ -147,10 +147,8 @@ void() f_death17 = [$death17, f_death18] {};
 void() f_death18 = [$death18, f_death19] {};
 void() f_death19 = [$death19, f_death20] {};
 void() f_death20 = [$death20, f_death21] {};
-// MED 01/15/97 removed solid from here
 void() f_death21 = [$death21, f_death21] {};
 
-// MED 01/15/97 added fish_die
 void() fish_die =
 {
 	// check for gib
@@ -185,8 +183,6 @@ void(entity attacker, float damage) fish_pain =
 	f_pain1 ();
 };
 
-/*QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-*/
 void() monster_fish =
 {
 	if (deathmatch)
@@ -211,7 +207,6 @@ void() monster_fish =
 	self.th_stand = f_stand1;
 	self.th_walk = f_walk1;
 	self.th_run = f_run1;
-	// MED 01/15/97 added fish death
 	self.th_die = fish_die;
 	self.th_pain = fish_pain;
 	self.th_melee = f_attack1;

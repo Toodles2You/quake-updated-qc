@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Trigger QuickC program
-	By Jim Dose'  12/2/96
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 float USE_GOLD_KEY = 1;
 
 void() keytrigger_use =
@@ -100,12 +93,6 @@ void() keytrigger_touch =
 	keytrigger_use ();
 };
 
-/*QUAKED trigger_usekey (0 .5 0) ? USE_GOLD_KEY
-Variable sized single use trigger that requires a key to trigger targets.  Must
-be targeted at one or more entities.
-
-"message" is printed when the trigger is touched without having the right key.
-*/
 void() trigger_usekey =
 {
 	if (world.worldtype == 0)
@@ -154,11 +141,6 @@ void() remove_touch =
 	remove (self);
 };
 
-/*QUAKED trigger_remove (.5 .5 .5) ? ignoremonsters ignoreplayers
-Variable sized trigger that removes the thing
-that touches it.  Does not affect monsters or
-players.
-*/
 void() trigger_remove =
 {
 	self.cnt = FL_CLIENT | FL_MONSTER;
@@ -169,13 +151,6 @@ void() trigger_remove =
 	InitTrigger ();
 	self.touch = remove_touch;
 };
-/*
-==============================================================================
-
-trigger_setgravity
-
-==============================================================================
-*/
 
 void() trigger_gravity_touch =
 {
@@ -187,18 +162,6 @@ void() trigger_gravity_touch =
 		other.gravity = self.gravity;
 };
 
-/*QUAKED trigger_setgravity (.5 .5 .5) ?
-set the gravity of a player
-"gravity" what to set the players gravity to
- - 0 (default) normal gravity
- - 1 no gravity
- - 2 almost no gravity
- - ...
- - 101 normal gravity
- - 102 slightly higher gravity
- - ...
- - 1000 very high gravity
-*/
 void() trigger_setgravity =
 {
 	InitTrigger ();
@@ -219,12 +182,6 @@ void() trigger_command_use =
 		localcmd (self.message);
 };
 
-/*QUAKED trigger_command (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
- When triggered, stuffs a command into the console to allow map
- designers to set server variables.
-
- "message" is the command to send to the console.
-*/
 void() trigger_command =
 {
 	self.use = oncount_use;
@@ -241,10 +198,6 @@ void() trigger_decoy_touch =
 	SUB_UseTargets ();
 };
 
-/*QUAKED trigger_decoy_use (.5 .5 .5) ?
- only the decoy player can trigger this
- once triggers, all targets are used
-*/
 void() trigger_decoy_use =
 {
 	if (deathmatch)
@@ -269,12 +222,6 @@ void() trigger_waterfall_touch =
 	other.velocity_y = other.velocity_y + self.count * (random () - 0.5);
 };
 
-/*QUAKED trigger_waterfall (.2 .5 .2) ?
- Pushes the player in the direction specified by angles.
-
- "speed" is the strength of the push (default 50).
- "count" amount of random xy movement to add to velocity (default 100).
-*/
 void() trigger_waterfall =
 {
 	InitTrigger ();

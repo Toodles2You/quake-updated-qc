@@ -18,12 +18,9 @@
 */
 
 /*
-
-A monster is in fight mode if it thinks it can effectively attack its
-enemy.
+A monster is in fight mode if it thinks it can effectively attack its enemy.
 
 When it decides it can't attack, it goes into hunt mode.
-
 */
 
 float(float v) anglemod;
@@ -64,15 +61,13 @@ void() knight_attack =
 		knight_runatk1 ();
 };
 
-//=============================================================================
-
 /*
-===========
+==============================================================================
 CheckAttack
 
 The player is in view, so decide to move or launch an attack
 Returns FALSE if movement should continue
-============
+==============================================================================
 */
 float() CheckAttack =
 {
@@ -88,15 +83,14 @@ float() CheckAttack =
 
 	traceline (spot1, spot2, FALSE, self);
 
-	// MED 10/17/96 added charmed stuff
 	if ((trace_ent != targ) && (!self.charmed))
-		return FALSE;  // don't have a clear shot
+		return FALSE;
 
 	if (trace_inopen && trace_inwater)
-		return FALSE;  // sight line crossed contents
+		return FALSE; // sight line crossed contents
 
 	if (enemy_range == RANGE_MELEE)
-	{  // melee attack
+	{
 		if (self.th_melee)
 		{
 			if (self.classname == "monster_knight")
@@ -107,7 +101,6 @@ float() CheckAttack =
 		}
 	}
 
-	// missile attack
 	if (!self.th_missile)
 		return FALSE;
 
@@ -149,26 +142,12 @@ float() CheckAttack =
 	return FALSE;
 };
 
-/*
-=============
-ai_face
-
-Stay facing the enemy
-=============
-*/
 void() ai_face =
 {
 	self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin);
 	ChangeYaw ();
 };
 
-/*
-=============
-ai_charge
-
-The monster is in a melee attack, so get as close as possible to .enemy
-=============
-*/
 float(entity targ) visible;
 float(entity targ) infront;
 float(entity targ) range;
@@ -176,7 +155,7 @@ float(entity targ) range;
 void(float d) ai_charge =
 {
 	ai_face ();
-	movetogoal (d);  // done in C code...
+	movetogoal (d); // done in C code...
 };
 
 void() ai_charge_side =
@@ -196,19 +175,13 @@ void() ai_charge_side =
 	walkmove (heading, 20);
 };
 
-/*
-=============
-ai_melee
-
-=============
-*/
 void() ai_melee =
 {
 	local vector delta;
 	local float ldmg;
 
 	if (!self.enemy)
-		return;  // removed before stroke
+		return;
 
 	delta = self.enemy.origin - self.origin;
 
@@ -225,7 +198,7 @@ void() ai_melee_side =
 	local float ldmg;
 
 	if (!self.enemy)
-		return;  // removed before stroke
+		return;
 
 	ai_charge_side ();
 
@@ -239,16 +212,6 @@ void() ai_melee_side =
 	T_Damage (self.enemy, self, self, ldmg);
 };
 
-//=============================================================================
-
-/*
-===========
-SoldierCheckAttack
-
-The player is in view, so decide to move or launch an attack
-Returns FALSE if movement should continue
-============
-*/
 float() SoldierCheckAttack =
 {
 	local vector spot1, spot2;
@@ -264,12 +227,11 @@ float() SoldierCheckAttack =
 	traceline (spot1, spot2, FALSE, self);
 
 	if (trace_inopen && trace_inwater)
-		return FALSE;  // sight line crossed contents
+		return FALSE; // sight line crossed contents
 
 	if (trace_ent != targ)
-		return FALSE;  // don't have a clear shot
+		return FALSE;
 
-	// missile attack
 	if (time < self.attack_finished)
 		return FALSE;
 
@@ -297,16 +259,7 @@ float() SoldierCheckAttack =
 
 	return FALSE;
 };
-//=============================================================================
 
-/*
-===========
-ShamCheckAttack
-
-The player is in view, so decide to move or launch an attack
-Returns FALSE if movement should continue
-============
-*/
 float() ShamCheckAttack =
 {
 	local vector spot1, spot2;
@@ -339,14 +292,13 @@ float() ShamCheckAttack =
 	traceline (spot1, spot2, FALSE, self);
 
 	if (trace_inopen && trace_inwater)
-		return FALSE;  // sight line crossed contents
+		return FALSE; // sight line crossed contents
 
 	if (trace_ent != targ)
 	{
-		return FALSE;  // don't have a clear shot
+		return FALSE;
 	}
 
-	// missile attack
 	if (enemy_range == RANGE_FAR)
 		return FALSE;
 
@@ -355,16 +307,6 @@ float() ShamCheckAttack =
 	return TRUE;
 };
 
-//============================================================================
-
-/*
-===========
-OgreCheckAttack
-
-The player is in view, so decide to move or launch an attack
-Returns FALSE if movement should continue
-============
-*/
 float() OgreCheckAttack =
 {
 	local vector spot1, spot2;
@@ -395,14 +337,13 @@ float() OgreCheckAttack =
 	traceline (spot1, spot2, FALSE, self);
 
 	if (trace_inopen && trace_inwater)
-		return FALSE;  // sight line crossed contents
+		return FALSE; // sight line crossed contents
 
 	if (trace_ent != targ)
 	{
-		return FALSE;  // don't have a clear shot
+		return FALSE;
 	}
 
-	// missile attack
 	if (time < self.attack_finished)
 		return FALSE;
 

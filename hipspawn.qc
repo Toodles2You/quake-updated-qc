@@ -17,29 +17,11 @@
     See file, 'COPYING', for details.
 */
 
-//=====================================================================
-//
-// Spawning Functions (Hipnotic)
-//
-//=====================================================================
-
-//================
-//
-// spawn_think
-//
-//================
-
 void() spawn_think =
 {
 	self.think = spawn_think;
 	self.nextthink = time + 1;
 };
-
-//================
-//
-// spawn_use
-//
-//================
 
 void() spawn_use =
 {
@@ -97,21 +79,6 @@ void() spawn_use =
 	}
 };
 
-//================
-//
-// func_spawn
-//
-//================
-/*QUAKED func_spawn (0 .5 .8) (-32 -32 -24) (32 32 64) big/ambush megahealth
-This will spawn a thing upon being used. The thing that
-is spawned depends upon the value of "spawnfunction".
-"spawnclassname" should contain the same value as "spawnfunction".
-If "spawnfunction" is unspecified a random monster is chosen.
-The angles, target and all flags are passed on
-Think of it like setting up a normal entity.
-"spawnsilent" set this to 1 if you want a silent spawn.
-"spawnmulti" set this to 1 if you want this spawn to be reoccuring.
-*/
 void() func_spawn =
 {
 	local entity tempself;
@@ -327,25 +294,11 @@ void() func_spawn =
 	self.movetype = MOVETYPE_NONE;
 	self.modelindex = 0;
 	self.model = "";
-	setmodel (self, self.model);  // set size and link into world
+	setmodel (self, self.model); // set size and link into world
 	self.use = spawn_use;
 	self.spawnmaster = monster;
 };
 
-//================
-//
-// func_spawn_small
-//
-//================
-/*QUAKED func_spawn_small (0 .5 .8) (-16 -16 -24) (16 16 40) big/ambush
-megahealth This will spawn a thing upon being used. The thing that is spawned
-depends upon the value of "spawnfunction". "spawnclassname" should contain the
-same value as "spawnfunction". If "spawnfunction" is unspecified a random
-monster is chosen. The angles, target and all flags are passed on Think of it
-like setting up a normal entity. "spawnsilent" set this to 1 if you want a
-silent spawn. "spawnmulti" set this to 1 if you want this spawn to be
-reoccuring.
-*/
 void() func_spawn_small =
 {
 	func_spawn ();

@@ -17,12 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/* Miscelanneous QuickC program
-	Copyright (c)1996 Hipnotic Interactive, Inc.
-	All rights reserved.
-	Do not distribute.
-*/
-
 void() play_sound_use =
 {
 	if (self.spawnflags & 1)
@@ -54,18 +48,6 @@ void() PlaySoundThink =
 	play_sound_use ();
 };
 
-/*QUAKED play_sound_triggered (0.3 0.1 0.6) (-8 -8 -8) (8 8 8) toggle
-play a sound when it is used
-"toggle" determines whether sound should be stopped when triggered again
-"volume" how loud (1 default full volume)
-"noise" sound to play
-"impulse" channel on which to play sound (0-7) (0 automatic is default)
-"speed" attenuation factor
-   -1 - no attenuation
-	1 - normal
-	2 - idle
-	3 - static
-*/
 void() play_sound_triggered =
 {
 	precache_sound (self.noise);
@@ -82,19 +64,6 @@ void() play_sound_triggered =
 	self.use = play_sound_use;
 };
 
-/*QUAKED play_sound (0.3 0.1 0.6) (-8 -8 -8) (8 8 8)
-play a sound on a periodic basis
-"volume" how loud (1 default full volume)
-"noise" sound to play
-"wait" random time between sounds (default 20)
-"delay" minimum delay between sounds (default 2)
-"impulse" channel on which to play sound (0-7) (0 automatic is default)
-"speed" attenuation factor
-   -1 - no attenuation
-	1 - normal
-	2 - idle
-	3 - static
-*/
 void() play_sound =
 {
 	local float t;
@@ -111,16 +80,6 @@ void() play_sound =
 	self.nextthink = time + t;
 };
 
-/*QUAKED random_thunder (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
-"wait" random time between strikes (default 20)
-"delay" minimum delay between strikes (default 2)
-"volume" how loud (1 default full volume)
-"speed" attenuation factor
-   -1 - no attenuation
-	1 - normal
-	2 - idle
-	3 - static
-*/
 void() random_thunder =
 {
 	self.noise = "ambience/thunder1.wav";
@@ -128,15 +87,6 @@ void() random_thunder =
 	self.impulse = 6;
 };
 
-/*QUAKED random_thunder_triggered (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) toggle
-"toggle" determines whether sound should be stopped when triggered again
-"volume" how loud (1 default full volume)
-"speed" attenuation factor
-   -1 - no attenuation
-	1 - normal
-	2 - idle
-	3 - static
-*/
 void() random_thunder_triggered =
 {
 	self.noise = "ambience/thunder1.wav";
@@ -144,9 +94,6 @@ void() random_thunder_triggered =
 	self.impulse = 6;
 };
 
-/*QUAKED ambient_humming (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
-  "volume" how loud it should be (0.5 is default)
-*/
 void() ambient_humming =
 {
 	if (self.volume == 0)
@@ -155,9 +102,6 @@ void() ambient_humming =
 	ambientsound (self.origin, "ambient/humming.wav", self.volume, ATTN_STATIC);
 };
 
-/*QUAKED ambient_rushing (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
-  "volume" how loud it should be (0.5 is default)
-*/
 void() ambient_rushing =
 {
 	if (self.volume == 0)
@@ -166,9 +110,6 @@ void() ambient_rushing =
 	ambientsound (self.origin, "ambient/rushing.wav", self.volume, ATTN_STATIC);
 };
 
-/*QUAKED ambient_running_water (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
-  "volume" how loud it should be (0.5 is default)
-*/
 void() ambient_running_water =
 {
 	if (self.volume == 0)
@@ -177,9 +118,6 @@ void() ambient_running_water =
 	ambientsound (self.origin, "ambient/runwater.wav", self.volume, ATTN_STATIC);
 };
 
-/*QUAKED ambient_fan_blowing (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
-  "volume" how loud it should be (0.5 is default)
-*/
 void() ambient_fan_blowing =
 {
 	if (self.volume == 0)
@@ -188,9 +126,6 @@ void() ambient_fan_blowing =
 	ambientsound (self.origin, "ambient/fanblow.wav", self.volume, ATTN_STATIC);
 };
 
-/*QUAKED ambient_waterfall (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
-  "volume" how loud it should be (0.5 is default)
-*/
 void() ambient_waterfall =
 {
 	if (self.volume == 0)
@@ -199,9 +134,6 @@ void() ambient_waterfall =
 	ambientsound (self.origin, "ambient/waterfal.wav", self.volume, ATTN_STATIC);
 };
 
-/*QUAKED ambient_riftpower (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
-  "volume" how loud it should be (0.5 is default)
-*/
 void() ambient_riftpower =
 {
 	if (self.volume == 0)
@@ -210,12 +142,6 @@ void() ambient_riftpower =
 	ambientsound (self.origin, "ambient/riftpowr.wav", self.volume, ATTN_STATIC);
 };
 
-/*QUAKED info_command (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
- Stuffs a command into the console to allow map designers
- to set server variables.
-
- "message" is the command to send to the console.
-*/
 void() info_command =
 {
 	if (self.message != "")
@@ -233,22 +159,19 @@ void() effect_teleport_use =
 	sound (self, CHAN_VOICE, "misc/r_tele1.wav", 1, ATTN_NORM);
 };
 
-/*QUAKED effect_teleport (0.3 0.1 0.6) (-8 -8 -8) (8 8 8)
- Create a teleport effect when triggered
-*/
 void() effect_teleport =
 {
 	precache_sound ("misc/r_tele1.wav");
 	self.use = effect_teleport_use;
 };
 
-float SVC_UPDATEENTITY = 128;  // Net.Protocol 0x80
+float SVC_UPDATEENTITY = 128; // Net.Protocol 0x80
 
 void(entity me, entity camera) UpdateCamera =
 {
-	msg_entity = me;                            // target of message
-	WriteByte (MSG_ONE, SVC_UPDATEENTITY | 15);  // 0x80|1|2|4|8
-	WriteByte (MSG_ONE, 64);                     // 0x40
+	msg_entity = me; // target of message
+	WriteByte (MSG_ONE, SVC_UPDATEENTITY | 15); // 0x80|1|2|4|8
+	WriteByte (MSG_ONE, 64); // 0x40
 	WriteEntity (MSG_ONE, camera);
 	WriteCoord (MSG_ONE, camera.origin_x);
 	WriteCoord (MSG_ONE, camera.origin_y);
@@ -294,7 +217,7 @@ void() effect_finale_use =
 		pl.view_ofs = '0 0 0';
 		pl.angles = other.v_angle = pos.mangle;
 		pl.mangle = pos.mangle;
-		pl.fixangle = TRUE;  // turn this way immediately
+		pl.fixangle = TRUE; // turn this way immediately
 		pl.trigger_field = self;
 		pl.nextthink = time + 0.5;
 		pl.takedamage = DAMAGE_NO;
@@ -316,30 +239,7 @@ void() effect_finale_use =
 		self.think = self.spawnfunction;
 	}
 };
-/*
- "count" 0 - static camera
-	   1 - path camera
-	   2 - chase camera
- "distance" distance from chase guy
-		 (default 100)
- "height" height distance from chase guy
-		 (default 64)
-*/
 
-/*QUAKED effect_finale (0.3 0.1 0.6) (-8 -8 -8) (8 8 8) useplayer nodecoy
- start the finale sequence
- "target" the camera to go to.
- "mdl" if useplayer is specified, this is a
- path corner with target of the next
- path_corner to run to.
- if use player isn't specified this becomes
- the spawn point as well.
- "spawnfunction" next routine to run
- "delay" time to wait until running routine
- useplayer - use the current player as
-			 decoy location.
- nodecoy - no decoy, only the camera
-*/
 void() effect_finale =
 {
 	if (deathmatch)
@@ -359,9 +259,6 @@ void() info_startendtext_use =
 	ExitIntermission ();
 };
 
-/*QUAKED info_startendtext (0.3 0.1 0.6) (-8 -8 -8) (8 8 8)
- start the end text
-*/
 void() info_startendtext =
 {
 	self.use = info_startendtext_use;

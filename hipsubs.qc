@@ -17,18 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-//=========================
-//
-// Hipnotic Sub-routines
-//
-//=========================
-
-//=========================
-//
-// SUB_CopyEntity
-//
-//=========================
-
 void(entity srcent, entity destent) SUB_CopyEntity =
 {
 	destent.modelindex = srcent.modelindex;
@@ -189,12 +177,6 @@ void(entity srcent, entity destent) SUB_CopyEntity =
 	destent.spawnmaxs = srcent.spawnmaxs;
 	destent.spawnclassname = srcent.spawnclassname;
 };
-
-//=========================
-//
-// SUB_NormalizeAngles
-//
-//=========================
 
 vector(vector ang) SUB_NormalizeAngles =
 {
