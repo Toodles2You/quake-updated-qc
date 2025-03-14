@@ -57,7 +57,7 @@ void() W_FireAxe =
 
 	org = trace_endpos - v_forward * 4;
 
-	if (trace_ent.takedamage)
+	if (SUB_ShouldBleed (trace_ent))
 	{
 		trace_ent.axhitme = 1;
 		SpawnBlood (org, '0 0 0', 20);
@@ -178,7 +178,7 @@ void(float damage, vector dir) TraceAttack =
 
 	org = trace_endpos - dir * 4;
 
-	if (trace_ent.takedamage)
+	if (SUB_ShouldBleed (trace_ent))
 	{
 		SpawnBlood (org, vel * 0.2, damage);
 		AddMultiDamage (trace_ent, damage);
@@ -362,7 +362,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage =
 
 	traceline (p1, p2, FALSE, from);
 	e1 = trace_ent;
-	if (e1.takedamage)
+	if (SUB_ShouldBleed (e1))
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
 		T_Damage (e1, from, from, damage);
@@ -375,7 +375,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage =
 
 	traceline (p1 + f, p2 + f, FALSE, from);
 	e2 = trace_ent;
-	if (e2 != e1 && e2.takedamage)
+	if (e2 != e1 && SUB_ShouldBleed (e2))
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
 		T_Damage (e2, from, from, damage);
@@ -383,7 +383,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage =
 
 	traceline (p1 - f, p2 - f, FALSE, from);
 	e3 = trace_ent;
-	if (e3 != e1 && e3 != e2 && e3.takedamage)
+	if (e3 != e1 && e3 != e2 && SUB_ShouldBleed (e3))
 	{
 		particle (trace_endpos, '0 0 100', 225, damage * 4);
 		T_Damage (e3, from, from, damage);
@@ -582,7 +582,7 @@ void() spike_touch =
 	}
 
 	// hit something that bleeds
-	if (other.takedamage)
+	if (SUB_ShouldBleed (other))
 	{
 		spawn_touchblood (9);
 		T_Damage (other, self, self.owner, 9);
@@ -620,7 +620,7 @@ void() superspike_touch =
 	}
 
 	// hit something that bleeds
-	if (other.takedamage)
+	if (SUB_ShouldBleed (other))
 	{
 		spawn_touchblood (18);
 		T_Damage (other, self, self.owner, 18);

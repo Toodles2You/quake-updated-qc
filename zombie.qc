@@ -162,7 +162,7 @@ void() ZombieGrenadeTouch =
 {
 	if (other == self.owner)
 		return;
-	if (other.takedamage)
+	if (SUB_ShouldBleed (other))
 	{
 		T_Damage (other, self, self.owner, 10);
 		sound (self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);

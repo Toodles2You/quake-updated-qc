@@ -463,8 +463,6 @@ void() hurt_touch =
 		self.think = hurt_on;
 		self.nextthink = time + 1;
 	}
-
-	return;
 };
 
 void() trigger_hurt =
