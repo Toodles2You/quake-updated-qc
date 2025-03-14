@@ -316,7 +316,7 @@ void(entity current, float doDamage) PlasmaDischarge =
 
 	sound (self, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
 	if (doDamage == 1)
-		PlasmaDamage (self.origin, current.origin, self, 50);
+		PlasmaDamage (self.origin, current.origin, self.owner, 50);
 };
 
 void() PlasmaGroundOut =
