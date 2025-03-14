@@ -1064,7 +1064,7 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" suicides\n");
 				}
 				else if (targ.weapon == IT_LIGHTNING && targ.waterlevel > 1)
-					bprint (" discharges into the water.\n");
+					bprint (" discharges into the water\n");
 				else if (targ.weapon == IT_GRENADE_LAUNCHER)
 					bprint (" tries to put the pin back in\n");
 				else if (rnum > 0.4)

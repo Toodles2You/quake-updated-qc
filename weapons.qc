@@ -855,13 +855,13 @@ void() W_ChangeWeapon =
 
 	if (!(self.items & fl))
 	{
-		sprint (self, "no weapon.\n");
+		sprint (self, "No weapon\n");
 		return;
 	}
 
 	if (am)
 	{
-		sprint (self, "not enough ammo.\n");
+		sprint (self, "Not enough ammo\n");
 		return;
 	}
 
