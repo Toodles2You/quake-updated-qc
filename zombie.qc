@@ -392,14 +392,14 @@ void() zombie_paine12 = [$paine12, zombie_paine13]
 {
 	// see if ok to stand up
 	self.health = 60;
-	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 	self.solid = SOLID_SLIDEBOX;
 	if (!walkmove (0, 0))
 	{
-		self.think = zombie_paine11;
 		self.solid = SOLID_NOT;
+		zombie_paine11 ();
 		return;
 	}
+	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 };
 void() zombie_paine13 = [$paine13, zombie_paine14] {};
 void() zombie_paine14 = [$paine14, zombie_paine15] {};
