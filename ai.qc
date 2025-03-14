@@ -126,13 +126,16 @@ void() t_movetarget =
 		sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 
 	self.movetarget = find (world, targetname, other.target);
-	self.goalentity = self.movetarget;
-	self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
-	if (!self.movetarget)
+
+	if (self.movetarget)
 	{
-		self.pausetime = time + 999999;
+		self.goalentity = self.movetarget;
+		self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
+	}
+	else
+	{
+		self.pausetime = 0;
 		self.th_stand ();
-		return;
 	}
 };
 
@@ -365,10 +368,10 @@ void() ai_stand =
 	if (FindTarget ())
 		return;
 
-	if (time > self.pausetime)
+	if (self.pausetime)
 	{
-		self.th_walk ();
-		return;
+		if (time > self.pausetime)
+			self.th_walk ();
 	}
 };
 
@@ -485,12 +488,17 @@ void(float dist) ai_run =
 		self.oldenemy = world;
 		if (CanFindTarget (client, FIND_DIRECT))
 			HuntTarget (client);
+		else if (self.movetarget)
+		{
+			self.goalentity = self.movetarget;
+			self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
+			self.th_walk ();
+			return;
+		}
 		else
 		{
-			if (self.movetarget)
-				self.th_walk ();
-			else
-				self.th_stand ();
+			self.pausetime = 0;
+			self.th_stand ();
 			return;
 		}
 	}
