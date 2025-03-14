@@ -160,8 +160,6 @@ void() zombie_run18 = [$run18, zombie_run1]
 
 void() ZombieGrenadeTouch =
 {
-	if (other == self.owner)
-		return;
 	if (SUB_ShouldBleed (other))
 	{
 		T_Damage (other, self, self.owner, 10);
@@ -189,7 +187,6 @@ void(vector st) ZombieFireGrenade =
 
 	// calc org
 	org = self.origin + st_x * v_forward + st_y * v_right + (st_z - 24) * v_up;
-
 
 	makevectors (self.angles);
 

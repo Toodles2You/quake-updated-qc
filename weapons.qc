@@ -285,9 +285,6 @@ void() T_MissileTouch =
 {
 	local float damg;
 
-	if (other == self.owner)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -446,8 +443,6 @@ void() GrenadeExplode =
 
 void() GrenadeTouch =
 {
-	if (other == self.owner)
-		return;
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		GrenadeExplode ();
@@ -566,15 +561,8 @@ void(float ox) W_FireSpikes =
 	self.punchangle_x = -2;
 };
 
-.float hit_z;
 void() spike_touch =
 {
-	if (other == self.owner)
-		return;
-
-	if (other.solid == SOLID_TRIGGER)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
@@ -607,12 +595,6 @@ void() spike_touch =
 
 void() superspike_touch =
 {
-	if (other == self.owner)
-		return;
-
-	if (other.solid == SOLID_TRIGGER)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);

@@ -61,8 +61,6 @@ void() OgreGrenadeExplode =
 
 void() OgreGrenadeTouch =
 {
-	if (other == self.owner)
-		return;
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		OgreGrenadeExplode ();

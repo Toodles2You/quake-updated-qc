@@ -47,9 +47,6 @@ void() Laser_Touch =
 {
 	local vector org;
 
-	if (other == self.owner)
-		return;
-
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
