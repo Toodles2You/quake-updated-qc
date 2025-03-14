@@ -40,11 +40,7 @@ void() monster_use =
 		return;
 	if (self.health <= 0)
 		return;
-	if (activator.items & IT_INVISIBILITY)
-		return;
-	if (activator.flags & FL_NOTARGET)
-		return;
-	if (activator.classname != "player")
+	if (!CanFindTarget (activator, FIND_DIRECT))
 		return;
 
 	// delay reaction so if the monster is teleported, its sound is still heard

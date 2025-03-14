@@ -196,9 +196,14 @@ float(entity targ) infront =
 	return FALSE;
 };
 
-void() HuntTarget =
+void(entity client) HuntTarget =
 {
-	self.goalentity = self.enemy;
+	if (self.enemy)
+	{
+		if (self.enemy.classname == "player")
+			self.oldenemy = self.enemy;
+	}
+	self.enemy = self.goalentity = client;
 	self.think = self.th_run;
 	self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin);
 	self.nextthink = time + 0.1;
@@ -211,9 +216,9 @@ void() SightSound =
 		self.th_sight ();
 };
 
-void() FoundTarget =
+void(entity client) HuntFoundTarget =
 {
-	if (self.enemy.classname == "player")
+	if (client.classname == "player")
 	{ // let other monsters see this monster for a while
 		sight_entity = self;
 		sight_entity_time = time;
@@ -221,8 +226,46 @@ void() FoundTarget =
 
 	self.show_hostile = time + 1; // wake up other monsters
 
+	HuntTarget (client);
 	SightSound ();
-	HuntTarget ();
+};
+
+void() FoundTarget =
+{
+	HuntFoundTarget (self.enemy);
+};
+
+float(entity client, float method) CanFindTarget =
+{
+	if (!client)
+		return FALSE;
+	if (client == self)
+		return FALSE;
+	if (client == self.enemy)
+		return FALSE;
+	if (client.health <= 0)
+		return FALSE;
+	if (!(client.flags & (FL_CLIENT | FL_MONSTER)))
+		return FALSE;
+	if (client.flags & FL_NOTARGET)
+		return FALSE;
+	if (method == FIND_DAMAGE)
+	{
+		if (self.classname == client.classname &&
+			self.classname != "monster_army")
+			return FALSE;
+	}
+	else
+	{
+		if (method == FIND_DIRECT)
+		{
+			if (client.items & IT_INVISIBILITY)
+				return FALSE;
+		}
+		if (client.classname != "player")
+			return FALSE;
+	}
+	return TRUE;
 };
 
 /*
@@ -244,64 +287,44 @@ slower noticing monsters.
 */
 float() FindTarget =
 {
-	local entity client;
-	local float r;
+	local entity client, sight;
+	local float method, r;
 
-	// if the first spawnflag bit is set, the monster will only wake up on
-	// really seeing the player, not another monster getting angry
-
-	if (sight_entity_time >= time - 0.1 && !(self.spawnflags & MONSTER_AMBUSH))
+	if (!(self.spawnflags & MONSTER_AMBUSH) &&
+		(sight_entity_time >= time - 0.1))
 	{
-		client = sight_entity;
-		if (client.enemy == self.enemy)
-			return FALSE;
+		sight = sight_entity;
+		client = sight_entity.enemy;
+		method = FIND_INFORM;
 	}
 	else
 	{
-		client = checkclient ();
-		if (!client)
-			return FALSE; // current check entity isn't in PVS
+		client = sight = checkclient ();
+		method = FIND_DIRECT;
 	}
 
-	if (client == self.enemy)
+	if (!CanFindTarget (client, method))
 		return FALSE;
 
-	if (client.flags & FL_NOTARGET)
-		return FALSE;
-	if (client.items & IT_INVISIBILITY)
-		return FALSE;
-
-	r = range (client);
+	r = range (sight);
 	if (r == RANGE_FAR)
 		return FALSE;
 
-	if (!visible (client))
+	if (!visible (sight))
 		return FALSE;
 
 	if (r == RANGE_NEAR)
 	{
-		if (client.show_hostile < time && !infront (client))
+		if (sight.show_hostile < time && !infront (sight))
 			return FALSE;
 	}
 	else if (r == RANGE_MID)
 	{
-		if (!infront (client))
+		if (!infront (sight))
 			return FALSE;
 	}
 
-	// got one
-	self.enemy = client;
-	if (self.enemy.classname != "player")
-	{
-		self.enemy = self.enemy.enemy;
-		if (self.enemy.classname != "player")
-		{
-			self.enemy = world;
-			return FALSE;
-		}
-	}
-
-	FoundTarget ();
+	HuntFoundTarget (client);
 
 	return TRUE;
 };
@@ -451,17 +474,17 @@ The monster has an enemy it is trying to kill
 */
 void(float dist) ai_run =
 {
+	local entity client;
+
 	movedist = dist;
 	// see if the enemy is dead
 	if (self.enemy.health <= 0)
 	{
+		client = self.oldenemy;
 		self.enemy = world;
-		// FIXME: look all around for other targets
-		if (self.oldenemy.health > 0)
-		{
-			self.enemy = self.oldenemy;
-			HuntTarget ();
-		}
+		self.oldenemy = world;
+		if (CanFindTarget (client, FIND_DIRECT))
+			HuntTarget (client);
 		else
 		{
 			if (self.movetarget)

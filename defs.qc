@@ -259,6 +259,10 @@ float RANGE_NEAR = 1;
 float RANGE_MID = 2;
 float RANGE_FAR = 3;
 
+float FIND_DIRECT = 0;
+float FIND_INFORM = 1;
+float FIND_DAMAGE = 2;
+
 float DEAD_NO = 0;
 float DEAD_DYING = 1;
 float DEAD_DEAD = 2;
