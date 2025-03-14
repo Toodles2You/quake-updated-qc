@@ -314,7 +314,6 @@ float STATE_BOTTOM = 1;
 float STATE_UP = 2;
 float STATE_DOWN = 3;
 
-vector VEC_ORIGIN = '0 0 0';
 vector VEC_HULL_MIN = '-16 -16 -24';
 vector VEC_HULL_MAX = '16 16 32';
 
@@ -371,8 +370,6 @@ float MSG_INIT = 3; // write to the init string
 
 float movedist;
 float gameover; // set when a rule exits
-
-string string_null;
 
 entity newmis; // launch_spike sets this after spawning it
 

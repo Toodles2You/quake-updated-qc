@@ -512,7 +512,7 @@ void(vector org, vector dir) launch_spike =
 	newmis.think = SUB_Remove;
 	newmis.nextthink = time + 6;
 	setmodel (newmis, "progs/spike.mdl");
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+	setsize (newmis, '0 0 0', '0 0 0');
 	setorigin (newmis, org);
 
 	newmis.velocity = dir * 1000;
@@ -529,7 +529,7 @@ void() W_FireSuperSpikes =
 	launch_spike (self.origin + '0 0 16', dir);
 	newmis.touch = superspike_touch;
 	setmodel (newmis, "progs/s_spike.mdl");
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+	setsize (newmis, '0 0 0', '0 0 0');
 	self.punchangle_x = -2;
 };
 

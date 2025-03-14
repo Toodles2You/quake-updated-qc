@@ -234,7 +234,7 @@ void(vector p) boss_missile =
 	launch_spike (org, vec);
 	setmodel (newmis, "progs/lavaball.mdl");
 	newmis.avelocity = '200 100 300';
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+	setsize (newmis, '0 0 0', '0 0 0');
 	newmis.velocity = vec * 300;
 	newmis.touch = T_MissileTouch; // rocket explosion
 	sound (self, CHAN_WEAPON, "boss1/throw.wav", 1, ATTN_NORM);

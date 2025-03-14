@@ -192,7 +192,7 @@ void() Wiz_FastFire =
 		newmis.owner = self.owner;
 		newmis.classname = "wizspike";
 		setmodel (newmis, "progs/w_spike.mdl");
-		setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+		setsize (newmis, '0 0 0', '0 0 0');
 	}
 
 	remove (self);
@@ -227,7 +227,7 @@ void() Wiz_StartFast =
 	missile.enemy = self.enemy;
 	missile.nextthink = time + 0.3;
 	missile.think = Wiz_FastFire;
-	missile.movedir = VEC_ORIGIN - v_right;
+	missile.movedir = '0 0 0' - v_right;
 };
 
 void() Wiz_idlesound =
