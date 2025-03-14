@@ -365,11 +365,6 @@ void(float dist) ai_walk =
 {
 	movedist = dist;
 
-	if (self.classname == "monster_dragon")
-	{
-		movetogoal (dist);
-		return;
-	}
 	// check for noticing a player
 	if (FindTarget ())
 		return;
