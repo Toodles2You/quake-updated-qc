@@ -258,15 +258,21 @@ void() W_FireSuperShotgun =
 	FireBullets (14, dir, '0.14 0.08 0');
 };
 
-void() s_explode1 = [ 0, s_explode2 ]{};
-void() s_explode2 = [ 1, s_explode3 ]{};
-void() s_explode3 = [ 2, s_explode4 ]{};
-void() s_explode4 = [ 3, s_explode5 ]{};
-void() s_explode5 = [ 4, s_explode6 ]{};
-void() s_explode6 = [ 5, SUB_Remove ]{};
+void() s_explode1 = [0, s_explode2] {};
+void() s_explode2 = [1, s_explode3] {};
+void() s_explode3 = [2, s_explode4] {};
+void() s_explode4 = [3, s_explode5] {};
+void() s_explode5 = [4, s_explode6] {};
+void() s_explode6 = [5, SUB_Remove] {};
 
 void() BecomeExplosion =
 {
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
+	WriteCoord (MSG_BROADCAST, self.origin_x);
+	WriteCoord (MSG_BROADCAST, self.origin_y);
+	WriteCoord (MSG_BROADCAST, self.origin_z);
+
 	self.movetype = MOVETYPE_NONE;
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
@@ -301,14 +307,7 @@ void() T_MissileTouch =
 	// was done in the impact
 	T_RadiusDamage (self, self.owner, 120, other);
 
-	//	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 	self.origin = self.origin - 8 * normalize (self.velocity);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
 
 	BecomeExplosion ();
 };
@@ -442,13 +441,6 @@ void() W_FireLightning =
 void() GrenadeExplode =
 {
 	T_RadiusDamage (self, self.owner, 120, world);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-
 	BecomeExplosion ();
 };
 

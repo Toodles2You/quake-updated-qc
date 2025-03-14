@@ -176,7 +176,6 @@ void() barrel_explode =
 	self.takedamage = DAMAGE_NO;
 	self.classname = "explo_box";
 	T_RadiusDamage (self, self, 160, world);
-	sound (self, CHAN_VOICE, "weapons/r_exp3.wav", 1, ATTN_NORM);
 	particle (self.origin, '0 0 0', 75, 255);
 
 	self.origin_z = self.origin_z + 32;
@@ -191,7 +190,6 @@ void() misc_explobox =
 	self.movetype = MOVETYPE_NONE;
 	precache_model ("maps/b_explob.bsp");
 	setmodel (self, "maps/b_explob.bsp");
-	precache_sound ("weapons/r_exp3.wav");
 	self.health = 20;
 	self.th_die = barrel_explode;
 	self.takedamage = DAMAGE_AIM;
@@ -216,7 +214,6 @@ void() misc_explobox2 =
 	self.movetype = MOVETYPE_NONE;
 	precache_model2 ("maps/b_exbox2.bsp");
 	setmodel (self, "maps/b_exbox2.bsp");
-	precache_sound ("weapons/r_exp3.wav");
 	self.health = 20;
 	self.th_die = barrel_explode;
 	self.takedamage = DAMAGE_AIM;
