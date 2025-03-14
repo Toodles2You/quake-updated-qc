@@ -73,8 +73,8 @@ void() sham_walk10 = [$walk10, sham_walk11] { ai_walk (9); };
 void() sham_walk11 = [$walk11, sham_walk12] { ai_walk (7); };
 void() sham_walk12 = [$walk12, sham_walk1]
 {
-	ai_walk (7);
 	SUB_CheckIdle ("shambler/sidle.wav", ATTN_IDLE);
+	ai_walk (7);
 };
 
 void() sham_run1 = [$run1, sham_run2] { ai_run (20); };
@@ -84,8 +84,8 @@ void() sham_run4 = [$run4, sham_run5] { ai_run (20); };
 void() sham_run5 = [$run5, sham_run6] { ai_run (24); };
 void() sham_run6 = [$run6, sham_run1]
 {
-	ai_run (20);
 	SUB_CheckIdle ("shambler/sidle.wav", ATTN_IDLE);
+	ai_run (20);
 };
 
 void() sham_smash1 = [$smash1, sham_smash2]

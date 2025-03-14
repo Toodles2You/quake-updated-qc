@@ -156,16 +156,16 @@ void() ogre_walk1 = [$walk1, ogre_walk2] { ai_walk (3); };
 void() ogre_walk2 = [$walk2, ogre_walk3] { ai_walk (2); };
 void() ogre_walk3 = [$walk3, ogre_walk4]
 {
-	ai_walk (2);
 	SUB_CheckIdle ("ogre/ogidle.wav", ATTN_IDLE);
+	ai_walk (2);
 };
 void() ogre_walk4 = [$walk4, ogre_walk5] { ai_walk (2); };
 void() ogre_walk5 = [$walk5, ogre_walk6] { ai_walk (2); };
 void() ogre_walk6 = [$walk6, ogre_walk7]
 {
-	ai_walk (5);
 	if (random () < 0.1)
 		sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
+	ai_walk (5);
 };
 void() ogre_walk7 = [$walk7, ogre_walk8] { ai_walk (3); };
 void() ogre_walk8 = [$walk8, ogre_walk9] { ai_walk (2); };
@@ -180,8 +180,8 @@ void() ogre_walk16 = [$walk16, ogre_walk1] { ai_walk (4); };
 
 void() ogre_run1 = [$run1, ogre_run2]
 {
-	ai_run (9);
 	SUB_CheckIdle ("ogre/ogidle2.wav", ATTN_IDLE);
+	ai_run (9);
 };
 void() ogre_run2 = [$run2, ogre_run3] { ai_run (12); };
 void() ogre_run3 = [$run3, ogre_run4] { ai_run (8); };

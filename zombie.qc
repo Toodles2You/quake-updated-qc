@@ -122,9 +122,9 @@ void() zombie_walk17 = [$walk17, zombie_walk18] { ai_walk (0); };
 void() zombie_walk18 = [$walk18, zombie_walk19] { ai_walk (0); };
 void() zombie_walk19 = [$walk19, zombie_walk1]
 {
-	ai_walk (0);
 	if (random () < 0.2)
 		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
+	ai_walk (0);
 };
 
 void() zombie_run1 = [$run1, zombie_run2]

@@ -263,8 +263,8 @@ void() wiz_stand8 = [$hover8, wiz_stand1] { ai_stand (); };
 
 void() wiz_walk1 = [$hover1, wiz_walk2]
 {
-	ai_walk (8);
 	Wiz_idlesound ();
+	ai_walk (8);
 };
 void() wiz_walk2 = [$hover2, wiz_walk3] { ai_walk (8); };
 void() wiz_walk3 = [$hover3, wiz_walk4] { ai_walk (8); };
@@ -276,8 +276,8 @@ void() wiz_walk8 = [$hover8, wiz_walk1] { ai_walk (8); };
 
 void() wiz_side1 = [$hover1, wiz_side2]
 {
-	ai_run (8);
 	Wiz_idlesound ();
+	ai_run (8);
 };
 void() wiz_side2 = [$hover2, wiz_side3] { ai_run (8); };
 void() wiz_side3 = [$hover3, wiz_side4] { ai_run (8); };

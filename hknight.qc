@@ -59,7 +59,6 @@ $frame magicc9 magicc10 magicc11
 
 void() hknight_char_a1;
 void() hknight_run1;
-void() hk_idle_sound;
 
 void(float offset) hknight_shot =
 {
@@ -125,7 +124,7 @@ void() hknight_stand9 = [$stand9, hknight_stand1] { ai_stand (); };
 
 void() hknight_walk1 = [$walk1, hknight_walk2]
 {
-	hk_idle_sound ();
+	SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
 	ai_walk (2);
 };
 void() hknight_walk2 = [$walk2, hknight_walk3] { ai_walk (5); };
@@ -150,7 +149,7 @@ void() hknight_walk20 = [$walk20, hknight_walk1] { ai_walk (2); };
 
 void() hknight_run1 = [$run1, hknight_run2]
 {
-	hk_idle_sound ();
+	SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
 	ai_run (20);
 	CheckForCharge ();
 };
@@ -436,11 +435,6 @@ void() hknight_watk19 = [$w_attack19, hknight_watk20]
 void() hknight_watk20 = [$w_attack20, hknight_watk21] { ai_charge (6); };
 void() hknight_watk21 = [$w_attack21, hknight_watk22] { ai_charge (7); };
 void() hknight_watk22 = [$w_attack22, hknight_run1] { ai_charge (3); };
-
-void() hk_idle_sound =
-{
-	SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
-};
 
 void(entity attacker, float damage) hknight_pain =
 {
