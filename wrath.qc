@@ -17,8 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// wrath.qc
-
 $frame wrthfrme
 
 $frame wrthwk01 wrthwk02 wrthwk03 wrthwk04 wrthwk05 wrthwk06
@@ -215,8 +213,6 @@ void() wrath_die15 = [$wrthdt15, wrath_die15]
 	remove (self);
 };
 
-/*QUAKED monster_wrath (1 0 0) (-16 -16 -24) (16 16 32) Ambush
-*/
 void() monster_wrath =
 {
 	if (deathmatch)
@@ -286,16 +282,15 @@ void(float AttackNumber) WrathMissile =
 
 	if (AttackNumber == 1)
 	{
-		org = self.origin + v_forward * 20 + v_up * 12;  // 20 // 44;
+		org = self.origin + v_forward * 20 + v_up * 12;
 	}
 	else if (AttackNumber == 2)
 	{
-		org = self.origin + v_forward * 18 + v_up * 10;  // 18 // 42;
+		org = self.origin + v_forward * 18 + v_up * 10;
 	}
 	else if (AttackNumber == 3)
 	{
 		org = self.origin + v_forward * 12 + v_up * 12 + v_right * 20;
-		// up20
 	}
 	else if (AttackNumber == 4)
 	{
@@ -340,7 +335,7 @@ void() WrathMissileTouch =
 		other.classname == "monster_super_wrath")
 		{
 		remove (self);
-		return;  // don't explode on any wraths
+		return; // don't explode on any wraths
 	}
 
 	if (other.classname == "monster_zombie")

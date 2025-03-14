@@ -16,7 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/* ALL MONSTERS SHOULD BE 1 0 0 IN COLOR*/
 
 // name =[framenum,	nexttime, nextthink] {code}
 // expands to:
@@ -29,11 +28,11 @@
 // };
 
 /*
-================
+==============================================================================
 monster_use
 
 Using a monster makes it angry at the current activator
-================
+==============================================================================
 */
 void() monster_use =
 {
@@ -48,20 +47,19 @@ void() monster_use =
 	if (activator.classname != "player")
 		return;
 
-	// delay reaction so if the monster is teleported, its sound is still
-	// heard
+	// delay reaction so if the monster is teleported, its sound is still heard
 	self.enemy = activator;
 	self.nextthink = time + 0.1;
 	self.think = FoundTarget;
 };
 
 /*
-================
+==============================================================================
 monster_death_use
 
 When a mosnter dies, it fires all of its targets with the current
 enemy as activator.
-================
+==============================================================================
 */
 void() monster_death_use =
 {
@@ -78,8 +76,6 @@ void() monster_death_use =
 	SUB_UseTargets ();
 };
 
-//============================================================================
-
 void() monster_start_spread =
 {
 	// spread think times so they don't all happen at same time
@@ -91,7 +87,7 @@ void() monster_start_spread =
 
 void() walkmonster_start_go =
 {
-	self.origin_z = self.origin_z + 1;  // raise off floor a bit
+	self.origin_z = self.origin_z + 1; // raise off floor a bit
 	droptofloor (0, 0);
 
 	if (!walkmove (0, 0))

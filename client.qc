@@ -18,7 +18,6 @@
 */
 // updated to quake v1.06 10/8/96
 
-// prototypes
 void() W_WeaponFrame;
 void() W_SetCurrentAmmo;
 void(entity attacker, float damage) player_pain;
@@ -29,14 +28,6 @@ void(vector org, entity death_owner) spawn_tdeath;
 void(entity targ, entity attacker) dmatch_score;
 
 float modelindex_eyes, modelindex_player;
-
-/*
-=============================================================================
-
-LEVEL CHANGING / INTERMISSION
-
-=============================================================================
-*/
 
 float intermission_running;
 float intermission_exittime;
@@ -49,11 +40,6 @@ void() restartlevel =
 	changelevel (mapname);
 };
 
-/*QUAKED info_intermission (1 0.5 0.5) (-16 -16 -16) (16 16 16)
-This is the camera point for the intermission.
-Use mangle instead of angle, so you can set pitch or roll as well as yaw. 'pitch
-roll yaw'
-*/
 void() info_intermission = {};
 
 void() SetChangeParms =
@@ -67,7 +53,7 @@ void() SetChangeParms =
 	if (self.health <= 0)
 	{
 		SetNewParms ();
-		parm14 = self.steam;  // Save the current team of the player
+		parm14 = self.steam; // Save the current team of the player
 		return;
 	}
 
@@ -85,7 +71,7 @@ void() SetChangeParms =
 		parm2 = self.health;
 
 	teamplay = cvar ("teamplay");
-	if (teamplay >= TEAM_CTF)  // don't carry items between levels in CTF
+	if (teamplay >= TEAM_CTF) // don't carry items between levels in CTF
 		SetNewParms ();
 	else
 	{
@@ -106,12 +92,11 @@ void() SetChangeParms =
 		parm12 = self.ammo_multi_rockets;
 		parm13 = self.ammo_plasma;
 	}
-	parm14 = self.steam;  // save team setting
+	parm14 = self.steam; // save team setting
 };
 
 void() SetNewParms =
 {
-	// ZOID--
 	if (deathmatch && teamplay >= TEAM_CTF)
 	{
 		parm1 = IT_SHOTGUN | IT_AXE | IT_GRAPPLE;
@@ -126,7 +111,6 @@ void() SetNewParms =
 		parm9 = 0;
 		parm10 = 0;
 	}
-	//--ZOID
 	parm2 = 100;
 	parm4 = 25;
 	parm5 = 0;
@@ -136,9 +120,7 @@ void() SetNewParms =
 	parm11 = 0;
 	parm12 = 0;
 	parm13 = 0;
-	// ZOID--
-	parm14 = -1;  // CTF: reset current team selection
-	//--ZOID
+	parm14 = -1; // CTF: reset current team selection
 };
 
 void() DecodeLevelParms =
@@ -146,11 +128,10 @@ void() DecodeLevelParms =
 	if (serverflags)
 	{
 		if (world.model == "maps/start.bsp")
-			SetNewParms ();  // take away all stuff on starting new episode
+			SetNewParms (); // take away all stuff on starting new episode
 	}
 	if (world.model == "maps/r2m1.bsp" && !deathmatch)
 		SetNewParms ();
-	// PGM - 01/29 change to have level 8 reset all your stuff.
 
 	self.items = parm1;
 	self.health = parm2;
@@ -159,7 +140,6 @@ void() DecodeLevelParms =
 	self.ammo_nails1 = parm5;
 	self.ammo_rockets1 = parm6;
 	self.ammo_cells1 = parm7;
-	// cute bug, if grapple was selected, it still will be on level change
 	if (parm8 == IT_GRAPPLE && teamplay < TEAM_CTF)
 		self.weapon = IT_AXE;
 	else
@@ -169,22 +149,13 @@ void() DecodeLevelParms =
 	self.ammo_lava_nails = parm11;
 	self.ammo_multi_rockets = parm12;
 	self.ammo_plasma = parm13;
-	// ZOID--
 	if (TeamColorIsLegal (parm14))
 	{
 		self.steam = parm14;
 		TeamSetSkin ();
 	}
-	//--ZOID
 };
 
-/*
-============
-FindIntermission
-
-Returns the entity to view from
-============
-*/
 entity() FindIntermission =
 {
 	local entity spot;
@@ -193,7 +164,7 @@ entity() FindIntermission =
 	// look for info_intermission first
 	spot = find (world, classname, "info_intermission");
 	if (spot)
-	{  // pick a random one
+	{ // pick a random one
 		cyc = random () * 4;
 		while (cyc > 1)
 		{
@@ -222,7 +193,7 @@ entity() FindIntermission =
 string nextmap;
 void() GotoNextMap =
 {
-	if (cvar ("samelevel"))  // if samelevel is set, stay on same level
+	if (cvar ("samelevel")) // if samelevel is set, stay on same level
 		changelevel (mapname);
 	else
 		changelevel (nextmap);
@@ -240,9 +211,7 @@ void() ExitIntermission =
 	intermission_exittime = time + 1;
 	intermission_running = intermission_running + 1;
 
-	//
 	// run some text if at the end of an episode
-	//
 	if (intermission_running == 2)
 	{
 		if (world.model == "maps/e1m7.bsp")
@@ -305,7 +274,7 @@ void() ExitIntermission =
 	if (intermission_running == 3)
 	{
 		if (!cvar ("registered"))
-		{  // shareware episode has been completed, go to sell screen
+		{ // shareware episode has been completed, go to sell screen
 			WriteByte (MSG_ALL, SVC_SELLSCREEN);
 			return;
 		}
@@ -321,13 +290,6 @@ void() ExitIntermission =
 	GotoNextMap ();
 };
 
-/*
-============
-IntermissionThink
-
-When the player presses attack or jump, change to the next level
-============
-*/
 void() IntermissionThink =
 {
 	if (time < intermission_exittime)
@@ -362,7 +324,7 @@ void() execute_changelevel =
 	{
 		other.view_ofs = '0 0 0';
 		other.angles = other.v_angle = pos.mangle;
-		other.fixangle = TRUE;  // turn this way immediately
+		other.fixangle = TRUE;
 		other.nextthink = time + 0.5;
 		other.takedamage = DAMAGE_NO;
 		other.solid = SOLID_NOT;
@@ -401,24 +363,19 @@ void() changelevel_touch =
 	SUB_UseTargets ();
 
 	if ((self.spawnflags & 1) && (deathmatch == 0))
-	{  // NO_INTERMISSION
+	{ // NO_INTERMISSION
 		GotoNextMap ();
 		return;
 	}
 
 	self.touch = SUB_Null;
 
-	// we can't move people right now, because touch functions are called
-	// in the middle of C movement code, so set a think time to do it
+	// we can't move people right now, because touch functions are called in the
+	// middle of C movement code, so set a think time to do it
 	self.think = execute_changelevel;
 	self.nextthink = time + 0.1;
 };
 
-/*QUAKED trigger_changelevel (0.5 0.5 0.5) ? NO_INTERMISSION
-When the player touches this, he gets sent to the map listed in the "map"
-variable.  Unless the NO_INTERMISSION flag is set, the view will go to the
-info_intermission spot and display stats.
-*/
 void() trigger_changelevel =
 {
 	if (self.map == "")
@@ -427,14 +384,6 @@ void() trigger_changelevel =
 	InitTrigger ();
 	self.touch = changelevel_touch;
 };
-
-/*
-=============================================================================
-
-PLAYER GAME EDGE FUNCTIONS
-
-=============================================================================
-*/
 
 void() set_suicide_frame;
 
@@ -462,23 +411,15 @@ void() respawn =
 		TeamSetSkin ();
 	}
 	else
-	{  // restart the entire server
+	{ // restart the entire server
 		restartlevel ();
 	}
 };
 
-/*
-============
-ClientKill
-
-Player entered the suicide command
-============
-*/
 void() ClientKill =
 {
 	local entity vSphere;
 
-	// ZOID--
 	if (self.suicide_count > 3)
 	{
 		sprint (self, "You have suicided too much already.\n");
@@ -486,7 +427,6 @@ void() ClientKill =
 	}
 	TeamDropFlagOfPlayer (self);
 	self.suicide_count = self.suicide_count + 1;
-	// --ZOID
 
 	if (tag_token_owner == self)
 	{
@@ -512,7 +452,7 @@ void() ClientKill =
 	bprint (" suicides\n");
 	set_suicide_frame ();
 	self.modelindex = modelindex_player;
-	self.frags = self.frags - 2;  // extra penalty
+	self.frags = self.frags - 2; // extra penalty
 	respawn ();
 };
 
@@ -521,22 +461,13 @@ float(vector v) CheckSpawnPoint =
 	return FALSE;
 };
 
-/*
-============
-SelectSpawnPoint
-
-Returns the entity to spawn at
-============
-*/
 entity() SelectSpawnPoint =
 {
 	local entity spot;
 	local entity thing;
 	local float pcount;
-	// ZOID--
 	local entity startspot;
 	local float t;
-	//--ZOID
 
 	// testinfo_player_start is only found in regioned levels
 	spot = find (world, classname, "testplayerstart");
@@ -609,7 +540,7 @@ entity() SelectSpawnPoint =
 	}
 
 	if (serverflags)
-	{  // return with a rune to start
+	{ // return with a rune to start
 		spot = find (world, classname, "info_player_start2");
 		if (spot)
 			return spot;
@@ -622,13 +553,6 @@ entity() SelectSpawnPoint =
 	return spot;
 };
 
-/*
-===========
-PutClientInServer
-
-called each time a player is spawned
-============
-*/
 void() DecodeLevelParms;
 void() PlayerDie;
 
@@ -647,7 +571,7 @@ void() PutClientInServer =
 	self.max_health = 100;
 	self.flags = FL_CLIENT;
 	self.air_finished = time + 12;
-	self.dmg = 2;  // initial water damage
+	self.dmg = 2; // initial water damage
 	self.super_damage_finished = 0;
 	self.radsuit_finished = 0;
 	self.invisible_finished = 0;
@@ -658,12 +582,10 @@ void() PutClientInServer =
 	self.shield_finished = 0;
 	self.antigrav_finished = 0;
 
-	// ZOID--
 	self.ctf_lastreturnedflag = -10;
 	self.ctf_lastfraggedcarrier = -10;
 	self.ctf_flagsince = -10;
 	self.ctf_lasthurtcarrier = -10;
-	//--ZOID
 
 	DecodeLevelParms ();
 
@@ -682,7 +604,7 @@ void() PutClientInServer =
 
 	self.origin = spot.origin + '0 0 1';
 	self.angles = spot.angles;
-	self.fixangle = TRUE;  // turn this way immediately
+	self.fixangle = TRUE;
 
 	self.touch = player_touch;
 
@@ -712,60 +634,27 @@ void() PutClientInServer =
 	spawn_tdeath (self.origin, self);
 };
 
-/*
-=============================================================================
-
-QUAKED FUNCTIONS
-
-=============================================================================
-*/
-
-/*QUAKED info_player_start (1 0 0) (-16 -16 -24) (16 16 24)
-The normal starting point for a level.
-*/
 void() info_player_start = {};
 
-/*QUAKED info_player_start2 (1 0 0) (-16 -16 -24) (16 16 24)
-Only used on start map for the return point from an episode.
-*/
 void() info_player_start2 = {};
 
-/*
-saved out by quaked in region mode
-*/
+// saved out by quaked in region mode
 void() testplayerstart = {};
 
-/*QUAKED info_player_deathmatch (1 0 1) (-16 -16 -24) (16 16 24)
-potential spawning position for deathmatch games
-*/
 void() info_player_deathmatch =
 {
 	SpawnRunes ();
 };
 
-/*QUAKED info_player_coop (1 0 1) (-16 -16 -24) (16 16 24)
-potential spawning position for coop games
-*/
 void() info_player_coop = {};
 
-/*
-===============================================================================
-
-RULES
-
-===============================================================================
-*/
-
-/*
-go to the next level for deathmatch
-*/
+// for deathmatch; only called if a time or frag limit has expired
 void() NextLevel =
 {
 	local entity o;
 
 	if (mapname == "start")
 	{
-		// PGM 03/02/97 - make it always go to rogue level1 when in our progs
 		mapname = "r1m1";
 
 		o = spawn ();
@@ -795,19 +684,12 @@ void() NextLevel =
 	}
 };
 
-/*
-============
-CheckRules
-
-Exit deathmatch games upon conditions
-============
-*/
 void() CheckRules =
 {
 	local float timelimit;
 	local float fraglimit;
 
-	if (gameover)  // someone else quit the game already
+	if (gameover) // someone else quit the game already
 		return;
 
 	timelimit = cvar ("timelimit") * 60;
@@ -825,13 +707,8 @@ void() CheckRules =
 		return;
 	}
 
-	// ZOID--
-	// update team scores?
 	TeamCheckUpdate ();
-	//--ZOID
 };
-
-//============================================================================
 
 void() PlayerDeathThink =
 {
@@ -880,7 +757,6 @@ void() PlayerJump =
 		else
 			self.velocity_z = 50;
 
-		// play swiming sound
 		if (self.swim_flag < time)
 		{
 			self.swim_flag = time + 1;
@@ -897,24 +773,17 @@ void() PlayerJump =
 		return;
 
 	if (!(self.flags & FL_JUMPRELEASED))
-		return;  // don't pogo stick
+		return;
 
 	self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
 
-	self.flags = self.flags - FL_ONGROUND;  // don't stairwalk
+	self.flags = self.flags - FL_ONGROUND;
 
 	self.button2 = 0;
-	// player jumping sound
 	sound (self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM);
 	self.velocity_z = self.velocity_z + 270;
 };
 
-/*
-===========
-WaterMove
-
-============
-*/
 .float dmgtime;
 
 void() WaterMove =
@@ -936,7 +805,7 @@ void() WaterMove =
 		self.dmg = 2;
 	}
 	else if (self.air_finished < time)
-	{  // drown!
+	{ // drown!
 		if (self.pain_finished < time)
 		{
 			self.dmg = self.dmg + 2;
@@ -951,7 +820,6 @@ void() WaterMove =
 	{
 		if (self.flags & FL_INWATER)
 		{
-			// play leave water sound
 			sound (self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM);
 			self.flags = self.flags - FL_INWATER;
 		}
@@ -959,7 +827,7 @@ void() WaterMove =
 	}
 
 	if (self.watertype == CONTENT_LAVA)
-	{  // do damage
+	{ // do damage
 		if (self.dmgtime < time)
 		{
 			if (self.radsuit_finished > time)
@@ -971,7 +839,7 @@ void() WaterMove =
 		}
 	}
 	else if (self.watertype == CONTENT_SLIME)
-	{  // do damage
+	{ // do damage
 		if (self.dmgtime < time && self.radsuit_finished < time)
 		{
 			self.dmgtime = time + 1;
@@ -981,8 +849,6 @@ void() WaterMove =
 
 	if (!(self.flags & FL_INWATER))
 	{
-		// player enter water sound
-
 		if (self.watertype == CONTENT_LAVA)
 			sound (self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
 		if (self.watertype == CONTENT_WATER)
@@ -1014,39 +880,39 @@ void() CheckWaterJump =
 	end = start + v_forward * 24;
 	traceline (start, end, TRUE, self);
 	if (trace_fraction < 1)
-	{  // solid at waist
+	{ // solid at waist
 		start_z = start_z + self.maxs_z - 8;
 		end = start + v_forward * 24;
 		self.movedir = trace_plane_normal * -50;
 		traceline (start, end, TRUE, self);
 		if (trace_fraction == 1)
-		{  // open at eye level
+		{ // open at eye level
 			self.flags = self.flags | FL_WATERJUMP;
 			self.velocity_z = 225;
 			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
-			self.teleport_time = time + 2;  // safety net
+			self.teleport_time = time + 2; // safety net
 			return;
 		}
 	}
 };
 
 /*
-================
+==============================================================================
 PlayerPreThink
 
 Called every frame before physics are run
-================
+==============================================================================
 */
 void() PlayerPreThink =
 {
 	if (intermission_running)
 	{
-		IntermissionThink ();  // otherwise a button could be missed between
-		return;                // the think tics
+		IntermissionThink (); // otherwise a button could be missed between
+		return;               // the think tics
 	}
 
 	if (self.view_ofs == '0 0 0')
-		return;  // intermission or finale
+		return; // intermission or finale
 
 	if (earthquake_active)
 	{
@@ -1064,13 +930,9 @@ void() PlayerPreThink =
 		}
 	}
 
-	makevectors (self.v_angle);  // is this still used
+	makevectors (self.v_angle); // is this still used
 
-	// ZOID--
-	// TeamCheckLock performs all necessary teamlock checking, and performs all
-	// actions needed.
 	TeamCheckLock ();
-	//--ZOID
 
 	CheckMOTD ();
 	CheckRules ();
@@ -1086,7 +948,7 @@ void() PlayerPreThink =
 	}
 
 	if (self.deadflag == DEAD_DYING)
-		return;  // dying, so do nothing
+		return;
 
 	if (self.button2)
 	{
@@ -1117,20 +979,13 @@ void() PlayerPreThink =
 		}
 	}
 
-	RuneApplyElder (self);  // regeneration rune
+	RuneApplyElder (self); // regeneration rune
 
 	// Track the grapple
 	if (self.hook_out)
 		GrappleService ();
 };
 
-/*
-================
-CheckPowerups
-
-Check for turning off powerups
-================
-*/
 void() CheckPowerups =
 {
 	if (self.health <= 0)
@@ -1164,7 +1019,7 @@ void() CheckPowerups =
 		}
 
 		if (self.invisible_finished < time)
-		{  // just stopped
+		{ // just stopped
 			self.items = self.items - IT_INVISIBILITY;
 			self.invisible_finished = 0;
 			self.invisible_time = 0;
@@ -1175,7 +1030,7 @@ void() CheckPowerups =
 		self.modelindex = modelindex_eyes;
 	}
 	else
-		self.modelindex = modelindex_player;  // don't use eyes
+		self.modelindex = modelindex_player; // don't use eyes
 
 	// invincibility
 	if (self.invincible_finished)
@@ -1199,7 +1054,7 @@ void() CheckPowerups =
 		}
 
 		if (self.invincible_finished < time)
-		{  // just stopped
+		{ // just stopped
 			self.items = self.items - IT_INVULNERABILITY;
 			self.invincible_time = 0;
 			self.invincible_finished = 0;
@@ -1214,7 +1069,6 @@ void() CheckPowerups =
 	if (self.super_damage_finished)
 	{
 		// sound and screen flash when items starts to run out
-
 		if (self.super_damage_finished < time + 3)
 		{
 			if (self.super_time == 1)
@@ -1233,7 +1087,7 @@ void() CheckPowerups =
 		}
 
 		if (self.super_damage_finished < time)
-		{  // just stopped
+		{ // just stopped
 			self.items = self.items - IT_QUAD;
 			self.super_damage_finished = 0;
 			self.super_time = 0;
@@ -1247,7 +1101,7 @@ void() CheckPowerups =
 	// suit
 	if (self.radsuit_finished)
 	{
-		self.air_finished = time + 12;  // don't drown
+		self.air_finished = time + 12;
 
 		// sound and screen flash when items starts to run out
 		if (self.radsuit_finished < time + 3)
@@ -1268,7 +1122,7 @@ void() CheckPowerups =
 		}
 
 		if (self.radsuit_finished < time)
-		{  // just stopped
+		{ // just stopped
 			self.items = self.items - IT_SUIT;
 			self.rad_time = 0;
 			self.radsuit_finished = 0;
@@ -1328,18 +1182,18 @@ void() CheckPowerups =
 };
 
 /*
-================
+==============================================================================
 PlayerPostThink
 
 Called every frame after physics are run
-================
+==============================================================================
 */
 void() xpackEnding;
 
 void() PlayerPostThink =
 {
 	if (self.view_ofs == '0 0 0')
-		return;  // intermission or finale
+		return; // intermission or finale
 	if (self.deadflag)
 		return;
 
@@ -1376,19 +1230,11 @@ void() PlayerPostThink =
 	CheckPowerups ();
 };
 
-/*
-===========
-ClientConnect
-
-called when a player connects to a server
-============
-*/
 void() ClientConnect =
 {
 	bprint (self.netname);
 	bprint (" entered the game\n");
 
-	// ZOID--
 	self.suicide_count = 0;
 	self.ctf_killed = 0;
 
@@ -1399,31 +1245,23 @@ void() ClientConnect =
 	if (parm14 < 0 && teamplay > 0)
 	{
 		if (cvar ("gamecfg") & GAMECFG_USE_COLOR)
-			self.steam = self.team;  // accept joining players color if legal
+			self.steam = self.team; // accept joining players color if legal
 		else
-			self.steam = -50;  // always reassign
+			self.steam = -50; // always reassign
 		TeamCheckLock ();
 	}
-	//--ZOID
 
 	// a client connecting during an intermission can cause problems
 	if (intermission_running)
 		ExitIntermission ();
 };
 
-/*
-===========
-ClientDisconnect
-
-called when a player disconnects from a server
-============
-*/
 void() ClientDisconnect =
 {
 	if (gameover)
 		return;
-	// if the level end trigger has been activated, just return
-	// since they aren't *really* leaving
+	// if the level end trigger has been activated, just return since they
+	// aren't *really* leaving
 
 	// let everyone else know
 	bprint (self.netname);
@@ -1436,22 +1274,13 @@ void() ClientDisconnect =
 	if (tag_token_owner == self)
 		tag_token_drop ();
 
-	// ZOID--
 	TeamDropFlagOfPlayer (self);
 	self.steam = -50;
 	self.team = 0;
-	//--ZOID
 
 	set_suicide_frame ();
 };
 
-/*
-===========
-ClientObituary
-
-called when a player dies
-============
-*/
 void(entity targ, entity attacker) ClientObituary =
 {
 	local float rnum;
@@ -1462,9 +1291,7 @@ void(entity targ, entity attacker) ClientObituary =
 
 	if (targ.classname == "player")
 	{
-		// ZOID--
 		TeamResetCarrier (targ);
-		// --ZOID
 
 		if (attacker.classname == "teledeath")
 		{
@@ -1502,8 +1329,6 @@ void(entity targ, entity attacker) ClientObituary =
 				}
 				if (targ.weapon == IT_GRENADE_LAUNCHER)
 					bprint (" tries to put the pin back in\n");
-				// ZOID--
-				// gibbed for changing teams
 				else if (teamplay && (targ.team != targ.steam))
 				{
 					if (cvar ("gamecfg") & GAMECFG_ALLOW_CHG)
@@ -1511,7 +1336,6 @@ void(entity targ, entity attacker) ClientObituary =
 					else
 						bprint (" tried to change teams\n");
 				}
-				//--ZOID
 				else if (rnum > 0.4)
 					bprint (" becomes bored with life\n");
 				else
@@ -1541,9 +1365,7 @@ void(entity targ, entity attacker) ClientObituary =
 				else
 				{
 					attacker.frags = attacker.frags + 1;
-					// ZOID--
 					TeamAssists (targ, attacker);
-					//--ZOID
 				}
 
 				rnum = attacker.weapon;
@@ -1552,13 +1374,11 @@ void(entity targ, entity attacker) ClientObituary =
 					deathstring = " was ax-murdered by ";
 					deathstring2 = "\n";
 				}
-				// ZOID--
 				else if (rnum == IT_GRAPPLE)
 				{
 					deathstring = " was grappled by ";
 					deathstring2 = "\n";
 				}
-				//--ZOID
 				else if (rnum == IT_SHOTGUN)
 				{
 					deathstring = " chewed on ";
@@ -1753,7 +1573,7 @@ void(entity targ, entity attacker) ClientObituary =
 				// shield death doesn't count as a negative frag
 				targ.frags = targ.frags + 1;
 				attacker.owner.frags = attacker.owner.frags + 1;
-				TeamAssists (targ, attacker.owner);  // PGM
+				TeamAssists (targ, attacker.owner);
 
 				deathstring = " was smashed by ";
 				deathstring2 = "\n";

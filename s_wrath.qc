@@ -148,8 +148,6 @@ entity() overlord_find_dest3 =
 	return world;
 };
 
-// =======================================================
-
 entity() overlord_find_dest =
 {
 	local entity curDest, lastDest;
@@ -215,8 +213,6 @@ void() overlord_teleport =
 	self.flags = self.flags - self.flags & FL_ONGROUND;
 };
 
-// =======================================================
-
 void() overlord_stand1 = [$s_wtwk01, overlord_stand1] { ai_stand (); };
 
 void() overlord_walk01 = [$s_wtwk01, overlord_walk02] { ai_walk (8); };
@@ -251,9 +247,6 @@ void() overlord_run13 = [$s_wtwk13, overlord_run14] { ai_run (12); };
 void() overlord_run14 = [$s_wtwk14, overlord_run15] { ai_run (12); };
 void() overlord_run15 = [$s_wtwk15, overlord_run01] { ai_run (12); };
 
-// =================================================
-// overlord hand-to-hand attack
-// =================================================
 void() overlord_smash;
 
 void() overlord_at_a01 = [$s_wtaa01, overlord_at_a02] { ai_charge (12); };
@@ -342,9 +335,6 @@ void() overlord_melee =
 	}
 };
 
-// ==================================================
-// missile attacks
-// ==================================================
 void(float AttackNumber) WrathMissile;
 
 void() overlord_msl_a01 = [$s_wtba01, overlord_msl_a02] { ai_charge (12); };
@@ -368,9 +358,6 @@ void() overlord_missile =
 	overlord_msl_a01 ();
 };
 
-// ==================================================
-// pain
-// ==================================================
 void() overlord_pn_a01 = [$s_wtpa01, overlord_pn_a02] {};
 void() overlord_pn_a02 = [$s_wtpa02, overlord_pn_a03] {};
 void() overlord_pn_a03 = [$s_wtpa03, overlord_pn_a04] { overlord_teleport (); };
@@ -555,11 +542,6 @@ void() overlord_die19 = [$s_wtdt17, overlord_die19]
 	remove (self);
 };
 
-/*QUAKED monster_super_wrath (1 0 0) (-16 -16 -24) (16 16 32) Ambush BossMode
-The super wrath (Overlord).
-
-BossMode enables the superwrath's powershield and the random teleporting.
-*/
 void() monster_super_wrath =
 {
 	if (deathmatch)
@@ -568,7 +550,6 @@ void() monster_super_wrath =
 		return;
 	}
 	precache_model ("progs/s_wrath.mdl");
-	//
 	precache_model ("progs/s_wrtgb1.mdl");
 
 	precache_model ("progs/s_wrtgb2.mdl");
@@ -606,11 +587,6 @@ void() monster_super_wrath =
 	flymonster_start ();
 };
 
-/*QUAKED info_overlord_destination (.5 .5 .5) (-8 -8 -8) (8 8 32)
-This is the destination marker for the overlord.
-
-It does not require any other fields filled in.
-*/
 void() info_overlord_destination =
 {
 	// this does nothing, just serves as a target spot

@@ -16,13 +16,7 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
 
-ZOMBIE
-
-==============================================================================
-*/
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
 $frame stand9 stand10 stand11 stand12 stand13 stand14 stand15
 
@@ -67,8 +61,6 @@ float SPAWN_CRUCIFIED = 1;
 float SPAWN_LYING = 2;
 float SPAWN_AMBUSH = 4;
 float SPAWN_SNEAKY = 8;
-
-//=============================================================================
 
 .float inpain;
 void() zombie_escape1;
@@ -182,18 +174,10 @@ void() zombie_run18 = [$run18, zombie_run1]
 		sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
 };
 
-/*
-=============================================================================
-
-ATTACKS
-
-=============================================================================
-*/
-
 void() ZombieGrenadeTouch =
 {
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 	if (other.takedamage)
 	{
 		T_Damage (other, self, self.owner, 10);
@@ -201,18 +185,12 @@ void() ZombieGrenadeTouch =
 		remove (self);
 		return;
 	}
-	// bounce sound
 	sound (self, CHAN_WEAPON, "zombie/z_miss.wav", 1, ATTN_NORM);
 	self.velocity = '0 0 0';
 	self.avelocity = '0 0 0';
 	self.touch = SUB_Remove;
 };
 
-/*
-================
-ZombieFireGrenade
-================
-*/
 void(vector st) ZombieFireGrenade =
 {
 	local entity missile;
@@ -228,7 +206,6 @@ void(vector st) ZombieFireGrenade =
 	// calc org
 	org = self.origin + st_x * v_forward + st_y * v_right + (st_z - 24) * v_up;
 
-	// set missile speed
 
 	makevectors (self.angles);
 
@@ -240,7 +217,6 @@ void(vector st) ZombieFireGrenade =
 
 	missile.touch = ZombieGrenadeTouch;
 
-	// set missile duration
 	missile.nextthink = time + 2.5;
 	missile.think = SUB_Remove;
 
@@ -317,14 +293,6 @@ void() zombie_missile =
 	else
 		zombie_attc1 ();
 };
-
-/*
-=============================================================================
-
-PAIN
-
-=============================================================================
-*/
 
 void() zombie_paina1 = [$paina1, zombie_paina2]
 {
@@ -484,7 +452,7 @@ void() zombie_die =
 };
 
 /*
-=================
+==============================================================================
 zombie_pain
 
 Zombies can only be killed (gibbed) by doing 60 hit points of damage
@@ -500,19 +468,19 @@ fast pain frames.
 A hit of less than 10 points of damage (winged by a shotgun) will be ignored.
 
 FIXME: don't use pain_finished because of nightmare hack
-=================
+==============================================================================
 */
 void(entity attacker, float take) zombie_pain =
 {
 	local float r;
 
-	self.health = 60;  // allways reset health
+	self.health = 60; // allways reset health
 
 	if (take < 9)
-		return;  // totally ignore
+		return;
 
 	if (self.inpain == 2)
-		return;  // down on ground, so don't reset any counters
+		return; // down on ground, so don't reset any counters
 
 	// go down immediately if a big enough hit
 	if (take >= 25)
@@ -527,7 +495,7 @@ void(entity attacker, float take) zombie_pain =
 		// if hit again in next gre seconds while not in pain frames, definately
 		// drop
 		self.pain_finished = time + 3;
-		return;  // currently going through an animation, don't change
+		return;
 	}
 
 	if (self.pain_finished > time)
@@ -538,7 +506,6 @@ void(entity attacker, float take) zombie_pain =
 		return;
 	}
 
-	// gp into one of the fast pain animations
 	self.inpain = 1;
 
 	r = random ();
@@ -665,19 +632,6 @@ void(entity attacker, float damage) zombie_escape_pain =
 	zombie_escape ();
 };
 
-//============================================================================
-
-/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified Lying ambush
-Sneaky
-
-Crucified - Zombie stays stuck in the wall, moans and writhes.
-Lying - Zombie will start lying down, and stand when player spotted.
-Ambush - Just like all the other ambush flags.
-Sneaky - Zombie stays stuck in the wall, but breaks his chains, hops off the
-wall, and attacks after seeing the player.
-
-If crucified, stick the bounding box 12 pixels back into a wall to look right.
-*/
 void() monster_zombie =
 {
 	if (deathmatch)

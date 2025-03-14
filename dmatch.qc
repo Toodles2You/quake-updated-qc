@@ -17,10 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// dmatch - general deathmatch additions
-
-// =======================================
-// =======================================
 void() tag_token_respawn =
 {
 	local entity spawnPoint;
@@ -41,8 +37,6 @@ void() tag_token_respawn =
 	droptofloor (0, 0);
 };
 
-// =======================================
-// =======================================
 void() tag_token_fall =
 {
 	self.tag_frags = 0;
@@ -51,8 +45,6 @@ void() tag_token_fall =
 	droptofloor (0, 0);
 };
 
-// =======================================
-// =======================================
 void() tag_token_drop =
 {
 	local entity tagToken;
@@ -71,8 +63,6 @@ void() tag_token_drop =
 	tagToken.nextthink = time + 0.1;
 };
 
-// =======================================
-// =======================================
 void() tag_token_think =
 {
 	if (self.owner.health > 0)
@@ -94,8 +84,6 @@ void() tag_token_think =
 	}
 };
 
-// =======================================
-// =======================================
 void() tag_token_touch =
 {
 	if (other.classname != "player")
@@ -117,9 +105,6 @@ void() tag_token_touch =
 	self.nextthink = time + 0.1;
 };
 
-/*QUAKED dmatch_tag_token (1 1 0) (-16 -16 -16) (16 16 16)
-The deathmatch tag token.
-*/
 void() dmatch_tag_token =
 {
 	if (cvar ("teamplay") != TEAM_DMATCH_TAG)
@@ -138,8 +123,6 @@ void() dmatch_tag_token =
 	StartItem ();
 };
 
-// =======================================
-// =======================================
 void(entity targ, entity attacker) dmatch_score =
 {
 	local entity tagToken;

@@ -17,10 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// lightning trail
-// pmack
-// sept 96
-
 float LT_TOGGLE = 1;
 float LT_ACTIVE = 2;
 
@@ -108,20 +104,6 @@ void() ltrail_start_fire =
 	}
 };
 
-/*QUAKED ltrail_start (0 1 0) (-8 -8 -8) (8 8 8) LT_TOGGLE
-Starting point of a lightning trail.
-Set currentammo to amount of damage you want the lightning to do.
-Default is 25.
-
-Set frags to amount of time before next item is triggered.
-Default is 0.3 seconds.
-
-Set weapon to amount of time to be firing the lightning.
-Default is 0.3 seconds.
-
-Set the LT_TOGGLE checkbox if you want the lightning shooter to continuously
-fire until triggered again.
-*/
 void() ltrail_start =
 {
 	self.ltrailLastUsed = time;
@@ -148,17 +130,6 @@ void() ltrail_start =
 	}
 };
 
-/*QUAKED ltrail_relay (0 1 0) (-8 -8 -8) (8 8 8)
-Relay point of a lightning trail.
-Set currentammo to amount of damage you want the lightning to do.
-Default is 25.
-
-Set frags to amount of time before next item is triggered.
-Default is 0.3 seconds.
-
-Set weapon to amount of time to be firing the lightning.
-Default is 0.3 seconds.
-*/
 void() ltrail_relay =
 {
 	precache_sound ("weapons/lhit.wav");
@@ -176,13 +147,6 @@ void() ltrail_relay =
 		self.frags = 0.3;
 };
 
-/*QUAKED ltrail_end (0 1 0) (-8 -8 -8) (8 8 8)
-Ending point of a lightning trail.
-Does not fire any lightning.
-
-Set frags to amount of time before next item is triggered.
-Default is 0.3 seconds.
-*/
 void() ltrail_end =
 {
 	precache_sound ("weapons/lhit.wav");

@@ -17,17 +17,8 @@
     See file, 'COPYING', for details.
 */
 
-// multi_weapons.qc
-// pmack
-// sept 96
-
-//=============================================================================
-// Multi Grenade Code
-//=============================================================================
 void() MultiGrenadeTouch;
 
-//================================
-//================================
 void() MiniGrenadeExplode =
 {
 	if (self.owner.classname == "player")
@@ -46,8 +37,6 @@ void() MiniGrenadeExplode =
 	BecomeExplosion ();
 };
 
-//================================
-//================================
 void(float offsetAngle) MiniGrenadeLaunch =
 {
 	local entity missile;
@@ -59,7 +48,6 @@ void(float offsetAngle) MiniGrenadeLaunch =
 	missile.solid = SOLID_BBOX;
 	missile.classname = "MiniGrenade";
 
-	// set missile speed
 	missile.v_angle = self.v_angle;
 	missile.v_angle_y = missile.v_angle_y + offsetAngle;
 	makevectors (missile.v_angle);
@@ -80,13 +68,10 @@ void(float offsetAngle) MiniGrenadeLaunch =
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin);
 
-	// set missile duration
 	missile.nextthink = time + 1 + (crandom () * 0.5);
 	missile.think = MiniGrenadeExplode;
 };
 
-//================================
-//================================
 void() MultiGrenadeExplode =
 {
 	MiniGrenadeLaunch (0);
@@ -98,12 +83,10 @@ void() MultiGrenadeExplode =
 	remove (self);
 };
 
-//================================
-//================================
 void() MultiGrenadeTouch =
 {
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		if (self.classname == "MiniGrenade")
@@ -117,14 +100,11 @@ void() MultiGrenadeTouch =
 		}
 		return;
 	}
-	// bounce sound
 	sound (self, CHAN_WEAPON, "weapons/bounce.wav", 1, ATTN_NORM);
 	if (self.velocity == '0 0 0')
 		self.avelocity = '0 0 0';
 };
 
-//================================
-//================================
 void() W_FireMultiGrenade =
 {
 	local entity missile;
@@ -142,7 +122,6 @@ void() W_FireMultiGrenade =
 	missile.solid = SOLID_BBOX;
 	missile.classname = "MultiGrenade";
 
-	// set missile speed
 	makevectors (self.v_angle);
 	if (self.v_angle_x)
 		missile.velocity = v_forward * 600 + v_up * 200
@@ -158,7 +137,6 @@ void() W_FireMultiGrenade =
 	missile.angles = vectoangles (missile.velocity);
 	missile.touch = MultiGrenadeTouch;
 
-	// set missile duration
 	missile.nextthink = time + 1;
 	missile.think = MultiGrenadeExplode;
 
@@ -167,12 +145,6 @@ void() W_FireMultiGrenade =
 	setorigin (missile, self.origin);
 };
 
-//=============================================================================
-// Multi Rocket Code
-//=============================================================================
-
-//================================
-//================================
 void() MultiRocketExplode =
 {
 	local float damg;
@@ -182,9 +154,9 @@ void() MultiRocketExplode =
 	if (other.health)
 	{
 		if (other.classname == "monster_shambler")
-			damg = damg * 0.5;  // mostly immune
+			damg = damg * 0.5; // mostly immune
 		if (other.classname == "monster_dragon")
-			damg = damg * 0.5;  // mostly immune
+			damg = damg * 0.5; // mostly immune
 		T_Damage (other, self, self.owner, damg);
 	}
 
@@ -202,12 +174,10 @@ void() MultiRocketExplode =
 	BecomeExplosion ();
 };
 
-//================================
-//================================
 void() MultiRocketTouch =
 {
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
@@ -218,8 +188,6 @@ void() MultiRocketTouch =
 	MultiRocketExplode ();
 };
 
-//================================
-//================================
 void() HomingMissileThink =
 {
 	local vector dir;
@@ -236,8 +204,6 @@ void() HomingMissileThink =
 	self.think = HomingMissileThink;
 };
 
-//================================
-//================================
 void() HomingMissileAcquire =
 {
 	local vector oldVelocity;
@@ -273,8 +239,6 @@ void() HomingMissileAcquire =
 	self.nextthink = time + 0.2;
 };
 
-//================================
-//================================
 void(float offset, float frameNum) MultiRocketLaunch =
 {
 	local entity missile;
@@ -333,8 +297,6 @@ void(float offset, float frameNum) MultiRocketLaunch =
 	}
 };
 
-//================================
-//================================
 void() W_FireMultiRocket =
 {
 	self.currentammo = self.ammo_multi_rockets = self.ammo_multi_rockets - 1;
@@ -350,16 +312,11 @@ void() W_FireMultiRocket =
 	MultiRocketLaunch (10, 1);
 };
 
-//=============================================================================
-// Plasma Gun Code
-//=============================================================================
 void(vector p1, vector p2, entity from, float damage) PlasmaDamage =
 {
 	LightningDamage (p1, p2, from, damage);
 };
 
-//================================
-//================================
 void(entity current, float doDamage) PlasmaDischarge =
 {
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -377,8 +334,6 @@ void(entity current, float doDamage) PlasmaDischarge =
 		PlasmaDamage (self.origin, current.origin, self, 50);
 };
 
-//================================
-//================================
 void() PlasmaGroundOut =
 {
 	local entity current, start;
@@ -414,14 +369,12 @@ void() PlasmaGroundOut =
 	}
 };
 
-//================================
-//================================
 void() PlasmaTouch =
 {
 	local float damg;
 
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
@@ -435,7 +388,7 @@ void() PlasmaTouch =
 	if (other.health)
 	{
 		if (other.classname == "monster_shambler")
-			damg = damg * 0.5;  // mostly immune
+			damg = damg * 0.5; // mostly immune
 		T_Damage (other, self, self.owner, damg);
 	}
 
@@ -455,8 +408,6 @@ void() PlasmaTouch =
 	remove (self);
 };
 
-//================================
-//================================
 void() PlasmaLaunch =
 {
 	self.velocity = normalize (self.velocity);
@@ -476,7 +427,6 @@ void(vector org, vector dir) launch_plasma =
 	missile.solid = SOLID_BBOX;
 	missile.classname = "plasma";
 
-	// set missile speed
 	missile.velocity = dir * 0.01;
 	missile.avelocity = '300 300 300';
 	missile.angles = vectoangles (missile.velocity);
@@ -490,13 +440,10 @@ void(vector org, vector dir) launch_plasma =
 	if (!deathmatch && !coop)
 		missile.effects = EF_BRIGHTLIGHT;
 
-	// set missile duration
 	missile.think = PlasmaLaunch;
 	missile.nextthink = time + 0.1;
 };
 
-//================================
-//================================
 void() W_FirePlasma =
 {
 	local float cells;

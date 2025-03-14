@@ -17,8 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// buzzsaw.qc
-
 $frame buzzsaw
 $frame bzzrot01 bzzrot02 bzzrot03 bzzrot04 bzzrot05 bzzrot06
 
@@ -97,21 +95,6 @@ void() buzzsaw_use =
 	self.use = SUB_Null;
 };
 
-/*QUAKED buzzsaw (0 .5 .8) (-18 -18 -18) (18 18 18) Vertical
-The buzzsaw trap.
-
-currentammo: amount of damage for each contact. (default 10)
-speed: speed that it will follow it's path. (default 10)
-
-Use the angle buttons to point the buzzsaw in the direction it
-should face.
-
-Place on a monster path if you want it to move.
-
-If it is targeted, it will wait until triggered to activate.
-
-It will not damage players until activated.
-*/
 void() buzzsaw =
 {
 	precache_model ("progs/buzzsaw.mdl");

@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 $frame attack1 attack2 attack3 attack4 attack5 attack6
 $frame attack7 attack8 attack9 attack10 attack11 attack12 attack13
 $frame attack14 attack15 attack16 attack17 attack18
@@ -92,7 +93,7 @@ void() fish_melee =
 	local float ldmg;
 
 	if (!self.enemy)
-		return;  // removed before stroke
+		return;
 
 	delta = self.enemy.origin - self.origin;
 
@@ -164,8 +165,6 @@ void(entity attacker, float damage) fish_pain =
 	f_pain1 ();
 };
 
-/*QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 32) Ambush
-*/
 void() monster_fish =
 {
 	if (deathmatch)

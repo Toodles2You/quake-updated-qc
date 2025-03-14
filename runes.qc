@@ -21,23 +21,21 @@
 // Jan'97 by ZOID <zoid@threewave.com>
 // Under contract to id software for Rogue Entertainment
 
-.float rune;      // what rune does this guy have?
-.float runetime;  // last time we told him he's already got a rune
+.float rune; // what rune does this guy have?
+.float runetime; // last time we told him he's already got a rune
 
 .float rune1_last_noise_time;
 .float rune2_last_noise_time;
 .float rune3_last_noise_time;
 .float rune4_last_regen_time;
 
-float runespawn;         // have we spawned runes?
-entity rune_spawn_spot;  // spawn spot for runes
+float runespawn; // have we spawned runes?
+entity rune_spawn_spot; // spawn spot for runes
 
-float ITEM_RUNE1 = 1;  // Rune of Earth Magic:  Resistance
-float ITEM_RUNE2 = 2;  // Rune of Black Magic:  Strength
-float ITEM_RUNE3 = 4;  // Rune of Hell Magic:  Haste
-float ITEM_RUNE4 = 8;  // Rune of Edler Magic:  Regeneration
-
-// prototypes
+float ITEM_RUNE1 = 1; // Rune of Earth Magic: Resistance
+float ITEM_RUNE2 = 2; // Rune of Black Magic: Strength
+float ITEM_RUNE3 = 4; // Rune of Hell Magic: Haste
+float ITEM_RUNE4 = 8; // Rune of Edler Magic: Regeneration
 
 void() RuneTouch =
 {
@@ -124,7 +122,7 @@ void(float r, entity spot) SpawnRune =
 	setsize (item, '-16 -16 0', '16 16 56');
 	item.touch = RuneTouch;
 
-	item.nextthink = time + 120;  // remove after 2 minutes
+	item.nextthink = time + 120; // remove after 2 minutes
 	item.think = RuneRespawn;
 };
 

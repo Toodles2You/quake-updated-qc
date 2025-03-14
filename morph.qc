@@ -64,14 +64,8 @@ float MORPH_GREEK = 8;
 
 void() morph_teleport;
 
-// ========================
-// standing
-// ========================
 void() morph_stand1 = [$mfstand1, morph_stand1] { ai_stand (); };
 
-// ========================
-// movement
-// ========================
 void() morph_walk1 = [$mfwlk01, morph_walk2] { ai_walk (3); };
 void() morph_walk2 = [$mfwlk02, morph_walk3] { ai_walk (2); };
 void() morph_walk3 = [$mfwlk03, morph_walk4] { ai_walk (4); };
@@ -98,9 +92,6 @@ void() morph_run9 = [$mfrun09, morph_run10] { ai_run (19); };
 void() morph_run10 = [$mfrun10, morph_run11] { ai_run (15); };
 void() morph_run11 = [$mfrun11, morph_run1] { ai_run (11); };
 
-// ========================
-// new attack code
-// ========================
 void() morph_stab2 =
 {
 	local float dist;
@@ -143,10 +134,6 @@ void() morph_stab2 =
 		}
 	}
 };
-
-// ========================
-// hand to hand attack
-// ========================
 
 void() morph_attack01 = [$mfatb01, morph_attack02] { ai_face (); };
 void() morph_attack02 = [$mfatb02, morph_attack03] { ai_face (); };
@@ -230,9 +217,6 @@ void() morph_attack =
 		morph_knockback01 ();
 };
 
-// ========================
-// ranged attack
-// ========================
 void() morph_fire =
 {
 	local vector org, dir;
@@ -267,9 +251,6 @@ void() morph_fire7 = [$mfata07, morph_fire8] { ai_face (); };
 void() morph_fire8 = [$mfata08, morph_fire9] { ai_face (); };
 void() morph_fire9 = [$mfata09, morph_run1] { ai_face (); };
 
-// ========================
-// pain
-// ========================
 void() morph_painA1 = [$mfpain01, morph_painA2] {};
 void() morph_painA2 = [$mfpain02, morph_painA3] {};
 void() morph_painA3 = [$mfpain03, morph_painA4] {};
@@ -318,9 +299,6 @@ void(entity attacker, float damage) morph_pain =
 	self.nextthink = time + 0.1;
 };
 
-// ========================
-// die
-// ========================
 void() morph_die1 = [$mfdth01, morph_die2] {};
 void() morph_die2 = [$mfdth02, morph_die3] {};
 void() morph_die3 = [$mfdth03, morph_die4] {};
@@ -351,9 +329,6 @@ void() morph_die =
 	self.nextthink = time + 0.1;
 };
 
-// ========================
-// hide in floor
-// ========================
 void() morph_wake1 = [$start01, morph_wake2]
 {
 	sound (self, CHAN_VOICE, "guard/see1.wav", 1, ATTN_NORM);
@@ -509,13 +484,6 @@ void() morph_teleport =
 	theChild.nextthink = time + 0.3;
 };
 
-/*QUAKED monster_morph (1 0 0) (-16 -16 -24) (16 16 32) Ambush Aztec Egyptian
-Greek The morphing monster.
-
-Select the look of the monster (Aztec,Greek,Egyptian).
-If the monster has a targetname (triggered by something) he will rise up out of
-the floor when triggered.
-*/
 void() monster_morph =
 {
 	if (deathmatch)
@@ -524,7 +492,7 @@ void() monster_morph =
 		return;
 	}
 
-	if (self.spawnflags & MORPH_AZTEC)  // Aztec
+	if (self.spawnflags & MORPH_AZTEC) // Aztec
 	{
 		precache_model ("progs/morph_az.mdl");
 		self.model = "progs/morph_az.mdl";
@@ -534,7 +502,7 @@ void() monster_morph =
 		precache_model ("progs/morph_eg.mdl");
 		self.model = "progs/morph_eg.mdl";
 	}
-	else if (self.spawnflags & MORPH_GREEK)  // greek
+	else if (self.spawnflags & MORPH_GREEK) // greek
 	{
 		precache_model ("progs/morph_gr.mdl");
 		self.model = "progs/morph_gr.mdl";

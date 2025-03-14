@@ -17,10 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// New Items
-//
-// Items added for the Rogue XPACK.
-
 void() sphere_spawn;
 
 void(entity theEntity) UpdateAmmoCounts =
@@ -104,12 +100,9 @@ void() newitems_touch =
 	}
 
 	activator = other;
-	SUB_UseTargets ();  // fire all targets / killtargets
+	SUB_UseTargets ();
 };
 
-/*QUAKED item_powerup_shield (0 .5 .8) (-16 -16 -24) (16 16 32)
-The shield upgrade
-*/
 void() item_powerup_shield =
 {
 	self.touch = newitems_touch;
@@ -127,9 +120,6 @@ void() item_powerup_shield =
 	StartItem ();
 };
 
-/*QUAKED item_powerup_belt (0 .5 .8) (-16 -16 -24) (16 16 32)
-The anti-grav belt
-*/
 void() item_powerup_belt =
 {
 	self.touch = newitems_touch;

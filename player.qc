@@ -19,39 +19,23 @@
 
 void() bubble_bob;
 
-/*
-==============================================================================
-
-PLAYER
-
-==============================================================================
-*/
-
-//
 // running
-//
 $frame axrun1 axrun2 axrun3 axrun4 axrun5 axrun6
 
 $frame rockrun1 rockrun2 rockrun3 rockrun4 rockrun5 rockrun6
 
-//
 // standing
-//
 $frame stand1 stand2 stand3 stand4 stand5
 
 $frame axstnd1 axstnd2 axstnd3 axstnd4 axstnd5 axstnd6
 $frame axstnd7 axstnd8 axstnd9 axstnd10 axstnd11 axstnd12
 
-//
 // pain
-//
 $frame axpain1 axpain2 axpain3 axpain4 axpain5 axpain6
 
 $frame pain1 pain2 pain3 pain4 pain5 pain6
 
-//
 // death
-//
 
 $frame axdeth1 axdeth2 axdeth3 axdeth4 axdeth5 axdeth6
 $frame axdeth7 axdeth8 axdeth9
@@ -71,9 +55,7 @@ $frame deathd8 deathd9
 $frame deathe1 deathe2 deathe3 deathe4 deathe5 deathe6 deathe7
 $frame deathe8 deathe9
 
-//
 // attacks
-//
 $frame nailatt1 nailatt2
 
 $frame light1 light2
@@ -89,12 +71,6 @@ $frame axattb1 axattb2 axattb3 axattb4 axattb5 axattb6
 $frame axattc1 axattc2 axattc3 axattc4 axattc5 axattc6
 
 $frame axattd1 axattd2 axattd3 axattd4 axattd5 axattd6
-
-/*
-==============================================================================
-PLAYER
-==============================================================================
-*/
 
 void() player_run;
 
@@ -195,8 +171,6 @@ void() player_axed3 = [$axattd3, player_axed4]
 };
 void() player_axed4 = [$axattd4, player_run] { self.weaponframe = 8; };
 
-//============================================================================
-// ZOID--
 void() player_grapple3;
 void() player_grapple4;
 void() player_grapple5;
@@ -239,8 +213,6 @@ void() player_grapple4 = [$deathc4, player_grapple4]
 	}
 };
 void() player_grapple5 = [$axattd4, player_run] { self.weaponframe = 1; };
-//--ZOID
-//============================================================================
 
 void() player_nail1 = [$nailatt1, player_nail2]
 {
@@ -274,8 +246,6 @@ void() player_nail2 = [$nailatt2, player_nail1]
 	W_FireSpikes (-4);
 	self.attack_finished = time + 0.2;
 };
-
-//============================================================================
 
 void(float ox) W_FireLavaSpikes;
 
@@ -312,7 +282,6 @@ void() player_lava_nail2 = [$nailatt2, player_lava_nail1]
 	self.attack_finished = time + 0.2;
 };
 
-//============================================================================
 void() W_FirePlasma;
 
 void() player_light1 = [$light1, player_light2]
@@ -361,8 +330,6 @@ void() player_light2 = [$light2, player_light1]
 		self.attack_finished = time + 0.2;
 	}
 };
-
-//============================================================================
 
 void() player_rocket1 = [$rockatt1, player_rocket2]
 {
@@ -485,7 +452,7 @@ void(entity attacker, float damage) player_pain =
 		return;
 
 	if (self.invisible_finished > time)
-		return;  // eyes don't have pain frames
+		return;
 
 	if (self.weapon == IT_AXE)
 		player_axpain1 ();
@@ -662,17 +629,16 @@ void() PlayerDie =
 	local float i;
 
 	self.items = self.items - (self.items & IT_INVISIBILITY);
-	self.invisible_finished = 0;  // don't die as eyes
+	self.invisible_finished = 0; // don't die as eyes
 	self.invincible_finished = 0;
 	self.super_damage_finished = 0;
 	self.radsuit_finished = 0;
-	self.modelindex = modelindex_player;  // don't use eyes
+	self.modelindex = modelindex_player; // don't use eyes
 
 	self.gravity = 1.0;
 	self.shield_finished = 0;
 	self.antigrav_finished = 0;
 
-	// ZOID--
 	if (deathmatch || coop)
 	{
 		DropBackpack ();
@@ -684,7 +650,6 @@ void() PlayerDie =
 		self.ctf_killed = 0;
 	else
 		self.ctf_killed = 1;
-	//--ZOID
 
 	self.weaponmodel = "";
 	self.view_ofs = '0 0 -8';
@@ -729,9 +694,9 @@ void() PlayerDie =
 };
 
 void() set_suicide_frame =
-{  // used by klill command and diconnect command
+{
 	if (self.model != "progs/player.mdl")
-		return;  // allready gibbed
+		return;
 	self.frame = $deatha11;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_TOSS;

@@ -17,11 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// vengeance sphere
-
-// ==============================
-// sphere_impact
-// ==============================
 void() sphere_impact =
 {
 	if (other.health)
@@ -64,9 +59,6 @@ void(entity ownerEntity) sphere_remove =
 	}
 };
 
-// ==============================
-// sphere_attack
-// ==============================
 void() sphere_attack =
 {
 	self.solid = SOLID_TRIGGER;
@@ -84,9 +76,6 @@ void() sphere_attack =
 	self.think = sphere_attack;
 };
 
-// ==============================
-// sphere_think
-// ==============================
 void() sphere_think =
 {
 	if (self.shieldSoundTime < time)
@@ -130,9 +119,6 @@ void() sphere_think =
 	self.nextthink = time + 0.1;
 };
 
-// ==============================
-// sphere_spawn
-// ==============================
 void() sphere_spawn =
 {
 	local entity missile;
@@ -152,9 +138,6 @@ void() sphere_spawn =
 	missile.nextthink = time + 0.1;
 };
 
-/*QUAKED item_sphere (0 0 1) (-8 -8 -8) (8 8 8) ?
-The Vengeance Sphere. DEATHMATCH ONLY.
-*/
 void() item_sphere =
 {
 	if (!deathmatch)

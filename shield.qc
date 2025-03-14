@@ -17,12 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// Shield
-//
-
-// ===================
-// shield_think
-// ===================
 void() shield_think =
 {
 	if (self.owner.shield_death_time < time)
@@ -47,9 +41,6 @@ void() shield_think =
 	self.nextthink = time + 0.05;
 };
 
-// ===================
-// shield_spawn
-// ===================
 void(entity shieldOwner, vector dir) shield_spawn =
 {
 	local entity newShield;
@@ -80,9 +71,6 @@ void(entity shieldOwner, vector dir) shield_spawn =
 	newShield.think = shield_think;
 };
 
-// ===================
-// shield_hit
-// ===================
 float(entity targ, entity inflictor, entity attacker, float damage) shield_hit =
 {
 	local vector dir;

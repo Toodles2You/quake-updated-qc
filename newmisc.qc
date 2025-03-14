@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// Miscellaneous items used in the Rogue XPACK
-
-/*QUAKED light_lantern (0 .5 0) (-10 -10 -20) (10 10 20)
-Light-emitting lantern.
-Default light value is 200
-Default style is 0
-*/
 void() light_lantern =
 {
 	precache_model ("progs/lantern.mdl");
@@ -31,11 +24,6 @@ void() light_lantern =
 	makestatic (self);
 };
 
-/*QUAKED light_candle (0 .5 0) (-4 -4 -10) (4 4 10)
-Candle
-Default light value is 200
-Default style is 0
-*/
 void() light_candle =
 {
 	precache_model ("progs/candle.mdl");
@@ -43,9 +31,6 @@ void() light_candle =
 	makestatic (self);
 };
 
-// ==========================================
-// rubble generator
-// ==========================================
 void() rubble_touch =
 {
 	if (other.classname == "player" || other.flags & FL_MONSTER)
@@ -106,15 +91,6 @@ void() rubble_use =
 	}
 };
 
-/*QUAKED rubble_generator (1 1 0) (-8 -8 -8) (8 8 8) LavaRock Active
-Rubble Generator - cave colored rock chunks flung at the target. Triggering the
-generator will turn it off and on.
-
-LavaRock - a lava rock texture, based on rich's pumice
-Active - start the generator immediately.
-
-delay - time between rubble pieces (Default 5 sec)
-*/
 void() rubble_generator =
 {
 	precache_model ("progs/rubble.mdl");
@@ -141,12 +117,6 @@ void() trigEx_die =
 	self.think = SUB_Remove;
 };
 
-/*QUAKED trigger_explosion (.5 .5 .5) ?
-Variable sized repeatable trigger.  Must be targeted at one or more entities.
-Only set off when killed, and is only damaged by T_RadiusDamage.
-
-health: amount of damage needed to set off trigger.
-*/
 void() trigger_explosion =
 {
 	InitTrigger ();
@@ -158,5 +128,5 @@ void() trigger_explosion =
 	self.th_die = trigEx_die;
 	self.takedamage = DAMAGE_YES;
 	self.solid = SOLID_BBOX;
-	setorigin (self, self.origin);  // make sure it links into the world
+	setorigin (self, self.origin);
 };

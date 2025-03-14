@@ -17,15 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// LAVA Weapon Routines
-
-/*
-===============
-launch_lava_spike
-
-Used for both the player and the ogre
-===============
-*/
 void(vector org, vector dir) launch_lava_spike =
 {
 	newmis = spawn ();
@@ -94,8 +85,6 @@ void(float ox) W_FireLavaSpikes =
 	self.punchangle_x = -2;
 };
 
-// =============== Lava Spike Touch Routines
-
 void() lavaspike_touch =
 {
 	local float old_armortype;
@@ -106,7 +95,7 @@ void() lavaspike_touch =
 		return;
 
 	if (other.solid == SOLID_TRIGGER)
-		return;  // trigger field, do nothing
+		return;
 
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
@@ -130,7 +119,7 @@ void() lavaspike_touch =
 			other.armorvalue = old_armorvalue;
 			other.items2 = other.items2 | old_armormask;
 		}
-		else  // is a monster
+		else // is a monster
 		{
 			if (other.classname != "monster_lava_man")
 			{
@@ -159,13 +148,12 @@ void() lavaspike_touch =
 void() superlavaspike_touch =
 {
 	local float old_armortype;
-	// local float old_armorvalue;
 
 	if (other == self.owner)
 		return;
 
 	if (other.solid == SOLID_TRIGGER)
-		return;  // trigger field, do nothing
+		return;
 
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
@@ -183,9 +171,7 @@ void() superlavaspike_touch =
 		{
 			// save the old armor values...
 			old_armortype = other.armortype;
-			//			old_armorvalue = other.armorvalue;
 			other.armortype = other.armortype * 0.5;
-			//			other.armorvalue = 0;
 			T_Damage (other, self, self.owner, 18);
 
 			// if the damage didn't wipe out the armor, armortype
@@ -194,7 +180,7 @@ void() superlavaspike_touch =
 				other.armortype = old_armortype;
 			}
 		}
-		else  // is a monster, do 50% more damage
+		else // is a monster, do 50% more damage
 		{
 			if (other.classname != "monster_lava_man")
 			{

@@ -17,14 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/*
-==============================================================================
-
-mummy
-
-==============================================================================
-*/
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
 $frame stand9 stand10 stand11 stand12 stand13 stand14 stand15
 
@@ -60,8 +52,6 @@ $frame paine1 paine2 paine3 paine4 paine5 paine6 paine7 paine8 paine9 paine10
 $frame paine11 paine12 paine13 paine14 paine15 paine16 paine17 paine18 paine19
 $frame paine20 paine21 paine22 paine23 paine24 paine25 paine26 paine27 paine28
 $frame paine29 paine30
-
-//=============================================================================
 
 void() mummy_stand1 = [$stand1, mummy_stand2] { ai_stand (); };
 void() mummy_stand2 = [$stand2, mummy_stand3] { ai_stand (); };
@@ -134,20 +124,12 @@ void() mummy_run18 = [$run18, mummy_run1]
 		sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
 };
 
-/*
-=============================================================================
-
-ATTACKS
-
-=============================================================================
-*/
-
 void() mummyGrenadeTouch =
 {
 	local float mummyDamage;
 
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 	if (other.takedamage)
 	{
 		mummyDamage = 15 + random () * 15;
@@ -157,18 +139,12 @@ void() mummyGrenadeTouch =
 		remove (self);
 		return;
 	}
-	sound (self, CHAN_WEAPON, "zombie/z_miss.wav", 1,
-		  ATTN_NORM);  // bounce sound
+	sound (self, CHAN_WEAPON, "zombie/z_miss.wav", 1, ATTN_NORM); 
 	self.velocity = '0 0 0';
 	self.avelocity = '0 0 0';
 	self.touch = SUB_Remove;
 };
 
-/*
-================
-mummyFireGrenade
-================
-*/
 void(vector st) mummyFireGrenade =
 {
 	local entity missile;
@@ -184,7 +160,6 @@ void(vector st) mummyFireGrenade =
 	// calc org
 	org = self.origin + st_x * v_forward + st_y * v_right + (st_z - 24) * v_up;
 
-	// set missile speed
 
 	makevectors (self.angles);
 
@@ -196,7 +171,6 @@ void(vector st) mummyFireGrenade =
 
 	missile.touch = mummyGrenadeTouch;
 
-	// set missile duration
 	missile.nextthink = time + 2.5;
 	missile.think = SUB_Remove;
 
@@ -480,15 +454,8 @@ void(entity attacker, float damage) mummy_wake_pain =
 	mummy_wake ();
 };
 
-//============================================================================
-
 float MUMMY_STRONG = 4;
 
-/*QUAKED monster_mummy (1 0 0) (-16 -16 -24) (16 16 32) Ambush Lying Stronger
-
-Lying - mummy will start lying down, and stand when player spotted.
-Stronger - mummy starts with 1000 hitpoints, rather than 500.
-*/
 void() monster_mummy =
 {
 	if (deathmatch)

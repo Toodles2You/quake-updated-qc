@@ -17,8 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// dragon.qc
-
 $frame dragon6
 
 $frame drgfly01 drgfly02 drgfly03 drgfly04
@@ -55,10 +53,6 @@ $frame drgdth19 drgdth20 drgdth21
 void() dragon_fireball;
 void() dragon_melee1;
 
-// ===================================
-// global variables
-// ===================================
-
 float DDIE_FALLING = 1;
 float DDIE_STOPPED = 2;
 float DDIE_EXPLODED = 3;
@@ -70,9 +64,6 @@ float DT_ROOM_C = 4;
 float FIRE_PLASMA = 1;
 float FIRE_FIREBALL = 2;
 
-// ===================================
-// dragon_stop_attack
-// ===================================
 void() dragon_stop_attack =
 {
 	if (self.dragonAttacking == FALSE)
@@ -91,9 +82,6 @@ void() dragon_stop_attack =
 		bprint ("Error: Dragon cannot get to next target!\n");
 };
 
-// ===================================
-// dragon_check_attack
-// ===================================
 void() dragon_check_attack =
 {
 	local vector vec;
@@ -139,9 +127,6 @@ void() dragon_check_attack =
 	}
 };
 
-// ===================================
-// dragon_move
-// ===================================
 void(float dist) dragon_move =
 {
 	local vector moveDir;
@@ -240,13 +225,8 @@ void(float dist) dragon_move =
 	self.enemy = oldEnemy;
 };
 
-// ===================================
-// movement
-// ===================================
 void() dragon_stand1 = [$drgfly01, dragon_walk1] {};
 
-// attack A: start - walk1  stop - walk 5
-// ================
 void() dragon_atk_a1 = [$drgfix1a, dragon_atk_a2] { dragon_move (17); };
 void() dragon_atk_a2 = [$drgfix1b, dragon_atk_a3]
 {
@@ -259,8 +239,6 @@ void() dragon_atk_a3 = [$drgfix1c, dragon_walk5]
 	dragon_stop_attack ();
 };
 
-// attack B: start - walk3  stop - walk7
-// ================
 void() dragon_atk_b1 = [$drgfix2a, dragon_atk_b2] { dragon_move (17); };
 void() dragon_atk_b2 = [$drgfix2b, dragon_atk_b3]
 {
@@ -273,8 +251,6 @@ void() dragon_atk_b3 = [$drgfix2c, dragon_walk7]
 	dragon_stop_attack ();
 };
 
-// attack C: start - walk5  stop - walk9
-// ================
 void() dragon_atk_c1 = [$drgfix3a, dragon_atk_c2] { dragon_move (17); };
 void() dragon_atk_c2 = [$drgfix3b, dragon_atk_c3]
 {
@@ -287,8 +263,6 @@ void() dragon_atk_c3 = [$drgfix3c, dragon_walk9]
 	dragon_stop_attack ();
 };
 
-// attack d: start - walk7  stop - walk11
-// ================
 void() dragon_atk_d1 = [$drgfix4a, dragon_atk_d2] { dragon_move (17); };
 void() dragon_atk_d2 = [$drgfix4b, dragon_atk_d3]
 {
@@ -301,8 +275,6 @@ void() dragon_atk_d3 = [$drgfix4c, dragon_walk11]
 	dragon_stop_attack ();
 };
 
-// attack E: start - walk9  stop - walk13
-// ================
 void() dragon_atk_e1 = [$drgfix5a, dragon_atk_e2] { dragon_move (17); };
 void() dragon_atk_e2 = [$drgfix5b, dragon_atk_e3]
 {
@@ -315,8 +287,6 @@ void() dragon_atk_e3 = [$drgfix5c, dragon_walk13]
 	dragon_stop_attack ();
 };
 
-// attack F: start - walk11  stop - walk3
-// ================
 void() dragon_atk_f1 = [$drgfix6a, dragon_atk_f2] { dragon_move (17); };
 void() dragon_atk_f2 = [$drgfix6b, dragon_atk_f3]
 {
@@ -330,9 +300,6 @@ void() dragon_atk_f4 = [$drgfix6c, dragon_walk3]
 	dragon_stop_attack ();
 };
 
-// ===================================
-// dragon walk frames
-// ===================================
 void() dragon_walk1 = [$drgfly01, dragon_walk2]
 {
 	if (self.dragonAttacking)
@@ -411,14 +378,10 @@ void() dragon_walk13 = [$drgfly13, dragon_walk1]
 	self.dragonPainSequence = 1;
 };
 
-// ===================================
-// attack
-// ===================================
-
 void() FireballTouch =
 {
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 
 	if (self.owner.classname == "monster_dragon")
 		T_RadiusDamage (self, self.owner, 90, self.owner);
@@ -463,9 +426,6 @@ void(vector org, vector dir) launch_fireball =
 	fireball.think = SUB_Remove;
 };
 
-// ===========================================
-// dragon_fireball
-// ===========================================
 void() dragon_fireball =
 {
 	local float fireCount;
@@ -488,7 +448,7 @@ void() dragon_fireball =
 	else
 	{
 		fireType = FIRE_FIREBALL;
-		fireCount = random () * skill;  // easy 0, med 0-1, hard 0-2
+		fireCount = random () * skill; // easy 0, med 0-1, hard 0-2
 		fireCount = rint (fireCount) + 1;
 		// easy 1, med 1-2, hard 1-3
 	}
@@ -509,9 +469,6 @@ void() dragon_fireball =
 	}
 };
 
-// ===================================
-// melee attacks
-// ===================================
 void() dragon_tail_touch =
 {
 	local vector delta;
@@ -574,9 +531,6 @@ void() dragon_melee11 = [$drgslh11, dragon_melee12] { dragon_move (10); };
 void() dragon_melee12 = [$drgslh12, dragon_melee13] { dragon_move (10); };
 void() dragon_melee13 = [$drgslh13, dragon_walk1] { dragon_move (10); };
 
-// ===================================
-// pain
-// ===================================
 void() dragon_painA1 = [$drgpan1a, dragon_painA2] { dragon_move (12); };
 void() dragon_painA2 = [$drgpan1b, dragon_painA3] { dragon_move (12); };
 void() dragon_painA3 = [$drgpan1c, dragon_walk5] { dragon_move (12); };
@@ -632,9 +586,6 @@ void(entity attacker, float damage) dragon_pain =
 	}
 };
 
-// ===================================
-// death
-// ===================================
 void() dragon_boom2 =
 {
 	self.velocity = self.dragonLastVelocity;
@@ -733,9 +684,6 @@ void() dragon_death21 = [$drgdth21, dragon_death21]
 	remove (self);
 };
 
-// ===================================
-// Delayed Activation
-// ===================================
 void() dragon_use =
 {
 	if (self.health < 1)
@@ -750,9 +698,6 @@ void() dragon_use =
 	self.nextthink = time + 0.1;
 };
 
-// ===================================
-// dragon activation code
-// ===================================
 void() dragon_activate =
 {
 	self.takedamage = DAMAGE_AIM;
@@ -791,8 +736,6 @@ void() dragon_activate =
 	dragon_use ();
 };
 
-/*QUAKED monster_dragon (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-*/
 void() monster_dragon =
 {
 	if (deathmatch)
@@ -836,28 +779,11 @@ void() monster_dragon =
 	self.think = dragon_activate;
 };
 
-// =================================================
-// dragon trigger
-// OBSOLETE!!
-// =================================================
-
-/*QUAKED trigger_dragon (.5 .5 .5) ? A B C
-Trigger to let dragon know what room you're in.
-
-Set the A,B,C to which room this trigger is at.
-
-Point the trigger towards the room. If the player is going
-the direction the trigger points, he is entering the room.
-If not, he is leaving.
-*/
 void() trigger_dragon =
 {
 	remove (self);
 };
 
-// =================================================
-// dragon corners
-// =================================================
 void() dragon_corner_touch =
 {
 	if (other.movetarget != self)
@@ -876,10 +802,6 @@ void() dragon_corner_touch =
 	}
 };
 
-/*QUAKED dragon_corner (0.5 0.3 0) (-16 -16 -16) (16 16 16)
-Only for use with monster_dragon. Use only as transitions
-between rooms.
-*/
 void() dragon_corner =
 {
 	if (self.targetname == "")

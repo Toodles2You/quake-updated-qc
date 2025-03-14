@@ -17,14 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/*
-==============================================================================
-
-SWORD
-
-==============================================================================
-*/
-
 $frame stand1
 
 $frame runb1 runb2 runb3 runb4 runb5 runb6 runb7 runb8
@@ -68,8 +60,6 @@ void() sword_atk8 = [$attackb8, sword_atk9] { ai_charge (14); };
 void() sword_atk9 = [$attackb9, sword_atk10] { ai_charge (14); };
 void() sword_atk10 = [$attackb10, sword_run1] { ai_charge (14); };
 
-//===========================================================================
-
 void() sword_die1 = [$death1, sword_die2] {};
 void() sword_die2 = [$death2, sword_die3] {};
 void() sword_die3 = [$death3, sword_die4] { self.solid = SOLID_NOT; };
@@ -101,7 +91,6 @@ void() sword_dieb11 = [$deathb11, sword_dieb11] {};
 
 void() sword_die =
 {
-	// regular death
 	self.effects = 0;
 	if (random () < 0.5)
 		sword_die1 ();
@@ -126,11 +115,6 @@ void(entity attacker, float damage) sword_pain =
 	self.th_pain = SUB_null_pain;
 };
 
-/*QUAKED monster_sword (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-The Invisible Swordsman
-
-delay - seconds after first sighting before it attacks (default 10)
-*/
 void() monster_sword =
 {
 	if (deathmatch)

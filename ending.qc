@@ -17,9 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// ending.qc
-// code to handle big ending of Xpack.
-// ------------------------------------------------
 $frame axrun1 axrun2 axrun3 axrun4 axrun5 axrun6
 $frame rockrun1 rockrun2 rockrun3 rockrun4 rockrun5 rockrun6
 $frame stand1 stand2 stand3 stand4 stand5
@@ -68,7 +65,7 @@ void() ending_remove_stuff;
 
 void() ending_for_coop =
 {
-	intermission_exittime = time + 10000000;  // never allow exit
+	intermission_exittime = time + 10000000;
 	intermission_running = 1;
 
 	self.model = "";
@@ -89,10 +86,6 @@ void() ending_for_coop =
 	theMachine.nextthink = time + 0.1;
 };
 
-// ------------------------------------------------
-// Camera and control functions
-// ------------------------------------------------
-
 void() xpackEnding =
 {
 	local entity cameraview;
@@ -103,7 +96,7 @@ void() xpackEnding =
 		return;
 	}
 
-	intermission_exittime = time + 10000000;  // never allow exit
+	intermission_exittime = time + 10000000;
 	intermission_running = 1;
 
 	WriteByte (MSG_ALL, SVC_CUTSCENE);
@@ -185,9 +178,6 @@ void() ending_remove_stuff =
 	curEnt.nextthink = time + 0.1;
 };
 
-// ------------------------------------------------
-// actor code
-// ------------------------------------------------
 void() actor_run =
 {
 	local vector dist;
@@ -346,9 +336,6 @@ void() actor_control =
 	}
 };
 
-// ==============
-// player actor spawn function
-// ==============
 void(entity thePlayer) spawn_actor =
 {
 	local entity pointOne;

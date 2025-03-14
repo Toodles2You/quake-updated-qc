@@ -17,12 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// Random.qc
-
-// =======================================================
-// Random Items!
-// =======================================================
-
 void() random_pick_type =
 {
 	local float randItem;
@@ -76,11 +70,6 @@ void() random_pick_type =
 	}
 };
 
-/*QUAKED item_random_powerup (0 .5 .8) (-16 -16 -24) (16 16 32)
-The Random Box!
-
-Contains a random powerup.
-*/
 void() item_random_powerup =
 {
 	if (!deathmatch)
@@ -89,7 +78,6 @@ void() item_random_powerup =
 		return;
 	}
 
-	// Precache the lot of it....
 	precache_model ("progs/shield.mdl");
 	precache_model ("progs/p_shield.mdl");
 	precache_model ("progs/beltup.mdl");

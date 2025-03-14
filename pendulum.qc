@@ -276,26 +276,6 @@ void() pend_use =
 	self.think = pend_swing1;
 };
 
-/*QUAKED pendulum (0 .5 .8) (-8 -24 -100) (8 24 100) PEND_X PEND_Y PEND_TRG
-The Pendulum
-
-Values:
-delay - amount of time (in seconds) before starting swinging. default 1.
-currentammo - amount of damage for each contact. default 5.
-
-Directional Flags: Pendulum swings perpendicular to it's angle. (eg. A pendulum
-facing east will swing north/south).
-
-Default: PEND_Y
-
-The pendulum angle is set automatically depending on the PEND_ choice.
-
-PEND_X - a pendulum hanging from the ceiling swinging parallel to the X axis.
-PEND_Y - a pendulum hanging from the ceiling swinging parallel to the Y axis.
-
-PEND_TRG - the pendulum must be triggered to start swinging. The delay value
-still affects the pendulum.
-*/
 void() pendulum =
 {
 	precache_model ("progs/pendulum.mdl");

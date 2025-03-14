@@ -16,13 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
-
-BLOB
-
-==============================================================================
-*/
 
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
 $frame walk11 walk12 walk13 walk14 walk15 walk16 walk17 walk18 walk19
@@ -94,8 +87,6 @@ void() tbaby_run23 = [$run23, tbaby_run24] { ai_run (2); };
 void() tbaby_run24 = [$run24, tbaby_run25] { ai_run (2); };
 void() tbaby_run25 = [$run25, tbaby_run1] { ai_run (2); };
 
-//============================================================================
-
 void() tbaby_jump1;
 
 void() Tar_JumpTouch =
@@ -117,13 +108,13 @@ void() Tar_JumpTouch =
 	if (!checkbottom (self))
 	{
 		if (self.flags & FL_ONGROUND)
-		{  // jump randomly to not get hung up
+		{ // jump randomly to not get hung up
 			self.touch = SUB_Null;
 			self.think = tbaby_run1;
 			self.movetype = MOVETYPE_STEP;
 			self.nextthink = time + 0.1;
 		}
-		return;  // not on ground yet
+		return;
 	}
 
 	self.touch = SUB_Null;
@@ -163,8 +154,6 @@ void() tbaby_jump5 = [$jump5, tbaby_jump6]
 };
 void() tbaby_jump6 = [$jump6, tbaby_fly1] {};
 
-//=============================================================================
-
 void() tbaby_die1 = [$exp, tbaby_die2] { self.takedamage = DAMAGE_NO; };
 void() tbaby_die2 = [$exp, tbaby_run1]
 {
@@ -182,7 +171,6 @@ void() tbaby_die2 = [$exp, tbaby_run1]
 	BecomeExplosion ();
 };
 
-//=============================================================================
 void(entity attacker, float damage) tbaby_mitosis;
 
 void() tbaby_checknew =
@@ -200,7 +188,7 @@ void() tbaby_checknew =
 	self.th_missile = tbaby_jump1;
 	self.th_melee = tbaby_jump1;
 	self.th_die = tbaby_die1;       
-	self.origin_z = self.origin_z + 1;      // raise off floor a bit
+	self.origin_z = self.origin_z + 1; // raise off floor a bit
 	droptofloor (0, 0);
 
 	if (!walkmove (0, 0))
@@ -260,12 +248,6 @@ void(entity attacker, float damage) tbaby_mitosis =
 	}
 };
 
-/*QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) Ambush Blue Green
-Spots The Spawn (and hellspawn)
-
-The spawn type is random by default.
-If you want a specific type, select "Blue", "Green", or "Spots".
-*/
 void() monster_tarbaby =
 {
 	local float myRand;

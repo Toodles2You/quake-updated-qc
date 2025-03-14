@@ -16,13 +16,7 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
 
-SHAL-RATH
-
-==============================================================================
-*/
 $frame attack1 attack2 attack3 attack4 attack5 attack6 attack7 attack8
 $frame attack9 attack10 attack11
 
@@ -116,7 +110,6 @@ void(entity attacker, float damage) shalrath_pain =
 
 void() shalrath_die =
 {
-	// check for gib
 	if (self.health < -90)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -133,11 +126,6 @@ void() shalrath_die =
 	// insert death sounds here
 };
 
-/*
-================
-ShalMissile
-================
-*/
 void() ShalMissileTouch;
 void() ShalHome;
 
@@ -195,7 +183,7 @@ void() ShalHome =
 void() ShalMissileTouch =
 {
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 
 	if (other.classname == "monster_zombie")
 		T_Damage (other, self, self, 110);
@@ -215,10 +203,6 @@ void() ShalMissileTouch =
 	s_explode1 ();
 };
 
-//=================================================================
-
-/*QUAKED monster_shalrath (1 0 0) (-32 -32 -24) (32 32 48) Ambush
-*/
 void() monster_shalrath =
 {
 	if (deathmatch)

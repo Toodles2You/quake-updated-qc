@@ -17,10 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// elevator button
-// pmack
-// sept 96
-
 float ELVTR_DOWN = 1;
 
 void() elvtr_button_wait;
@@ -39,7 +35,7 @@ void() elvtr_button_wait =
 	self.think = elvtr_button_return;
 	activator = self.enemy;
 	SUB_UseTargets ();
-	self.frame = 1;  // use alternate textures
+	self.frame = 1; // use alternate textures
 };
 
 void() elvtr_button_done =
@@ -51,9 +47,9 @@ void() elvtr_button_return =
 {
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos1, self.speed, elvtr_button_done);
-	self.frame = 0;  // use normal textures
+	self.frame = 0; // use normal textures
 	if (self.health)
-		self.takedamage = DAMAGE_YES;  // can be shot again
+		self.takedamage = DAMAGE_YES; // can be shot again
 };
 
 void() elvtr_button_blocked =
@@ -90,32 +86,10 @@ void() elvtr_button_killed =
 {
 	self.enemy = damage_attacker;
 	self.health = self.max_health;
-	self.takedamage = DAMAGE_NO;  // wil be reset upon return
+	self.takedamage = DAMAGE_NO; // wil be reset upon return
 	elvtr_button_fire ();
 };
 
-/*QUAKED func_elvtr_button (0 .5 .8) ? ELVTR_DOWN
-ELEVATOR BUTTON ONLY!
-
-ELVTR_DOWN causes this to be a DOWN button.
-Default is UP.
-
-When a button is touched, it moves some distance in the direction of it's angle,
-triggers all of it's targets, waits some time, then returns to it's original
-position where it can be triggered again.
-
-"angle"		determines the opening direction
-"target"	all entities with a matching targetname will be used
-"speed"		override the default 40 speed
-"wait"		override the default 1 second wait (-1 = never return)
-"lip"		override the default 4 pixel lip remaining at end of move
-"health"	if set, the button must be killed instead of touched
-"sounds"
-0) steam metal
-1) wooden clunk
-2) metallic click
-3) in-out
-*/
 void() func_elvtr_button =
 {
 	local float dist;

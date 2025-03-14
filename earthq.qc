@@ -17,11 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// earthquake
-
-// ============================================================
-// Level-Wide Earthquakes
-// ============================================================
 float EQ_RANDOM = 1;
 
 void() stop_earthquake;
@@ -58,19 +53,6 @@ void() stop_earthquake =
 		self.nextthink = time + self.wait;
 };
 
-/*QUAKED earthquake (0 1 0) (-8 -8 -8) (8 8 8) Random
-The Earthquake generator.
-
-delay - duration of the tremor (default 20)
-wait - time between tremors (default 60)
-weapon - richter scale of movement (default 40)
-
-RANDOM affects the times only. It will change the randomly between
-0-n where n is the duration or time between.
-
-weapon - if you give a weapon value of 40, the X and Y displacement
-can vary between -20 and +20, a range of 40.
-*/
 void() earthquake =
 {
 	if (!self.delay)
@@ -89,9 +71,6 @@ void() earthquake =
 	self.nextthink = time + 1;
 };
 
-// ============================================================
-// Earthquake trigger
-// ============================================================
 void() earthquake_touch =
 {
 	if (self.delay)
@@ -122,17 +101,6 @@ void() earthquake_use =
 	self.delay = !self.delay;
 };
 
-/*QUAKED trigger_earthquake (.5 .5 .5) ?
-The Earthquake generator.
-
-Anytime a person is in an active field, they shake. If the trigger is a target,
-it will be OFF until triggered. It will then toggle between ON and OFF.
-
-weapon - richter scale of movement (default 40)
-
-weapon - if you give a weapon value of 40, the X and Y displacement
-can vary between -20 and +20, a range of 40.
-*/
 void() trigger_earthquake =
 {
 	precache_sound ("equake/rumble.wav");
@@ -168,9 +136,6 @@ void() kill_earthquake =
 	}
 };
 
-/*QUAKED trigger_earthquake_kill (.5 .5 .5) ?
-Trigger to kill the level-wide earthquake.
-*/
 void() trigger_earthquake_kill =
 {
 	self.touch = kill_earthquake;

@@ -1,7 +1,7 @@
 ../progs.dat
 
 defs.qc
-teamplay.qc		// ZOID - teamplay stuff
+teamplay.qc
 runes.qc
 motd.qc
 subs.qc
@@ -9,7 +9,7 @@ fight.qc
 ai.qc
 combat.qc
 items.qc
-grapple.qc		// ZOID - grappling hook
+grapple.qc
 weapons.qc
 world.qc
 client.qc
@@ -31,12 +31,12 @@ dog.qc
 zombie.qc
 boss.qc
 
-tarbaby.qc		// registered
-hknight.qc		// registered
-fish.qc			// registered
-shalrath.qc		// registered
-enforcer.qc		// registered
-oldone.qc		// registered
+tarbaby.qc
+hknight.qc
+fish.qc
+shalrath.qc
+enforcer.qc
+oldone.qc
 
 new_ai.qc
 eel.qc

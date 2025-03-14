@@ -65,7 +65,6 @@ void() MOTD =
 
 void() CheckMOTD =
 {
-	//	if (self.motd_time && self.motd_time < time)
 	if (self.motd_time)
 	{
 		if (self.motd_time < time)

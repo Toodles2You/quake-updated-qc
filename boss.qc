@@ -16,13 +16,7 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
 
-BOSS-ONE
-
-==============================================================================
-*/
 $frame rise1 rise2 rise3 rise4 rise5 rise6 rise7 rise8 rise9 rise10
 $frame rise11 rise12 rise13 rise14 rise15 rise16 rise17 
 
@@ -242,7 +236,7 @@ void(vector p) boss_missile =
 	newmis.avelocity = '200 100 300';
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	newmis.velocity = vec * 300;
-	newmis.touch = T_MissileTouch;  // rocket explosion
+	newmis.touch = T_MissileTouch; // rocket explosion
 	sound (self, CHAN_WEAPON, "boss1/throw.wav", 1, ATTN_NORM);
 
 	// check for dead enemy
@@ -276,8 +270,6 @@ void() boss_awake =
 	boss_rise1 ();
 };
 
-/*QUAKED monster_boss (1 0 0) (-128 -128 -24) (128 128 256)
-*/
 void() monster_boss =
 {
 	if (deathmatch)
@@ -301,8 +293,6 @@ void() monster_boss =
 	self.use = boss_awake;
 };
 
-//===========================================================================
-
 entity le1, le2;
 float lightning_end;
 
@@ -311,7 +301,7 @@ void() lightning_fire =
 	local vector p1, p2;
 
 	if (time >= lightning_end)
-	{  // done here, put the terminals back up
+	{ // done here, put the terminals back up
 		self = le1;
 		door_go_down ();
 		self = le2;
@@ -388,9 +378,6 @@ void() lightning_use =
 	}
 };
 
-/*QUAKED event_lightning (0 1 1) (-16 -16 -16) (16 16 16)
-Just for boss level.
-*/
 void() event_lightning =
 {
 	self.use = lightning_use;

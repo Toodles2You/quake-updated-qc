@@ -153,9 +153,9 @@ void() eel_melee =
 	traceline (self.origin, self.enemy.origin, FALSE, self);
 
 	if (trace_ent != self.enemy)
-		attackOK = FALSE;  // don't have a clear shot
+		attackOK = FALSE; // don't have a clear shot
 	if (trace_inopen && trace_inwater)
-		attackOK = FALSE;  // sight line crossed contents
+		attackOK = FALSE; // sight line crossed contents
 
 	if (attackOK)
 		T_EELZap (self, self, 45);
@@ -298,8 +298,6 @@ void(entity attacker, float damage) eel_pain =
 	eel_pain1 ();
 };
 
-/*QUAKED monster_eel (1 0 0) (-16 -16 -24) (16 16 32) Ambush
-*/
 void() monster_eel =
 {
 	if (deathmatch)

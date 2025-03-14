@@ -16,13 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
-
-OGRE
-
-==============================================================================
-*/
 
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 
@@ -60,8 +53,6 @@ $frame bdeath7 bdeath8 bdeath9 bdeath10
 
 $frame pull1 pull2 pull3 pull4 pull5 pull6 pull7 pull8 pull9 pull10 pull11
 
-//=============================================================================
-
 float OGRE_BOSS = 2;
 float OGRE_NORMAL = 4;
 
@@ -86,23 +77,17 @@ void() OgreGrenadeExplode =
 void() OgreGrenadeTouch =
 {
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		OgreGrenadeExplode ();
 		return;
 	}
-	// bounce sound
 	sound (self, CHAN_VOICE, "weapons/bounce.wav", 1, ATTN_NORM);
 	if (self.velocity == '0 0 0')
 		self.avelocity = '0 0 0';
 };
 
-/*
-================
-OgreFireGrenade
-================
-*/
 void() MultiGrenadeTouch;
 void() MultiGrenadeExplode;
 
@@ -120,7 +105,6 @@ void() OgreFireGrenade =
 	missile.solid = SOLID_BBOX;
 	missile.classname = "ogre_grenade";
 
-	// set missile speed
 
 	makevectors (self.angles);
 
@@ -132,7 +116,6 @@ void() OgreFireGrenade =
 
 	missile.angles = vectoangles (missile.velocity);
 
-	// set missile duration
 	if (self.spawnflags & OGRE_BOSS)
 	{
 		missile.touch = MultiGrenadeTouch;
@@ -154,15 +137,6 @@ void() OgreFireGrenade =
 	}
 };
 
-//=============================================================================
-
-/*
-================
-chainsaw
-
-FIXME
-================
-*/
 void(float side) chainsaw =
 {
 	local vector delta;
@@ -334,7 +308,7 @@ void() ogre_smash11 = [$smash11, ogre_smash12]
 {
 	ai_charge (2);
 	chainsaw (0);
-	self.nextthink = self.nextthink + random () * 0.2;  // slight variation
+	self.nextthink = self.nextthink + random () * 0.2; // slight variation
 };
 void() ogre_smash12 = [$smash12, ogre_smash13] { ai_charge (0); };
 void() ogre_smash13 = [$smash13, ogre_smash14] { ai_charge (4); };
@@ -485,7 +459,6 @@ void() ogre_bdie10 = [$bdeath10, ogre_bdie10] {};
 
 void() ogre_die =
 {
-	// check for gib
 	if (self.health < -80)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -512,12 +485,6 @@ void() ogre_melee =
 		ogre_swing1 ();
 };
 
-/*QUAKED monster_ogre (1 0 0) (-32 -32 -24) (32 32 64) Ambush Boss Normal
-The Ogre
-
-Boss: use the modified skin and fire multigrenades.
-Normal: use the original skin and fire normal grenades.
-*/
 void() monster_ogre =
 {
 	if (deathmatch)
@@ -542,7 +509,6 @@ void() monster_ogre =
 
 	setmodel (self, "progs/ogre.mdl");
 
-	// none specified - choose random. 25% boss on normal, hard, bloodbath
 	if (self.spawnflags <= 1)
 	{
 		if (cvar ("skill") > 0)

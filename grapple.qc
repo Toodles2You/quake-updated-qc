@@ -22,11 +22,10 @@
 // Under contract to id software for Rogue Entertainment
 
 // New entity fields
-.entity hook;     // this is my hook
-.float on_hook;   // we're on it
-.float hook_out;  // it's out
+.entity hook; // this is my hook
+.float on_hook; // we're on it
+.float hook_out; // it's out
 
-// prototypes for WEAPONS.QC functions
 float() crandom;
 void(vector org, vector vel, float damage) SpawnBlood;
 
@@ -104,7 +103,7 @@ void() GrappleTrack =
 // Tries to anchor the grapple to whatever it touches
 void() GrappleAnchor =
 {
-	if (other == self.owner)  // don't hook the guy that fired it
+	if (other == self.owner) // don't hook the guy that fired it
 		return;
 
 	if (pointcontents (self.origin) == CONTENT_SKY)
@@ -118,7 +117,7 @@ void() GrappleAnchor =
 		// glance off of teammates
 		if (other.steam == self.owner.steam)
 		{
-			GrappleReset ();  // PGM - fix drift after teammate hit  01/20/97
+			GrappleReset ();
 			return;
 		}
 
@@ -139,7 +138,7 @@ void() GrappleAnchor =
 		self.avelocity = '0 0 0';
 	}
 
-	self.frame = 2;  // anchored
+	self.frame = 2; // anchored
 
 	sound (self.owner, CHAN_WEAPON, "weapons/tink1.wav", 1, ATTN_NORM);
 
@@ -159,7 +158,7 @@ void() GrappleAnchor =
 	// avoid adding a field)
 	self.owner.lefty = TRUE;
 
-	self.enemy = other;  // remember this guy!
+	self.enemy = other; // remember this guy!
 	self.think = GrappleTrack;
 	self.nextthink = time;
 	self.solid = SOLID_NOT;
@@ -168,10 +167,10 @@ void() GrappleAnchor =
 
 void() W_FireGrapple =
 {
-	if (self.hook_out)  // reject subsequent calls from player.qc
+	if (self.hook_out) // reject subsequent calls from player.qc
 		return;
 
-	self.punchangle_x = -2;  // bump him
+	self.punchangle_x = -2; // bump him
 
 	// chain out sound (loops)
 	sound (self, CHAN_WEAPON, "weapons/chain1.wav", 1, ATTN_NORM);
@@ -179,8 +178,8 @@ void() W_FireGrapple =
 	newmis = spawn ();
 	newmis.movetype = MOVETYPE_FLYMISSILE;
 	newmis.solid = SOLID_BBOX;
-	newmis.owner = self;  // newmis belongs to me
-	self.hook = newmis;   // This is my newmis
+	newmis.owner = self; // newmis belongs to me
+	self.hook = newmis; // This is my newmis
 	newmis.classname = "hook";
 
 	makevectors (self.v_angle);
@@ -191,7 +190,7 @@ void() W_FireGrapple =
 	newmis.think = GrappleReset;
 	// grapple only lives for two seconds, this gives max range on it
 	newmis.nextthink = time + 2;
-	newmis.frame = 1;  // hook spread
+	newmis.frame = 1; // hook spread
 
 	setmodel (newmis, "progs/hook.mdl");
 	setorigin (newmis, self.origin + v_forward * 16 + '0 0 16');
@@ -217,7 +216,7 @@ void() GrappleService =
 	// drop the hook if player lets go of button
 	if ((!self.button0 && self.weapon == IT_GRAPPLE) ||
 		self.teleport_time > time)
-	{  // release when we get 'ported
+	{ // release when we get 'ported
 		self = self.hook;
 		GrappleReset ();
 		return;
@@ -240,8 +239,8 @@ void() GrappleService =
 	if (vlen (dist) <= 50)
 	{
 		if (self.lefty)
-		{  // cancel chain sound
-			self.lefty = FALSE;  // we've reset the sound channel.
+		{ // cancel chain sound
+			self.lefty = FALSE; // we've reset the sound channel.
 		}
 	}
 	else

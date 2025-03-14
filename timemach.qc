@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// timemach.qc
-// pmack
-// jan97
-
-// ------------------------------------------------
-// time machine and related parts
-// ------------------------------------------------
 void() time_chunk =
 {
 	local entity timeChunk;
@@ -195,9 +188,6 @@ void() time_die =
 	time_pain (world, 0);
 };
 
-//(-16 -16 -32) (16 16 0)
-/*QUAKED item_time_machine (1 1 0) (-64 -64 -144) (64 64 0)
-*/
 void() item_time_machine =
 {
 	if (deathmatch)
@@ -229,8 +219,6 @@ void() item_time_machine =
 	theMachine = self;
 };
 
-/*QUAKED item_time_core (1 0 0) (-8 -8 -8) (8 8 8)
-*/
 void() item_time_core =
 {
 	if (deathmatch)

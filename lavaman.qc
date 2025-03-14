@@ -17,13 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-/*
-==============================================================================
-
-LavaMan (Smaller version of Boss E1M7)
-
-==============================================================================
-*/
 $frame rise1 rise2 rise3 rise4 rise5 rise6 rise7 rise8 rise9 rise10
 $frame rise11 rise12 rise13 rise14 rise15 rise16 rise17
 
@@ -72,9 +65,9 @@ float() LavaManCheckAttack =
 	traceline (spot1, targ.origin, FALSE, self);
 
 	if (trace_inopen && trace_inwater)
-		return FALSE;  // sight line crossed contents
+		return FALSE; // sight line crossed contents
 	if (trace_ent != targ)
-		return FALSE;  // don't have a clear shot
+		return FALSE; // don't have a clear shot
 
 	// missile attack
 	if (time < self.attack_finished)
@@ -85,8 +78,6 @@ float() LavaManCheckAttack =
 	return TRUE;
 };
 
-// ============
-// ============
 void() lavaman_hunt =
 {
 	local entity possibleEnemy;
@@ -140,8 +131,6 @@ void() lavaman_rise15 = [$rise15, lavaman_rise16] {};
 void() lavaman_rise16 = [$rise16, lavaman_rise17] {};
 void() lavaman_rise17 = [$rise17, lavaman_fire1] {};
 
-// ============
-// ============
 void() lavaman_stand =
 {
 	if (self.enemy)
@@ -167,8 +156,6 @@ void() lavaman_idle7 = [$walk3, lavaman_idle8] { lavaman_stand (); };
 void() lavaman_idle8 = [$walk2, lavaman_idle9] { lavaman_stand (); };
 void() lavaman_idle9 = [$walk1, lavaman_idle1] { lavaman_stand (); };
 
-// ============
-// ============
 void() lavaman_walk =
 {
 	if (self.enemy)
@@ -326,7 +313,7 @@ void() lavaman_touch =
 	local float damg;
 
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
@@ -338,7 +325,7 @@ void() lavaman_touch =
 	if (other.health)
 	{
 		if (other.classname == "monster_shambler")
-			damg = damg * 0.5;  // mostly immune
+			damg = damg * 0.5; // mostly immune
 		T_Damage (other, self, self.owner, damg);
 	}
 
@@ -466,10 +453,6 @@ void() lavaman_awake =
 	lavaman_rise1 ();
 };
 
-//								  (-64 -64 -12)
-//(64 64 128)
-/*QUAKED monster_lava_man (1 0 0) (-32 -32 -24) (32 32 64) Ambush Sleeping
-*/
 void() monster_lava_man =
 {
 	if (deathmatch)

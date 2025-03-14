@@ -17,10 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// new ai functions
-//
-// pmack
-
 // ================================================================
 // ai_orbit - used to have an object orbit an entity.
 //
@@ -102,10 +98,6 @@ void(entity destEnt, float trackSpeed) ai_track =
 	dir = normalize (dir - self.origin);
 	self.velocity = dir * trackSpeed;
 };
-
-// ================================================================
-// ViolentDeath
-// ================================================================
 
 void(string gibname, float dm) AccelerateGib =
 {

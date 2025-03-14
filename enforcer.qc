@@ -16,13 +16,6 @@
 
     See file, 'COPYING', for details.
 */
-/*
-==============================================================================
-
-SOLDIER / PLAYER
-
-==============================================================================
-*/
 
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7
 
@@ -55,7 +48,7 @@ void() Laser_Touch =
 	local vector org;
 
 	if (other == self.owner)
-		return;  // don't explode on owner
+		return;
 
 	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
@@ -127,8 +120,6 @@ void() enforcer_fire =
 
 	LaunchLaser (org, self.enemy.origin - self.origin);
 };
-
-//============================================================================
 
 void() enf_stand1 = [$stand1, enf_stand2] { ai_stand (); };
 void() enf_stand2 = [$stand2, enf_stand3] { ai_stand (); };
@@ -268,8 +259,6 @@ void(entity attacker, float damage) enf_pain =
 	}
 };
 
-//============================================================================
-
 void() enf_die1 = [$death1, enf_die2] {};
 void() enf_die2 = [$death2, enf_die3] {};
 void() enf_die3 = [$death3, enf_die4]
@@ -309,7 +298,6 @@ void() enf_fdie11 = [$fdeath11, enf_fdie11] {};
 
 void() enf_die =
 {
-	// check for gib
 	if (self.health < -35)
 	{
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
@@ -320,7 +308,6 @@ void() enf_die =
 		return;
 	}
 
-	// regular death
 	sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
 	if (random () > 0.5)
 		enf_die1 ();
@@ -328,9 +315,6 @@ void() enf_die =
 		enf_fdie1 ();
 };
 
-/*QUAKED monster_enforcer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-
-*/
 void() monster_enforcer =
 {
 	if (deathmatch)
