@@ -74,8 +74,7 @@ void() sham_walk11 = [$walk11, sham_walk12] { ai_walk (7); };
 void() sham_walk12 = [$walk12, sham_walk1]
 {
 	ai_walk (7);
-	if (random () > 0.8)
-		sound (self, CHAN_VOICE, "shambler/sidle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("shambler/sidle.wav", ATTN_IDLE);
 };
 
 void() sham_run1 = [$run1, sham_run2] { ai_run (20); };
@@ -86,8 +85,7 @@ void() sham_run5 = [$run5, sham_run6] { ai_run (24); };
 void() sham_run6 = [$run6, sham_run1]
 {
 	ai_run (20);
-	if (random () > 0.8)
-		sound (self, CHAN_VOICE, "shambler/sidle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("shambler/sidle.wav", ATTN_IDLE);
 };
 
 void() sham_smash1 = [$smash1, sham_smash2]

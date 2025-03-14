@@ -203,6 +203,12 @@ void() HuntTarget =
 	SUB_AttackFinished (1); // wait a while before first attack
 };
 
+void() SightSound =
+{
+	if (self.th_sight)
+		self.th_sight ();
+};
+
 void() FoundTarget =
 {
 	if (self.enemy.classname == "player")
@@ -213,9 +219,7 @@ void() FoundTarget =
 
 	self.show_hostile = time + 1; // wake up other monsters
 
-	if (self.th_sight)
-		self.th_sight ();
-
+	SightSound ();
 	HuntTarget ();
 };
 
@@ -468,8 +472,6 @@ void(float dist) ai_run =
 			return;
 		}
 	}
-
-	self.show_hostile = time + 1; // wake up other monsters
 
 	// check knowledge of enemy
 	enemy_vis = visible (self.enemy);

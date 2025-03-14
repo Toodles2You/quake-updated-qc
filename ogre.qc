@@ -146,8 +146,7 @@ void() ogre_stand3 = [$stand3, ogre_stand4] { ai_stand (); };
 void() ogre_stand4 = [$stand4, ogre_stand5] { ai_stand (); };
 void() ogre_stand5 = [$stand5, ogre_stand6]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "ogre/ogidle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("ogre/ogidle.wav", ATTN_IDLE);
 	ai_stand ();
 };
 void() ogre_stand6 = [$stand6, ogre_stand7] { ai_stand (); };
@@ -160,8 +159,7 @@ void() ogre_walk2 = [$walk2, ogre_walk3] { ai_walk (2); };
 void() ogre_walk3 = [$walk3, ogre_walk4]
 {
 	ai_walk (2);
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "ogre/ogidle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("ogre/ogidle.wav", ATTN_IDLE);
 };
 void() ogre_walk4 = [$walk4, ogre_walk5] { ai_walk (2); };
 void() ogre_walk5 = [$walk5, ogre_walk6] { ai_walk (2); };
@@ -185,8 +183,7 @@ void() ogre_walk16 = [$walk16, ogre_walk1] { ai_walk (4); };
 void() ogre_run1 = [$run1, ogre_run2]
 {
 	ai_run (9);
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "ogre/ogidle2.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("ogre/ogidle2.wav", ATTN_IDLE);
 };
 void() ogre_run2 = [$run2, ogre_run3] { ai_run (12); };
 void() ogre_run3 = [$run3, ogre_run4] { ai_run (8); };

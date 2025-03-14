@@ -149,11 +149,13 @@ void() zombie_run16 = [$run16, zombie_run17] { ai_run (7); };
 void() zombie_run17 = [$run17, zombie_run18] { ai_run (3); };
 void() zombie_run18 = [$run18, zombie_run1]
 {
-	ai_run (8);
-	if (random () < 0.2)
+	local float r;
+	r = (random () + random ()) * 0.5;
+	if (r < 0.2)
 		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-	if (random () > 0.8)
+	else if (r > 0.8)
 		sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
+	ai_run (8);
 };
 
 void() ZombieGrenadeTouch =

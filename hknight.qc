@@ -439,8 +439,7 @@ void() hknight_watk22 = [$w_attack22, hknight_run1] { ai_charge (3); };
 
 void() hk_idle_sound =
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
+	SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
 };
 
 void(entity attacker, float damage) hknight_pain =

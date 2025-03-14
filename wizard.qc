@@ -238,12 +238,18 @@ void() Wiz_idlesound =
 	if (self.waitmin < time)
 	{
 		self.waitmin = time + 2;
+
+		if (self.enemy)
+		{
+			if (self.show_hostile >= time - 0.9)
+				return;
+		}
+
 		if (wr > 4.5)
 			sound (self, CHAN_VOICE, "wizard/widle1.wav", 1, ATTN_IDLE);
-		if (wr < 1.5)
+		else if (wr < 1.5)
 			sound (self, CHAN_VOICE, "wizard/widle2.wav", 1, ATTN_IDLE);
 	}
-	return;
 };
 
 void() wiz_stand1 = [$hover1, wiz_stand2] { ai_stand (); };
