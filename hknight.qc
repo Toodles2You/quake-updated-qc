@@ -59,7 +59,6 @@ $frame magicc9 magicc10 magicc11
 
 void() hknight_char_a1;
 void() hknight_run1;
-void() hk_idle_sound;
 
 void(float offset) hknight_shot =
 {
@@ -79,7 +78,7 @@ void(float offset) hknight_shot =
 	launch_spike (org, vec);
 	newmis.classname = "knightspike";
 	setmodel (newmis, "progs/k_spike.mdl");
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+	setsize (newmis, '0 0 0', '0 0 0');
 	newmis.velocity = vec * 300;
 	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 };
@@ -125,7 +124,7 @@ void() hknight_stand9 = [$stand9, hknight_stand1] { ai_stand (); };
 
 void() hknight_walk1 = [$walk1, hknight_walk2]
 {
-	hk_idle_sound ();
+	SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
 	ai_walk (2);
 };
 void() hknight_walk2 = [$walk2, hknight_walk3] { ai_walk (5); };
@@ -150,7 +149,7 @@ void() hknight_walk20 = [$walk20, hknight_walk1] { ai_walk (2); };
 
 void() hknight_run1 = [$run1, hknight_run2]
 {
-	hk_idle_sound ();
+	SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
 	ai_run (20);
 	CheckForCharge ();
 };
@@ -437,12 +436,6 @@ void() hknight_watk20 = [$w_attack20, hknight_watk21] { ai_charge (6); };
 void() hknight_watk21 = [$w_attack21, hknight_watk22] { ai_charge (7); };
 void() hknight_watk22 = [$w_attack22, hknight_run1] { ai_charge (3); };
 
-void() hk_idle_sound =
-{
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
-};
-
 void(entity attacker, float damage) hknight_pain =
 {
 	if (self.pain_finished > time)
@@ -480,6 +473,11 @@ void() hknight_melee =
 		hknight_watk1 ();
 		hknight_type = 0;
 	}
+};
+
+void() hknight_sight =
+{
+	sound (self, CHAN_VOICE, "hknight/sight1.wav", 1, ATTN_NORM);
 };
 
 void() monster_hell_knight =
@@ -520,6 +518,7 @@ void() monster_hell_knight =
 	self.th_missile = hknight_magicc1;
 	self.th_pain = hknight_pain;
 	self.th_die = hknight_die;
+	self.th_sight = hknight_sight;
 
 	walkmonster_start ();
 };

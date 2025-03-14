@@ -43,7 +43,7 @@ void() hip_powerup_touch =
 	stuffcmd (other, "bf\n");
 	self.solid = SOLID_NOT;
 	other.items2 = other.items2 | self.items2;
-	self.model = string_null;
+	self.model = "";
 
 	// do the apropriate action
 	if (self.classname == "item_artifact_wetsuit")
@@ -93,7 +93,7 @@ void() horn_touch =
 	}
 
 	self.solid = SOLID_NOT;
-	self.model = string_null;
+	self.model = "";
 	sprint (other, "You got the Horn of Conjuring\n");
 	sound (other, CHAN_VOICE, self.noise, 1, ATTN_NONE);
 	stuffcmd (other, "bf\n");
@@ -247,20 +247,9 @@ void() spikemine_Touch =
 	}
 
 	T_RadiusDamage (self, self, 110, world);
-	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
 
 	sound (self, CHAN_VOICE, "misc/null.wav", 1, ATTN_NORM);
-	self.velocity = '0 0 0';
-	self.touch = SUB_Null;
-	setmodel (self, "progs/s_explod.spr");
-	self.solid = SOLID_NOT;
-	s_explode1 ();
+	BecomeExplosion ();
 };
 
 void() spike_mine_first_think =
@@ -280,7 +269,6 @@ void() trap_spike_mine =
 		return;
 	}
 	precache_model ("progs/spikmine.mdl");
-	precache_sound ("weapons/r_exp3.wav");
 	precache_sound ("hipitems/spikmine.wav");
 	precache_sound ("misc/null.wav");
 	setmodel (self, "progs/spikmine.mdl");

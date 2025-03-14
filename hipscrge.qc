@@ -239,8 +239,7 @@ void() scourge_stand12 = [$stand12, scourge_stand1]
 
 void() scourge_walk1 = [$walk1, scourge_walk2]
 {
-	if (random () < 0.1)
-		sound (self, CHAN_VOICE, "scourge/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle2 ("scourge/idle.wav", ATTN_IDLE);
 	self.spawnsilent = 1;
 	scourge_think ();
 	ai_walk (8);
@@ -253,8 +252,7 @@ void() scourge_walk6 = [$walk6, scourge_walk1] { ai_walk (8); };
 
 void() scourge_run1 = [$walk1, scourge_run2]
 {
-	if (random () < 0.1)
-		sound (self, CHAN_VOICE, "scourge/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle2 ("scourge/idle.wav", ATTN_IDLE);
 	self.spawnsilent = 1;
 	scourge_think ();
 	ai_run (18);
@@ -499,6 +497,11 @@ void() ScourgeTriggerTouch =
 	self = tempent;
 };
 
+void() scourge_sight =
+{
+	sound (self, CHAN_VOICE, "scourge/sight.wav", 1, ATTN_NORM);
+};
+
 void() monster_scourge =
 {
 	if (deathmatch)
@@ -537,6 +540,8 @@ void() monster_scourge =
 	self.th_die = scourge_die;
 	self.th_melee = scourge_melee;
 	self.th_missile = scourge_atk1;
+	self.th_sight = scourge_sight;
+	self.th_checkattack = ScourgeCheckAttack;
 	self.yaw_speed = 60;
 	self.attack_state = AS_DODGING;
 	self.state = 0;

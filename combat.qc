@@ -65,27 +65,26 @@ void(entity targ, entity attacker) Killed =
 	oself = self;
 	self = targ;
 
-	if (self.health < -99)
+	if (self.health > 0)
+		self.health = 0;
+	else if (self.health < -99)
 		self.health = -99; // don't let sbar look bad if a player
 
 	if (self.charmed)
-	{
 		self.effects = self.effects - (self.effects & EF_DIMLIGHT);
-	}
 
-	if (self.movetype == MOVETYPE_PUSH ||
-		self.movetype == MOVETYPE_NONE)
-		{ // doors, triggers, etc
+	if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE)
+	{ // doors, triggers, etc
 		self.th_die ();
 		self = oself;
 		return;
 	}
 
-	self.enemy = attacker;
-
-	// bump the monster counter
 	if (self.flags & FL_MONSTER)
 	{
+		self.enemy = attacker;
+		self.oldenemy = world;
+
 		killed_monsters = killed_monsters + 1;
 		WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
 	}
@@ -212,22 +211,10 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	oldself = self;
 	self = targ;
 
-	if ((self.flags & FL_MONSTER) && attacker != world)
+	if ((self.flags & FL_MONSTER))
 	{
-		// get mad unless of the same class (except for soldiers)
-		if (self != attacker && attacker != self.enemy &&
-			(self.charmer != attacker))
-		{
-			if ((self.classname != attacker.classname) ||
-				(self.classname == "monster_army") ||
-				(self.classname == "monster_armagon"))
-			{
-				if (self.enemy.classname == "player")
-					self.oldenemy = self.enemy;
-				self.enemy = attacker;
-				FoundTarget ();
-			}
-		}
+		if (CanFindTarget (attacker, FIND_DAMAGE))
+			HuntFoundTarget (attacker);
 	}
 
 	if (self.th_pain)
@@ -272,7 +259,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 						if (points > 0)
 						{
 							if (CanDamage (head, inflictor))
-							{ // shambler takes half damage from all explosions
+							{
 								if (head.classname == "monster_shambler")
 									points = points * 0.5;
 								T_Damage (head, inflictor, attacker, points);

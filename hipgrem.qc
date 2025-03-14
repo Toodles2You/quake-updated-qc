@@ -538,8 +538,7 @@ void() gremlin_stand17 = [$stand17, gremlin_stand1]
 
 void() gremlin_walk1 = [$walk1, gremlin_walk2]
 {
-	if (random () < 0.1)
-		sound (self, CHAN_VOICE, "grem/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle2 ("grem/idle.wav", ATTN_IDLE);
 	gremlin_walk (8);
 };
 void() gremlin_walk2 = [$walk2, gremlin_walk3] { gremlin_walk (8); };
@@ -556,8 +555,7 @@ void() gremlin_walk12 = [$walk12, gremlin_walk1] { gremlin_walk (8); };
 
 void() gremlin_run1 = [$run1, gremlin_run2]
 {
-	if (random () < 0.1)
-		sound (self, CHAN_VOICE, "grem/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle2 ("grem/idle.wav", ATTN_IDLE);
 	gremlin_run (0);
 };
 void() gremlin_run2 = [$run2, gremlin_run3] { gremlin_run (8); };
@@ -808,11 +806,12 @@ void() gremlin_look8 = [$look8, gremlin_look9]
 };
 void() gremlin_look9 = [$look9, gremlin_run1]
 {
-	if (self.oldenemy.health > 0)
-	{
-		self.enemy = self.oldenemy;
-		HuntTarget ();
-	}
+	local entity client;
+
+	client = self.oldenemy;
+	self.oldenemy = world;
+	if (CanFindTarget (client, FIND_DIRECT))
+		HuntTarget (client);
 	else
 	{
 		if (self.movetarget)
@@ -844,13 +843,15 @@ void() gremlin_glook18 = [$glook18, gremlin_glook19] {};
 void() gremlin_glook19 = [$glook19, gremlin_glook20] {};
 void() gremlin_glook20 = [$glook20, gremlin_glook20]
 {
+	local entity client;
+
 	GremlinDropBackpack ();
 	self.stoleweapon = FALSE;
-	if (self.oldenemy.health > 0)
-	{
-		self.enemy = self.oldenemy;
-		HuntTarget ();
-	}
+
+	client = self.oldenemy;
+	self.oldenemy = world;
+	if (CanFindTarget (client, FIND_DIRECT))
+		HuntTarget (client);
 	else
 	{
 		if (self.movetarget)
@@ -1445,6 +1446,14 @@ void() Gremlin_MissileAttack =
 		gremlin_jump1 ();
 };
 
+void() gremlin_sight =
+{
+	if (self.stoleweapon == 0)
+		sound (self, CHAN_VOICE, "grem/sight1.wav", 1, ATTN_NORM);
+};
+
+float() GremlinCheckAttack;
+
 void() monster_gremlin =
 {
 	if (deathmatch)
@@ -1480,10 +1489,11 @@ void() monster_gremlin =
 	self.th_walk = gremlin_walk1;
 	self.th_run = gremlin_run1;
 	self.th_die = gremlin_die;
-	self.th_melee = Gremlin_MeleeAttack; // one of two attacks
-	self.th_missile =
-		Gremlin_MissileAttack; // check for random jump or firing of weapon
+	self.th_melee = Gremlin_MeleeAttack;
+	self.th_missile = Gremlin_MissileAttack;
 	self.th_pain = gremlin_pain;
+	self.th_sight = gremlin_sight;
+	self.th_checkattack = GremlinCheckAttack;
 
 	walkmonster_start ();
 };

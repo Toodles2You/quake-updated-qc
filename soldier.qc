@@ -56,8 +56,7 @@ void() army_stand8 = [$stand8, army_stand1] { ai_stand (); };
 
 void() army_walk1 = [$prowl_1, army_walk2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "soldier/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("soldier/idle.wav", ATTN_IDLE);
 	ai_walk (1);
 };
 void() army_walk2 = [$prowl_2, army_walk3] { ai_walk (1); };
@@ -86,8 +85,7 @@ void() army_walk24 = [$prowl_24, army_walk1] { ai_walk (1); };
 
 void() army_run1 = [$run1, army_run2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "soldier/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("soldier/idle.wav", ATTN_IDLE);
 	ai_run (11);
 };
 void() army_run2 = [$run2, army_run3] { ai_run (15); };
@@ -253,6 +251,59 @@ void() army_die =
 		army_cdie1 ();
 };
 
+void() army_sight =
+{
+	sound (self, CHAN_VOICE, "soldier/sight1.wav", 1, ATTN_NORM);
+};
+
+float() SoldierCheckAttack =
+{
+	local vector spot1, spot2;
+	local entity targ;
+	local float chance;
+
+	targ = self.enemy;
+
+	// see if any entities are in the way of the shot
+	spot1 = self.origin + self.view_ofs;
+	spot2 = targ.origin + targ.view_ofs;
+
+	traceline (spot1, spot2, FALSE, self);
+
+	if (trace_inopen && trace_inwater)
+		return FALSE; // sight line crossed contents
+
+	if (trace_ent != targ)
+		return FALSE;
+
+	if (time < self.attack_finished)
+		return FALSE;
+
+	if (enemy_range == RANGE_FAR)
+		return FALSE;
+
+	if (enemy_range == RANGE_MELEE)
+		chance = 0.9;
+	else if (enemy_range == RANGE_NEAR)
+		chance = 0.4;
+	else if (enemy_range == RANGE_MID)
+		chance = 0.05;
+	else
+		chance = 0;
+
+	if (random () < chance)
+	{
+		self.th_missile ();
+		SUB_AttackFinished (1 + random ());
+		if (random () < 0.3)
+			self.lefty = !self.lefty;
+
+		return TRUE;
+	}
+
+	return FALSE;
+};
+
 void() monster_army =
 {
 	if (deathmatch)
@@ -289,6 +340,8 @@ void() monster_army =
 	self.th_missile = army_atk1;
 	self.th_pain = army_pain;
 	self.th_die = army_die;
+	self.th_sight = army_sight;
+	self.th_checkattack = SoldierCheckAttack;
 
 	walkmonster_start ();
 };

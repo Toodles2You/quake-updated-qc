@@ -73,9 +73,8 @@ void() sham_walk10 = [$walk10, sham_walk11] { ai_walk (9); };
 void() sham_walk11 = [$walk11, sham_walk12] { ai_walk (7); };
 void() sham_walk12 = [$walk12, sham_walk1]
 {
+	SUB_CheckIdle ("shambler/sidle.wav", ATTN_IDLE);
 	ai_walk (7);
-	if (random () > 0.8)
-		sound (self, CHAN_VOICE, "shambler/sidle.wav", 1, ATTN_IDLE);
 };
 
 void() sham_run1 = [$run1, sham_run2] { ai_run (20); };
@@ -85,9 +84,8 @@ void() sham_run4 = [$run4, sham_run5] { ai_run (20); };
 void() sham_run5 = [$run5, sham_run6] { ai_run (24); };
 void() sham_run6 = [$run6, sham_run1]
 {
+	SUB_CheckIdle ("shambler/sidle.wav", ATTN_IDLE);
 	ai_run (20);
-	if (random () > 0.8)
-		sound (self, CHAN_VOICE, "shambler/sidle.wav", 1, ATTN_IDLE);
 };
 
 void() sham_smash1 = [$smash1, sham_smash2]
@@ -343,6 +341,58 @@ void() sham_die =
 	sham_death1 ();
 };
 
+void() sham_sight =
+{
+	sound (self, CHAN_VOICE, "shambler/ssight.wav", 1, ATTN_NORM);
+};
+
+float() ShamCheckAttack =
+{
+	local vector spot1, spot2;
+	local entity targ;
+
+	if (enemy_range == RANGE_MELEE)
+	{
+		if (CanDamage (self.enemy, self))
+		{
+			self.attack_state = AS_MELEE;
+			return TRUE;
+		}
+	}
+
+	if (time < self.attack_finished)
+		return FALSE;
+
+	if (!enemy_vis)
+		return FALSE;
+
+	targ = self.enemy;
+
+	// see if any entities are in the way of the shot
+	spot1 = self.origin + self.view_ofs;
+	spot2 = targ.origin + targ.view_ofs;
+
+	if (vlen (spot1 - spot2) > 600)
+		return FALSE;
+
+	traceline (spot1, spot2, FALSE, self);
+
+	if (trace_inopen && trace_inwater)
+		return FALSE; // sight line crossed contents
+
+	if (trace_ent != targ)
+	{
+		return FALSE;
+	}
+
+	if (enemy_range == RANGE_FAR)
+		return FALSE;
+
+	self.attack_state = AS_MISSILE;
+	SUB_AttackFinished (2 + 2 * random ());
+	return TRUE;
+};
+
 void() monster_shambler =
 {
 	if (deathmatch)
@@ -379,6 +429,8 @@ void() monster_shambler =
 	self.th_melee = sham_melee;
 	self.th_missile = sham_magic1;
 	self.th_pain = sham_pain;
+	self.th_sight = sham_sight;
+	self.th_checkattack = ShamCheckAttack;
 
 	walkmonster_start ();
 };

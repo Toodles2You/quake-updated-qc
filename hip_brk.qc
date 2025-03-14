@@ -54,7 +54,7 @@ void() trigger_damagethreshold =
 	setsize (self, self.mins, self.maxs);
 	if (self.spawnflags & INVISIBLE)
 	{
-		self.model = string_null;
+		self.model = "";
 	}
 
 	if (!self.health)

@@ -499,8 +499,6 @@ void() hurt_touch =
 			}
 		}
 	}
-
-	return;
 };
 
 void() trigger_hurt =

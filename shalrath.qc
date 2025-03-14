@@ -34,8 +34,7 @@ void() shal_stand = [$walk1, shal_stand] { ai_stand (); };
 
 void() shal_walk1 = [$walk2, shal_walk2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "shalrath/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("shalrath/idle.wav", ATTN_IDLE);
 	ai_walk (6);
 };
 void() shal_walk2 = [$walk3, shal_walk3] { ai_walk (4); };
@@ -52,8 +51,7 @@ void() shal_walk12 = [$walk1, shal_walk1] { ai_walk (5); };
 
 void() shal_run1 = [$walk2, shal_run2]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "shalrath/idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle ("shalrath/idle.wav", ATTN_IDLE);
 	ai_run (6);
 };
 void() shal_run2 = [$walk3, shal_run3] { ai_run (4); };
@@ -182,25 +180,16 @@ void() ShalHome =
 
 void() ShalMissileTouch =
 {
-	if (other == self.owner)
-		return;
-
 	if (other.classname == "monster_zombie")
 		T_Damage (other, self, self, 110);
 	T_RadiusDamage (self, self.owner, 40, world);
-	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	BecomeExplosion ();
+};
 
-	self.velocity = '0 0 0';
-	self.touch = SUB_Null;
-	setmodel (self, "progs/s_explod.spr");
-	self.solid = SOLID_NOT;
-	s_explode1 ();
+void() shal_sight =
+{
+	sound (self, CHAN_VOICE, "shalrath/sight.wav", 1, ATTN_NORM);
 };
 
 void() monster_shalrath =
@@ -234,6 +223,7 @@ void() monster_shalrath =
 	self.th_die = shalrath_die;
 	self.th_pain = shalrath_pain;
 	self.th_missile = shal_attack1;
+	self.th_sight = shal_sight;
 
    walkmonster_start ();
 	self.nextthink = time + 0.1 + random () * 0.1;

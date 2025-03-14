@@ -297,3 +297,38 @@ void(void() thinkst) SUB_CheckRefire =
 	self.cnt = 1;
 	self.think = thinkst;
 };
+
+void(string samp, float atten) SUB_CheckIdle =
+{
+	if (random () < 0.2)
+	{
+		if (self.enemy)
+		{
+			if (self.show_hostile >= time - 0.9)
+				return;
+		}
+		sound (self, CHAN_VOICE, samp, 1, atten);
+	}
+};
+
+void(string samp, float atten) SUB_CheckIdle2 =
+{
+	if (random () < 0.1)
+	{
+		if (self.enemy)
+		{
+			if (self.show_hostile >= time - 0.9)
+				return;
+		}
+		sound (self, CHAN_VOICE, samp, 1, atten);
+	}
+};
+
+float(entity targ) SUB_ShouldBleed =
+{
+	if (targ.takedamage)
+		return TRUE;
+	if (targ.flags & (FL_CLIENT | FL_MONSTER))
+		return TRUE;
+	return FALSE;
+};

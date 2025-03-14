@@ -168,7 +168,7 @@ void() func_particlefield =
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	setmodel (self, self.model);
-	self.model = string_null;
+	self.model = "";
 
 	self.origin = (self.mins + self.maxs) * 0.5;
 	setorigin (self, self.origin);
@@ -262,7 +262,7 @@ void() func_togglewall =
 	precache_sound (self.noise1);
 
 	self.solid = SOLID_BSP;
-	self.model = string_null;
+	self.model = "";
 	if (self.spawnflags & START_OFF)
 	{
 		self.state = 0;

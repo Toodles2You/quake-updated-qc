@@ -1264,6 +1264,11 @@ void() armagon_stand_attack =
 	}
 };
 
+void() armagon_sight =
+{
+	sound (self, CHAN_VOICE, "armagon/sight.wav", 1, 0.1);
+};
+
 float() ArmagonCheckAttack =
 {
 	local vector spot1, spot2;
@@ -1382,5 +1387,7 @@ void() monster_armagon =
 	self.th_missile = armagon_missile_attack;
 	self.th_melee = armagon_stop1;
 	self.th_pain = armagon_pain;
+	self.th_sight = armagon_sight;
+	self.th_checkattack = ArmagonCheckAttack;
 	walkmonster_start ();
 };
