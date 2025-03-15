@@ -74,13 +74,7 @@ void() time_boom =
 	}
 
 	if (random () < 0.5)
-	{
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-	}
+		BecomeExplosion (TE_EXPLOSION);
 	else
 	{
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -90,9 +84,10 @@ void() time_boom =
 		WriteCoord (MSG_BROADCAST, self.origin_z);
 		WriteByte (MSG_BROADCAST, 244);
 		WriteByte (MSG_BROADCAST, 3);
+
+		BecomeExplosion (0);
 	}
 
-	BecomeExplosion ();
 	stopShakeEnt = spawn ();
 	stopShakeEnt.target = self.target;
 	stopShakeEnt.think = time_stop_shake;

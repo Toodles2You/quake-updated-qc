@@ -80,7 +80,7 @@ void() eel_stand6 = [$eelswim6, eel_stand1]
 
 void() eel_walk1 = [$eelswim1, eel_walk2]
 {
-	SUB_CheckIdle ("eel/eactive1.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "eel/eactive1.wav", ATTN_IDLE);
 	ai_walk (6);
 	eel_pitch_change ();
 };
@@ -112,7 +112,7 @@ void() eel_walk6 = [$eelswim6, eel_walk1]
 
 void() eel_run1 = [$eelswim1, eel_run2]
 {
-	SUB_CheckIdle3 ("eel/eactive1.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.4, "eel/eactive1.wav", ATTN_IDLE);
 	ai_run (10);
 	eel_pitch_change ();
 };

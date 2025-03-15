@@ -61,9 +61,9 @@ void() knight_stand9 = [$stand9, knight_stand1] { ai_stand (); };
 void() knight_walk1 =
 {
 	if (self.spawnflags & KNIGHT_STATUE)
-		SUB_CheckIdle ("statue/idle.wav", ATTN_IDLE);
+		SUB_CheckIdle (0.2, "statue/idle.wav", ATTN_IDLE);
 	else
-		SUB_CheckIdle ("knight/idle.wav", ATTN_IDLE);
+		SUB_CheckIdle (0.2, "knight/idle.wav", ATTN_IDLE);
 	ai_walk (3);
 };
 void() knight_walk2 = [$walk2, knight_walk3] { ai_walk (2); };
@@ -83,9 +83,9 @@ void() knight_walk14 = [$walk14, knight_walk1] { ai_walk (3); };
 void() knight_run1 = [$runb1, knight_run2]
 {
 	if (self.spawnflags & KNIGHT_STATUE)
-		SUB_CheckIdle ("statue/idle.wav", ATTN_IDLE);
+		SUB_CheckIdle (0.2, "statue/idle.wav", ATTN_IDLE);
 	else
-		SUB_CheckIdle ("knight/idle.wav", ATTN_IDLE);
+		SUB_CheckIdle (0.2, "knight/idle.wav", ATTN_IDLE);
 	ai_run (16);
 };
 void() knight_run2 = [$runb2, knight_run3] { ai_run (20); };

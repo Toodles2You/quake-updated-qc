@@ -56,7 +56,7 @@ void() Laser_Touch =
 	sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
 	org = self.origin - 8 * normalize (self.velocity);
 
-	if (other.health)
+	if (SUB_ShouldBleed (other))
 	{
 		SpawnBlood (org, self.velocity * 0.2, 15);
 		T_Damage (other, self, self.owner, 15);
@@ -127,7 +127,7 @@ void() enf_stand7 = [$stand7, enf_stand1] { ai_stand (); };
 
 void() enf_walk1 = [$walk1, enf_walk2]
 {
-	SUB_CheckIdle ("enforcer/idle1.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "enforcer/idle1.wav", ATTN_IDLE);
 	ai_walk (2);
 };
 void() enf_walk2 = [$walk2, enf_walk3] { ai_walk (4); };
@@ -148,7 +148,7 @@ void() enf_walk16 = [$walk16, enf_walk1] { ai_walk (2); };
 
 void() enf_run1 = [$run1, enf_run2]
 {
-	SUB_CheckIdle ("enforcer/idle1.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "enforcer/idle1.wav", ATTN_IDLE);
 	ai_run (18);
 };
 void() enf_run2 = [$run2, enf_run3] { ai_run (14); };

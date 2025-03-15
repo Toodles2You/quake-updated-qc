@@ -30,7 +30,7 @@ void() sphere_impact =
 
 	self.origin = self.origin - 8 * normalize (self.velocity);
 
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void(entity ownerEntity) sphere_remove =
@@ -57,7 +57,7 @@ void() sphere_attack =
 	self.solid = SOLID_TRIGGER;
 	self.touch = sphere_impact;
 
-	if (self.enemy.health < 1)
+	if (self.enemy.health <= 0)
 	{
 		sprint (self.owner, "You are denied vengeance");
 		remove (self);
@@ -86,7 +86,7 @@ void() sphere_think =
 		return;
 	}
 
-	if (self.owner.health < 1)
+	if (self.owner.health <= 0)
 	{
 		if (self.owner.items2 & IT2_V_SPHERE)
 			self.owner.items2 = self.owner.items2 - IT2_V_SPHERE;

@@ -34,7 +34,7 @@ void() MiniGrenadeExplode =
 	WriteByte (MSG_BROADCAST, 230);
 	WriteByte (MSG_BROADCAST, 5);
 
-	BecomeExplosion ();
+	BecomeExplosion (0);
 };
 
 void(float offsetAngle) MiniGrenadeLaunch =
@@ -159,7 +159,7 @@ void() MultiRocketExplode =
 
 	self.origin = self.origin - 8 * normalize (self.velocity);
 
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() MultiRocketTouch =
@@ -177,7 +177,7 @@ void() HomingMissileThink =
 {
 	local vector dir;
 
-	if (self.enemy.health < 1)
+	if (self.enemy.health <= 0)
 	{
 		remove (self);
 		return;

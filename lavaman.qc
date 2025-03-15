@@ -143,7 +143,7 @@ void() lavaman_stand =
 
 void() lavaman_idle1 = [$walk1, lavaman_idle2]
 {
-	SUB_CheckIdle ("boss1/sight1.wav", ATTN_NORM);
+	SUB_CheckIdle (0.2, "boss1/sight1.wav", ATTN_NORM);
 	// look for other players
 };
 void() lavaman_idle2 = [$walk2, lavaman_idle3] { lavaman_stand (); };
@@ -332,7 +332,7 @@ void() lavaman_touch =
 	self.origin = self.origin - 8 * normalize (self.velocity);
 
 	// Change to an explosion2!!! Ramp in the non-diminishing reds...
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void(float AttackNumber) lavaman_missile =

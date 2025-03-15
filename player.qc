@@ -411,7 +411,6 @@ void() PainSound =
 		self.noise = "player/pain6.wav";
 
 	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
-	return;
 };
 
 void() player_pain1 = [$pain1, player_pain2]
@@ -494,7 +493,6 @@ void(float num_bubbles) DeathBubbles =
 	bubble_spawner.air_finished = 0;
 	bubble_spawner.owner = self;
 	bubble_spawner.bubble_count = num_bubbles;
-	return;
 };
 
 void() DeathSound =

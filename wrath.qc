@@ -319,7 +319,7 @@ void(float AttackNumber) WrathMissile =
 
 void() WrathHome =
 {
-	if (self.enemy.health < 1)
+	if (self.enemy.health <= 0)
 	{
 		remove (self);
 		return;
@@ -348,5 +348,5 @@ void() WrathMissileTouch =
 
 	T_RadiusDamage (self, self.owner, 20, world);
 
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };

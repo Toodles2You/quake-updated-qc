@@ -93,7 +93,7 @@ void() dragon_check_attack =
 		return;
 	if (self.attack_finished > time)
 		return;
-	if (self.enemy.health < 0)
+	if (self.enemy.health <= 0)
 		self.enemy = world;
 	if (self.enemy.flags & FL_NOTARGET)
 		return;
@@ -134,7 +134,7 @@ void(float dist) dragon_move =
 	local float leftTurn, rightTurn, turnOffset;
 	local entity oldEnemy;
 
-	if (self.health < 1)
+	if (self.health <= 0)
 	{
 		remove (self);
 		return;
@@ -682,7 +682,7 @@ void() dragon_death21 = [$drgdth21, dragon_death21]
 
 void() dragon_use =
 {
-	if (self.health < 1)
+	if (self.health <= 0)
 	{
 		self.use = SUB_Null;
 		return;

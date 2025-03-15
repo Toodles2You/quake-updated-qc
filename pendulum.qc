@@ -244,7 +244,7 @@ void() pend_swing26 = [$frame1, pend_swing1]
 
 void() pend_touch =
 {
-	if (other.health < 1 || other.takedamage == DAMAGE_NO) return;
+	if (other.health <= 0 || other.takedamage == DAMAGE_NO) return;
 
 	if (self.attack_finished < time)
 	{

@@ -278,13 +278,16 @@ void() s_explode4 = [3, s_explode5] {};
 void() s_explode5 = [4, s_explode6] {};
 void() s_explode6 = [5, SUB_Remove] {};
 
-void() BecomeExplosion =
+void(float type) BecomeExplosion =
 {
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	if (type)
+	{
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, type);
+		WriteCoord (MSG_BROADCAST, self.origin_x);
+		WriteCoord (MSG_BROADCAST, self.origin_y);
+		WriteCoord (MSG_BROADCAST, self.origin_z);
+	}
 
 	self.movetype = MOVETYPE_NONE;
 	self.velocity = '0 0 0';
@@ -319,7 +322,7 @@ void() T_MissileTouch =
 
 	self.origin = self.origin - 8 * normalize (self.velocity);
 
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() W_FireRocket =
@@ -455,7 +458,7 @@ void() W_FireLightning =
 void() GrenadeExplode =
 {
 	T_RadiusDamage (self, self.owner, 120, world);
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() GrenadeTouch =
@@ -1124,15 +1127,14 @@ void() CheatCommand =
 	self.ammo_rockets1 = 100;
 	self.ammo_nails1 = 200;
 	self.ammo_shells1 = 100;
+	self.ammo_cells1 = 100;
 	self.items = self.items | IT_WEAPONS | IT_KEYS;
 
 	self.ammo_lava_nails = 200;
 	self.ammo_multi_rockets = 100;
 	self.ammo_plasma = 100;
-	self.ammo_cells1 = 100;
 
 	self.weapon = IT_ROCKET_LAUNCHER;
-
 	W_SetCurrentAmmo ();
 };
 
@@ -1366,7 +1368,6 @@ void() QuadCheat =
 	self.super_time = 1;
 	self.super_damage_finished = time + 30;
 	self.items = self.items | IT_QUAD;
-	dprint ("quad cheat\n");
 };
 
 void() ImpulseCommands =
@@ -1436,5 +1437,4 @@ void() SuperDamageSound =
 			sound (self, CHAN_BODY, "items/damage3.wav", 1, ATTN_NORM);
 		}
 	}
-	return;
 };
