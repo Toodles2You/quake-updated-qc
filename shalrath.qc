@@ -184,7 +184,7 @@ void() ShalMissileTouch =
 		T_Damage (other, self, self, 110);
 	T_RadiusDamage (self, self.owner, 40, world);
 
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() shal_sight =

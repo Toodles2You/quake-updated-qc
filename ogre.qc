@@ -56,7 +56,7 @@ $frame pull1 pull2 pull3 pull4 pull5 pull6 pull7 pull8 pull9 pull10 pull11
 void() OgreGrenadeExplode =
 {
 	T_RadiusDamage (self, self.owner, 40, world);
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() OgreGrenadeTouch =

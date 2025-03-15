@@ -268,13 +268,16 @@ void() s_explode4 = [3, s_explode5] {};
 void() s_explode5 = [4, s_explode6] {};
 void() s_explode6 = [5, SUB_Remove] {};
 
-void() BecomeExplosion =
+void(float type) BecomeExplosion =
 {
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	if (type)
+	{
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, type);
+		WriteCoord (MSG_BROADCAST, self.origin_x);
+		WriteCoord (MSG_BROADCAST, self.origin_y);
+		WriteCoord (MSG_BROADCAST, self.origin_z);
+	}
 
 	self.movetype = MOVETYPE_NONE;
 	self.velocity = '0 0 0';
@@ -309,7 +312,7 @@ void() T_MissileTouch =
 
 	self.origin = self.origin - 8 * normalize (self.velocity);
 
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() W_FireRocket =
@@ -441,7 +444,7 @@ void() W_FireLightning =
 void() GrenadeExplode =
 {
 	T_RadiusDamage (self, self.owner, 120, world);
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() GrenadeTouch =
