@@ -164,7 +164,7 @@ void() ShalHome =
 {
 	local vector dir, vtemp;
 	vtemp = self.enemy.origin + '0 0 10';
-	if (self.enemy.health < 1)
+	if (self.enemy.health <= 0)
 	{
 		remove (self);
 		return;
