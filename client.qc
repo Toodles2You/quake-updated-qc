@@ -688,7 +688,7 @@ void() WaterMove =
 
 	if (self.movetype == MOVETYPE_NOCLIP)
 		return;
-	if (self.health < 0)
+	if (self.health <= 0)
 		return;
 
 	if (self.waterlevel != 3)

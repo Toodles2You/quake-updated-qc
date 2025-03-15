@@ -249,7 +249,7 @@ void() spikemine_Touch =
 	T_RadiusDamage (self, self, 110, world);
 
 	sound (self, CHAN_VOICE, "misc/null.wav", 1, ATTN_NORM);
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() spike_mine_first_think =

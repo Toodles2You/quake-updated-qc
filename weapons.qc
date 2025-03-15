@@ -358,9 +358,9 @@ void() HIP_FireMjolnirLightning =
 		cells = self.ammo_cells;
 		self.ammo_cells = 0;
 		W_SetCurrentAmmo ();
-		discharged = 1;
+		discharged = TRUE;
 		T_RadiusDamage (self, self, 35 * cells, world);
-		discharged = 0;
+		discharged = FALSE;
 		return;
 	}
 
@@ -688,13 +688,16 @@ void() s_explode4 = [3, s_explode5] {};
 void() s_explode5 = [4, s_explode6] {};
 void() s_explode6 = [5, SUB_Remove] {};
 
-void() BecomeExplosion =
+void(float type) BecomeExplosion =
 {
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	if (type)
+	{
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, type);
+		WriteCoord (MSG_BROADCAST, self.origin_x);
+		WriteCoord (MSG_BROADCAST, self.origin_y);
+		WriteCoord (MSG_BROADCAST, self.origin_z);
+	}
 
 	self.movetype = MOVETYPE_NONE;
 	self.velocity = '0 0 0';
@@ -729,7 +732,7 @@ void() T_MissileTouch =
 
 	self.origin = self.origin - 8 * normalize (self.velocity);
 
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() W_FireRocket =
@@ -829,9 +832,9 @@ void() W_FireLightning =
 		cells = self.ammo_cells;
 		self.ammo_cells = 0;
 		W_SetCurrentAmmo ();
-		discharged = 1;
+		discharged = TRUE;
 		T_RadiusDamage (self, self, 35 * cells, world);
-		discharged = 0;
+		discharged = FALSE;
 		return;
 	}
 
@@ -864,7 +867,7 @@ void() W_FireLightning =
 void() GrenadeExplode =
 {
 	T_RadiusDamage (self, self.owner, 120, world);
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() GrenadeTouch =
@@ -924,7 +927,7 @@ void() W_FireGrenade =
 void() ProximityExplode =
 {
 	T_RadiusDamage (self, self.owner, 95, world);
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 float NumProximityGrenades;
@@ -1530,12 +1533,10 @@ void() CheatCommand =
 	self.ammo_rockets = 100;
 	self.ammo_nails = 200;
 	self.ammo_shells = 100;
+	self.ammo_cells = 100;
 	self.items = self.items | IT_WEAPONS | IT_KEYS;
 
-	self.ammo_cells = 100;
-
 	self.weapon = IT_ROCKET_LAUNCHER;
-
 	W_SetCurrentAmmo ();
 };
 
@@ -1727,7 +1728,6 @@ void() QuadCheat =
 	self.super_time = 1;
 	self.super_damage_finished = time + 30;
 	self.items = self.items | IT_QUAD;
-	bprint ("quad cheat\n");
 };
 
 void() WetsuitCheat =
@@ -1737,7 +1737,6 @@ void() WetsuitCheat =
 	self.items2 = self.items2 | HIP_IT_WETSUIT;
 	self.wetsuit_time = 1;
 	self.wetsuit_finished = time + 30;
-	bprint ("wetsuit cheat\n");
 };
 
 void() EmpathyShieldsCheat =
@@ -1747,7 +1746,6 @@ void() EmpathyShieldsCheat =
 	self.items2 = self.items2 | HIP_IT_EMPATHY_SHIELDS;
 	self.empathy_time = 1;
 	self.empathy_finished = time + 30;
-	bprint ("empathy shields cheat\n");
 };
 
 void() DumpEntities =
@@ -1891,5 +1889,4 @@ void() SuperDamageSound =
 			sound (self, CHAN_BODY, "items/damage3.wav", 1, ATTN_NORM);
 		}
 	}
-	return;
 };

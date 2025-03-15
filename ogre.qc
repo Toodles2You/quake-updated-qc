@@ -56,7 +56,7 @@ $frame pull1 pull2 pull3 pull4 pull5 pull6 pull7 pull8 pull9 pull10 pull11
 void() OgreGrenadeExplode =
 {
 	T_RadiusDamage (self, self.owner, 40, world);
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() OgreGrenadeTouch =
@@ -148,7 +148,7 @@ void() ogre_stand3 = [$stand3, ogre_stand4] { ai_stand (); };
 void() ogre_stand4 = [$stand4, ogre_stand5] { ai_stand (); };
 void() ogre_stand5 = [$stand5, ogre_stand6]
 {
-	SUB_CheckIdle ("ogre/ogidle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "ogre/ogidle.wav", ATTN_IDLE);
 	ai_stand ();
 };
 void() ogre_stand6 = [$stand6, ogre_stand7] { ai_stand (); };
@@ -160,7 +160,7 @@ void() ogre_walk1 = [$walk1, ogre_walk2] { ai_walk (3); };
 void() ogre_walk2 = [$walk2, ogre_walk3] { ai_walk (2); };
 void() ogre_walk3 = [$walk3, ogre_walk4]
 {
-	SUB_CheckIdle ("ogre/ogidle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "ogre/ogidle.wav", ATTN_IDLE);
 	ai_walk (2);
 };
 void() ogre_walk4 = [$walk4, ogre_walk5] { ai_walk (2); };
@@ -184,7 +184,7 @@ void() ogre_walk16 = [$walk16, ogre_walk1] { ai_walk (4); };
 
 void() ogre_run1 = [$run1, ogre_run2]
 {
-	SUB_CheckIdle ("ogre/ogidle2.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "ogre/ogidle2.wav", ATTN_IDLE);
 	ai_run (9);
 };
 void() ogre_run2 = [$run2, ogre_run3] { ai_run (12); };

@@ -298,22 +298,9 @@ void(void() thinkst) SUB_CheckRefire =
 	self.think = thinkst;
 };
 
-void(string samp, float atten) SUB_CheckIdle =
+void(float chance, string samp, float atten) SUB_CheckIdle =
 {
-	if (random () < 0.2)
-	{
-		if (self.enemy)
-		{
-			if (self.show_hostile >= time - 0.9)
-				return;
-		}
-		sound (self, CHAN_VOICE, samp, 1, atten);
-	}
-};
-
-void(string samp, float atten) SUB_CheckIdle2 =
-{
-	if (random () < 0.1)
+	if (random () < chance)
 	{
 		if (self.enemy)
 		{

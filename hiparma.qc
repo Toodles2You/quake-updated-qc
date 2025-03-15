@@ -177,7 +177,7 @@ void() armagon_think =
 	}
 	angdelta = delta - self.fixangle;
 	armagon_turn (angdelta, delta);
-	if (self.health < 0)
+	if (self.health <= 0)
 		return;
 	if (time > self.super_time)
 	{
@@ -222,7 +222,7 @@ void() armagon_walkthink =
 	}
 	angdelta = delta - self.fixangle;
 	armagon_turn (angdelta, delta);
-	if (self.health < 0)
+	if (self.health <= 0)
 		return;
 	if (time > self.super_time)
 	{

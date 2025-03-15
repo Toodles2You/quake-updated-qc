@@ -79,8 +79,7 @@ void() zombie_stand15 = [$stand15, zombie_stand1] { ai_stand (); };
 
 void() zombie_cruc1 = [$cruc_1, zombie_cruc2]
 {
-	if (random () < 0.1)
-		sound (self, CHAN_VOICE, "zombie/idle_w2.wav", 1, ATTN_STATIC);
+	SUB_CheckIdle (0.1, "zombie/idle_w2.wav", ATTN_STATIC);
 };
 void() zombie_cruc2 = [$cruc_2, zombie_cruc3]
 {
@@ -123,9 +122,25 @@ void() zombie_walk17 = [$walk17, zombie_walk18] { ai_walk (0); };
 void() zombie_walk18 = [$walk18, zombie_walk19] { ai_walk (0); };
 void() zombie_walk19 = [$walk19, zombie_walk1]
 {
-	if (random () < 0.2)
-		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
+	SUB_CheckIdle (0.2, "zombie/z_idle.wav", ATTN_IDLE);
 	ai_walk (0);
+};
+
+void() zombie_idle =
+{
+	local float r;
+	r = (random () + random ()) * 0.5;
+
+	if (self.enemy)
+	{
+		if (self.show_hostile >= time - 0.9)
+			return;
+	}
+
+	if (r < 0.2)
+		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
+	else if (r > 0.8)
+		sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
 };
 
 void() zombie_run1 = [$run1, zombie_run2]
@@ -151,12 +166,7 @@ void() zombie_run16 = [$run16, zombie_run17] { ai_run (7); };
 void() zombie_run17 = [$run17, zombie_run18] { ai_run (3); };
 void() zombie_run18 = [$run18, zombie_run1]
 {
-	local float r;
-	r = (random () + random ()) * 0.5;
-	if (r < 0.2)
-		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-	else if (r > 0.8)
-		sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
+	zombie_idle ();
 	ai_run (8);
 };
 

@@ -237,7 +237,7 @@ float() GremlinFindTarget =
 		head = nextent (world);
 		while (head != world)
 		{
-			if ((head.health < 1) && (head.flags & (FL_MONSTER | FL_CLIENT)))
+			if ((head.health <= 0) && (head.flags & (FL_MONSTER | FL_CLIENT)))
 			{
 				result = fabs (head.origin_z - self.origin_z);
 				if ((visible (head)) && (result < 80) &&
@@ -368,7 +368,7 @@ void(float dist) gremlin_run =
 		// get away from player if we stole a weapon
 		if (self.stoleweapon)
 		{
-			if (self.enemy.health < 0 && self.enemy.classname == "player")
+			if (self.enemy.health <= 0 && self.enemy.classname == "player")
 			{
 				gremlin_glook1 ();
 				return;
@@ -538,7 +538,7 @@ void() gremlin_stand17 = [$stand17, gremlin_stand1]
 
 void() gremlin_walk1 = [$walk1, gremlin_walk2]
 {
-	SUB_CheckIdle2 ("grem/idle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.1, "grem/idle.wav", ATTN_IDLE);
 	gremlin_walk (8);
 };
 void() gremlin_walk2 = [$walk2, gremlin_walk3] { gremlin_walk (8); };
@@ -555,7 +555,7 @@ void() gremlin_walk12 = [$walk12, gremlin_walk1] { gremlin_walk (8); };
 
 void() gremlin_run1 = [$run1, gremlin_run2]
 {
-	SUB_CheckIdle2 ("grem/idle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.1, "grem/idle.wav", ATTN_IDLE);
 	gremlin_run (0);
 };
 void() gremlin_run2 = [$run2, gremlin_run3] { gremlin_run (8); };
@@ -1280,9 +1280,9 @@ void() Gremlin_FireLightningGun =
 	{
 		cells = self.ammo_cells;
 		self.ammo_cells = 0;
-		discharged = 1;
+		discharged = TRUE;
 		T_RadiusDamage (self, self, 35 * cells, world);
-		discharged = 0;
+		discharged = FALSE;
 		return;
 	}
 

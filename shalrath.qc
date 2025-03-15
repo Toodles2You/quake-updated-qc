@@ -34,7 +34,7 @@ void() shal_stand = [$walk1, shal_stand] { ai_stand (); };
 
 void() shal_walk1 = [$walk2, shal_walk2]
 {
-	SUB_CheckIdle ("shalrath/idle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "shalrath/idle.wav", ATTN_IDLE);
 	ai_walk (6);
 };
 void() shal_walk2 = [$walk3, shal_walk3] { ai_walk (4); };
@@ -51,7 +51,7 @@ void() shal_walk12 = [$walk1, shal_walk1] { ai_walk (5); };
 
 void() shal_run1 = [$walk2, shal_run2]
 {
-	SUB_CheckIdle ("shalrath/idle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "shalrath/idle.wav", ATTN_IDLE);
 	ai_run (6);
 };
 void() shal_run2 = [$walk3, shal_run3] { ai_run (4); };
@@ -164,7 +164,7 @@ void() ShalHome =
 {
 	local vector dir, vtemp;
 	vtemp = self.enemy.origin + '0 0 10';
-	if (self.enemy.health < 1)
+	if (self.enemy.health <= 0)
 	{
 		remove (self);
 		return;
@@ -184,7 +184,7 @@ void() ShalMissileTouch =
 		T_Damage (other, self, self, 110);
 	T_RadiusDamage (self, self.owner, 40, world);
 
-	BecomeExplosion ();
+	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() shal_sight =

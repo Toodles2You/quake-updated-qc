@@ -19,7 +19,7 @@
 
 float USE_PARTICLES = 1;
 
-void() BecomeExplosion;
+void(float type) BecomeExplosion;
 
 void() exploder_fire =
 {
@@ -40,14 +40,9 @@ void() exploder_fire =
 	}
 	T_RadiusDamage (self, self.owner, self.dmg, other);
 	if (self.spawnflags & USE_PARTICLES)
-	{
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-	}
-	BecomeExplosion ();
+		BecomeExplosion (TE_EXPLOSION);
+	else
+		BecomeExplosion (0);
 };
 
 void() exploder_use =
@@ -120,17 +115,12 @@ void() multi_exploder_fire =
 		self.absmin_z + (random () * (self.absmax_z - self.absmin_z));
 	sound (expl, CHAN_VOICE, "misc/shortexp.wav", self.volume, self.speed);
 	T_RadiusDamage (expl, self.owner, self.dmg, other);
-	if (self.spawnflags & USE_PARTICLES)
-	{
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-		WriteCoord (MSG_BROADCAST, expl.origin_x);
-		WriteCoord (MSG_BROADCAST, expl.origin_y);
-		WriteCoord (MSG_BROADCAST, expl.origin_z);
-	}
 	temp = self;
 	self = expl;
-	BecomeExplosion ();
+	if (self.spawnflags & USE_PARTICLES)
+		BecomeExplosion (TE_EXPLOSION);
+	else
+		BecomeExplosion (0);
 	self = temp;
 };
 

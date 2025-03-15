@@ -239,7 +239,7 @@ void() scourge_stand12 = [$stand12, scourge_stand1]
 
 void() scourge_walk1 = [$walk1, scourge_walk2]
 {
-	SUB_CheckIdle2 ("scourge/idle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.1, "scourge/idle.wav", ATTN_IDLE);
 	self.spawnsilent = 1;
 	scourge_think ();
 	ai_walk (8);
@@ -252,7 +252,7 @@ void() scourge_walk6 = [$walk6, scourge_walk1] { ai_walk (8); };
 
 void() scourge_run1 = [$walk1, scourge_run2]
 {
-	SUB_CheckIdle2 ("scourge/idle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.1, "scourge/idle.wav", ATTN_IDLE);
 	self.spawnsilent = 1;
 	scourge_think ();
 	ai_run (18);
