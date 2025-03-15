@@ -106,7 +106,7 @@ void() dog_stand9 = [$stand9, dog_stand1] { ai_stand (); };
 
 void() dog_walk1 = [$walk1, dog_walk2]
 {
-	SUB_CheckIdle ("dog/idle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "dog/idle.wav", ATTN_IDLE);
 	ai_walk (8);
 };
 void() dog_walk2 = [$walk2, dog_walk3] { ai_walk (8); };
@@ -119,7 +119,7 @@ void() dog_walk8 = [$walk8, dog_walk1] { ai_walk (8); };
 
 void() dog_run1 = [$run1, dog_run2]
 {
-	SUB_CheckIdle ("dog/idle.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "dog/idle.wav", ATTN_IDLE);
 	ai_run (16);
 };
 void() dog_run2 = [$run2, dog_run3] { ai_run (32); };

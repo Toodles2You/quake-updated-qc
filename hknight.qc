@@ -124,7 +124,7 @@ void() hknight_stand9 = [$stand9, hknight_stand1] { ai_stand (); };
 
 void() hknight_walk1 = [$walk1, hknight_walk2]
 {
-	SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
+	SUB_CheckIdle (0.2, "hknight/idle.wav", ATTN_NORM);
 	ai_walk (2);
 };
 void() hknight_walk2 = [$walk2, hknight_walk3] { ai_walk (5); };
@@ -149,7 +149,7 @@ void() hknight_walk20 = [$walk20, hknight_walk1] { ai_walk (2); };
 
 void() hknight_run1 = [$run1, hknight_run2]
 {
-	SUB_CheckIdle ("hknight/idle.wav", ATTN_NORM);
+	SUB_CheckIdle (0.2, "hknight/idle.wav", ATTN_NORM);
 	ai_run (20);
 	CheckForCharge ();
 };

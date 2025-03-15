@@ -298,9 +298,9 @@ void(void() thinkst) SUB_CheckRefire =
 	self.think = thinkst;
 };
 
-void(string samp, float atten) SUB_CheckIdle =
+void(float chance, string samp, float atten) SUB_CheckIdle =
 {
-	if (random () < 0.2)
+	if (random () < chance)
 	{
 		if (self.enemy)
 		{

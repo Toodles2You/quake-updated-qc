@@ -52,7 +52,7 @@ void() demon1_stand13 = [$stand13, demon1_stand1] { ai_stand (); };
 
 void() demon1_walk1 = [$walk1, demon1_walk2]
 {
-	SUB_CheckIdle ("demon/idle1.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "demon/idle1.wav", ATTN_IDLE);
 	ai_walk (8);
 };
 void() demon1_walk2 = [$walk2, demon1_walk3] { ai_walk (6); };
@@ -65,7 +65,7 @@ void() demon1_walk8 = [$walk8, demon1_walk1] { ai_walk (10); };
 
 void() demon1_run1 = [$run1, demon1_run2]
 {
-	SUB_CheckIdle ("demon/idle1.wav", ATTN_IDLE);
+	SUB_CheckIdle (0.2, "demon/idle1.wav", ATTN_IDLE);
 	ai_run (20);
 };
 void() demon1_run2 = [$run2, demon1_run3] { ai_run (15); };
