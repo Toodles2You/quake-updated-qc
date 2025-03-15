@@ -439,7 +439,7 @@ float AS_MISSILE = 4;
 
 .float axhitme;
 
-// set to time+0.2 whenever a client fires a weapon or takes damage.
+// set to time + 1 whenever a client fires a weapon or takes damage.
 // Used to alert monsters that otherwise would let the player go
 .float show_hostile;
 
@@ -451,8 +451,6 @@ float AS_MISSILE = 4;
 
 .string mdl;
 .vector mangle;
-
-.vector oldorigin;
 
 .float t_length, t_width;
 
