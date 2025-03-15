@@ -880,12 +880,10 @@ void() CheatCommand =
 	self.ammo_rockets = 100;
 	self.ammo_nails = 200;
 	self.ammo_shells = 100;
+	self.ammo_cells = 100;
 	self.items = self.items | IT_WEAPONS | IT_KEYS;
 
-	self.ammo_cells = 100;
-
 	self.weapon = IT_ROCKET_LAUNCHER;
-
 	W_SetCurrentAmmo ();
 };
 
@@ -1045,7 +1043,6 @@ void() QuadCheat =
 	self.super_time = 1;
 	self.super_damage_finished = time + 30;
 	self.items = self.items | IT_QUAD;
-	dprint ("quad cheat\n");
 };
 
 void() ImpulseCommands =
@@ -1092,5 +1089,4 @@ void() SuperDamageSound =
 			sound (self, CHAN_BODY, "items/damage3.wav", 1, ATTN_NORM);
 		}
 	}
-	return;
 };
