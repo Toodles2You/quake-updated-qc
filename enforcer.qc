@@ -56,7 +56,7 @@ void() Laser_Touch =
 	sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
 	org = self.origin - 8 * normalize (self.velocity);
 
-	if (other.health)
+	if (SUB_ShouldBleed (other))
 	{
 		SpawnBlood (org, self.velocity * 0.2, 15);
 		T_Damage (other, self, self.owner, 15);
