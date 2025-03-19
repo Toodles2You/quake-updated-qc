@@ -58,7 +58,7 @@ void() knight_stand7 = [$stand7, knight_stand8] { ai_stand (); };
 void() knight_stand8 = [$stand8, knight_stand9] { ai_stand (); };
 void() knight_stand9 = [$stand9, knight_stand1] { ai_stand (); };
 
-void() knight_walk1 =
+void() knight_walk1 = [$walk1, knight_walk2]
 {
 	if (self.spawnflags & KNIGHT_STATUE)
 		SUB_CheckIdle (0.2, "statue/idle.wav", ATTN_IDLE);
