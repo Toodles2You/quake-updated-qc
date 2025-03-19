@@ -523,10 +523,13 @@ void() weapon_touch =
 	stemp = self;
 	self = other;
 
-	if (!deathmatch)
-		W_SetWeapon (new);
-	else
-		Deathmatch_Weapon (old, new);
+	if ((old & new) == 0)
+	{
+		if (!deathmatch)
+			W_SetWeapon (new);
+		else
+			Deathmatch_Weapon (old, new);
+	}
 
 	self = stemp;
 
