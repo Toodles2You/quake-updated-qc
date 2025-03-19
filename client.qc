@@ -137,6 +137,7 @@ void() DecodeLevelParms =
 	self.ammo_nails1 = parm5;
 	self.ammo_rockets1 = parm6;
 	self.ammo_cells1 = parm7;
+	self.weapon = 0;
 	W_SetWeapon (parm8);
 	self.armortype = parm9 * 0.01;
 	self.items2 = parm10;
