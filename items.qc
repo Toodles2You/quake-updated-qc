@@ -331,19 +331,12 @@ float() W_BestWeapon;
 
 void() weapon_touch =
 {
-	local float best, new, old;
+	local float new, old;
 	local entity stemp;
 	local float leave;
 
 	if (!(other.flags & FL_CLIENT))
 		return;
-
-	// if the player was using his best weapon, change up to the new one if
-	// better
-	stemp = self;
-	self = other;
-	best = W_BestWeapon ();
-	self = stemp;
 
 	if (deathmatch == 2 || coop)
 		leave = 1;
@@ -517,19 +510,11 @@ void() weapon_lightning =
 void() ammo_touch =
 {
 	local entity stemp;
-	local float best;
 
 	if (other.classname != "player")
 		return;
 	if (other.health <= 0)
 		return;
-
-	// if the player was using his best weapon, change up to the new one if
-	// better
-	stemp = self;
-	self = other;
-	best = W_BestWeapon ();
-	self = stemp;
 
 	if (self.weapon == 1)
 	{ // shotgun
@@ -563,16 +548,6 @@ void() ammo_touch =
 	sprint (other, "\n");
 	sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
-
-	// change to a better weapon if appropriate
-
-	if (other.weapon == best)
-	{
-		stemp = self;
-		self = other;
-		W_SetWeapon (W_BestWeapon ());
-		self = stemp;
-	}
 
 	// if changed current ammo, update it
 	stemp = self;
@@ -1029,8 +1004,7 @@ void() item_artifact_super_damage =
 void() BackpackTouch =
 {
 	local string s;
-	local float best, old, new;
-	local entity stemp;
+	local float old, new;
 	local float acount;
 
 	if (other.classname != "player")
@@ -1048,6 +1022,7 @@ void() BackpackTouch =
 	}
 
 	acount = 0;
+	new = 0;
 	sprint (other, "You get ");
 
 	if (self.items)
@@ -1057,15 +1032,9 @@ void() BackpackTouch =
 			acount = 1;
 			sprint (other, "the ");
 			sprint (other, self.netname);
+			new = self.items;
 		}
 	}
-
-	// if the player was using his best weapon, change up to the new one if
-	// better
-	stemp = self;
-	self = other;
-	best = W_BestWeapon ();
-	self = stemp;
 
 	// change weapons
 	other.ammo_shells = other.ammo_shells + self.ammo_shells;
@@ -1073,11 +1042,8 @@ void() BackpackTouch =
 	other.ammo_rockets = other.ammo_rockets + self.ammo_rockets;
 	other.ammo_cells = other.ammo_cells + self.ammo_cells;
 
-	new = self.items;
-	if (!new)
-		new = other.weapon;
 	old = other.items;
-	other.items = other.items | new;
+	other.items = other.items | self.items;
 
 	bound_other_ammo ();
 
@@ -1125,6 +1091,9 @@ void() BackpackTouch =
 	// remove the backpack, change self to the player
 	remove (self);
 	self = other;
+
+	if (!new)
+		return;
 
 	// change to the weapon
 	if (!deathmatch)
