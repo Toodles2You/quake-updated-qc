@@ -403,19 +403,12 @@ float() W_BestWeapon;
 
 void() weapon_touch =
 {
-	local float best, new, old;
+	local float new, old;
 	local entity stemp;
 	local float leave;
 
 	if (!(other.flags & FL_CLIENT))
 		return;
-
-	// if the player was using his best weapon, change up to the new one if
-	// better
-	stemp = self;
-	self = other;
-	best = W_BestWeapon ();
-	self = stemp;
 
 	if (deathmatch == 2 || coop)
 		leave = 1;
@@ -620,19 +613,11 @@ void() weapon_lightning =
 void() ammo_touch =
 {
 	local entity stemp;
-	local float best;
 
 	if (other.classname != "player")
 		return;
 	if (other.health <= 0)
 		return;
-
-	// if the player was using his best weapon, change up to the new one if
-	// better
-	stemp = self;
-	self = other;
-	best = W_BestWeapon ();
-	self = stemp;
 
 	if (self.weapon == 1)
 	{ // shotgun
@@ -686,16 +671,6 @@ void() ammo_touch =
 	stuffcmd (other, "bf\n");
 
 	EnableComboWeapons (other);
-
-	// change to a better weapon if appropriate
-
-	if (other.weapon == best)
-	{
-		stemp = self;
-		self = other;
-		W_SetWeapon (W_BestWeapon ());
-		self = stemp;
-	}
 
 	// if changed current ammo, update it
 	stemp = self;
@@ -1227,8 +1202,7 @@ void() item_artifact_super_damage =
 void() BackpackTouch =
 {
 	local string s;
-	local float best, old, new;
-	local entity stemp;
+	local float old, new;
 	local float acount;
 
 	if (other.classname != "player")
@@ -1253,6 +1227,7 @@ void() BackpackTouch =
 	}
 
 	acount = 0;
+	new = 0;
 	sprint (other, "You get ");
 
 	if (self.items)
@@ -1261,14 +1236,8 @@ void() BackpackTouch =
 			acount = 1;
 			sprint (other, "the ");
 			sprint (other, self.netname);
+			new = self.items;
 		}
-
-	// if the player was using his best weapon, change up to the new one if
-	// better
-	stemp = self;
-	self = other;
-	best = W_BestWeapon ();
-	self = stemp;
 
 	// change weapons
 	other.ammo_shells1 = other.ammo_shells1 + self.ammo_shells1;
@@ -1280,11 +1249,8 @@ void() BackpackTouch =
 	other.ammo_multi_rockets = other.ammo_multi_rockets + self.ammo_multi_rockets;
 	other.ammo_plasma = other.ammo_plasma + self.ammo_plasma;
 
-	new = self.items;
-	if (!new)
-		new = other.weapon;
 	old = other.items;
-	other.items = other.items | new;
+	other.items = other.items | self.items;
 
 	bound_other_ammo ();
 
@@ -1361,6 +1327,35 @@ void() BackpackTouch =
 	self = other;
 
 	EnableComboWeapons (self);
+
+	if (new == IT_LIGHTNING)
+	{
+		if (self.ammo_plasma > 0)
+			new = IT_PLASMA_GUN;
+	}
+	else if (new == IT_ROCKET_LAUNCHER)
+	{
+		if (self.ammo_multi_rockets > 0)
+			new = IT_MULTI_ROCKET;
+	}
+	else if (new == IT_GRENADE_LAUNCHER)
+	{
+		if (self.ammo_multi_rockets > 0)
+			new = IT_MULTI_GRENADE;
+	}
+	else if (new == IT_SUPER_NAILGUN)
+	{
+		if (self.ammo_lava_nails > 1)
+			new = IT_LAVA_SUPER_NAILGUN;
+	}
+	else if (new == IT_NAILGUN)
+	{
+		if (self.ammo_lava_nails > 0)
+			new = IT_LAVA_NAILGUN;
+	}
+
+	if (!new)
+		return;
 
 	// change to the weapon
 	if (!deathmatch)

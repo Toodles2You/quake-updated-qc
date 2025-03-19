@@ -816,21 +816,13 @@ void() TossBackpack =
 
 void() Team_weapon_touch =
 {
-	local float best, new, old;
-	local entity stemp;
+	local float new, old;
 
 	if (!(other.flags & FL_CLIENT))
 		return;
 	// Don't let the owner pick up his own weapon for a second.
 	if ((other == self.owner) && ((self.nextthink - time) > 119))
 		return;
-
-	// if the player was using his best weapon, change up to the new one if
-	// better
-	stemp = self;
-	self = other;
-	best = W_BestWeapon ();
-	self = stemp;
 
 	new = 0;
 	if (self.classname == "weapon_nailgun")
@@ -865,6 +857,32 @@ void() Team_weapon_touch =
 	self = other;
 
 	EnableComboWeapons (self);
+
+	if (new == IT_LIGHTNING)
+	{
+		if (self.ammo_plasma > 0)
+			new = IT_PLASMA_GUN;
+	}
+	else if (new == IT_ROCKET_LAUNCHER)
+	{
+		if (self.ammo_multi_rockets > 0)
+			new = IT_MULTI_ROCKET;
+	}
+	else if (new == IT_GRENADE_LAUNCHER)
+	{
+		if (self.ammo_multi_rockets > 0)
+			new = IT_MULTI_GRENADE;
+	}
+	else if (new == IT_SUPER_NAILGUN)
+	{
+		if (self.ammo_lava_nails > 1)
+			new = IT_LAVA_SUPER_NAILGUN;
+	}
+	else if (new == IT_NAILGUN)
+	{
+		if (self.ammo_lava_nails > 0)
+			new = IT_LAVA_NAILGUN;
+	}
 
 	if (!deathmatch)
 		W_SetWeapon (new);
