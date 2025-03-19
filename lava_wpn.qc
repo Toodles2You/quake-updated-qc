@@ -69,8 +69,7 @@ void(float ox) W_FireLavaSpikes =
 	if (self.ammo_lava_nails < 1)
 	{
 		sprint (self, "Out of Lava Nails\n");
-		self.weapon = W_BestWeapon ();
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 		return;
 	}
 

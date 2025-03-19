@@ -433,8 +433,7 @@ void() W_FirePlasma =
 
 	if (self.ammo_plasma < 1)
 	{
-		self.weapon = W_BestWeapon ();
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 		return;
 	}
 
@@ -443,7 +442,7 @@ void() W_FirePlasma =
 	{
 		cells = self.ammo_plasma;
 		self.ammo_plasma = 0;
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 		T_RadiusDamage (self, self, 35 * cells, world);
 		return;
 	}

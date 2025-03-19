@@ -19,7 +19,6 @@
 // updated to quake v1.06 10/8/96
 
 void() W_WeaponFrame;
-void() W_SetCurrentAmmo;
 void(entity attacker, float damage) player_pain;
 void() player_stand1;
 void(vector org) spawn_tfog;
@@ -138,7 +137,7 @@ void() DecodeLevelParms =
 	self.ammo_nails1 = parm5;
 	self.ammo_rockets1 = parm6;
 	self.ammo_cells1 = parm7;
-	self.weapon = parm8;
+	W_SetWeapon (parm8);
 	self.armortype = parm9 * 0.01;
 	self.items2 = parm10;
 	self.ammo_lava_nails = parm11;
@@ -148,7 +147,7 @@ void() DecodeLevelParms =
 	{
 		self.items = self.items - (self.items & IT_GRAPPLE);
 		if (self.weapon == IT_GRAPPLE)
-			self.weapon = IT_AXE;
+			W_SetWeapon (IT_AXE);
 	}
 	if (TeamColorIsLegal (parm14))
 	{
@@ -581,8 +580,6 @@ void() PutClientInServer =
 	// spawn selection must be after DecodeLevelParms because of team stuff
 	spot = SelectSpawnPoint ();
 
-	W_SetCurrentAmmo ();
-
 	self.attack_finished = time;
 	self.th_pain = player_pain;
 	self.th_die = PlayerDie;
@@ -949,8 +946,7 @@ void() PlayerPreThink =
 	if (time > self.attack_finished && self.currentammo == 0 &&
 		self.weapon != IT_AXE && self.weapon != IT_GRAPPLE)
 	{
-		self.weapon = W_BestWeapon ();
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 	}
 
 	if (self.items2 & IT2_ANTIGRAV)

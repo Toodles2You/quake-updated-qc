@@ -96,6 +96,7 @@ float FLAG_DROPPED = 2;
 
 float() W_BestWeapon;
 void() W_SetCurrentAmmo;
+void(float weap) W_SetWeapon;
 void() bound_other_ammo;
 void(float o, float n) Deathmatch_Weapon;
 void() BackpackTouch;
@@ -863,15 +864,12 @@ void() Team_weapon_touch =
 	remove (self);
 	self = other;
 
+	EnableComboWeapons (self);
+
 	if (!deathmatch)
-		self.weapon = new;
+		W_SetWeapon (new);
 	else
 		Deathmatch_Weapon (old, new);
-
-	EnableComboWeapons (self);
-	UpdateAmmoCounts (self);
-
-	W_SetCurrentAmmo ();
 
 	// dropped weapon doesn't target, so no need to call UseTargets
 };
@@ -916,7 +914,7 @@ void() TossWeapon =
 	{
 		setmodel (item, "progs/g_nail.mdl");
 		item.weapon = IT_NAILGUN;
-		item.netname = "nailgun";
+		item.netname = "Nailgun";
 		item.classname = "weapon_nailgun";
 		self.items = self.items - (self.items & (IT_NAILGUN | IT_LAVA_NAILGUN));
 	}
@@ -965,8 +963,7 @@ void() TossWeapon =
 	item.think = SUB_Remove;
 	item.nextthink = time + 120;
 
-	self.weapon = W_BestWeapon ();
-	W_SetCurrentAmmo ();
+	W_SetWeapon (W_BestWeapon ());
 };
 
 void(entity flg) RegenFlag =

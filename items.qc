@@ -18,6 +18,7 @@
 */
 
 void() W_SetCurrentAmmo;
+void(float weap) W_SetWeapon;
 
 void() SUB_regen =
 {
@@ -130,8 +131,6 @@ void() item_health =
 
 void() health_touch =
 {
-	local string s;
-
 	if (other.classname != "player")
 		return;
 
@@ -149,11 +148,9 @@ void() health_touch =
 	}
 
 	sprint (other, "You receive ");
-	s = ftos (self.healamount);
-	sprint (other, s);
+	sprint (other, ftos (self.healamount));
 	sprint (other, " health\n");
 
-	// health touch sound
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 
 	stuffcmd (other, "bf\n");
@@ -249,7 +246,6 @@ void() armor_touch =
 	self.think = SUB_regen;
 
 	sprint (other, "You got armor\n");
-	// armor touch sound
 	sound (other, CHAN_ITEM, "items/armor1.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
@@ -344,7 +340,7 @@ void(float old, float new) Deathmatch_Weapon =
 	or = RankForWeapon (self.weapon);
 	nr = RankForWeapon (new);
 	if (nr < or)
-		self.weapon = new;
+		W_SetWeapon (new);
 };
 
 void(entity comboOwner) EnableComboWeapons =
@@ -405,7 +401,7 @@ float() W_BestWeapon;
 
 void() weapon_touch =
 {
-	local float hadammo, best, new, old;
+	local float best, new, old;
 	local entity stemp;
 	local float leave;
 
@@ -425,81 +421,83 @@ void() weapon_touch =
 		leave = 0;
 
 	new = 0;
-	if (self.classname == "weapon_nailgun")
-	{
-		if (leave && (other.items & IT_NAILGUN))
-			return;
-		hadammo = other.ammo_nails1;
-		new = IT_NAILGUN;
-		if (leave)
-			other.ammo_lava_nails = other.ammo_lava_nails + 20;
-		other.ammo_nails1 = other.ammo_nails1 + 30;
-	}
-	else if (self.classname == "weapon_supernailgun")
-	{
-		if (leave && (other.items & IT_SUPER_NAILGUN))
-			return;
-		hadammo = other.ammo_rockets1;
-		new = IT_SUPER_NAILGUN;
-		if (leave)
-			other.ammo_lava_nails = other.ammo_lava_nails + 20;
-		other.ammo_nails1 = other.ammo_nails1 + 30;
-	}
-	else if (self.classname == "weapon_supershotgun")
-	{
-		if (leave && (other.items & IT_SUPER_SHOTGUN))
-			return;
-		hadammo = other.ammo_rockets1;
+	if (self.classname == "weapon_supershotgun")
 		new = IT_SUPER_SHOTGUN;
+	else if (self.classname == "weapon_nailgun")
+		new = IT_NAILGUN;
+	else if (self.classname == "weapon_supernailgun")
+		new = IT_SUPER_NAILGUN;
+	else if (self.classname == "weapon_rocketlauncher")
+		new = IT_ROCKET_LAUNCHER;
+	else if (self.classname == "weapon_grenadelauncher")
+		new = IT_GRENADE_LAUNCHER;
+	else if (self.classname == "weapon_lightning")
+		new = IT_LIGHTNING;
+	else
+		objerror ("weapon_touch: unknown classname");
+
+	if (other.items & new)
+	{
+		if (leave)
+			return;
+		if (new & IT_SUPER_SHOTGUN)
+		{
+			if (other.ammo_shells1 >= 100)
+				return;
+		}
+		else if (new & (IT_NAILGUN | IT_SUPER_NAILGUN))
+		{
+			if (other.ammo_nails1 >= 200)
+				return;
+		}
+		else if (new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER))
+		{
+			if (other.ammo_rockets1 >= 100)
+				return;
+		}
+		else if (new & IT_LIGHTNING)
+		{
+			if (other.ammo_cells1 >= 100)
+				return;
+		}
+	}
+
+	if (new & IT_SUPER_SHOTGUN)
+	{
 		other.ammo_shells1 = other.ammo_shells1 + 5;
 	}
-	else if (self.classname == "weapon_rocketlauncher")
+	else if (new & (IT_NAILGUN | IT_SUPER_NAILGUN))
 	{
-		if (leave && (other.items & IT_ROCKET_LAUNCHER))
-			return;
-		hadammo = other.ammo_rockets1;
-		new = IT_ROCKET_LAUNCHER;
+		if (leave)
+			other.ammo_lava_nails = other.ammo_lava_nails + 20;
+		other.ammo_nails1 = other.ammo_nails1 + 30;
+	}
+	else if (new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER))
+	{
 		if (leave)
 			other.ammo_multi_rockets = other.ammo_multi_rockets + 3;
 		other.ammo_rockets1 = other.ammo_rockets1 + 5;
 	}
-	else if (self.classname == "weapon_grenadelauncher")
+	else if (new & IT_LIGHTNING)
 	{
-		if (leave && (other.items & IT_GRENADE_LAUNCHER))
-			return;
-		hadammo = other.ammo_rockets1;
-		new = IT_GRENADE_LAUNCHER;
-		if (leave)
-			other.ammo_multi_rockets = other.ammo_multi_rockets + 3;
-		other.ammo_rockets1 = other.ammo_rockets1 + 5;
-	}
-	else if (self.classname == "weapon_lightning")
-	{
-		if (leave && (other.items & IT_LIGHTNING))
-			return;
-		hadammo = other.ammo_rockets1;
-		new = IT_LIGHTNING;
 		if (leave)
 			other.ammo_plasma = other.ammo_plasma + 5;
 		other.ammo_cells1 = other.ammo_cells1 + 15;
 	}
-	else
-		objerror ("weapon_touch: unknown classname");
 
 	sprint (other, "You got the ");
 	sprint (other, self.netname);
 	sprint (other, "\n");
-	// weapon touch sound
 	sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
 	bound_other_ammo ();
 
+	EnableComboWeapons (other);
+
 	// change to the weapon
 	old = other.items;
 	other.items = other.items | new;
-
-	EnableComboWeapons (other);
 
 	if (new == IT_LIGHTNING)
 	{
@@ -531,12 +529,9 @@ void() weapon_touch =
 	self = other;
 
 	if (!deathmatch)
-		self.weapon = new;
+		W_SetWeapon (new);
 	else
 		Deathmatch_Weapon (old, new);
-
-	UpdateAmmoCounts (self);
-	W_SetCurrentAmmo ();
 
 	self = stemp;
 
@@ -570,7 +565,7 @@ void() weapon_nailgun =
 	precache_model ("progs/g_nail.mdl");
 	setmodel (self, "progs/g_nail.mdl");
 	self.weapon = IT_NAILGUN;
-	self.netname = "nailgun";
+	self.netname = "Nailgun";
 	self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
 	StartItem ();
@@ -680,17 +675,15 @@ void() ammo_touch =
 		other.ammo_plasma = other.ammo_plasma + self.aflag;
 	}
 
-	EnableComboWeapons (other);
-	UpdateAmmoCounts (other);
-
 	bound_other_ammo ();
 
 	sprint (other, "You got the ");
 	sprint (other, self.netname);
 	sprint (other, "\n");
-	// ammo touch sound
 	sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
+
+	EnableComboWeapons (other);
 
 	// change to a better weapon if appropriate
 
@@ -698,8 +691,7 @@ void() ammo_touch =
 	{
 		stemp = self;
 		self = other;
-		self.weapon = W_BestWeapon ();
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 		self = stemp;
 	}
 
@@ -918,7 +910,7 @@ void() item_weapon =
 			self.aflag = 20;
 		}
 		self.weapon = 2;
-		self.netname = "spikes";
+		self.netname = "nails";
 	}
 
 	if (self.spawnflags & WEAPON_ROCKET)
@@ -1246,6 +1238,18 @@ void() BackpackTouch =
 	if ((other == self.owner) && ((self.nextthink - time) > 119))
 		return;
 
+	if ((!self.items || (other.items & self.items) == self.items) &&
+		(!self.ammo_shells1 || other.ammo_shells1 >= 100) &&
+		(!self.ammo_nails1 || other.ammo_nails1 >= 200) &&
+		(!self.ammo_rockets1 || other.ammo_rockets1 >= 100) &&
+		(!self.ammo_cells1 || other.ammo_cells1 >= 100) &&
+		(!self.ammo_lava_nails || other.ammo_lava_nails >= 200) &&
+		(!self.ammo_multi_rockets || other.ammo_multi_rockets >= 100) &&
+		(!self.ammo_plasma || other.ammo_plasma >= 100))
+	{
+		return;
+	}
+
 	acount = 0;
 	sprint (other, "You get ");
 
@@ -1347,7 +1351,6 @@ void() BackpackTouch =
 	}
 
 	sprint (other, "\n");
-	// backpack touch sound
 	sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
@@ -1355,18 +1358,13 @@ void() BackpackTouch =
 	remove (self);
 	self = other;
 
-	// fixme -- move this to after weapon choice if problematic.
 	EnableComboWeapons (self);
 
 	// change to the weapon
 	if (!deathmatch)
-		self.weapon = new;
+		W_SetWeapon (new);
 	else
 		Deathmatch_Weapon (old, new);
-
-	UpdateAmmoCounts (self);
-
-	W_SetCurrentAmmo ();
 };
 
 void() DropBackpack =
