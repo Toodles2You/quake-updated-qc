@@ -319,6 +319,8 @@ void(float old, float new) Deathmatch_Weapon =
 	nr = RankForWeapon (new);
 	if (nr < or)
 		W_SetWeapon (new);
+	else
+		W_SetCurrentAmmo ();
 };
 
 float() W_BestWeapon;

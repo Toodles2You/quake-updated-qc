@@ -660,7 +660,7 @@ void(float weap) W_SetWeapon =
 {
 	if (self.weapon == weap)
 	{
-		W_SetCurrentAmmo();
+		W_SetCurrentAmmo ();
 		return;
 	}
 
