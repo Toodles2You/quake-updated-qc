@@ -18,6 +18,7 @@
 */
 
 void() W_SetCurrentAmmo;
+void(float weap) W_SetWeapon;
 
 void() SUB_regen =
 {
@@ -322,7 +323,7 @@ void(float old, float new) Deathmatch_Weapon =
 	or = RankForWeapon (self.weapon);
 	nr = RankForWeapon (new);
 	if (nr < or)
-		self.weapon = new;
+		W_SetWeapon (new);
 };
 
 float() W_BestWeapon;
@@ -417,11 +418,9 @@ void() weapon_touch =
 	self = other;
 
 	if (!deathmatch)
-		self.weapon = new;
+		W_SetWeapon (new);
 	else
 		Deathmatch_Weapon (old, new);
-
-	W_SetCurrentAmmo ();
 
 	self = stemp;
 
@@ -562,8 +561,7 @@ void() ammo_touch =
 	{
 		stemp = self;
 		self = other;
-		self.weapon = W_BestWeapon ();
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 		self = stemp;
 	}
 
@@ -1111,11 +1109,9 @@ void() BackpackTouch =
 
 	// change to the weapon
 	if (!deathmatch)
-		self.weapon = new;
+		W_SetWeapon (new);
 	else
 		Deathmatch_Weapon (old, new);
-
-	W_SetCurrentAmmo ();
 };
 
 void() DropBackpack =

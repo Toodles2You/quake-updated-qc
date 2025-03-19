@@ -18,7 +18,6 @@
 */
 
 void() W_WeaponFrame;
-void() W_SetCurrentAmmo;
 void(entity attacker, float damage) player_pain;
 void() player_stand1;
 void(vector org) spawn_tfog;
@@ -101,7 +100,7 @@ void() DecodeLevelParms =
 	self.ammo_nails = parm5;
 	self.ammo_rockets = parm6;
 	self.ammo_cells = parm7;
-	self.weapon = parm8;
+	W_SetWeapon (parm8);
 	self.armortype = parm9 * 0.01;
 };
 
@@ -448,8 +447,6 @@ void() PutClientInServer =
 	self.invincible_time = 0;
 
 	DecodeLevelParms ();
-
-	W_SetCurrentAmmo ();
 
 	self.attack_finished = time;
 	self.th_pain = player_pain;
@@ -810,8 +807,7 @@ void() PlayerPreThink =
 	if (time > self.attack_finished && self.currentammo == 0 &&
 		self.weapon != IT_AXE)
 	{
-		self.weapon = W_BestWeapon ();
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 	}
 };
 
