@@ -354,6 +354,7 @@ void() ClientKill =
 	self.deathtype = "suicide";
 	Killed (self, self);
 	self.deathtype = "";
+	set_suicide_frame ();
 	if (coop || deathmatch)
 		respawn ();
 };
