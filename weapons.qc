@@ -149,8 +149,7 @@ void(float stat) HIP_FireLaser =
 	}
 	if (self.ammo_cells < 1)
 	{
-		self.weapon = W_BestWeapon ();
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 		return;
 	}
 	SuperDamageSound ();
@@ -356,8 +355,7 @@ void() HIP_FireMjolnirLightning =
 	if (self.waterlevel > 1)
 	{
 		cells = self.ammo_cells;
-		self.ammo_cells = 0;
-		W_SetCurrentAmmo ();
+		self.currentammo = self.ammo_cells = 0;
 		discharged = TRUE;
 		T_RadiusDamage (self, self, 35 * cells, world);
 		discharged = FALSE;
@@ -666,7 +664,7 @@ void() W_FireSuperShotgun =
 {
 	local vector dir;
 
-	if (self.currentammo == 1)
+	if (self.ammo_shells < 2)
 	{
 		W_FireShotgun ();
 		return;
@@ -821,8 +819,7 @@ void() W_FireLightning =
 
 	if (self.ammo_cells < 1)
 	{
-		self.weapon = W_BestWeapon ();
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 		return;
 	}
 
@@ -831,7 +828,7 @@ void() W_FireLightning =
 	{
 		cells = self.ammo_cells;
 		self.ammo_cells = 0;
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 		discharged = TRUE;
 		T_RadiusDamage (self, self, 35 * cells, world);
 		discharged = FALSE;
@@ -1116,8 +1113,7 @@ void(float ox) W_FireSpikes =
 
 	if (self.ammo_nails < 1)
 	{
-		self.weapon = W_BestWeapon ();
-		W_SetCurrentAmmo ();
+		W_SetWeapon (W_BestWeapon ());
 		return;
 	}
 
@@ -1190,92 +1186,79 @@ void() superspike_touch =
 
 void() W_SetCurrentAmmo =
 {
-	player_run (); // get out of any weapon firing states
-
 	self.items = self.items - (self.items & IT_AMMO);
 
 	if (self.weapon == IT_AXE)
-	{
 		self.currentammo = 0;
-		self.weaponmodel = "progs/v_axe.mdl";
-		self.weaponframe = 0;
-	}
-	else if (self.weapon == IT_SHOTGUN)
+	else if (self.weapon == IT_SHOTGUN ||
+			 self.weapon == IT_SUPER_SHOTGUN)
 	{
 		self.currentammo = self.ammo_shells;
-		self.weaponmodel = "progs/v_shot.mdl";
-		self.weaponframe = 0;
 		self.items = self.items | IT_SHELLS;
 	}
-	else if (self.weapon == IT_SUPER_SHOTGUN)
-	{
-		self.currentammo = self.ammo_shells;
-		self.weaponmodel = "progs/v_shot2.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_SHELLS;
-	}
-	else if (self.weapon == IT_NAILGUN)
+	else if (self.weapon == IT_NAILGUN ||
+			 self.weapon == IT_SUPER_NAILGUN)
 	{
 		self.currentammo = self.ammo_nails;
-		self.weaponmodel = "progs/v_nail.mdl";
-		self.weaponframe = 0;
 		self.items = self.items | IT_NAILS;
 	}
-	else if (self.weapon == IT_SUPER_NAILGUN)
-	{
-		self.currentammo = self.ammo_nails;
-		self.weaponmodel = "progs/v_nail2.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_NAILS;
-	}
-	else if (self.weapon == IT_LASER_CANNON)
-	{
-		self.currentammo = self.ammo_cells;
-		self.weaponmodel = "progs/v_laserg.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_CELLS;
-	}
-	else if (self.weapon == IT_GRENADE_LAUNCHER)
+	else if (self.weapon == IT_GRENADE_LAUNCHER ||
+			 self.weapon == IT_ROCKET_LAUNCHER ||
+			 self.weapon == IT_PROXIMITY_GUN)
 	{
 		self.currentammo = self.ammo_rockets;
-		self.weaponmodel = "progs/v_rock.mdl";
-		self.weaponframe = 0;
 		self.items = self.items | IT_ROCKETS;
 	}
-	else if (self.weapon == IT_ROCKET_LAUNCHER)
-	{
-		self.currentammo = self.ammo_rockets;
-		self.weaponmodel = "progs/v_rock2.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_ROCKETS;
-	}
-	else if (self.weapon == IT_LIGHTNING)
+	else if (self.weapon == IT_LIGHTNING || self.weapon == IT_LASER_CANNON ||
+			 self.weapon == IT_MJOLNIR)
 	{
 		self.currentammo = self.ammo_cells;
-		self.weaponmodel = "progs/v_light.mdl";
-		self.weaponframe = 0;
 		self.items = self.items | IT_CELLS;
-	}
-	else if (self.weapon == IT_MJOLNIR)
-	{
-		self.currentammo = self.ammo_cells;
-		self.weaponmodel = "progs/v_hammer.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_CELLS;
-	}
-	else if (self.weapon == IT_PROXIMITY_GUN)
-	{
-		self.currentammo = self.ammo_rockets;
-		self.weaponmodel = "progs/v_prox.mdl";
-		self.weaponframe = 0;
-		self.items = self.items | IT_ROCKETS;
 	}
 	else
-	{
 		self.currentammo = 0;
-		self.weaponmodel = "";
-		self.weaponframe = 0;
+};
+
+void(float weap) W_SetWeapon =
+{
+	if (self.weapon == weap)
+	{
+		W_SetCurrentAmmo();
+		return;
 	}
+
+	player_run (); // get out of any weapon firing states
+
+	self.weapon = weap;
+
+	if (self.weapon == IT_AXE)
+		self.weaponmodel = "progs/v_axe.mdl";
+	else if (self.weapon == IT_SHOTGUN)
+		self.weaponmodel = "progs/v_shot.mdl";
+	else if (self.weapon == IT_SUPER_SHOTGUN)
+		self.weaponmodel = "progs/v_shot2.mdl";
+	else if (self.weapon == IT_NAILGUN)
+		self.weaponmodel = "progs/v_nail.mdl";
+	else if (self.weapon == IT_SUPER_NAILGUN)
+		self.weaponmodel = "progs/v_nail2.mdl";
+	else if (self.weapon == IT_LASER_CANNON)
+		self.weaponmodel = "progs/v_laserg.mdl";
+	else if (self.weapon == IT_GRENADE_LAUNCHER)
+		self.weaponmodel = "progs/v_rock.mdl";
+	else if (self.weapon == IT_ROCKET_LAUNCHER)
+		self.weaponmodel = "progs/v_rock2.mdl";
+	else if (self.weapon == IT_LIGHTNING)
+		self.weaponmodel = "progs/v_light.mdl";
+	else if (self.weapon == IT_MJOLNIR)
+		self.weaponmodel = "progs/v_hammer.mdl";
+	else if (self.weapon == IT_PROXIMITY_GUN)
+		self.weaponmodel = "progs/v_prox.mdl";
+	else
+		self.weaponmodel = "";
+
+	self.weaponframe = 0;
+
+	W_SetCurrentAmmo ();
 };
 
 float() W_BestWeapon =
@@ -1307,17 +1290,16 @@ float() W_CheckNoAmmo =
 	if (self.currentammo > 0)
 		return TRUE;
 
-	if (self.weapon == IT_AXE)
+	if (self.weapon == IT_AXE || self.weapon == IT_MJOLNIR)
 		return TRUE;
 
-	if (self.weapon == IT_MJOLNIR)
-	{
+	W_SetWeapon (W_BestWeapon ());
+
+	if (self.currentammo > 0)
 		return TRUE;
-	}
 
-	self.weapon = W_BestWeapon ();
-
-	W_SetCurrentAmmo ();
+	if (self.weapon == IT_AXE || self.weapon == IT_MJOLNIR)
+		return TRUE;
 
 	return FALSE;
 };
@@ -1521,8 +1503,7 @@ void() W_ChangeWeapon =
 		return;
 	}
 
-	self.weapon = fl;
-	W_SetCurrentAmmo ();
+	W_SetWeapon (fl);
 };
 
 void() CheatCommand =
@@ -1536,8 +1517,7 @@ void() CheatCommand =
 	self.ammo_cells = 100;
 	self.items = self.items | IT_WEAPONS | IT_KEYS;
 
-	self.weapon = IT_ROCKET_LAUNCHER;
-	W_SetCurrentAmmo ();
+	W_SetWeapon (IT_ROCKET_LAUNCHER);
 };
 
 /*
@@ -1549,80 +1529,80 @@ Go to the next weapon with ammo
 */
 void() CycleWeaponCommand =
 {
-	local float it, am;
+	local float am, fl;
 
-	it = self.items;
+	fl = self.weapon;
 
 	while (1)
 	{
 		am = 0;
 
-		if (self.weapon == IT_MJOLNIR)
+		if (fl == IT_MJOLNIR)
 		{
-			self.weapon = IT_AXE;
+			fl = IT_AXE;
 		}
-		else if (self.weapon == IT_AXE)
+		else if (fl == IT_AXE)
 		{
-			self.weapon = IT_SHOTGUN;
+			fl = IT_SHOTGUN;
 			if (self.ammo_shells < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_SHOTGUN)
+		else if (fl == IT_SHOTGUN)
 		{
-			self.weapon = IT_SUPER_SHOTGUN;
+			fl = IT_SUPER_SHOTGUN;
 			if (self.ammo_shells < 2)
 				am = 1;
 		}
-		else if (self.weapon == IT_SUPER_SHOTGUN)
+		else if (fl == IT_SUPER_SHOTGUN)
 		{
-			self.weapon = IT_NAILGUN;
+			fl = IT_NAILGUN;
 			if (self.ammo_nails < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_NAILGUN)
+		else if (fl == IT_NAILGUN)
 		{
-			self.weapon = IT_SUPER_NAILGUN;
+			fl = IT_SUPER_NAILGUN;
 			if (self.ammo_nails < 2)
 				am = 1;
 		}
-		else if (self.weapon == IT_SUPER_NAILGUN)
+		else if (fl == IT_SUPER_NAILGUN)
 		{
-			self.weapon = IT_GRENADE_LAUNCHER;
+			fl = IT_GRENADE_LAUNCHER;
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_GRENADE_LAUNCHER)
+		else if (fl == IT_GRENADE_LAUNCHER)
 		{
-			self.weapon = IT_PROXIMITY_GUN;
+			fl = IT_PROXIMITY_GUN;
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_PROXIMITY_GUN)
+		else if (fl == IT_PROXIMITY_GUN)
 		{
-			self.weapon = IT_ROCKET_LAUNCHER;
+			fl = IT_ROCKET_LAUNCHER;
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_ROCKET_LAUNCHER)
+		else if (fl == IT_ROCKET_LAUNCHER)
 		{
-			self.weapon = IT_LIGHTNING;
+			fl = IT_LIGHTNING;
 			if (self.ammo_cells < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_LIGHTNING)
+		else if (fl == IT_LIGHTNING)
 		{
-			self.weapon = IT_LASER_CANNON;
+			fl = IT_LASER_CANNON;
 			if (self.ammo_cells < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_LASER_CANNON)
+		else if (fl == IT_LASER_CANNON)
 		{
-			self.weapon = IT_MJOLNIR;
+			fl = IT_MJOLNIR;
 		}
 
-		if ((it & self.weapon) && am == 0)
+		if ((self.items & fl) && am == 0)
 		{
-			W_SetCurrentAmmo ();
+			W_SetWeapon (fl);
 			return;
 		}
 	}
@@ -1637,80 +1617,80 @@ Go to the prev weapon with ammo
 */
 void() CycleWeaponReverseCommand =
 {
-	local float it, am;
+	local float am, fl;
 
-	it = self.items;
+	fl = self.weapon;
 
 	while (1)
 	{
 		am = 0;
 
-		if (self.weapon == IT_MJOLNIR)
+		if (fl == IT_MJOLNIR)
 		{
-			self.weapon = IT_LASER_CANNON;
+			fl = IT_LASER_CANNON;
 			if (self.ammo_cells < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_LASER_CANNON)
+		else if (fl == IT_LASER_CANNON)
 		{
-			self.weapon = IT_LIGHTNING;
+			fl = IT_LIGHTNING;
 			if (self.ammo_cells < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_LIGHTNING)
+		else if (fl == IT_LIGHTNING)
 		{
-			self.weapon = IT_ROCKET_LAUNCHER;
+			fl = IT_ROCKET_LAUNCHER;
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_ROCKET_LAUNCHER)
+		else if (fl == IT_ROCKET_LAUNCHER)
 		{
-			self.weapon = IT_PROXIMITY_GUN;
+			fl = IT_PROXIMITY_GUN;
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_PROXIMITY_GUN)
+		else if (fl == IT_PROXIMITY_GUN)
 		{
-			self.weapon = IT_GRENADE_LAUNCHER;
+			fl = IT_GRENADE_LAUNCHER;
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_GRENADE_LAUNCHER)
+		else if (fl == IT_GRENADE_LAUNCHER)
 		{
-			self.weapon = IT_SUPER_NAILGUN;
+			fl = IT_SUPER_NAILGUN;
 			if (self.ammo_nails < 2)
 				am = 1;
 		}
-		else if (self.weapon == IT_SUPER_NAILGUN)
+		else if (fl == IT_SUPER_NAILGUN)
 		{
-			self.weapon = IT_NAILGUN;
+			fl = IT_NAILGUN;
 			if (self.ammo_nails < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_NAILGUN)
+		else if (fl == IT_NAILGUN)
 		{
-			self.weapon = IT_SUPER_SHOTGUN;
+			fl = IT_SUPER_SHOTGUN;
 			if (self.ammo_shells < 2)
 				am = 1;
 		}
-		else if (self.weapon == IT_SUPER_SHOTGUN)
+		else if (fl == IT_SUPER_SHOTGUN)
 		{
-			self.weapon = IT_SHOTGUN;
+			fl = IT_SHOTGUN;
 			if (self.ammo_shells < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_SHOTGUN)
+		else if (fl == IT_SHOTGUN)
 		{
-			self.weapon = IT_AXE;
+			fl = IT_AXE;
 		}
-		else if (self.weapon == IT_AXE)
+		else if (fl == IT_AXE)
 		{
-			self.weapon = IT_MJOLNIR;
+			fl = IT_MJOLNIR;
 		}
 
-		if ((it & self.weapon) && am == 0)
+		if ((self.items & fl) && am == 0)
 		{
-			W_SetCurrentAmmo ();
+			W_SetWeapon (fl);
 			return;
 		}
 	}

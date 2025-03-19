@@ -196,8 +196,7 @@ float() GremlinAttemptWeaponSteal =
 	}
 	tempself = self;
 	self = victim;
-	self.weapon = W_BestWeapon ();
-	W_SetCurrentAmmo ();
+	W_SetWeapon (W_BestWeapon ());
 	self = tempself;
 
 	// tag the gremlin as having stolen a weapon
