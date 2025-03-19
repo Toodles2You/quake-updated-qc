@@ -1355,7 +1355,10 @@ void() BackpackTouch =
 	}
 
 	if (!new)
+	{
+		W_SetCurrentAmmo ();
 		return;
+	}
 
 	// change to the weapon
 	if (!deathmatch)
