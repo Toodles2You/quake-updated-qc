@@ -88,7 +88,6 @@ void() OgreFireGrenade =
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;
 
-
 	makevectors (self.angles);
 
 	missile.velocity = normalize (self.enemy.origin - self.origin);

@@ -749,7 +749,6 @@ void() W_FireRocket =
 	missile.solid = SOLID_BBOX;
 	missile.classname = "missile";
 
-
 	makevectors (self.v_angle);
 	missile.velocity = aim (self, 1000);
 	missile.velocity = missile.velocity * 1000;
