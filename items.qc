@@ -412,6 +412,8 @@ void() weapon_touch =
 		else
 			Deathmatch_Weapon (old, new);
 	}
+	else
+		W_SetCurrentAmmo ();
 
 	self = stemp;
 
