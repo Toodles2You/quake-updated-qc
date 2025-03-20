@@ -1265,7 +1265,7 @@ void(entity targ, entity attacker) ClientObituary =
 			else
 			{
 				attacker.frags = attacker.frags + 1;
-				if (empathyused == 1)
+				if (empathyused)
 				{
 					bprint (targ.netname);
 					if (random () < 0.5)

@@ -127,10 +127,10 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	if ((targ.items2 & HIP_IT_EMPATHY_SHIELDS) &&
 		!(inflictor.items2 & HIP_IT_EMPATHY_SHIELDS) && (targ != attacker))
 	{
-		empathyused = 1;
+		empathyused = TRUE;
 		damage = damage / 2;
 		T_Damage (attacker, targ, targ, damage);
-		empathyused = 0;
+		empathyused = FALSE;
 	}
 	// used by buttons and triggers to set activator for target firing
 	damage_attacker = attacker;
