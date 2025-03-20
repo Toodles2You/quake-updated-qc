@@ -125,14 +125,9 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	// save damage based on the target's armor level
 
 	save = ceil (targ.armortype * damage);
-	if (save >= targ.armorvalue)
-	{
+	if (save > targ.armorvalue)
 		save = targ.armorvalue;
-		targ.armortype = 0; // lost all armor
-		targ.items = targ.items - (targ.items & IT_ARMOR);
-	}
 
-	targ.armorvalue = targ.armorvalue - save;
 	take = ceil (damage - save);
 
 	// add to the damage total for clients, which will be sent as a single
@@ -169,6 +164,14 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	// team play damage avoidance
 	if ((teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team))
 		return;
+
+	targ.armorvalue = targ.armorvalue - save;
+	if (targ.armorvalue <= 0)
+	{
+		targ.armorvalue = 0;
+		targ.armortype = 0; // lost all armor
+		targ.items = targ.items - (targ.items & IT_ARMOR);
+	}
 
 	// do the damage
 	targ.health = targ.health - take;
