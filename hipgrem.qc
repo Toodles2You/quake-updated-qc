@@ -1584,8 +1584,7 @@ void(float dm) Gremlin_ThrowHead =
 	ThrowHead (gibname, dm);
 };
 
-void(entity targ, entity inflictor, entity attacker, float damage)
-	Gremlin_Damage =
+void(entity targ, entity inflictor, entity attacker, float damage) Gremlin_Damage =
 {
 	// check for godmode or invincibility
 	if (targ.flags & FL_GODMODE)
