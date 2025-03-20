@@ -207,10 +207,9 @@ void() tbaby_checknew =
 	self.flags = self.flags | FL_MONSTER;
 	self.pausetime = 99999999;
 	self.th_stand ();
-	self.nextthink = self.nextthink + random ()*0.5;
+	self.nextthink = self.nextthink + random () * 0.5;
 
 	total_monsters = total_monsters + 1;
-
 
 	WriteByte (MSG_BROADCAST, SVC_UPDATESTAT);
 	WriteByte (MSG_BROADCAST, STAT_TOTALMONSTERS);

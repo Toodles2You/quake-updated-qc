@@ -160,7 +160,6 @@ void(vector st) mummyFireGrenade =
 	// calc org
 	org = self.origin + st_x * v_forward + st_y * v_right + (st_z - 24) * v_up;
 
-
 	makevectors (self.angles);
 
 	missile.velocity = normalize (self.enemy.origin - org);

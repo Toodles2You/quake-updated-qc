@@ -91,7 +91,6 @@ void() OgreFireGrenade =
 	missile.solid = SOLID_BBOX;
 	missile.classname = "ogre_grenade";
 
-
 	makevectors (self.angles);
 
 	missile.velocity = normalize (self.enemy.origin - self.origin);
