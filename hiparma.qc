@@ -243,11 +243,8 @@ void() armagon_walkthink =
 	client = checkclient ();
 	if (!client)
 		return; // current check entity isn't in PVS
-	if (visible (client))
-	{
-		self.enemy = client;
-		FoundTarget ();
-	}
+	if (CanFindTarget (client, FIND_DIRECT))
+		HuntFoundTarget (client);
 };
 
 void() armagon_overleft_think =

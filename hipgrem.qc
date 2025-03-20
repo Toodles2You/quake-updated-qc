@@ -212,8 +212,7 @@ float() GremlinAttemptWeaponSteal =
 	victim = GremlinFindVictim ();
 	if (victim != world)
 	{
-		self.enemy = victim;
-		FoundTarget ();
+		HuntFoundTarget (victim);
 		self.attack_finished = time;
 		self.search_time = time + 1.0;
 	}
@@ -252,9 +251,8 @@ float() GremlinFindTarget =
 		{
 			self.oldenemy = self.enemy;
 			self.gorging = TRUE;
-			self.enemy = gorge;
 			self.search_time = time + 4.0;
-			FoundTarget ();
+			HuntFoundTarget (gorge);
 			return TRUE;
 		}
 	}
@@ -263,8 +261,7 @@ float() GremlinFindTarget =
 		head = GremlinFindVictim ();
 		if (head != world)
 		{
-			self.enemy = head;
-			FoundTarget ();
+			HuntFoundTarget (head);
 			self.attack_finished = time;
 			self.search_time = time + 2.0;
 			return TRUE;
@@ -876,8 +873,8 @@ void(entity attacker, float damage) gremlin_pain =
 	if (random () < 0.8)
 	{
 		self.gorging = FALSE;
-		self.enemy = attacker;
-		FoundTarget ();
+		if (CanFindTarget (attacker, FIND_DAMAGE))
+			HuntFoundTarget (attacker);
 	}
 	if (self.touch == Gremlin_JumpTouch)
 		return;
@@ -1138,23 +1135,19 @@ entity() GremlinFindVictim =
 	head = findradius (self.origin, 1000);
 	while (head)
 	{
-		if (!(head.flags & FL_NOTARGET) &&
-			((head.flags & FL_MONSTER) || (head.flags & FL_CLIENT)))
+		if (CanFindTarget (head, FIND_DIRECT))
 		{
-			if (visible (head) && (head.health > 0) && (head != self))
+			head_dist = vlen (head.origin - self.origin);
+			if (head == self.lastvictim)
+				head_dist = head_dist * 2;
+			if (head.flags & FL_CLIENT)
+				head_dist = head_dist / 1.5;
+			if (head.classname == self.classname)
+				head_dist = head_dist * 1.5;
+			if (head_dist < dist)
 			{
-				head_dist = vlen (head.origin - self.origin);
-				if (head == self.lastvictim)
-					head_dist = head_dist * 2;
-				if (head.flags & FL_CLIENT)
-					head_dist = head_dist / 1.5;
-				if (head.classname == self.classname)
-					head_dist = head_dist * 1.5;
-				if (head_dist < dist)
-				{
-					selected = head;
-					dist = head_dist;
-				}
+				selected = head;
+				dist = head_dist;
 			}
 		}
 		head = head.chain;
