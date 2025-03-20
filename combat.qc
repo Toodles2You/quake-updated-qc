@@ -116,11 +116,8 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	// used by buttons and triggers to set activator for target firing
 	damage_attacker = attacker;
 
-	// check for quad damage powerup on the attacker
 	if (attacker.super_damage_finished > time)
 		damage = damage * 4;
-
-	// save damage based on the target's armor level
 
 	save = ceil (targ.armortype * damage);
 	if (save > targ.armorvalue)
@@ -130,7 +127,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 
 	// add to the damage total for clients, which will be sent as a single
 	// message at the end of the frame
-	// FIXME: remove after combining shotgun blasts?
 	if (targ.flags & FL_CLIENT)
 	{
 		targ.dmg_take = targ.dmg_take + take;
@@ -138,7 +134,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		targ.dmg_inflictor = inflictor;
 	}
 
-	// figure momentum add
 	if ((inflictor != world) && (targ.movetype == MOVETYPE_WALK))
 	{
 		dir = targ.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
@@ -146,7 +141,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		targ.velocity = targ.velocity + dir * damage * 8;
 	}
 
-	// check for godmode or invincibility
 	if (targ.flags & FL_GODMODE)
 		return;
 	if (targ.invincible_finished >= time)
@@ -159,7 +153,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		return;
 	}
 
-	// team play damage avoidance
 	if ((teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team))
 		return;
 
@@ -167,11 +160,10 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	if (targ.armorvalue <= 0)
 	{
 		targ.armorvalue = 0;
-		targ.armortype = 0; // lost all armor
+		targ.armortype = 0;
 		targ.items = targ.items - (targ.items & IT_ARMOR);
 	}
 
-	// do the damage
 	targ.health = targ.health - take;
 
 	if (targ.health <= 0)
@@ -180,7 +172,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		return;
 	}
 
-	// react to the damage
 	oldself = self;
 	self = targ;
 
@@ -193,7 +184,6 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	if (self.th_pain)
 	{
 		self.th_pain (attacker, take);
-		// nightmare mode monsters don't go into pain frames often
 		if (skill == 3)
 			self.pain_finished = time + 5;
 	}
