@@ -348,12 +348,12 @@ void(float dist) ai_back =
 
 void(float dist) ai_pain =
 {
-	ai_back (dist);
+	walkmove (self.angles_y, dist);
 };
 
 void(float dist) ai_painforward =
 {
-	walkmove (self.ideal_yaw, dist);
+	walkmove ((self.angles_y + 180), dist);
 };
 
 void(float dist) ai_walk =
