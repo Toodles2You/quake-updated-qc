@@ -193,7 +193,7 @@ void() spikemine_Home =
 		{
 			if (!(head.flags & FL_NOTARGET) && (head.flags & FL_CLIENT))
 			{
-				if (visible (head) && (head.health > 0))
+				if (visible (head) && (SUB_IsAlive (head)))
 				{
 					head_dist = vlen (head.origin - self.origin);
 					if (head_dist < cur_dist)
@@ -505,7 +505,7 @@ void() trap_tesla_scan =
 	{
 		if (!(head.flags & FL_NOTARGET) && (head.flags & self.cnt))
 		{
-			if (visible (head) && (head.health > 0) &&
+			if (visible (head) && (SUB_IsAlive (head)) &&
 				(head.struck_by_mjolnir == 0))
 			{
 				if (tesla_numtargets == 0)
@@ -537,7 +537,7 @@ void() TeslaLightningThink =
 	}
 	traceline (self.origin, self.enemy.origin, TRUE, self);
 
-	if (trace_fraction != 1.0 || self.enemy.health <= 0 ||
+	if (trace_fraction != 1.0 || !SUB_IsAlive (self.enemy) ||
 		vlen (self.origin - self.enemy.origin) > (self.distance + 10))
 	{
 		self.enemy.struck_by_mjolnir = 0;

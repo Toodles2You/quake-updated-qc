@@ -67,6 +67,8 @@ void(entity targ, entity attacker) Killed =
 
 	if (self.health > 0)
 		self.health = 0;
+	else if (self.health < -99)
+		self.health = -99;
 
 	if (self.charmed)
 		self.effects = self.effects - (self.effects & EF_DIMLIGHT);

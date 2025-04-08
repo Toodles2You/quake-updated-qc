@@ -235,7 +235,7 @@ float() GremlinFindTarget =
 		head = nextent (world);
 		while (head != world)
 		{
-			if ((head.health <= 0) && (head.flags & (FL_MONSTER | FL_CLIENT)))
+			if ((!SUB_IsAlive (head)) && (head.flags & (FL_MONSTER | FL_CLIENT)))
 			{
 				result = fabs (head.origin_z - self.origin_z);
 				if ((visible (head)) && (result < 80) &&
@@ -364,7 +364,7 @@ void(float dist) gremlin_run =
 		// get away from player if we stole a weapon
 		if (self.stoleweapon)
 		{
-			if (self.enemy.health <= 0 && self.enemy.classname == "player")
+			if (!SUB_IsAlive (self.enemy) && self.enemy.classname == "player")
 			{
 				gremlin_glook1 ();
 				return;
@@ -1625,7 +1625,7 @@ void() Gremlin_Split =
 		proceed = 1;
 		while (head)
 		{
-			if ((head.health > 0) && (head.flags & (FL_MONSTER | FL_CLIENT)))
+			if ((SUB_IsAlive (head)) && (head.flags & (FL_MONSTER | FL_CLIENT)))
 				proceed = 0;
 			head = head.chain;
 		}

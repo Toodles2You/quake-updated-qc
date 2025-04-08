@@ -229,7 +229,7 @@ void() HIP_LightningThink =
 				((head.flags & FL_MONSTER) || (head.flags & FL_CLIENT)))
 			{
 				if ((visible (head)) && (head != self.owner.owner) &&
-					(head.health > 0))
+					(SUB_IsAlive (head)))
 				{
 					head_dist = vlen (head.origin - self.lastvictim.origin);
 					if ((head_dist < cur_dist) && (head.struck_by_mjolnir == 0))
@@ -275,7 +275,7 @@ void() HIP_LightningThink =
 	dst = dst + (random () * 0.5 * (self.enemy.absmax - self.enemy.absmin));
 	traceline (org, dst, TRUE, self.owner.owner);
 
-	if (trace_fraction != 1.0 || self.enemy.health <= 0)
+	if (trace_fraction != 1.0 || !SUB_IsAlive (self.enemy))
 	{
 		self.enemy.struck_by_mjolnir = 0;
 		self.state = 0;
@@ -985,7 +985,7 @@ void() ProximityBomb =
 
 	while (head)
 	{
-		if ((head != self) && (head.health > 0) &&
+		if ((head != self) && (SUB_IsAlive (head)) &&
 			(head.flags & (FL_CLIENT | FL_MONSTER)) &&
 			(head.classname != self.classname))
 			blowup = 1;
@@ -1779,7 +1779,7 @@ void() Genocide =
 	head = nextent (world);
 	while (head != world)
 	{
-		if ((head.health > 0) && (head.flags & FL_MONSTER))
+		if ((SUB_IsAlive (head)) && (head.flags & FL_MONSTER))
 		{
 			T_Damage (head, world, world, head.health + 10);
 		}

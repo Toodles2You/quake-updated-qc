@@ -378,7 +378,6 @@ entity newmis; // launch_spike sets this after spawning it
 entity activator; // the entity that activated a trigger or brush
 
 entity damage_attacker; // set by T_Damage
-float framecount;
 
 float skill;
 

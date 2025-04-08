@@ -430,7 +430,7 @@ float(entity client, float method) CanFindTarget =
 		return FALSE;
 	if (client == self.enemy)
 		return FALSE;
-	if (client.health <= 0)
+	if (!SUB_IsAlive (client))
 		return FALSE;
 	if (!(client.flags & (FL_CLIENT | FL_MONSTER)))
 		return FALSE;
@@ -810,7 +810,7 @@ void(float dist) ai_run =
 
 	movedist = dist;
 	// see if the enemy is dead
-	if (self.enemy.health <= 0)
+	if (!SUB_IsAlive (self.enemy))
 	{
 		client = self.oldenemy;
 		self.enemy = world;
