@@ -136,7 +136,7 @@ void() player_run = [$rockrun1, player_run]
 			self.walkframe = 0;
 		self.frame = self.frame + self.walkframe;
 	}
-	if (footsteps == 1)
+	if (footsteps)
 	{
 		dist = vlen (self.origin - self.old_velocity);
 		self.spawnsilent = self.spawnsilent + dist;

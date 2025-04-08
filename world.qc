@@ -197,10 +197,11 @@ void() worldspawn =
 	lightstyle (63, "a");
 
 	StopEarthQuake ();
-	if (cvar ("crosshair") == 2)
-		footsteps = 1;
+
+	if (cvar ("scratch1") & 2)
+		footsteps = TRUE;
 	else
-		footsteps = 0;
+		footsteps = FALSE;
 };
 
 void() StartFrame =
