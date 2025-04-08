@@ -58,11 +58,11 @@ void() GrappleTrack =
 	local vector spray;
 
 	// Release dead targets
-	if (self.enemy.classname == "player" && self.enemy.health <= 0)
+	if (self.enemy.classname == "player" && !SUB_IsAlive (self.enemy))
 		self.owner.on_hook = FALSE;
 
 	// drop the hook if owner is dead or has released the button
-	if (!self.owner.on_hook || self.owner.health <= 0)
+	if (!self.owner.on_hook || !SUB_IsAlive (self.owner))
 	{
 		GrappleReset ();
 		return;

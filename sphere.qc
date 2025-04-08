@@ -57,7 +57,7 @@ void() sphere_attack =
 	self.solid = SOLID_TRIGGER;
 	self.touch = sphere_impact;
 
-	if (self.enemy.health <= 0)
+	if (!SUB_IsAlive (self.enemy))
 	{
 		sprint (self.owner, "You are denied vengeance");
 		remove (self);
@@ -86,7 +86,7 @@ void() sphere_think =
 		return;
 	}
 
-	if (self.owner.health <= 0)
+	if (!SUB_IsAlive (self.owner))
 	{
 		if (self.owner.items2 & IT2_V_SPHERE)
 			self.owner.items2 = self.owner.items2 - IT2_V_SPHERE;

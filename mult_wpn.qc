@@ -177,7 +177,7 @@ void() HomingMissileThink =
 {
 	local vector dir;
 
-	if (self.enemy.health <= 0)
+	if (!SUB_IsAlive (self.enemy))
 	{
 		remove (self);
 		return;

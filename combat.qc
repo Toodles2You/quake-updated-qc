@@ -70,6 +70,8 @@ void(entity targ, entity attacker) Killed =
 
 	if (self.health > 0)
 		self.health = 0;
+	else if (self.health < -99)
+		self.health = -99;
 
 	if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE)
 	{ // doors, triggers, etc

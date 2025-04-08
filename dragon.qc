@@ -93,7 +93,7 @@ void() dragon_check_attack =
 		return;
 	if (self.attack_finished > time)
 		return;
-	if (self.enemy.health <= 0)
+	if (!SUB_IsAlive (self.enemy))
 		self.enemy = world;
 	if (self.enemy.flags & FL_NOTARGET)
 		return;

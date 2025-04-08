@@ -45,7 +45,7 @@ void(vector p) boss_missile;
 void() boss_face =
 {
 	// go for another player if multi player
-	if (self.enemy.health <= 0 || random () < 0.02)
+	if (!SUB_IsAlive (self.enemy) || random () < 0.02)
 	{
 		self.enemy = find (self.enemy, classname, "player");
 		if (!self.enemy)
@@ -240,7 +240,7 @@ void(vector p) boss_missile =
 	sound (self, CHAN_WEAPON, "boss1/throw.wav", 1, ATTN_NORM);
 
 	// check for dead enemy
-	if (self.enemy.health <= 0)
+	if (!SUB_IsAlive (self.enemy))
 		boss_idle1 ();
 };
 

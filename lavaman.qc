@@ -84,7 +84,7 @@ void() lavaman_hunt =
 	local vector viewPoint;
 
 	// go for another player if multi player
-	if (self.enemy.health <= 0)
+	if (!SUB_IsAlive (self.enemy))
 	{
 		viewPoint = self.origin + '0 0 96';
 		possibleEnemy = find (self.enemy, classname, "player");
@@ -395,7 +395,7 @@ void(float AttackNumber) lavaman_missile =
 	sound (self, CHAN_WEAPON, "boss1/throw.wav", 1, ATTN_NORM);
 
 	// check for dead enemy
-	if (self.enemy.health <= 0)
+	if (!SUB_IsAlive (self.enemy))
 		lavaman_idle1 ();
 };
 

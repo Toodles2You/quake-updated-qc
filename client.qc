@@ -1230,7 +1230,7 @@ void() ClientConnect =
 
 	// a client connecting during an intermission can cause problems
 	if (intermission_running)
-		ExitIntermission ();
+		GotoNextMap ();
 };
 
 void() ClientDisconnect =

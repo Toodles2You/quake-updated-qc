@@ -319,3 +319,12 @@ float(entity targ) SUB_ShouldBleed =
 		return TRUE;
 	return FALSE;
 };
+
+float(entity targ) SUB_IsAlive =
+{
+	if (targ.health <= 0)
+		return FALSE;
+	if (!targ.solid)
+		return FALSE;
+	return TRUE;
+};

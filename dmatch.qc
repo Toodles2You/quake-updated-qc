@@ -65,7 +65,7 @@ void() tag_token_drop =
 
 void() tag_token_think =
 {
-	if (self.owner.health > 0)
+	if (SUB_IsAlive (self.owner))
 	{
 		if (self.tag_message_time < time)
 		{
