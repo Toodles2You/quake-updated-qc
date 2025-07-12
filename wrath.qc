@@ -252,6 +252,7 @@ void() monster_wrath =
 	self.th_missile = wrath_attack;
 	self.th_pain = wrath_pain;
 	self.th_die = wrath_die02;
+	self.th_sight = wrath_sight;
 
 	flymonster_start ();
 };
