@@ -1226,8 +1226,6 @@ void(float weap) W_SetWeapon =
 		return;
 	}
 
-	player_run (); // get out of any weapon firing states
-
 	self.weapon = weap;
 
 	if (self.weapon == IT_AXE)
@@ -1258,6 +1256,8 @@ void(float weap) W_SetWeapon =
 	self.weaponframe = 0;
 
 	W_SetCurrentAmmo ();
+
+	player_run (); // get out of any weapon firing states
 };
 
 float() W_BestWeapon =

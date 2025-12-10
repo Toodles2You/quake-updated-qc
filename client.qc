@@ -537,6 +537,8 @@ void() PutClientInServer =
 
 	self.view_ofs = '0 0 22';
 
+	self.velocity = '0 0 0';
+
 	player_stand1 ();
 
 	if (deathmatch || coop)
