@@ -17,7 +17,7 @@
     See file, 'COPYING', for details.
 */
 void(entity targ, entity inflictor, entity attacker, float damage) T_Damage;
-void() player_run;
+void() PlayerRun;
 void(entity bomb, entity attacker, float rad, entity ignore) T_RadiusDamage;
 void(vector org, vector vel, float damage) SpawnBlood;
 void() SuperDamageSound;
@@ -688,7 +688,7 @@ void(float weap) W_SetWeapon =
 
 	W_SetCurrentAmmo ();
 
-	player_run (); // get out of any weapon firing states
+	PlayerRun (); // get out of any weapon firing states
 };
 
 float() W_BestWeapon =

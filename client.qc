@@ -19,7 +19,7 @@
 
 void() W_WeaponFrame;
 void(entity attacker, float damage) player_pain;
-void() player_stand1;
+void() PlayerStand;
 void(vector org) spawn_tfog;
 void(vector org, entity death_owner) spawn_tdeath;
 
@@ -475,7 +475,7 @@ void() PutClientInServer =
 
 	self.velocity = '0 0 0';
 
-	player_stand1 ();
+	PlayerStand ();
 
 	if (deathmatch || coop)
 	{

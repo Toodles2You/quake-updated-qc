@@ -72,15 +72,15 @@ $frame axattc1 axattc2 axattc3 axattc4 axattc5 axattc6
 
 $frame axattd1 axattd2 axattd3 axattd4 axattd5 axattd6
 
-void() player_run;
+void() PlayerStand;
+void() PlayerRun;
 
 void() player_stand1 = [$axstnd1, player_stand1]
 {
 	self.weaponframe = 0;
 	if (self.velocity_x || self.velocity_y)
 	{
-		self.walkframe = 0;
-		player_run ();
+		PlayerRun ();
 		return;
 	}
 
@@ -99,29 +99,40 @@ void() player_stand1 = [$axstnd1, player_stand1]
 	self.walkframe = self.walkframe + 1;
 };
 
+void() PlayerStand =
+{
+	self.walkframe = 0;
+	player_stand1 ();
+};
+
 void() player_run = [$rockrun1, player_run]
 {
 	self.weaponframe = 0;
-	if (!self.velocity_x && !self.velocity_y)
+	if (!(self.velocity_x || self.velocity_y))
 	{
-		self.walkframe = 0;
-		player_stand1 ();
+		PlayerStand ();
 		return;
 	}
 
 	if (self.weapon == IT_AXE)
 	{
-		if (self.walkframe == 6)
+		if (self.walkframe >= 6)
 			self.walkframe = 0;
 		self.frame = $axrun1 + self.walkframe;
 	}
 	else
 	{
-		if (self.walkframe == 6)
+		if (self.walkframe >= 6)
 			self.walkframe = 0;
 		self.frame = self.frame + self.walkframe;
 	}
 	self.walkframe = self.walkframe + 1;
+};
+
+void() PlayerRun =
+{
+	self.walkframe = 0;
+	player_run ();
 };
 
 void() player_shot1 = [$shotatt1, player_shot2]
@@ -133,7 +144,7 @@ void() player_shot2 = [$shotatt2, player_shot3] { self.weaponframe = 2; };
 void() player_shot3 = [$shotatt3, player_shot4] { self.weaponframe = 3; };
 void() player_shot4 = [$shotatt4, player_shot5] { self.weaponframe = 4; };
 void() player_shot5 = [$shotatt5, player_shot6] { self.weaponframe = 5; };
-void() player_shot6 = [$shotatt6, player_run] { self.weaponframe = 6; };
+void() player_shot6 = [$shotatt6, PlayerRun] { self.weaponframe = 6; };
 
 void() player_axe1 = [$axatt1, player_axe2] { self.weaponframe = 1; };
 void() player_axe2 = [$axatt2, player_axe3] { self.weaponframe = 2; };
@@ -142,7 +153,7 @@ void() player_axe3 = [$axatt3, player_axe4]
 	self.weaponframe = 3;
 	W_FireAxe ();
 };
-void() player_axe4 = [$axatt4, player_run] { self.weaponframe = 4; };
+void() player_axe4 = [$axatt4, PlayerRun] { self.weaponframe = 4; };
 
 void() player_axeb1 = [$axattb1, player_axeb2] { self.weaponframe = 5; };
 void() player_axeb2 = [$axattb2, player_axeb3] { self.weaponframe = 6; };
@@ -151,7 +162,7 @@ void() player_axeb3 = [$axattb3, player_axeb4]
 	self.weaponframe = 7;
 	W_FireAxe ();
 };
-void() player_axeb4 = [$axattb4, player_run] { self.weaponframe = 8; };
+void() player_axeb4 = [$axattb4, PlayerRun] { self.weaponframe = 8; };
 
 void() player_axec1 = [$axattc1, player_axec2] { self.weaponframe = 1; };
 void() player_axec2 = [$axattc2, player_axec3] { self.weaponframe = 2; };
@@ -160,7 +171,7 @@ void() player_axec3 = [$axattc3, player_axec4]
 	self.weaponframe = 3;
 	W_FireAxe ();
 };
-void() player_axec4 = [$axattc4, player_run] { self.weaponframe = 4; };
+void() player_axec4 = [$axattc4, PlayerRun] { self.weaponframe = 4; };
 
 void() player_axed1 = [$axattd1, player_axed2] { self.weaponframe = 5; };
 void() player_axed2 = [$axattd2, player_axed3] { self.weaponframe = 6; };
@@ -169,17 +180,17 @@ void() player_axed3 = [$axattd3, player_axed4]
 	self.weaponframe = 7;
 	W_FireAxe ();
 };
-void() player_axed4 = [$axattd4, player_run] { self.weaponframe = 8; };
+void() player_axed4 = [$axattd4, PlayerRun] { self.weaponframe = 8; };
 
 void() player_nail1 = [$nailatt1, player_nail2]
 {
-	self.effects = self.effects | EF_MUZZLEFLASH;
-
 	if (!self.button0)
 	{
-		player_run ();
+		PlayerRun ();
 		return;
 	}
+	self.effects = self.effects | EF_MUZZLEFLASH;
+
 	self.weaponframe = self.weaponframe + 1;
 	if (self.weaponframe == 9)
 		self.weaponframe = 1;
@@ -189,13 +200,13 @@ void() player_nail1 = [$nailatt1, player_nail2]
 };
 void() player_nail2 = [$nailatt2, player_nail1]
 {
-	self.effects = self.effects | EF_MUZZLEFLASH;
-
 	if (!self.button0)
 	{
-		player_run ();
+		PlayerRun ();
 		return;
 	}
+	self.effects = self.effects | EF_MUZZLEFLASH;
+
 	self.weaponframe = self.weaponframe + 1;
 	if (self.weaponframe == 9)
 		self.weaponframe = 1;
@@ -206,13 +217,13 @@ void() player_nail2 = [$nailatt2, player_nail1]
 
 void() player_light1 = [$light1, player_light2]
 {
-	self.effects = self.effects | EF_MUZZLEFLASH;
-
 	if (!self.button0)
 	{
-		player_run ();
+		PlayerRun ();
 		return;
 	}
+	self.effects = self.effects | EF_MUZZLEFLASH;
+
 	self.weaponframe = self.weaponframe + 1;
 	if (self.weaponframe == 5)
 		self.weaponframe = 1;
@@ -222,13 +233,13 @@ void() player_light1 = [$light1, player_light2]
 };
 void() player_light2 = [$light2, player_light1]
 {
-	self.effects = self.effects | EF_MUZZLEFLASH;
-
 	if (!self.button0)
 	{
-		player_run ();
+		PlayerRun ();
 		return;
 	}
+	self.effects = self.effects | EF_MUZZLEFLASH;
+
 	self.weaponframe = self.weaponframe + 1;
 	if (self.weaponframe == 5)
 		self.weaponframe = 1;
@@ -246,7 +257,8 @@ void() player_rocket2 = [$rockatt2, player_rocket3] { self.weaponframe = 2; };
 void() player_rocket3 = [$rockatt3, player_rocket4] { self.weaponframe = 3; };
 void() player_rocket4 = [$rockatt4, player_rocket5] { self.weaponframe = 4; };
 void() player_rocket5 = [$rockatt5, player_rocket6] { self.weaponframe = 5; };
-void() player_rocket6 = [$rockatt6, player_run] { self.weaponframe = 6; };
+void() player_rocket6 = [$rockatt6, PlayerRun] { self.weaponframe = 6; };
+
 void(float num_bubbles) DeathBubbles;
 
 void() PainSound =
@@ -328,7 +340,7 @@ void() player_pain2 = [$pain2, player_pain3] {};
 void() player_pain3 = [$pain3, player_pain4] {};
 void() player_pain4 = [$pain4, player_pain5] {};
 void() player_pain5 = [$pain5, player_pain6] {};
-void() player_pain6 = [$pain6, player_run] {};
+void() player_pain6 = [$pain6, PlayerRun] {};
 
 void() player_axpain1 = [$axpain1, player_axpain2]
 {
@@ -339,7 +351,7 @@ void() player_axpain2 = [$axpain2, player_axpain3] {};
 void() player_axpain3 = [$axpain3, player_axpain4] {};
 void() player_axpain4 = [$axpain4, player_axpain5] {};
 void() player_axpain5 = [$axpain5, player_axpain6] {};
-void() player_axpain6 = [$axpain6, player_run] {};
+void() player_axpain6 = [$axpain6, PlayerRun] {};
 
 void(entity attacker, float damage) player_pain =
 {
