@@ -1032,7 +1032,14 @@ void() CycleWeaponReverseCommand =
 
 void() ServerflagsCommand =
 {
-	serverflags = serverflags * 2 + 1;
+	if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
+		serverflags = serverflags - SFL_EPISODES;
+	else
+	{
+		serverflags = serverflags -
+			(serverflags & SFL_EPISODES) +
+			(serverflags & SFL_EPISODES) * 2 + 1;
+	}
 };
 
 void() QuadCheat =

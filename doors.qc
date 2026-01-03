@@ -285,7 +285,7 @@ void() LinkDoors =
 
 	if (self.enemy)
 		return; // already linked by another door
-	if (self.spawnflags & 4)
+	if (self.spawnflags & DOOR_DONT_LINK)
 	{
 		self.owner = self.enemy = self;
 		return; // don't want to link this door

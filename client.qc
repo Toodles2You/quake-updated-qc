@@ -23,6 +23,8 @@ void() PlayerStand;
 void(vector org) spawn_tfog;
 void(vector org, entity death_owner) spawn_tdeath;
 
+float CHANGE_NO_INTERMISSION = 1;
+
 float modelindex_eyes, modelindex_player;
 
 float intermission_running;
@@ -87,7 +89,7 @@ void() SetNewParms =
 
 void() DecodeLevelParms =
 {
-	if (serverflags)
+	if (serverflags & SFL_EPISODES)
 	{
 		if (world.model == "maps/start.bsp")
 			SetNewParms (); // take away all stuff on starting new episode
@@ -218,7 +220,7 @@ void() ExitIntermission =
 			return;
 		}
 
-		if ((serverflags & 15) == 15)
+		if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		{
 			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "Now, you have all four Runes. You sense\ntremendous invisible forces moving to\nunseal ancient barriers. Shub-Niggurath\nhad hoped to use the Runes Herself to\nclear off the Earth, but now instead,\nyou will use them to enter her home and\nconfront her as an avatar of avenging\nEarth-life. If you defeat her, you will\nbe remembered forever as the savior of\nthe planet. If she conquers, it will be\nas if you had never been born.");
@@ -301,7 +303,7 @@ void() changelevel_touch =
 
 	SUB_UseTargets ();
 
-	if ((self.spawnflags & 1) && (deathmatch == 0))
+	if ((self.spawnflags & CHANGE_NO_INTERMISSION) && (deathmatch == 0))
 	{
 		GotoNextMap ();
 		return;
@@ -409,7 +411,7 @@ entity() SelectSpawnPoint =
 		}
 	}
 
-	if (serverflags)
+	if (serverflags & SFL_EPISODES)
 	{ // return with a rune to start
 		spot = find (world, classname, "info_player_start2");
 		if (spot)
@@ -507,25 +509,26 @@ void() NextLevel =
 		{
 			mapname = "e1m1";
 		}
-		else if (!(serverflags & 1))
+		else if (!(serverflags & SFL_EPISODE_1))
 		{
 			mapname = "e1m1";
-			serverflags = serverflags | 1;
+			serverflags = serverflags | SFL_EPISODE_1;
 		}
-		else if (!(serverflags & 2))
+		else if (!(serverflags & SFL_EPISODE_2))
 		{
 			mapname = "e2m1";
-			serverflags = serverflags | 2;
+			serverflags = serverflags | SFL_EPISODE_2;
 		}
-		else if (!(serverflags & 4))
+		else if (!(serverflags & SFL_EPISODE_3))
 		{
 			mapname = "e3m1";
-			serverflags = serverflags | 4;
+			serverflags = serverflags | SFL_EPISODE_3;
 		}
-		else if (!(serverflags & 8))
+		else if (!(serverflags & SFL_EPISODE_4))
 		{
 			mapname = "e4m1";
-			serverflags = serverflags - 7;
+			serverflags = serverflags - (serverflags &
+					(SFL_EPISODE_1 | SFL_EPISODE_2 | SFL_EPISODE_3));
 		}
 
 		o = spawn ();
