@@ -443,6 +443,7 @@ void() DeathSound =
 void() PlayerDead =
 {
 	self.nextthink = -1;
+	self.think = SUB_Null;
 	// allow respawn after a certain time
 	self.deadflag = DEAD_DEAD;
 };
@@ -491,6 +492,7 @@ void(string gibname, float dm) ThrowHead =
 	setmodel (self, gibname);
 	self.frame = 0;
 	self.nextthink = -1;
+	self.think = SUB_Null;
 	self.movetype = MOVETYPE_BOUNCE;
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
@@ -592,6 +594,7 @@ void() set_suicide_frame =
 	self.movetype = MOVETYPE_TOSS;
 	self.deadflag = DEAD_DEAD;
 	self.nextthink = -1;
+	self.think = SUB_Null;
 };
 
 void() player_diea1 = [$deatha1, player_diea2] {};
