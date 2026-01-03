@@ -540,7 +540,7 @@ entity(entity e) nextent = #47; // for looping through all ents
 
 void(vector o, vector d, float color, float count) particle = #48;
 
-void() ChangeYaw = #49;	// turn towards self.ideal_yaw at self.yaw_speed
+void() ChangeYaw = #49; // turn towards self.ideal_yaw at self.yaw_speed
 
 vector(vector v) vectoangles = #51;
 

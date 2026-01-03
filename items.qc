@@ -129,6 +129,8 @@ void() item_health =
 
 void() health_touch =
 {
+	local string s;
+
 	if (other.classname != "player")
 		return;
 
@@ -146,7 +148,8 @@ void() health_touch =
 	}
 
 	sprint (other, "You receive ");
-	sprint (other, ftos (self.healamount));
+	s = ftos (self.healamount);
+	sprint (other, s);
 	sprint (other, " health\n");
 
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
