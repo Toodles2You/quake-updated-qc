@@ -262,7 +262,7 @@ void() execute_changelevel =
 	while (other != world)
 	{
 		other.view_ofs = '0 0 0';
-		other.angles = other.v_angle = pos.mangle;
+		other.angles = pos.mangle;
 		other.fixangle = TRUE;
 		other.nextthink = time + 0.5;
 		other.takedamage = DAMAGE_NO;
