@@ -265,11 +265,18 @@ void() PainSound =
 {
 	local float rs;
 
-	if (damage_attacker.classname == "teledeath")
+	if (self.invisible_finished > time)
+		return;
+
+	if (self.axhitme)
 	{
-		sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
+		self.pain_finished = time + 0.5;
+		sound (self, CHAN_VOICE, "player/axhit1.wav", 1, ATTN_NORM);
 		return;
 	}
+
+	if (self.weaponframe)
+		return;
 
 	// water pain sounds
 	if (self.watertype == CONTENT_WATER && self.waterlevel == 3)
@@ -282,19 +289,10 @@ void() PainSound =
 		return;
 	}
 
-	// slime pain sounds
-	if (self.watertype == CONTENT_SLIME)
+	// slime and lava pain sounds
+	if (self.watertype == CONTENT_SLIME || self.watertype == CONTENT_LAVA)
 	{
-		// FIX ME	put in some steam here
-		if (random () > 0.5)
-			sound (self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
-		else
-			sound (self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM);
-		return;
-	}
-
-	if (self.watertype == CONTENT_LAVA)
-	{
+		// FIXME: put in some steam here for slime
 		if (random () > 0.5)
 			sound (self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
 		else
@@ -305,12 +303,6 @@ void() PainSound =
 	if (self.pain_finished > time)
 		return;
 	self.pain_finished = time + 0.5;
-
-	if (self.axhitme)
-	{
-		sound (self, CHAN_VOICE, "player/axhit1.wav", 1, ATTN_NORM);
-		return;
-	}
 
 	rs = rint ((random () * 5) + 1);
 
@@ -331,22 +323,14 @@ void() PainSound =
 	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 };
 
-void() player_pain1 = [$pain1, player_pain2]
-{
-	PainSound ();
-	self.weaponframe = 0;
-};
+void() player_pain1 = [$pain1, player_pain2] {};
 void() player_pain2 = [$pain2, player_pain3] {};
 void() player_pain3 = [$pain3, player_pain4] {};
 void() player_pain4 = [$pain4, player_pain5] {};
 void() player_pain5 = [$pain5, player_pain6] {};
 void() player_pain6 = [$pain6, PlayerRun] {};
 
-void() player_axpain1 = [$axpain1, player_axpain2]
-{
-	PainSound ();
-	self.weaponframe = 0;
-};
+void() player_axpain1 = [$axpain1, player_axpain2] {};
 void() player_axpain2 = [$axpain2, player_axpain3] {};
 void() player_axpain3 = [$axpain3, player_axpain4] {};
 void() player_axpain4 = [$axpain4, player_axpain5] {};
@@ -355,6 +339,8 @@ void() player_axpain6 = [$axpain6, PlayerRun] {};
 
 void(entity attacker, float damage) player_pain =
 {
+	PainSound ();
+
 	if (self.weaponframe)
 		return;
 
@@ -428,13 +414,13 @@ void() DeathSound =
 	rs = rint ((random () * 4) + 1);
 	if (rs == 1)
 		self.noise = "player/death1.wav";
-	if (rs == 2)
+	else if (rs == 2)
 		self.noise = "player/death2.wav";
-	if (rs == 3)
+	else if (rs == 3)
 		self.noise = "player/death3.wav";
-	if (rs == 4)
+	else if (rs == 4)
 		self.noise = "player/death4.wav";
-	if (rs == 5)
+	else
 		self.noise = "player/death5.wav";
 
 	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NONE);
