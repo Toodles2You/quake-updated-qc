@@ -361,11 +361,6 @@ void() ClientKill =
 		respawn ();
 };
 
-float(vector v) CheckSpawnPoint =
-{
-	return FALSE;
-};
-
 entity() SelectSpawnPoint =
 {
 	local entity spot;
