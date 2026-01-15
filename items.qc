@@ -64,32 +64,10 @@ void() StartItem =
 	self.think = PlaceItem;
 };
 
-// T_Heal: add health to an entity, limiting health to max_health
-// "ignore" will ignore max_health limit
-float(entity e, float healamount, float ignore) T_Heal =
-{
-	if (e.health <= 0)
-		return 0;
-	if ((!ignore) && (e.health >= e.max_health))
-		return 0;
-	healamount = ceil (healamount);
-
-	e.health = e.health + healamount;
-	if ((!ignore) && (e.health >= e.max_health))
-		e.health = e.max_health;
-
-	if (e.health > 250)
-		e.health = 250;
-	return 1;
-};
-
 float H_ROTTEN = 1;
 float H_MEGA = 2;
 
-.float healamount, healtype;
-
 void() health_touch;
-void() item_megahealth_rot;
 
 void() item_health =
 {
@@ -129,23 +107,19 @@ void() item_health =
 
 void() health_touch =
 {
+	local float mega;
 	local string s;
 
 	if (other.classname != "player")
 		return;
 
-	if (self.healtype == 2) // Megahealth?  Ignore max_health...
-	{
-		if (other.health >= 250)
-			return;
-		if (!T_Heal (other, self.healamount, 1))
-			return;
-	}
+	if (self.healtype >= 2)
+		mega = TRUE;
 	else
-	{
-		if (!T_Heal (other, self.healamount, 0))
-			return;
-	}
+		mega = FALSE;
+
+	if (!T_Heal (other, self.healamount, mega))
+		return;
 
 	sprint (other, "You receive ");
 	s = ftos (self.healamount);
@@ -159,12 +133,10 @@ void() health_touch =
 	self.model = "";
 	self.solid = SOLID_NOT;
 
-	// Megahealth = rot down the player's super health
-	if (self.healtype == 2)
+	if (self.healtype == 2 && (other.items & IT_SUPERHEALTH))
 	{
-		other.items = other.items | IT_SUPERHEALTH;
 		self.nextthink = time + 5;
-		self.think = item_megahealth_rot;
+		self.think = SUB_Null;
 		self.owner = other;
 	}
 	else
@@ -182,21 +154,31 @@ void() health_touch =
 
 void() item_megahealth_rot =
 {
-	other = self.owner;
+	self.owner = world;
 
-	if (other.health > other.max_health)
+	if (deathmatch != 2) // deathmatch 2 is silly old rules
 	{
-		other.health = other.health - 1;
-		self.nextthink = time + 1;
-		return;
-	}
-
-	other.items = other.items - (other.items & IT_SUPERHEALTH);
-
-	if (deathmatch == 1) // deathmatch 2 is silly old rules
-	{
-		self.nextthink = time + 20;
+		if (deathmatch)
+			self.nextthink = time + 20;
 		self.think = SUB_regen;
+	}
+};
+
+void(entity client) RespawnMegaHealth =
+{
+	local entity ent;
+
+	ent = find (world, classname, "item_health");
+	while (ent)
+	{
+		if (ent.owner == client)
+		{
+			ent.owner = world;
+			ent.think = item_megahealth_rot;
+			if (ent.nextthink <= time)
+				SUB_Think (ent, ent.think);
+		}
+		ent = find (ent, classname, "item_health");
 	}
 };
 

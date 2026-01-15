@@ -17,6 +17,8 @@
     See file, 'COPYING', for details.
 */
 
+.float healamount, healtype;
+
 void() T_MissileTouch;
 void() info_player_start;
 void(entity targ, entity attacker) ClientObituary;
@@ -230,4 +232,48 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 		}
 		head = nextent (head);
 	}
+};
+
+/*
+==============================================================================
+T_Heal
+
+add health to an entity, limiting health to max_health
+mega will ignore max_health limit
+==============================================================================
+*/
+float(entity ent, float heal, float mega) T_Heal =
+{
+	local float healmax, give;
+
+	if (ent.health <= 0)
+		return FALSE;
+
+	if (mega)
+		healmax = ent.max_health * 2.5;
+	else
+		healmax = ent.max_health;
+	if (ent.health >= healmax)
+		return FALSE;
+
+	give = ceil (heal);
+	ent.health = ent.health + give;
+	if (ent.health > healmax)
+		ent.health = healmax;
+
+	if (mega)
+		if (ent.health > ent.max_health)
+		{
+			// rot down the player's super health
+			if (!(ent.items & IT_SUPERHEALTH))
+			{
+				ent.healamount = 1;
+				ent.healtype = time + 5;
+				ent.items = ent.items | IT_SUPERHEALTH;
+			}
+			else
+				ent.healamount = ent.healamount + 1;
+		}
+
+	return TRUE;
 };

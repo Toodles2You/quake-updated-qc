@@ -531,6 +531,8 @@ void() PlayerDie =
 	if (deathmatch || coop)
 		DropBackpack ();
 
+	RespawnMegaHealth (self);
+
 	self.weaponmodel = "";
 	self.view_ofs = '0 0 -8';
 	self.deadflag = DEAD_DYING;

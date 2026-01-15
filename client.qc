@@ -462,6 +462,9 @@ void() PutClientInServer =
 	// paustime is set by teleporters to keep the player from moving a while
 	self.pausetime = 0;
 
+	self.healamount = 0;
+	self.healtype = 0;
+
 	self.origin = spot.origin + '0 0 1';
 	self.angles = spot.angles;
 	self.fixangle = TRUE;
@@ -767,6 +770,29 @@ void() CheckWaterJump =
 	}
 };
 
+void() PlayerHealthThink =
+{
+	if (!self.healamount)
+		return;
+	if (self.healtype > time)
+		return;
+
+	if (self.health > self.max_health)
+	{
+		self.health = self.health - 1;
+		self.healtype = time + 1 / self.healamount;
+
+		if (self.health > self.max_health)
+			return;
+	}
+
+	self.healamount = 0;
+	self.healtype = 0;
+	self.items = self.items - (self.items & IT_SUPERHEALTH);
+
+	RespawnMegaHealth (self);
+};
+
 /*
 ==============================================================================
 PlayerPreThink
@@ -801,6 +827,8 @@ void() PlayerPreThink =
 
 	if (self.deadflag == DEAD_DYING)
 		return;
+
+	PlayerHealthThink ();
 
 	if (self.button2)
 	{
@@ -1023,6 +1051,8 @@ void() ClientDisconnect =
 	bprint (" frags\n");
 	sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
 	set_suicide_frame ();
+
+	RespawnMegaHealth (self);
 };
 
 void(entity targ, entity attacker) ClientObituary =
