@@ -48,7 +48,7 @@ void() PlaceItem =
 	self.velocity = '0 0 0';
 	self.origin_z = self.origin_z + 6;
 	oldz = self.origin_z;
-	if (!droptofloor (0, 0))
+	if (!droptofloor ())
 	{
 		dprint ("Bonus item fell out of level at ");
 		dprint (vtos (self.origin));
