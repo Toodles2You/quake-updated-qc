@@ -233,30 +233,42 @@ void() misc_explobox2 =
 float SPAWNFLAG_SUPERSPIKE = 1;
 float SPAWNFLAG_LASER = 2;
 
-void(vector org, vector vec) LaunchLaser;
+entity(vector org, vector vec) LaunchLaser;
 
-void() spikeshooter_use =
+entity() spikeshooter_launch =
 {
+	local entity newmis;
+
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
 		sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
-		LaunchLaser (self.origin, self.movedir);
+		newmis = LaunchLaser (self.origin, self.movedir);
 	}
 	else
 	{
 		sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
-		launch_spike (self.origin, self.movedir);
+		newmis = launch_spike (self.origin, self.movedir);
 		newmis.velocity = self.movedir * 500;
 		if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
 			newmis.touch = superspike_touch;
 	}
+
+	return newmis;
+};
+
+void() spikeshooter_use =
+{
+	spikeshooter_launch ();
 };
 
 void() shooter_think =
 {
-	spikeshooter_use ();
-	self.nextthink = time + self.wait;
+	local entity newmis;
+
+	newmis = spikeshooter_launch ();
 	newmis.velocity = self.movedir * 500;
+
+	self.nextthink = time + self.wait;
 };
 
 void() trap_spikeshooter =

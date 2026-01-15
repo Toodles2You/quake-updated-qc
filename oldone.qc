@@ -22,8 +22,6 @@ void() finale_2;
 void() finale_3;
 void() finale_4;
 
-entity shub;
-
 $frame old1 old2 old3 old4 old5 old6 old7 old8 old9 
 $frame old10 old11 old12 old13 old14 old15 old16 old17 old18 old19 
 $frame old20 old21 old22 old23 old24 old25 old26 old27 old28 old29 
@@ -128,7 +126,7 @@ void() finale_1 =
 	WriteString (MSG_ALL, "");
 
 	pl = find (world, classname, "player");
-	while (pl != world)
+	while (pl)
 	{
 		pl.view_ofs = '0 0 0';
 		pl.angles = pos.mangle;
@@ -144,13 +142,17 @@ void() finale_1 =
 	}
 
 	timer = spawn ();
+	timer.owner = self;
 	timer.nextthink = time + 1;
 	timer.think = finale_2;
 };
 
 void() finale_2 =
 {
+	local entity shub;
 	local vector o;
+
+	shub = self.owner;
 
 	o = shub.origin - '0 100 0';
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -167,6 +169,9 @@ void() finale_2 =
 
 void() finale_3 =
 {
+	local entity shub;
+
+	shub = self.owner;
 	shub.think = old_thrash1;
 	sound (shub, CHAN_VOICE, "boss2/death.wav", 1, ATTN_NORM);
 	lightstyle (0, "abcdefghijklmlkjihgfedcb");
@@ -260,7 +265,6 @@ void() monster_oldone =
 	self.takedamage = DAMAGE_YES;
 	self.th_pain = nopain;
 	self.th_die = finale_1;
-	shub = self;
 
 	total_monsters = total_monsters + 1;
 };

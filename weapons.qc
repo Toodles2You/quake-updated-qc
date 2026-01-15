@@ -502,8 +502,10 @@ void() W_FireGrenade =
 void() spike_touch;
 void() superspike_touch;
 
-void(vector org, vector dir) launch_spike =
+entity(vector org, vector dir) launch_spike =
 {
+	local entity newmis;
+
 	newmis = spawn ();
 	newmis.owner = self;
 	newmis.movetype = MOVETYPE_FLYMISSILE;
@@ -520,17 +522,20 @@ void(vector org, vector dir) launch_spike =
 	setorigin (newmis, org);
 
 	newmis.velocity = dir * 1000;
+
+	return newmis;
 };
 
 void() W_FireSuperSpikes =
 {
 	local vector dir;
+	local entity newmis;
 
 	sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 	self.attack_finished = time + 0.2;
 	self.currentammo = self.ammo_nails = self.ammo_nails - 2;
 	dir = aim (self, 1000);
-	launch_spike (self.origin + '0 0 16', dir);
+	newmis = launch_spike (self.origin + '0 0 16', dir);
 	newmis.touch = superspike_touch;
 	setmodel (newmis, "progs/s_spike.mdl");
 	setsize (newmis, '0 0 0', '0 0 0');

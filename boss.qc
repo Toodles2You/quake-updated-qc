@@ -210,6 +210,7 @@ void(vector p) boss_missile =
 	local vector offang;
 	local vector org, vec, d;
 	local float t;
+	local entity newmis;
 
 	offang = vectoangles (self.enemy.origin - self.origin);
 	makevectors (offang);
@@ -231,7 +232,7 @@ void(vector p) boss_missile =
 
 	vec = normalize (d - org);
 
-	launch_spike (org, vec);
+	newmis = launch_spike (org, vec);
 	setmodel (newmis, "progs/lavaball.mdl");
 	newmis.avelocity = '200 100 300';
 	setsize (newmis, '0 0 0', '0 0 0');
@@ -258,7 +259,7 @@ void() boss_awake =
 	else
 		self.health = 3;
 
-	self.enemy = activator;
+	self.enemy = other;
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
@@ -293,19 +294,19 @@ void() monster_boss =
 	self.use = boss_awake;
 };
 
-entity le1, le2;
-float lightning_end;
-
 void() lightning_fire =
 {
+	local entity le1, le2;
 	local vector p1, p2;
 
-	if (time >= lightning_end)
-	{ // done here, put the terminals back up
-		self = le1;
-		door_go_down ();
-		self = le2;
-		door_go_down ();
+	le1 = self.enemy;
+	le2 = self.oldenemy;
+
+	if (time >= self.attack_finished)
+	{
+		// done here, put the terminals back up
+		SUB_Think (le1, door_go_down);
+		SUB_Think (le2, door_go_down);
 		return;
 	}
 
@@ -334,11 +335,19 @@ void() lightning_fire =
 
 void() lightning_use =
 {
-	if (lightning_end >= time + 1)
+	local entity le1, le2, boss;
+
+	if (self.attack_finished >= time + 1)
 		return;
 
-	le1 = find (world, target, "lightning");
-	le2 = find (le1, target, "lightning");
+	if (!self.enemy)
+		self.enemy = find (world, target, "lightning");
+	le1 = self.enemy;
+
+	if (!self.oldenemy)
+		self.oldenemy = find (le1, target, "lightning");
+	le2 = self.oldenemy;
+
 	if (!le1 || !le2)
 	{
 		dprint ("missing lightning targets\n");
@@ -352,29 +361,32 @@ void() lightning_use =
 		return;
 	}
 
-	// don't let the electrodes go back up until the bolt is done
+	// don't let the terminals go back up until the bolt is done
 	le1.nextthink = -1;
 	le2.nextthink = -1;
-	lightning_end = time + 1;
+	self.attack_finished = time + 1;
 
 	sound (self, CHAN_VOICE, "misc/power.wav", 1, ATTN_NORM);
 	lightning_fire ();
 
 	// advance the boss pain if down
-	self = find (world, classname, "monster_boss");
-	if (!self)
+	boss = find (world, classname, "monster_boss");
+
+	if (!boss)
 		return;
-	self.enemy = activator;
-	if (le1.state == STATE_TOP && self.health > 0)
+
+	boss.enemy = other;
+
+	if (le1.state == STATE_TOP && boss.health > 0)
 	{
-		sound (self, CHAN_VOICE, "boss1/pain.wav", 1, ATTN_NORM);
-		self.health = self.health - 1;
-		if (self.health >= 2)
-			boss_shocka1 ();
-		else if (self.health == 1)
-			boss_shockb1 ();
-		else if (self.health == 0)
-			boss_shockc1 ();
+		sound (boss, CHAN_VOICE, "boss1/pain.wav", 1, ATTN_NORM);
+		boss.health = boss.health - 1;
+		if (boss.health >= 2)
+			SUB_Think (boss, boss_shocka1);
+		else if (boss.health == 1)
+			SUB_Think (boss, boss_shockb1);
+		else if (boss.health == 0)
+			SUB_Think (boss, boss_shockc1);
 	}
 };
 

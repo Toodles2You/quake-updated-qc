@@ -354,8 +354,6 @@ void(float dist) ai_painforward =
 
 void(float dist) ai_walk =
 {
-	movedist = dist;
-
 	// check for noticing a player
 	if (FindTarget ())
 		return;
@@ -449,7 +447,7 @@ void() ai_run_missile =
 	}
 };
 
-void() ai_run_slide =
+void(float dist) ai_run_slide =
 {
 	local float ofs;
 
@@ -460,12 +458,12 @@ void() ai_run_slide =
 	else
 		ofs = -90;
 
-	if (walkmove (self.ideal_yaw + ofs, movedist))
+	if (walkmove (self.ideal_yaw + ofs, dist))
 		return;
 
 	self.lefty = 1 - self.lefty;
 
-	walkmove (self.ideal_yaw - ofs, movedist);
+	walkmove (self.ideal_yaw - ofs, dist);
 };
 
 /*
@@ -479,7 +477,6 @@ void(float dist) ai_run =
 {
 	local entity client;
 
-	movedist = dist;
 	// see if the enemy is dead
 	if (!SUB_IsAlive (self.enemy))
 	{
@@ -535,7 +532,7 @@ void(float dist) ai_run =
 
 	if (self.attack_state == AS_SLIDING)
 	{
-		ai_run_slide ();
+		ai_run_slide (dist);
 		return;
 	}
 

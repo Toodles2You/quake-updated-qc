@@ -73,9 +73,9 @@ void() Laser_Touch =
 	remove (self);
 };
 
-void(vector org, vector vec) LaunchLaser =
+entity(vector org, vector dir) LaunchLaser =
 {
-	vec = normalize (vec);
+	local entity newmis;
 
 	newmis = spawn ();
 	newmis.owner = self;
@@ -88,17 +88,19 @@ void(vector org, vector vec) LaunchLaser =
 
 	setorigin (newmis, org);
 
-	newmis.velocity = vec * 600;
+	newmis.velocity = dir * 600;
 	newmis.angles = vectoangles (newmis.velocity);
 
 	newmis.nextthink = time + 5;
 	newmis.think = SUB_Remove;
 	newmis.touch = Laser_Touch;
+
+	return newmis;
 };
 
 void() enforcer_fire =
 {
-	local vector org;
+	local vector org, vec;
 
 	sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
 
@@ -106,8 +108,9 @@ void() enforcer_fire =
 	makevectors (self.angles);
 
 	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
+	vec = normalize (self.enemy.origin - self.origin);
 
-	LaunchLaser (org, self.enemy.origin - self.origin);
+	LaunchLaser (org, vec);
 };
 
 void() enf_stand1 = [$stand1, enf_stand2] { ai_stand (); };

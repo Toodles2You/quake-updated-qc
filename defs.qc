@@ -379,14 +379,7 @@ float MSG_INIT = 3; // write to the init string
 
 // globals
 
-float movedist;
 float gameover; // set when a rule exits
-
-entity newmis; // launch_spike sets this after spawning it
-
-entity activator; // the entity that activated a trigger or brush
-
-entity damage_attacker; // set by T_Damage
 
 float skill;
 
