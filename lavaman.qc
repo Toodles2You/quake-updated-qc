@@ -429,12 +429,12 @@ void() lavaman_awake =
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 
-	if (!(activator.items & IT_INVISIBILITY))
+	if (!(other.items & IT_INVISIBILITY))
 	{
-		if (!(activator.flags & FL_NOTARGET))
+		if (!(other.flags & FL_NOTARGET))
 		{
-			if (activator.classname == "player")
-				self.enemy = activator;
+			if (other.classname == "player")
+				self.enemy = other;
 		}
 	}
 	droptofloor (0, 0);

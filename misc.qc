@@ -238,16 +238,18 @@ float SPAWNFLAG_SUPERLAVA = 8;
 float SPAWNFLAG_LAVASKILL = 16;
 float SPAWNFLAG_FIREBALL = 32;
 
-void(vector org, vector vec) LaunchLaser;
-void(vector org, vector dir) launch_lava_spike;
-void(vector org, vector dir) launch_fireball;
+entity(vector org, vector vec) LaunchLaser;
+entity(vector org, vector dir) launch_lava_spike;
+entity(vector org, vector dir) launch_fireball;
 
-void() spikeshooter_use =
+entity() spikeshooter_launch =
 {
+	local entity newmis;
+
 	if (self.spawnflags & SPAWNFLAG_SUPERSPIKE || !(self.spawnflags))
 	{
 		sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
-		launch_spike (self.origin, self.movedir);
+		newmis = launch_spike (self.origin, self.movedir);
 		newmis.velocity = self.movedir * 500;
 		if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
 			newmis.touch = superspike_touch;
@@ -255,29 +257,39 @@ void() spikeshooter_use =
 	else if (self.spawnflags & SPAWNFLAG_LASER)
 	{
 		sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
-		LaunchLaser (self.origin, self.movedir);
+		newmis = LaunchLaser (self.origin, self.movedir);
 	}
 	else if (self.spawnflags & SPAWNFLAG_FIREBALL)
 	{
-		launch_fireball (self.origin, self.movedir);
+		newmis = launch_fireball (self.origin, self.movedir);
 	}
 	else
 	{
 		sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
-		launch_lava_spike (self.origin, self.movedir);
+		newmis = launch_lava_spike (self.origin, self.movedir);
 		newmis.velocity = self.movedir * 500;
 		if (self.spawnflags & SPAWNFLAG_SUPERLAVA)
 			newmis.touch = superlavaspike_touch;
 		else if ((self.spawnflags & SPAWNFLAG_LAVASKILL) && (skill > 1))
 			newmis.touch = superlavaspike_touch;
 	}
+
+	return newmis;
+};
+
+void() spikeshooter_use =
+{
+	spikeshooter_launch ();
 };
 
 void() shooter_think =
 {
-	spikeshooter_use ();
-	self.nextthink = time + self.wait;
+	local entity newmis;
+
+	newmis = spikeshooter_launch ();
 	newmis.velocity = self.movedir * 500;
+
+	self.nextthink = time + self.wait;
 };
 
 void() trap_spikeshooter =

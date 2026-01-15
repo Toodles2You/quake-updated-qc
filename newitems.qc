@@ -99,7 +99,6 @@ void() newitems_touch =
 		sphere_spawn ();
 	}
 
-	activator = other;
 	SUB_UseTargets ();
 };
 

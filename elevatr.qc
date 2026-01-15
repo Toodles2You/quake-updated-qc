@@ -33,8 +33,7 @@ void() elvtr_button_wait =
 	self.state = STATE_TOP;
 	self.nextthink = self.ltime + self.wait;
 	self.think = elvtr_button_return;
-	activator = self.enemy;
-	SUB_UseTargets ();
+	SUB_UseTargetsEnt (self, self.enemy);
 	self.frame = 1; // use alternate textures
 };
 
@@ -64,13 +63,13 @@ void() elvtr_button_fire =
 
 	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 
+	self.enemy = other;
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, elvtr_button_wait);
 };
 
 void() elvtr_button_use =
 {
-	self.enemy = activator;
 	elvtr_button_fire ();
 };
 
@@ -78,13 +77,11 @@ void() elvtr_button_touch =
 {
 	if (other.classname != "player")
 		return;
-	self.enemy = other;
 	elvtr_button_fire ();
 };
 
 void() elvtr_button_killed =
 {
-	self.enemy = damage_attacker;
 	self.health = self.max_health;
 	self.takedamage = DAMAGE_NO; // wil be reset upon return
 	elvtr_button_fire ();

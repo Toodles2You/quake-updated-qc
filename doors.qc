@@ -102,8 +102,7 @@ void() door_go_up =
 
 void() door_fire =
 {
-	local entity oself;
-	local entity starte;
+	local entity door;
 
 	if (self.owner != self)
 		objerror ("door_fire: self.owner != self");
@@ -112,42 +111,35 @@ void() door_fire =
 		sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
 
 	self.message = ""; // no more message
-	oself = self;
+
+	// trigger all paired doors
+
+	door = self;
 
 	if (self.spawnflags & DOOR_TOGGLE)
 	{
 		if (self.state == STATE_UP || self.state == STATE_TOP)
 		{
-			starte = self;
 			do {
-				door_go_down ();
-				self = self.enemy;
-			} while ((self != starte) && (self != world));
-			self = oself;
+				SUB_Think (door, door_go_down);
+				door = door.enemy;
+			} while (door != self && door);
 			return;
 		}
 	}
 
-	// trigger all paired doors
-	starte = self;
 	do {
-		door_go_up ();
-		self = self.enemy;
-	} while ((self != starte) && (self != world));
-	self = oself;
+		SUB_Think (door, door_go_up);
+		door = door.enemy;
+	} while (door != self && door);
 };
 
 void() door_use =
 {
-	local entity oself;
-
 	self.message = ""; // door message are for touch only
 	self.owner.message = "";
 	self.enemy.message = "";
-	oself = self;
-	self = self.owner;
-	door_fire ();
-	self = oself;
+	SUB_Think (self.owner, door_fire);
 };
 
 void() door_trigger_touch =
@@ -159,22 +151,21 @@ void() door_trigger_touch =
 		return;
 	self.attack_finished = time + 1;
 
-	activator = other;
+	// activator = other;
 
-	self = self.owner;
+	SUB_Think (self.owner, door_use);
+};
+
+void() door_die =
+{
+	self.health = self.max_health;
+	self.takedamage = DAMAGE_NO; // will be reset upon return
 	door_use ();
 };
 
 void() door_killed =
 {
-	local entity oself;
-
-	oself = self;
-	self = self.owner;
-	self.health = self.max_health;
-	self.takedamage = DAMAGE_NO; // wil be reset upon return
-	door_use ();
-	self = oself;
+	SUB_Think (self.owner, door_die);
 };
 
 void() door_touch =
@@ -313,8 +304,8 @@ void() LinkDoors =
 		{
 			self.enemy = starte; // make the chain a loop
 
-			// shootable, fired, or key doors just needed the owner/enemy links,
-			// they don't spawn a field
+			// shootable, fired, or key doors just needed the owner/enemy
+			// links, they don't spawn a field
 
 			self = self.owner;
 
@@ -517,7 +508,7 @@ void() fd_secret_use =
 
 	if (!(self.spawnflags & SECRET_NO_SHOOT))
 	{
-		self.th_pain = SUB_null_pain;
+		self.th_pain = SUB_NullPain;
 		self.takedamage = DAMAGE_NO;
 	}
 	self.velocity = '0 0 0';

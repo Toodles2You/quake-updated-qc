@@ -168,7 +168,7 @@ void(entity attacker, float take) time_pain =
 	if (self.health < 1000)
 	{
 		self.pain_finished = 0;
-		self.th_pain = SUB_null_pain;
+		self.th_pain = SUB_NullPain;
 		self.th_die = SUB_Null;
 		cutscene_running = 1;
 		return;

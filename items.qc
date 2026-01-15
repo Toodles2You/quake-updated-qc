@@ -179,7 +179,6 @@ void() health_touch =
 		}
 	}
 
-	activator = other;
 	SUB_UseTargets ();
 };
 
@@ -252,7 +251,6 @@ void() armor_touch =
 	sound (other, CHAN_ITEM, "items/armor1.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
-	activator = other;
 	SUB_UseTargets ();
 };
 
@@ -548,7 +546,6 @@ void() weapon_touch =
 		self.nextthink = time + 30;
 	self.think = SUB_regen;
 
-	activator = other;
 	SUB_UseTargets ();
 };
 
@@ -693,7 +690,6 @@ void() ammo_touch =
 		self.nextthink = time + 30;
 	self.think = SUB_regen;
 
-	activator = other;
 	SUB_UseTargets ();
 };
 
@@ -943,7 +939,6 @@ void() key_touch =
 		self.model = "";
 	}
 
-	activator = other;
 	SUB_UseTargets ();
 };
 
@@ -1036,7 +1031,6 @@ void() sigil_touch =
 	serverflags = serverflags | (self.spawnflags & SFL_EPISODES);
 	self.classname = ""; // so rune doors won't find it
 
-	activator = other;
 	SUB_UseTargets ();
 };
 
@@ -1140,7 +1134,6 @@ void() powerup_touch =
 		other.super_damage_finished = time + 30;
 	}
 
-	activator = other;
 	SUB_UseTargets ();
 };
 

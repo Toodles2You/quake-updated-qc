@@ -17,8 +17,10 @@
     See file, 'COPYING', for details.
 */
 
-void(vector org, vector dir) launch_lava_spike =
+entity(vector org, vector dir) launch_lava_spike =
 {
+	local entity newmis;
+
 	newmis = spawn ();
 	newmis.owner = self;
 	newmis.movetype = MOVETYPE_FLYMISSILE;
@@ -35,11 +37,14 @@ void(vector org, vector dir) launch_lava_spike =
 	setorigin (newmis, org);
 
 	newmis.velocity = dir * 1000;
+
+	return newmis;
 };
 
 void() W_FireSuperLavaSpikes =
 {
 	local vector dir;
+	local entity newmis;
 
 	sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 	self.attack_finished = time + 0.2;
@@ -47,7 +52,7 @@ void() W_FireSuperLavaSpikes =
 	UpdateAmmoCounts (self);
 
 	dir = aim (self, 1000);
-	launch_lava_spike (self.origin + '0 0 16', dir);
+	newmis = launch_lava_spike (self.origin + '0 0 16', dir);
 	newmis.touch = superlavaspike_touch;
 
 	setsize (newmis, '0 0 0', '0 0 0');

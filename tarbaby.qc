@@ -233,7 +233,7 @@ void(entity attacker, float damage) tbaby_mitosis =
 			newSpawn.health = 100;
 
 		newSpawn.owner = self;
-		self.th_pain = SUB_null_pain;
+		self.th_pain = SUB_NullPain;
 
 		setmodel (newSpawn, "progs/tarbaby.mdl");
 		newSpawn.solid = SOLID_SLIDEBOX;

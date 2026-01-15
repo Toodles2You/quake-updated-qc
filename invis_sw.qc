@@ -112,7 +112,7 @@ void(entity attacker, float damage) sword_pain =
 	self.think = sword_run1;
 	self.nextthink = time + 0.1;
 	self.delay = 0;
-	self.th_pain = SUB_null_pain;
+	self.th_pain = SUB_NullPain;
 };
 
 void() monster_sword =

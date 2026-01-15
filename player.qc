@@ -593,13 +593,13 @@ void() GibPlayer =
 
 	self.deadflag = DEAD_DEAD;
 
-	if (damage_attacker.classname == "teledeath")
+	if (other.classname == "teledeath")
 	{
 		sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
 		return;
 	}
 
-	if (damage_attacker.classname == "teledeath2")
+	if (other.classname == "teledeath2")
 	{
 		sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
 		return;

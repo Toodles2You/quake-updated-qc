@@ -164,6 +164,8 @@ void() GrappleAnchor =
 
 void() W_FireGrapple =
 {
+	local entity newmis;
+
 	if (self.hook_out) // reject subsequent calls from player.qc
 		return;
 
