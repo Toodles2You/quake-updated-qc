@@ -475,7 +475,7 @@ void() func_illusionary =
 
 void() func_episodegate =
 {
-	if (!(serverflags & self.spawnflags))
+	if (!((serverflags & SFL_EPISODES) & self.spawnflags))
 		return;
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
@@ -486,7 +486,7 @@ void() func_episodegate =
 
 void() func_bossgate =
 {
-	if ((serverflags & 15) == 15)
+	if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		return;
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;

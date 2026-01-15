@@ -20,11 +20,13 @@
 
 void() W_WeaponFrame;
 void(entity attacker, float damage) player_pain;
-void() player_stand1;
+void() PlayerStand;
 void(vector org) spawn_tfog;
 void(vector org, entity death_owner) spawn_tdeath;
 
 void(entity targ, entity attacker) dmatch_score;
+
+float CHANGE_NO_INTERMISSION = 1;
 
 float modelindex_eyes, modelindex_player;
 
@@ -122,7 +124,7 @@ void() SetNewParms =
 
 void() DecodeLevelParms =
 {
-	if (serverflags)
+	if (serverflags & SFL_EPISODES)
 	{
 		if (world.model == "maps/start.bsp")
 			SetNewParms (); // take away all stuff on starting new episode
@@ -276,7 +278,7 @@ void() ExitIntermission =
 			return;
 		}
 
-		if ((serverflags & 15) == 15)
+		if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		{
 			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "Now, you have all four Runes. You sense\ntremendous invisible forces moving to\nunseal ancient barriers. Shub-Niggurath\nhad hoped to use the Runes Herself to\nclear off the Earth, but now instead,\nyou will use them to enter her home and\nconfront her as an avatar of avenging\nEarth-life. If you defeat her, you will\nbe remembered forever as the savior of\nthe planet. If she conquers, it will be\nas if you had never been born.");
@@ -320,7 +322,7 @@ void() execute_changelevel =
 	while (other != world)
 	{
 		other.view_ofs = '0 0 0';
-		other.angles = other.v_angle = pos.mangle;
+		other.angles = pos.mangle;
 		other.fixangle = TRUE;
 		other.nextthink = time + 0.5;
 		other.takedamage = DAMAGE_NO;
@@ -359,7 +361,7 @@ void() changelevel_touch =
 
 	SUB_UseTargets ();
 
-	if ((self.spawnflags & 1) && (deathmatch == 0))
+	if ((self.spawnflags & CHANGE_NO_INTERMISSION) && (deathmatch == 0))
 	{
 		GotoNextMap ();
 		return;
@@ -449,11 +451,6 @@ void() ClientKill =
 		respawn ();
 };
 
-float(vector v) CheckSpawnPoint =
-{
-	return FALSE;
-};
-
 entity() SelectSpawnPoint =
 {
 	local entity spot;
@@ -530,7 +527,7 @@ entity() SelectSpawnPoint =
 		}
 	}
 
-	if (serverflags)
+	if (serverflags & SFL_EPISODES)
 	{ // return with a rune to start
 		spot = find (world, classname, "info_player_start2");
 		if (spot)
@@ -609,7 +606,7 @@ void() PutClientInServer =
 
 	self.velocity = '0 0 0';
 
-	player_stand1 ();
+	PlayerStand ();
 
 	if (deathmatch || coop)
 	{

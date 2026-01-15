@@ -131,6 +131,8 @@ void() item_health =
 
 void() health_touch =
 {
+	local string s;
+
 	if (other.classname != "player")
 		return;
 
@@ -148,7 +150,8 @@ void() health_touch =
 	}
 
 	sprint (other, "You receive ");
-	sprint (other, ftos (self.healamount));
+	s = ftos (self.healamount);
+	sprint (other, s);
 	sprint (other, " health\n");
 
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
@@ -1030,7 +1033,7 @@ void() sigil_touch =
 	stuffcmd (other, "bf\n");
 	self.solid = SOLID_NOT;
 	self.model = "";
-	serverflags = serverflags | (self.spawnflags & 15);
+	serverflags = serverflags | (self.spawnflags & SFL_EPISODES);
 	self.classname = ""; // so rune doors won't find it
 
 	activator = other;
@@ -1039,28 +1042,28 @@ void() sigil_touch =
 
 void() item_sigil =
 {
-	if (!self.spawnflags)
+	if (!(self.spawnflags & SFL_EPISODES))
 		objerror ("no spawnflags");
 
 	precache_sound ("misc/runekey.wav");
 	self.noise = "misc/runekey.wav";
 
-	if (self.spawnflags & 1)
+	if (self.spawnflags & SFL_EPISODE_1)
 	{
 		precache_model ("progs/end1.mdl");
 		setmodel (self, "progs/end1.mdl");
 	}
-	if (self.spawnflags & 2)
+	if (self.spawnflags & SFL_EPISODE_2)
 	{
 		precache_model2 ("progs/end2.mdl");
 		setmodel (self, "progs/end2.mdl");
 	}
-	if (self.spawnflags & 4)
+	if (self.spawnflags & SFL_EPISODE_3)
 	{
 		precache_model2 ("progs/end3.mdl");
 		setmodel (self, "progs/end3.mdl");
 	}
-	if (self.spawnflags & 8)
+	if (self.spawnflags & SFL_EPISODE_4)
 	{
 		precache_model2 ("progs/end4.mdl");
 		setmodel (self, "progs/end4.mdl");

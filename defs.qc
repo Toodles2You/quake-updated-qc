@@ -395,6 +395,13 @@ float EF_MUZZLEFLASH = 2;
 float EF_BRIGHTLIGHT = 4;
 float EF_DIMLIGHT = 8;
 
+// server flags
+float SFL_EPISODE_1 = 1;
+float SFL_EPISODE_2 = 2;
+float SFL_EPISODE_3 = 4;
+float SFL_EPISODE_4 = 8;
+float SFL_EPISODES = 15;
+
 float MSG_BROADCAST = 0; // unreliable to all
 float MSG_ONE = 1; // reliable to one (msg_entity)
 float MSG_ALL = 2; // reliable to all
@@ -611,7 +618,7 @@ entity(entity e) nextent = #47; // for looping through all ents
 
 void(vector o, vector d, float color, float count) particle = #48;
 
-void() ChangeYaw = #49;	// turn towards self.ideal_yaw at self.yaw_speed
+void() ChangeYaw = #49; // turn towards self.ideal_yaw at self.yaw_speed
 
 vector(vector v) vectoangles = #51;
 

@@ -131,7 +131,7 @@ void() finale_1 =
 	while (pl != world)
 	{
 		pl.view_ofs = '0 0 0';
-		pl.angles = other.v_angle = pos.mangle;
+		pl.angles = pos.mangle;
 		pl.fixangle = TRUE;
 		pl.map = self.map;
 		pl.nextthink = time + 0.5;

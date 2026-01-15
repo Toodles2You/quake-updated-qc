@@ -89,24 +89,28 @@ void() monster_start_moving =
 
 	self.movetarget = find (world, targetname, self.target);
 
-	if ((self.movetarget) && (self.movetarget.classname == "path_corner"))
+	if (self.movetarget == world)
 	{
-		self.goalentity = self.movetarget;
-		self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
-		self.th_walk ();
+		dprint ("Monster can't find target at ");
+		dprint (vtos (self.origin));
+		dprint ("\n");
+
+		self.pausetime = 0;
+		self.th_stand ();
+		return;
 	}
-	else
+
+	if (self.movetarget.classname != "path_corner")
 	{
-		if (!self.movetarget)
-		{
-			dprint ("Monster can't find target at ");
-			dprint (vtos (self.origin));
-			dprint ("\n");
-		}
 		self.movetarget = world;
 		self.pausetime = 0;
 		self.th_stand ();
+		return;
 	}
+
+	self.goalentity = self.movetarget;
+	self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
+	self.th_walk ();
 };
 
 void() walkmonster_start_go =
