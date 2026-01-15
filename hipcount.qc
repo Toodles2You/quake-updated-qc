@@ -41,7 +41,6 @@ void() counter_think =
 		self.state = self.cnt;
 	}
 
-	activator = other;
 	SUB_UseTargets ();
 	self.nextthink = time + self.wait;
 
@@ -146,7 +145,6 @@ void() oncount_use =
 {
 	if (counter_GetCount (other) == self.count)
 	{
-		activator = other;
 		SUB_UseTargets ();
 	}
 };

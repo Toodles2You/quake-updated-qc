@@ -615,8 +615,6 @@ void(float dist) ai_painforward =
 
 void(float dist) ai_walk =
 {
-	movedist = dist;
-
 	// check for noticing a player
 	if (FindTarget ())
 		return;
@@ -734,7 +732,7 @@ void() ai_run_missile =
 	}
 };
 
-void() ai_run_slide =
+void(float dist) ai_run_slide =
 {
 	local float ofs;
 
@@ -745,12 +743,12 @@ void() ai_run_slide =
 	else
 		ofs = -90;
 
-	if (walkmove (self.ideal_yaw + ofs, movedist))
+	if (walkmove (self.ideal_yaw + ofs, dist))
 		return;
 
 	self.lefty = 1 - self.lefty;
 
-	walkmove (self.ideal_yaw - ofs, movedist);
+	walkmove (self.ideal_yaw - ofs, dist);
 };
 
 /*
@@ -761,7 +759,7 @@ Strafe sideways, but continue moving towards the enemy
 Used by the Scourge.
 =============
 */
-void() ai_run_dodge =
+void(float dist) ai_run_dodge =
 {
 	local float ofs;
 	local float newyaw;
@@ -780,7 +778,7 @@ void() ai_run_dodge =
 
 	newyaw = enemy_yaw + ofs;
 	self.ideal_yaw = enemy_yaw;
-	if (walkmove (newyaw, movedist))
+	if (walkmove (newyaw, dist))
 	{
 		ChangeYaw ();
 		return;
@@ -790,7 +788,7 @@ void() ai_run_dodge =
 	self.ltime = time + 0.8;
 	newyaw = enemy_yaw - ofs;
 	self.ideal_yaw = enemy_yaw;
-	walkmove (newyaw, movedist);
+	walkmove (newyaw, dist);
 	ChangeYaw ();
 };
 
@@ -808,7 +806,6 @@ void(float dist) ai_run =
 	local float axis;
 	local float angledelta;
 
-	movedist = dist;
 	// see if the enemy is dead
 	if (!SUB_IsAlive (self.enemy))
 	{
@@ -881,20 +878,20 @@ void(float dist) ai_run =
 
 	if (self.attack_state == AS_SLIDING)
 	{
-		ai_run_slide ();
+		ai_run_slide (dist);
 		return;
 	}
 
 	if (self.attack_state == AS_DODGING)
 	{
-		ai_run_dodge ();
+		ai_run_dodge (dist);
 		return;
 	}
 
 	if (RUN_STRAIGHT && time > self.endtime)
 	{
 		RUN_STRAIGHT = 0;
-		axis = walkmove (self.angles_y, movedist);
+		axis = walkmove (self.angles_y, dist);
 		if (!axis)
 		{
 			self.endtime = time + 3;

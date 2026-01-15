@@ -37,18 +37,14 @@ void() multi_wait =
 };
 
 // the trigger was just touched/killed/used
-// self.enemy should be set to the activator so it can be held through a delay
-// so wait for the delay time before firing
 void() multi_trigger =
 {
 	if (self.nextthink > time)
-	{
 		return;
-	}
 
 	if (self.classname == "trigger_secret")
 	{
-		if (self.enemy.classname != "player")
+		if (other.classname != "player")
 			return;
 		found_secrets = found_secrets + 1;
 		WriteByte (MSG_ALL, SVC_FOUNDSECRET);
@@ -60,43 +56,33 @@ void() multi_trigger =
 	// don't trigger again until reset
 	self.takedamage = DAMAGE_NO;
 
-	activator = self.enemy;
-
 	SUB_UseTargets ();
 
 	if (self.wait > 0)
 	{
 		self.think = multi_wait;
 		self.nextthink = time + self.wait;
-	}
-	else
-	{ // we can't just remove (self) here, because this is a touch function
-	 // called wheil C code is looping through area links...
-		self.touch = SUB_Null;
-		self.nextthink = time + 0.1;
-		self.think = SUB_Remove;
-	}
-	if (self.cnt > 0)
-	{
+		if (self.cnt <= 0)
+			return;
 		self.cnt = self.cnt - 1;
-		if (self.cnt == 0)
-		{
-			self.touch = SUB_Null;
-			self.nextthink = time + 0.1;
-			self.think = SUB_Remove;
-		}
+		if (self.cnt > 0)
+			return;
 	}
+
+	// we can't just remove (self) here, because this is a touch function
+	// called wheil C code is looping through area links...
+	self.touch = SUB_Null;
+	self.nextthink = time + 0.1;
+	self.think = SUB_Remove;
 };
 
 void() multi_killed =
 {
-	self.enemy = damage_attacker;
 	multi_trigger ();
 };
 
 void() multi_use =
 {
-	self.enemy = activator;
 	multi_trigger ();
 };
 
@@ -113,7 +99,6 @@ void() multi_touch =
 			return;
 	}
 
-	self.enemy = other;
 	multi_trigger ();
 };
 
@@ -199,30 +184,31 @@ void() trigger_secret =
 void() counter_use =
 {
 	self.count = self.count - 1;
-	if (self.count < 0)
-		return;
 
-	if (self.count != 0)
+	if (self.count)
 	{
-		if (activator.classname == "player" &&
-			(self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		{
-			if (self.count >= 4)
-				centerprint (activator, "There are more to go...");
-			else if (self.count == 3)
-				centerprint (activator, "Only 3 more to go...");
-			else if (self.count == 2)
-				centerprint (activator, "Only 2 more to go...");
-			else
-				centerprint (activator, "Only 1 more to go...");
-		}
+		if (self.count < 0)
+			return;
+
+		if (!(self.spawnflags & SPAWNFLAG_NOMESSAGE))
+			if (other.classname == "player")
+			{
+				if (self.count >= 4)
+					centerprint (other, "There are more to go...");
+				else if (self.count == 3)
+					centerprint (other, "Only 3 more to go...");
+				else if (self.count == 2)
+					centerprint (other, "Only 2 more to go...");
+				else
+					centerprint (other, "Only 1 more to go...");
+			}
 		return;
 	}
 
-	if (activator.classname == "player" &&
-		(self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		centerprint (activator, "Sequence completed!");
-	self.enemy = activator;
+	if (!(self.spawnflags & SPAWNFLAG_NOMESSAGE))
+		if (other.classname == "player")
+			centerprint (other, "Sequence completed!");
+
 	multi_trigger ();
 };
 

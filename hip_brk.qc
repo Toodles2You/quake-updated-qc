@@ -25,7 +25,6 @@ void() damagethreshold_killed =
 	self.health = self.max_health;
 
 	//	self.solid = SOLID_NOT;
-	activator = damage_attacker;
 	self.takedamage = DAMAGE_NO;
 	SUB_UseTargets ();
 	self.takedamage = DAMAGE_YES;

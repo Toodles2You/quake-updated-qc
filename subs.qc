@@ -17,9 +17,11 @@
     See file, 'COPYING', for details.
 */
 
+void(entity ent, entity activator) SUB_UseTargetsEnt;
+
 void() SUB_Null = {};
 
-void(entity attacker, float damage) SUB_null_pain = {};
+void(entity attacker, float damage) SUB_NullPain = {};
 
 void() SUB_Remove = { remove (self); };
 
@@ -57,6 +59,43 @@ void() InitTrigger =
 
 /*
 ==============================================================================
+SUB_Think
+
+inline entity think
+==============================================================================
+*/
+void(entity ent, void() func) SUB_Think =
+{
+	local entity oldself;
+
+	oldself = self;
+	self = ent;
+	func ();
+	self = oldself;
+};
+
+/*
+==============================================================================
+SUB_Interact
+
+thy precious "self" and "other" art not but lies and deceit
+==============================================================================
+*/
+void(entity thy, entity thou, void() func) SUB_Interact =
+{
+	local entity oldself, oldother;
+
+	oldself = self;
+	oldother = other;
+	self = thy;
+	other = thou;
+	func ();
+	self = oldself;
+	other = oldother;
+};
+
+/*
+==============================================================================
 SUB_CalcMove
 
 calculate self.velocity and self.nextthink to reach dest from
@@ -65,12 +104,12 @@ self.origin traveling at speed
 */
 void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt =
 {
-	local entity stemp;
-	stemp = self;
-	self = ent;
+	local entity oldself;
 
+	oldself = self;
+	self = ent;
 	SUB_CalcMove (tdest, tspeed, func);
-	self = stemp;
+	self = oldself;
 };
 
 void(vector tdest, float tspeed, void() func) SUB_CalcMove =
@@ -136,11 +175,12 @@ The calling function should make sure self.think is valid
 */
 void(entity ent, vector destangle, float tspeed, void() func) SUB_CalcAngleMoveEnt =
 {
-	local entity stemp;
-	stemp = self;
+	local entity oldself;
+
+	oldself = self;
 	self = ent;
 	SUB_CalcAngleMove (destangle, tspeed, func);
-	self = stemp;
+	self = oldself;
 };
 
 void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove =
@@ -182,16 +222,15 @@ void() SUB_CalcAngleMoveDone =
 
 void() DelayThink =
 {
-	activator = self.enemy;
-	SUB_UseTargets ();
+	SUB_UseTargetsEnt (self, self.enemy);
 	remove (self);
 };
 
 /*
 ==============================================================================
-SUB_UseTargets
+SUB_UseTargetsEnt
 
-the global "activator" should be set to the entity that initiated the firing.
+the "activator" should be set to the entity that initiated the firing.
 
 If self.delay is set, a DelayedUse entity will be created that will actually
 do the SUB_UseTargets after that many seconds have passed.
@@ -206,70 +245,61 @@ match (string)self.target and call their .use function
 
 ==============================================================================
 */
-void() SUB_UseTargets =
+void(entity ent, entity activator) SUB_UseTargetsEnt =
 {
-	local entity t, stemp, otemp, act;
+	local entity t;
 
 	// check for a delay
-	if (self.delay)
+	if (ent.delay > 0)
 	{
-		// create a temp object to fire at a later time
+		// create an entity to fire at a later time
 		t = spawn ();
 		t.classname = "DelayedUse";
-		t.nextthink = time + self.delay;
+		t.nextthink = time + ent.delay;
 		t.think = DelayThink;
 		t.enemy = activator;
-		t.message = self.message;
-		t.killtarget = self.killtarget;
-		t.target = self.target;
+		t.message = ent.message;
+		t.killtarget = ent.killtarget;
+		t.target = ent.target;
 		return;
 	}
 
 	// print the message
-	if (activator.classname == "player" && self.message != "")
+	if (activator.classname == "player" && ent.message != "")
 	{
-		centerprint (activator, self.message);
-		if (self.noise == "")
+		centerprint (activator, ent.message);
+		if (ent.noise == "")
 			sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 	}
 
 	// kill the killtagets
-	if (self.killtarget != "")
+	if (ent.killtarget != "")
 	{
-		t = world;
-		do {
-			t = find (t, targetname, self.killtarget);
-			if (!t)
-				return;
+		t = find (world, targetname, ent.killtarget);
+		while (t)
+		{
 			remove (t);
-		} while (1);
+			t = find (t, targetname, ent.killtarget);
+		}
 	}
 
 	// fire targets
-	if (self.target != "")
+	if (ent.target != "")
 	{
-		act = activator;
-		t = world;
-		do {
-			t = find (t, targetname, self.target);
-			if (!t)
-			{
-				return;
-			}
-			stemp = self;
-			otemp = other;
-			self = t;
-			other = stemp;
-			if (self.use != SUB_Null)
-			{
-				if (self.use)
-					self.use ();
-			}
-			self = stemp;
-			other = otemp;
-			activator = act;
-		} while (1);
+		t = find (world, targetname, ent.target);
+		while (t)
+		{
+			if (t.use)
+				if (t.use != SUB_Null)
+					SUB_Interact (t, activator, t.use);
+			t = find (t, targetname, ent.target);
+		}
 	}
+};
+
+void() SUB_UseTargets =
+{
+	SUB_UseTargetsEnt (self, other);
 };
 
 /*

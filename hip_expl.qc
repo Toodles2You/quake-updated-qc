@@ -26,7 +26,6 @@ void() exploder_fire =
 	local entity temp;
 
 	temp = self;
-	activator = other;
 	SUB_UseTargets ();
 	self = temp;
 	other = self;
@@ -94,7 +93,6 @@ void() multi_exploder_fire =
 		self.state = 1;
 		self.duration = time + self.duration;
 		temp = self;
-		activator = other;
 		SUB_UseTargets ();
 		self = temp;
 		other = self;

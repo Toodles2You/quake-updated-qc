@@ -95,11 +95,11 @@ void() HIP_LaserThink =
 	self.nextthink = time + 0.1;
 };
 
-void(vector org, vector vec, float light) HIP_LaunchLaser =
+entity(vector org, vector dir, float light) HIP_LaunchLaser =
 {
-	sound (self, CHAN_WEAPON, "hipweap/laserg.wav", 1, ATTN_NORM);
+	local entity newmis;
 
-	vec = normalize (vec);
+	sound (self, CHAN_WEAPON, "hipweap/laserg.wav", 1, ATTN_NORM);
 
 	newmis = spawn ();
 	newmis.owner = self;
@@ -117,7 +117,7 @@ void(vector org, vector vec, float light) HIP_LaunchLaser =
 
 	newmis.speed = 1000;
 	newmis.dmg = 18;
-	newmis.velocity = vec * newmis.speed;
+	newmis.velocity = dir * newmis.speed;
 	newmis.old_velocity = newmis.velocity;
 	newmis.angles = vectoangles (newmis.velocity);
 	newmis.avelocity = '0 0 400';
@@ -127,7 +127,10 @@ void(vector org, vector vec, float light) HIP_LaunchLaser =
 	newmis.think = HIP_LaserThink;
 	newmis.touch = HIP_LaserTouch;
 	newmis.count = 0;
+
+	return newmis;
 };
+
 
 /*
 =================
@@ -141,6 +144,7 @@ void(float stat) HIP_FireLaser =
 	local vector out;
 	local float ofs;
 	local float aofs;
+	local entity newmis;
 
 	if (!self.button0)
 	{
@@ -178,7 +182,7 @@ void(float stat) HIP_FireLaser =
 		org = org + (ofs * v_up);
 		if (random () < 0.1)
 		{
-			HIP_LaunchLaser (org, dir, 1);
+			newmis = HIP_LaunchLaser (org, dir, 1);
 			newmis.dmg = 25;
 		}
 		else
@@ -762,7 +766,6 @@ void() W_FireRocket =
 	setmodel (missile, "progs/missile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + v_forward * 8 + '0 0 16');
-	newmis = missile;
 };
 
 void(vector p1, vector p2, entity from, float damage) LightningDamage =
@@ -1063,8 +1066,10 @@ void() W_FireProximityGrenade =
 void() spike_touch;
 void() superspike_touch;
 
-void(vector org, vector dir) launch_spike =
+entity(vector org, vector dir) launch_spike =
 {
+	local entity newmis;
+
 	newmis = spawn ();
 	newmis.owner = self;
 	newmis.movetype = MOVETYPE_FLYMISSILE;
@@ -1081,17 +1086,20 @@ void(vector org, vector dir) launch_spike =
 	setorigin (newmis, org);
 
 	newmis.velocity = dir * 1000;
+
+	return newmis;
 };
 
 void() W_FireSuperSpikes =
 {
 	local vector dir;
+	local entity newmis;
 
 	sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 	self.attack_finished = time + 0.2;
 	self.currentammo = self.ammo_nails = self.ammo_nails - 2;
 	dir = aim (self, 1000);
-	launch_spike (self.origin + '0 0 16', dir);
+	newmis = launch_spike (self.origin + '0 0 16', dir);
 	newmis.touch = superspike_touch;
 	setmodel (newmis, "progs/s_spike.mdl");
 	setsize (newmis, '0 0 0', '0 0 0');

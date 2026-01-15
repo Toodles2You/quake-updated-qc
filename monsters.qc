@@ -40,11 +40,11 @@ void() monster_use =
 		return;
 	if (self.health <= 0)
 		return;
-	if (!CanFindTarget (activator, FIND_DIRECT))
+	if (!CanFindTarget (other, FIND_DIRECT))
 		return;
 
 	// delay reaction so if the monster is teleported, its sound is still heard
-	self.enemy = activator;
+	self.enemy = other;
 	self.nextthink = time + 0.1;
 	self.think = FoundTarget;
 };
@@ -65,8 +65,7 @@ void() monster_death_use =
 	if (self.target == "")
 		return;
 
-	activator = self.enemy;
-	SUB_UseTargets ();
+	SUB_UseTargetsEnt (self, self.enemy);
 };
 
 void() monster_start_spread =
@@ -89,7 +88,7 @@ void() monster_start_moving =
 
 	self.movetarget = find (world, targetname, self.target);
 
-	if (self.movetarget == world)
+	if (!self.movetarget)
 	{
 		dprint ("Monster can't find target at ");
 		dprint (vtos (self.origin));

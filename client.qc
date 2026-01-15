@@ -318,7 +318,7 @@ void() execute_changelevel =
 	pos = FindIntermission ();
 
 	other = find (world, classname, "player");
-	while (other != world)
+	while (other)
 	{
 		other.view_ofs = '0 0 0';
 		other.angles = pos.mangle;
@@ -410,10 +410,17 @@ void() respawn =
 
 void() ClientKill =
 {
+	local entity oldother;
+
+	oldother = other;
+	other = self;
 	self.deathtype = "suicide";
-	Killed (self, self);
+	Killed ();
 	self.deathtype = "";
+	other = oldother;
+
 	set_suicide_frame ();
+
 	if (coop || deathmatch)
 		respawn ();
 };
@@ -431,9 +438,9 @@ entity() SelectSpawnPoint =
 	if (coop)
 	{
 		lastspawn = find (lastspawn, classname, "info_player_coop");
-		if (lastspawn == world)
+		if (!lastspawn)
 			lastspawn = find (lastspawn, classname, "info_player_start");
-		if (lastspawn != world)
+		if (lastspawn)
 			return lastspawn;
 	}
 	else if (deathmatch)
@@ -442,7 +449,7 @@ entity() SelectSpawnPoint =
 		while (1)
 		{
 			spot = find (spot, classname, "info_player_deathmatch");
-			if (spot != world)
+			if (spot)
 			{
 				if (spot == lastspawn)
 					return lastspawn;
@@ -1461,7 +1468,7 @@ void(entity targ, entity attacker) ClientObituary =
 				bprint (" blew up\n");
 				return;
 			}
-			if (attacker.solid == SOLID_BSP && attacker != world)
+			if (attacker && attacker.solid == SOLID_BSP)
 			{
 				bprint (" was squished\n");
 				return;

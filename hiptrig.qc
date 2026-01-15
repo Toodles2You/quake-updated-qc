@@ -21,7 +21,7 @@ float USE_GOLD_KEY = 1;
 
 void() keytrigger_use =
 {
-	if (activator.classname != "player")
+	if (other.classname != "player")
 		return;
 	if (self.attack_finished > time)
 		return;
@@ -29,11 +29,11 @@ void() keytrigger_use =
 	self.attack_finished = time + 2;
 
 	// FIXME: blink key on player's status bar
-	if ((self.items & activator.items) != self.items)
+	if ((self.items & other.items) != self.items)
 	{
 		if (self.message != "")
 		{
-			centerprint (activator, self.message);
+			centerprint (other, self.message);
 		}
 		else
 		{
@@ -41,30 +41,30 @@ void() keytrigger_use =
 			{
 				if (world.worldtype == 2)
 				{
-					centerprint (activator, "You need the silver keycard");
+					centerprint (other, "You need the silver keycard");
 				}
 				else if (world.worldtype == 1)
 				{
-					centerprint (activator, "You need the silver runekey");
+					centerprint (other, "You need the silver runekey");
 				}
 				else if (world.worldtype == 0)
 				{
-					centerprint (activator, "You need the silver key");
+					centerprint (other, "You need the silver key");
 				}
 			}
 			else
 			{
 				if (world.worldtype == 2)
 				{
-					centerprint (activator, "You need the gold keycard");
+					centerprint (other, "You need the gold keycard");
 				}
 				else if (world.worldtype == 1)
 				{
-					centerprint (activator, "You need the gold runekey");
+					centerprint (other, "You need the gold runekey");
 				}
 				else if (world.worldtype == 0)
 				{
-					centerprint (activator, "You need the gold key");
+					centerprint (other, "You need the gold key");
 				}
 			}
 		}
@@ -72,7 +72,7 @@ void() keytrigger_use =
 		return;
 	}
 
-	activator.items = activator.items - self.items;
+	other.items = other.items - self.items;
 
 	// we can't just remove (self) here, because this is a touch function
 	// called while C code is looping through area links...
@@ -89,7 +89,6 @@ void() keytrigger_use =
 
 void() keytrigger_touch =
 {
-	activator = other;
 	keytrigger_use ();
 };
 

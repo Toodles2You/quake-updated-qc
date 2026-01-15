@@ -57,7 +57,6 @@ void() hip_powerup_touch =
 		other.empathy_finished = time + 30;
 	}
 
-	activator = other;
 	SUB_UseTargets (); // fire all targets / killtargets
 };
 
@@ -97,7 +96,6 @@ void() horn_touch =
 	sprint (other, "You got the Horn of Conjuring\n");
 	sound (other, CHAN_VOICE, self.noise, 1, ATTN_NONE);
 	stuffcmd (other, "bf\n");
-	activator = other;
 	horn_active = 1;
 	horn_charmer = other;
 	SUB_UseTargets (); // fire all targets / killtargets
@@ -671,7 +669,7 @@ void() trap_gods_wrath_use =
 	if (self.attack_state == 0)
 	{
 		self.search_time = time + self.delay;
-		self.lastvictim = activator;
+		self.lastvictim = other;
 		trap_tesla_think ();
 	}
 };

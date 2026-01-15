@@ -274,8 +274,6 @@ float() GremlinFindTarget =
 
 void(float dist) gremlin_walk =
 {
-	movedist = dist;
-
 	// check for noticing a player
 	if (GremlinFindTarget ())
 		return;
@@ -318,7 +316,6 @@ void(float dist) gremlin_run =
 	{ // do damage
 		T_Damage (self, world, world, 2000);
 	}
-	movedist = dist;
 	if (self.stoleweapon)
 		self.frame = self.frame + $grun1 - $run1;
 
@@ -905,7 +902,7 @@ void(entity attacker, float damage) gremlin_pain =
 void() gremlin_spawn1 = [$spawn1, gremlin_spawn2]
 {
 	self.nextthink = time + 0.3;
-	self.th_pain = SUB_null_pain;
+	self.th_pain = SUB_NullPain;
 };
 void() gremlin_spawn2 = [$spawn2, gremlin_spawn3]
 {
@@ -1053,7 +1050,7 @@ void() gremlin_die =
 	}
 
 	makevectors (self.angles);
-	vec = normalize (damage_attacker.origin - self.origin);
+	vec = normalize (other.origin - self.origin);
 	dot = vec * v_forward;
 
 	if (self.health < -35)

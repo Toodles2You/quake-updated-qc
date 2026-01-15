@@ -58,13 +58,8 @@ float(entity targ, entity inflictor) CanDamage =
 	return FALSE;
 };
 
-void(entity targ, entity attacker) Killed =
+void() Killed =
 {
-	local entity oself;
-
-	oself = self;
-	self = targ;
-
 	if (self.health > 0)
 		self.health = 0;
 	else if (self.health < -99)
@@ -74,157 +69,157 @@ void(entity targ, entity attacker) Killed =
 		self.effects = self.effects - (self.effects & EF_DIMLIGHT);
 
 	if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE)
-	{ // doors, triggers, etc
+	{
+		// doors, triggers, etc
 		self.th_die ();
-		self = oself;
 		return;
 	}
 
 	if (self.flags & FL_MONSTER)
 	{
-		self.enemy = attacker;
+		self.enemy = other;
 		self.oldenemy = world;
 
 		killed_monsters = killed_monsters + 1;
 		WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
 	}
 
-	ClientObituary (self, attacker);
+	ClientObituary (self, other);
 
 	self.takedamage = DAMAGE_NO;
 	self.touch = SUB_Null;
 
 	monster_death_use ();
 	self.th_die ();
-
-	self = oself;
 };
 
 float empathyused;
 
 /*
 ==============================================================================
-T_Damage
+TakeDamage
 
 The damage is coming from inflictor, but get mad at attacker
 This should be the only function that ever reduces health.
 ==============================================================================
 */
-void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
+void(entity inflictor, float damage) TakeDamage =
 {
 	local vector dir;
-	local entity oldself;
-	local float save;
-	local float take;
+	local float save, take;
 
-	if (!targ.takedamage)
+	if (!self.takedamage)
 		return;
 
-	if (discharged && targ.wetsuit_finished)
+	if (discharged && self.wetsuit_finished)
 		return;
 
-	if (attacker.super_damage_finished > time)
+	if (other.super_damage_finished > time)
 		damage = damage * 4;
 
-	if ((targ.items2 & HIP_IT_EMPATHY_SHIELDS) &&
-		!(inflictor.items2 & HIP_IT_EMPATHY_SHIELDS) && (targ != attacker))
+	if ((self.items2 & HIP_IT_EMPATHY_SHIELDS) &&
+		!(inflictor.items2 & HIP_IT_EMPATHY_SHIELDS) && (self != other))
 	{
 		empathyused = TRUE;
 		damage = damage / 2;
-		T_Damage (attacker, targ, targ, damage);
+		T_Damage (other, self, self, damage);
 		empathyused = FALSE;
 	}
-	// used by buttons and triggers to set activator for target firing
-	damage_attacker = attacker;
 
 	damage_inflictor = inflictor;
 
-	save = ceil (targ.armortype * damage);
-	if (save > targ.armorvalue)
-		save = targ.armorvalue;
+	save = ceil (self.armortype * damage);
+	if (save > self.armorvalue)
+		save = self.armorvalue;
 
 	take = ceil (damage - save);
 
 	// add to the damage total for clients, which will be sent as a single
 	// message at the end of the frame
-	if (targ.flags & FL_CLIENT)
+	if (self.flags & FL_CLIENT)
 	{
-		targ.dmg_take = targ.dmg_take + take;
-		targ.dmg_save = targ.dmg_save + save;
-		targ.dmg_inflictor = inflictor;
+		self.dmg_take = self.dmg_take + take;
+		self.dmg_save = self.dmg_save + save;
+		self.dmg_inflictor = inflictor;
 	}
 
-	if ((inflictor != world) && (targ.movetype == MOVETYPE_WALK))
+	if (inflictor && (self.movetype == MOVETYPE_WALK))
 	{
-		dir = targ.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
+		dir = self.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
 		dir = normalize (dir);
-		targ.velocity = targ.velocity + dir * damage * 8;
+		self.velocity = self.velocity + dir * damage * 8;
 	}
 
-	if (targ.flags & FL_GODMODE)
+	if (self.flags & FL_GODMODE)
 		return;
-	if (targ.invincible_finished >= time)
+	if (self.invincible_finished >= time)
 	{
-		if (targ.invincible_sound < time)
+		if (self.invincible_sound < time)
 		{
-			sound (targ, CHAN_ITEM, "items/protect3.wav", 1, ATTN_NORM);
-			targ.invincible_sound = time + 2;
+			sound (self, CHAN_ITEM, "items/protect3.wav", 1, ATTN_NORM);
+			self.invincible_sound = time + 2;
 		}
 		return;
 	}
-	if (targ.items2 & HIP_IT_EMPATHY_SHIELDS)
+	if (self.items2 & HIP_IT_EMPATHY_SHIELDS)
 	{
-		if (targ.empathy_sound < time)
+		if (self.empathy_sound < time)
 		{
-			sound (targ, CHAN_ITEM, "hipitems/empathy2.wav", 1, ATTN_NORM);
-			targ.empathy_sound = time + 0.5;
+			sound (self, CHAN_ITEM, "hipitems/empathy2.wav", 1, ATTN_NORM);
+			self.empathy_sound = time + 0.5;
 		}
 	}
 
-	if ((teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team))
+	if ((teamplay == 1) && (self.team > 0) && (self.team == other.team))
 		return;
 
-	targ.armorvalue = targ.armorvalue - save;
-	if (targ.armorvalue <= 0)
+	self.armorvalue = self.armorvalue - save;
+	if (self.armorvalue <= 0)
 	{
-		targ.armorvalue = 0;
-		targ.armortype = 0;
-		targ.items = targ.items - (targ.items & IT_ARMOR);
+		self.armorvalue = 0;
+		self.armortype = 0;
+		self.items = self.items - (self.items & IT_ARMOR);
 	}
 
-	targ.health = targ.health - take;
+	self.health = self.health - take;
 
-	if (targ.health <= 0)
+	if (self.health <= 0)
 	{
-		Killed (targ, attacker);
+		Killed ();
 		return;
 	}
-
-	oldself = self;
-	self = targ;
 
 	if ((self.flags & FL_MONSTER))
-	{
-		if (CanFindTarget (attacker, FIND_DAMAGE))
-			HuntFoundTarget (attacker);
-	}
+		if (CanFindTarget (other, FIND_DAMAGE))
+			HuntFoundTarget (other);
 
 	if (self.th_pain)
-	{
-		self.th_pain (attacker, take);
-		if (skill == 3)
-			self.pain_finished = time + 5;
-	}
+		if (self.th_pain != SUB_NullPain)
+		{
+			self.th_pain (other, take);
+			if (skill == 3)
+				self.pain_finished = time + 5;
+		}
+};
 
+void(entity ent, entity inflictor, entity attacker, float damage) T_Damage =
+{
+	local entity oldself, oldother;
+
+	oldself = self;
+	oldother = other;
+	self = ent;
+	other = attacker;
+	TakeDamage (inflictor, damage);
 	self = oldself;
+	other = oldother;
 };
 
 void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDamage =
 {
-	local float points;
+	local float points, radius;
 	local entity head;
 	local vector org;
-	local float radius;
 
 	radius = damage + 40;
 	head = nextent (world);

@@ -64,6 +64,7 @@ void(float offset) hknight_shot =
 {
 	local vector offang;
 	local vector org, vec;
+	local entity newmis;
 
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + offset * 6;
@@ -75,7 +76,7 @@ void(float offset) hknight_shot =
 	vec = normalize (v_forward);
 	vec_z = 0 - vec_z + (random () - 0.5) * 0.1;
 
-	launch_spike (org, vec);
+	newmis = launch_spike (org, vec);
 	newmis.classname = "knightspike";
 	setmodel (newmis, "progs/k_spike.mdl");
 	setsize (newmis, '0 0 0', '0 0 0');
@@ -457,21 +458,20 @@ void(entity attacker, float damage) hknight_pain =
 	hknight_pain1 ();
 };
 
-float hknight_type;
-
 void() hknight_melee =
 {
-	hknight_type = hknight_type + 1;
+	self.style = self.style + 1;
 
 	sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
-	if (hknight_type == 1)
+
+	if (self.style == 1)
 		hknight_slice1 ();
-	else if (hknight_type == 2)
+	else if (self.style == 2)
 		hknight_smash1 ();
-	else if (hknight_type == 3)
+	else
 	{
 		hknight_watk1 ();
-		hknight_type = 0;
+		self.style = 0;
 	}
 };
 
