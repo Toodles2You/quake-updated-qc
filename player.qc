@@ -521,11 +521,12 @@ void() PlayerDie =
 {
 	local float i;
 
-	self.items = self.items - (self.items & IT_INVISIBILITY);
+	self.items = self.items - (self.items & IT_ARTS);
 	self.invisible_finished = 0;
 	self.invincible_finished = 0;
 	self.super_damage_finished = 0;
 	self.radsuit_finished = 0;
+	self.effects = 0;
 	self.modelindex = modelindex_player;
 
 	if (deathmatch || coop)
