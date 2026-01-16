@@ -175,10 +175,13 @@ void() fire_touch =
 
 void() barrel_explode =
 {
+	local vector org;
 	self.takedamage = DAMAGE_NO;
 	self.classname = "explo_box";
-	self.origin = self.origin + (self.mins + self.maxs) * 0.5;
-	particle (self.origin, '0 0 0', 75, 255);
+	org = self.origin + (self.mins + self.maxs) * 0.5;
+	org_z = self.origin_z + 32;
+	self.origin = org;
+	particle (org, '0 0 0', 75, 255);
 	T_RadiusDamage (self, self, 160, world);
 	BecomeExplosion (TE_EXPLOSION);
 };
