@@ -364,7 +364,10 @@ void() DeathBubblesSpawn =
 {
 	local entity bubble;
 	if (self.owner.waterlevel != 3)
+	{
+		remove (self);
 		return;
+	}
 	bubble = spawn ();
 	setmodel (bubble, "progs/s_bubble.spr");
 	setorigin (bubble, self.owner.origin + '0 0 24');
