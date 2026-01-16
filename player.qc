@@ -409,7 +409,8 @@ void() DeathSound =
 	// water death sounds
 	if (self.waterlevel == 3)
 	{
-		DeathBubbles (20);
+		if (self.watertype == CONTENT_WATER)
+			DeathBubbles (20);
 		sound (self, CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
 		return;
 	}
