@@ -184,6 +184,9 @@ void() finale_4 =
 	local float r;
 	local entity n;
 
+	killed_monsters = killed_monsters + 1;
+	WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+
 	sound (self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NORM);
 
 	oldo = self.origin;
