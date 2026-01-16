@@ -136,7 +136,9 @@ void() misc_fireball =
 {
 	precache_model ("progs/lavaball.mdl");
 	self.classname = "fireball";
-	self.nextthink = time + (random () * 5);
+	self.nextthink = time + random () * 5;
+	if (self.nextthink < time + 0.1)
+		self.nextthink = time + 0.1;
 	self.think = fire_fly;
 	if (!self.speed)
 		self.speed = 1000;
@@ -161,7 +163,7 @@ void() fire_fly =
 	fireball.think = SUB_Remove;
 	fireball.touch = fire_touch;
 
-	self.nextthink = time + (random () * 5) + 3;
+	self.nextthink = time + random () * 5 + 3;
 	self.think = fire_fly;
 };
 
