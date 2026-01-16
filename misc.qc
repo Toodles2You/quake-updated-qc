@@ -177,10 +177,9 @@ void() barrel_explode =
 {
 	self.takedamage = DAMAGE_NO;
 	self.classname = "explo_box";
-	T_RadiusDamage (self, self, 160, world);
+	self.origin = self.origin + (self.mins + self.maxs) * 0.5;
 	particle (self.origin, '0 0 0', 75, 255);
-
-	self.origin_z = self.origin_z + 32;
+	T_RadiusDamage (self, self, 160, world);
 	BecomeExplosion (TE_EXPLOSION);
 };
 
