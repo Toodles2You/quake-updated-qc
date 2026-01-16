@@ -458,13 +458,18 @@ void() hurt_on =
 
 void() hurt_touch =
 {
-	if (other.takedamage)
-	{
-		self.solid = SOLID_NOT;
-		T_Damage (other, self, self, self.dmg);
-		self.think = hurt_on;
-		self.nextthink = time + 1;
-	}
+	if (!other.takedamage)
+		return;
+
+	if (time != self.dmgtime)
+		if (time < self.nextthink)
+			return;
+
+	T_Damage (other, self, self, self.dmg);
+
+	self.think = hurt_on;
+	self.nextthink = time + 1;
+	self.dmgtime = time;
 };
 
 void() trigger_hurt =

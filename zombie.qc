@@ -292,7 +292,7 @@ void() zombie_missile =
 {
 	local float r;
 
-	droptofloor (0, 0);
+	droptofloor ();
 	r = random ();
 
 	if (r < 0.3)
@@ -413,14 +413,14 @@ void() zombie_paine10 = [$paine10, zombie_paine11]
 };
 void() zombie_paine11 = [$paine11, zombie_paine12]
 {
-	droptofloor (0, 0);
+	droptofloor ();
 	self.nextthink = self.nextthink + 5;
 	self.health = 60;
 };
 void() zombie_paine12 = [$paine12, zombie_paine13]
 {
 	// see if ok to stand up
-	droptofloor (0, 0);
+	droptofloor ();
 	self.health = 60;
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.solid = SOLID_SLIDEBOX;
@@ -628,7 +628,7 @@ void() zombie_escape16 = [$cruc_16, zombie_run1]
 	self.health = 60;
 	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 
-	droptofloor (0, 0);
+	droptofloor ();
 };
 
 void() zombie_escape =

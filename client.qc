@@ -124,7 +124,7 @@ void() SetNewParms =
 
 void() DecodeLevelParms =
 {
-	if (serverflags & SFL_EPISODES)
+	if (!deathmatch)
 	{
 		if (world.model == "maps/start.bsp")
 			SetNewParms (); // take away all stuff on starting new episode
@@ -343,12 +343,15 @@ void() changelevel_touch =
 	if (other.classname != "player")
 		return;
 
-	noexit = cvar ("noexit");
-
-	if ((noexit == 1) || ((noexit == 2) && (mapname != "start")))
+	if (deathmatch)
 	{
-		T_Damage (other, self, self, 50000);
-		return;
+		noexit = cvar ("noexit");
+
+		if ((noexit == 1) || ((noexit == 2) && (mapname != "start")))
+		{
+			T_Damage (other, self, self, 50000);
+			return;
+		}
 	}
 
 	if (coop || deathmatch)
@@ -361,7 +364,7 @@ void() changelevel_touch =
 
 	SUB_UseTargets ();
 
-	if ((self.spawnflags & CHANGE_NO_INTERMISSION) && (deathmatch == 0))
+	if ((self.spawnflags & CHANGE_NO_INTERMISSION) && !deathmatch)
 	{
 		GotoNextMap ();
 		return;
@@ -445,6 +448,9 @@ void() ClientKill =
 		}
 	}
 
+	if (intermission_running)
+		return;
+
 	oldother = other;
 	other = self;
 	self.deathtype = "suicide";
@@ -454,7 +460,7 @@ void() ClientKill =
 
 	set_suicide_frame ();
 
-	if (coop || deathmatch)
+	if (deathmatch)
 		respawn ();
 };
 
@@ -594,7 +600,11 @@ void() PutClientInServer =
 	// paustime is set by teleporters to keep the player from moving a while
 	self.pausetime = 0;
 
+	self.healamount = 0;
+	self.healtype = 0;
+
 	self.origin = spot.origin + '0 0 1';
+	self.oldorigin = self.origin;
 	self.angles = spot.angles;
 	self.fixangle = TRUE;
 
@@ -677,9 +687,10 @@ void() NextLevel =
 
 void() CheckRules =
 {
-	local float timelimit;
-	local float fraglimit;
+	local float timelimit, fraglimit;
 
+	if (!deathmatch)
+		return;
 	if (gameover)
 		return;
 
@@ -886,6 +897,29 @@ void() CheckWaterJump =
 	}
 };
 
+void() PlayerHealthThink =
+{
+	if (!self.healamount)
+		return;
+	if (self.healtype > time)
+		return;
+
+	if (self.health > self.max_health)
+	{
+		self.health = self.health - 1;
+		self.healtype = time + 1 / self.healamount;
+
+		if (self.health > self.max_health)
+			return;
+	}
+
+	self.healamount = 0;
+	self.healtype = 0;
+	self.items2 = self.items2 - (self.items2 & IT2_SUPERHEALTH);
+
+	RespawnMegaHealth (self);
+};
+
 /*
 ==============================================================================
 PlayerPreThink
@@ -939,6 +973,8 @@ void() PlayerPreThink =
 
 	if (self.deadflag == DEAD_DYING)
 		return;
+
+	PlayerHealthThink ();
 
 	if (self.button2)
 	{
@@ -1259,6 +1295,8 @@ void() ClientDisconnect =
 	self.team = 0;
 
 	set_suicide_frame ();
+
+	RespawnMegaHealth (self);
 };
 
 void(entity targ, entity attacker) ClientObituary =

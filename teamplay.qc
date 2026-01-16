@@ -1727,7 +1727,7 @@ void() place_flag =
 	self.cnt = FLAG_AT_BASE;
 	self.mangle = self.angles;
 	self.effects = self.effects | EF_DIMLIGHT;
-	if (!droptofloor (0, 0))
+	if (!droptofloor ())
 	{
 		dprint ("Flag fell out of level at ");
 		dprint (vtos (self.origin));
@@ -1765,7 +1765,7 @@ void(entity flg, string cname) place_flagbase =
 	}
 	else
 		self.solid = SOLID_NOT;
-	if (!droptofloor (0, 0))
+	if (!droptofloor ())
 	{
 		dprint ("Flagbase fell out of level at ");
 		dprint (vtos (self.origin));

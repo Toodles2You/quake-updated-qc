@@ -20,6 +20,8 @@
 
 float IsExplosionDamage;
 
+.float healamount, healtype;
+
 void() T_MissileTouch;
 void() info_player_start;
 void(entity targ, entity attacker) ClientObituary;
@@ -228,21 +230,24 @@ void(entity ent, entity inflictor, entity attacker, float damage) T_Damage =
 
 void(entity inflictor, entity attacker, float damage) T_EELZap =
 {
-	local float points;
-	local entity head;
+	local entity oldself, oldother;
+	local float points, radius, attacker_points;
 	local vector org;
-	local float radius;
+
+	oldself = self;
+	oldother = other;
+	self = nextent (world);
+	other = attacker;
 
 	radius = damage + 40;
-	head = nextent (world);
+	attacker_points = 0;
 
-	while (head)
+	while (self)
 	{
-		if (head.solid)
-		{
-			if (head.takedamage)
+		if (self.solid)
+			if (self.takedamage)
 			{
-				org = head.origin + (head.mins + head.maxs) * 0.5;
+				org = self.origin + (self.mins + self.maxs) * 0.5;
 				points = vlen (inflictor.origin - org);
 				if (points <= radius)
 				{
@@ -250,46 +255,56 @@ void(entity inflictor, entity attacker, float damage) T_EELZap =
 					if (points < 0)
 						points = 0;
 					points = damage - points;
-					if (head == attacker)
-						points = points * 0.5;
 					if (points > 0)
-					{
-						if (CanDamage (head, inflictor))
+						if (CanDamage (self, inflictor))
 						{
-							if (head.classname != "monster_eel" &&
-								(head.flags & FL_INWATER))
+							if ((self.flags & FL_INWATER) && self.classname != "monster_eel")
 							{
-								T_Damage (head, inflictor, attacker, points);
+								if (self == attacker)
+									attacker_points = points;
+								else
+									TakeDamage (inflictor, points);
 							}
 						}
-					}
 				}
 			}
-		}
-		head = nextent (head);
+		self = nextent (self);
 	}
+
+	if (attacker_points > 0)
+	{
+		points = attacker_points * 0.5;
+		self = attacker;
+		TakeDamage (inflictor, points);
+	}
+
+	self = oldself;
+	other = oldother;
 };
 
 void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDamage =
 {
-	local float points, radius;
-	local entity head;
+	local entity oldself, oldother;
+	local float points, radius, attacker_points;
 	local vector org;
+
+	oldself = self;
+	oldother = other;
+	self = nextent (world);
+	other = attacker;
 
 	IsExplosionDamage = 1;
 
 	radius = damage + 40;
-	head = nextent (world);
+	attacker_points = 0;
 
-	while (head)
+	while (self)
 	{
-		if (head.solid)
-		{
-			if (head != ignore)
-			{
-				if (head.takedamage)
+		if (self.solid)
+			if (self != ignore)
+				if (self.takedamage)
 				{
-					org = head.origin + (head.mins + head.maxs) * 0.5;
+					org = self.origin + (self.mins + self.maxs) * 0.5;
 					points = vlen (inflictor.origin - org);
 					if (points <= radius)
 					{
@@ -297,21 +312,74 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 						if (points < 0)
 							points = 0;
 						points = damage - points;
-						if (head == attacker)
-							points = points * 0.5;
 						if (points > 0)
-						{
-							if (CanDamage (head, inflictor))
+							if (CanDamage (self, inflictor))
 							{
-								if (head.classname == "monster_shambler")
+								if (self.classname == "monster_shambler")
 									points = points * 0.5;
-								T_Damage (head, inflictor, attacker, points);
+								if (self == attacker)
+									attacker_points = points;
+								else
+									TakeDamage (inflictor, points);
 							}
-						}
 					}
 				}
-			}
-		}
-		head = nextent (head);
+		self = nextent (self);
 	}
+
+	if (attacker_points > 0)
+	{
+		points = attacker_points * 0.5;
+		self = attacker;
+		TakeDamage (inflictor, points);
+	}
+
+	IsExplosionDamage = 0;
+
+	self = oldself;
+	other = oldother;
+};
+
+/*
+==============================================================================
+T_Heal
+
+add health to an entity, limiting health to max_health
+mega will ignore max_health limit
+==============================================================================
+*/
+float(entity ent, float heal, float mega) T_Heal =
+{
+	local float healmax, give;
+
+	if (ent.health <= 0)
+		return FALSE;
+
+	if (mega)
+		healmax = ent.max_health * 2.5;
+	else
+		healmax = ent.max_health;
+	if (ent.health >= healmax)
+		return FALSE;
+
+	give = ceil (heal);
+	ent.health = ent.health + give;
+	if (ent.health > healmax)
+		ent.health = healmax;
+
+	if (mega)
+		if (ent.health > ent.max_health)
+		{
+			// rot down the player's super health
+			if (!(ent.items2 & IT2_SUPERHEALTH))
+			{
+				ent.healamount = 1;
+				ent.healtype = time + 5;
+				ent.items2 = ent.items2 | IT2_SUPERHEALTH;
+			}
+			else
+				ent.healamount = ent.healamount + 1;
+		}
+
+	return TRUE;
 };

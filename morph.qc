@@ -478,7 +478,7 @@ void() morph_teleport =
 	theChild.classname = "monster_morph";
 	morph_setup (theChild);
 	setorigin (theChild, theDest.origin);
-	droptofloor (0, 0);
+	droptofloor ();
 
 	theChild.think = morph_wake1;
 	theChild.nextthink = time + 0.3;

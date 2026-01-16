@@ -157,6 +157,7 @@ void() tbaby_jump6 = [$jump6, tbaby_fly1] {};
 void() tbaby_die1 = [$exp, tbaby_die2] { self.takedamage = DAMAGE_NO; };
 void() tbaby_die2 = [$exp, tbaby_run1]
 {
+	self.takedamage = DAMAGE_NO; // because i'm paranoid
 	T_RadiusDamage (self, self, 120, world);
 
 	sound (self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);
@@ -189,7 +190,7 @@ void() tbaby_checknew =
 	self.th_die = tbaby_die1;
 	self.th_sight = tbaby_sight;
 	self.origin_z = self.origin_z + 1; // raise off floor a bit
-	droptofloor (0, 0);
+	droptofloor ();
 
 	if (!walkmove (0, 0))
 	{

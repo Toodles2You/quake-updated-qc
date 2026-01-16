@@ -28,7 +28,7 @@ void() eel_pitch_change =
 {
 	if (pointcontents (self.origin) != CONTENT_WATER)
 	{
-		droptofloor (0, 0);
+		droptofloor ();
 		T_Damage (self, world, world, 6);
 		return;
 	}
@@ -251,7 +251,7 @@ void() eel_death11 = [$eeldth5, eel_death12]
 void() eel_death12 = [$eeldth6, eel_death13] {};
 void() eel_death13 = [$eeldth7, eel_death14] {};
 void() eel_death14 = [$eeldth8, eel_death15] {};
-void() eel_death15 = [$eeldth9, eel_death16] { droptofloor (0, 0); };
+void() eel_death15 = [$eeldth9, eel_death16] { droptofloor (); };
 void() eel_death16 = [$eeldth10, eel_death16] { self.solid = SOLID_NOT; };
 
 void() eel_death =

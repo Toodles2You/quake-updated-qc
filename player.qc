@@ -458,7 +458,10 @@ void() DeathBubblesSpawn =
 {
 	local entity bubble;
 	if (self.owner.waterlevel != 3)
+	{
+		remove (self);
 		return;
+	}
 	bubble = spawn ();
 	setmodel (bubble, "progs/s_bubble.spr");
 	setorigin (bubble, self.owner.origin + '0 0 24');
@@ -615,11 +618,12 @@ void() PlayerDie =
 {
 	local float i;
 
-	self.items = self.items - (self.items & IT_INVISIBILITY);
+	self.items = self.items - (self.items & IT_ARTS);
 	self.invisible_finished = 0;
 	self.invincible_finished = 0;
 	self.super_damage_finished = 0;
 	self.radsuit_finished = 0;
+	self.effects = 0;
 	self.modelindex = modelindex_player;
 
 	self.gravity = 1.0;
@@ -637,6 +641,8 @@ void() PlayerDie =
 		self.ctf_killed = 0;
 	else
 		self.ctf_killed = 1;
+
+	RespawnMegaHealth (self);
 
 	self.weaponmodel = "";
 	self.view_ofs = '0 0 -8';
