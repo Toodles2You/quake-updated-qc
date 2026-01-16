@@ -240,10 +240,10 @@ void() spikemine_Touch =
 			return;
 		if (other.classname == "proximity_grenade")
 			return;
-
-		T_Damage (self, self, self, self.health + 10);
+		self.health = -10;
 	}
 
+	self.takedamage = DAMAGE_NO;
 	T_RadiusDamage (self, self, 110, world);
 
 	sound (self, CHAN_VOICE, "misc/null.wav", 1, ATTN_NORM);
@@ -657,6 +657,8 @@ void() trap_tesla_coil =
 	if (self.delay == 0)
 		self.delay = -1;
 	self.nextthink = time + random ();
+	if (self.nextthink < time + 0.1)
+		self.nextthink = time + 0.1;
 	self.think = trap_tesla_think;
 	self.lastvictim = world;
 	tesla_numtargets = 0;

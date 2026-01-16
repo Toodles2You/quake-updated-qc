@@ -115,7 +115,7 @@ void() monster_start_moving =
 void() walkmonster_start_go =
 {
 	self.origin_z = self.origin_z + 1; // raise off floor a bit
-	droptofloor (0, 0);
+	droptofloor ();
 
 	if (!walkmove (0, 0))
 	{

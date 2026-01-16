@@ -136,7 +136,9 @@ void() misc_fireball =
 {
 	precache_model ("progs/lavaball.mdl");
 	self.classname = "fireball";
-	self.nextthink = time + (random () * 5);
+	self.nextthink = time + random () * 5;
+	if (self.nextthink < time + 0.1)
+		self.nextthink = time + 0.1;
 	self.think = fire_fly;
 	if (!self.speed)
 		self.speed = 1000;
@@ -161,7 +163,7 @@ void() fire_fly =
 	fireball.think = SUB_Remove;
 	fireball.touch = fire_touch;
 
-	self.nextthink = time + (random () * 5) + 3;
+	self.nextthink = time + random () * 5 + 3;
 	self.think = fire_fly;
 };
 
@@ -175,10 +177,9 @@ void() barrel_explode =
 {
 	self.takedamage = DAMAGE_NO;
 	self.classname = "explo_box";
-	T_RadiusDamage (self, self, 160, world);
+	self.origin = self.origin + (self.mins + self.maxs) * 0.5;
 	particle (self.origin, '0 0 0', 75, 255);
-
-	self.origin_z = self.origin_z + 32;
+	T_RadiusDamage (self, self, 160, world);
 	BecomeExplosion (TE_EXPLOSION);
 };
 
@@ -196,7 +197,7 @@ void() misc_explobox =
 
 	self.origin_z = self.origin_z + 2;
 	oldz = self.origin_z;
-	droptofloor (0, 0);
+	droptofloor ();
 	if (oldz - self.origin_z > 250)
 	{
 		dprint ("item fell out of level at ");
@@ -220,7 +221,7 @@ void() misc_explobox2 =
 
 	self.origin_z = self.origin_z + 2;
 	oldz = self.origin_z;
-	droptofloor (0, 0);
+	droptofloor ();
 	if (oldz - self.origin_z > 250)
 	{
 		dprint ("item fell out of level at ");

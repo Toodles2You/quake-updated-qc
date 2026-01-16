@@ -449,6 +449,12 @@ void() W_Precache =
 	precache_sound ("hipweap/mjolhit.wav");
 	precache_sound ("hipweap/mjolslap.wav");
 	precache_sound ("hipweap/mjoltink.wav");
+
+	if (!deathmatch)
+	{
+		precache_sound ("items/damage2.wav");
+		precache_sound ("items/damage3.wav");
+	}
 };
 
 float() crandom =
@@ -1515,7 +1521,7 @@ void() W_ChangeWeapon =
 
 void() CheatCommand =
 {
-	if (deathmatch || coop)
+	if (deathmatch)
 		return;
 
 	self.ammo_rockets = 100;
@@ -1705,6 +1711,9 @@ void() CycleWeaponReverseCommand =
 
 void() ServerflagsCommand =
 {
+	if (deathmatch)
+		return;
+
 	if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		serverflags = serverflags - SFL_EPISODES;
 	else
@@ -1717,7 +1726,7 @@ void() ServerflagsCommand =
 
 void() QuadCheat =
 {
-	if (deathmatch || coop)
+	if (deathmatch)
 		return;
 	self.super_time = 1;
 	self.super_damage_finished = time + 30;
@@ -1726,7 +1735,7 @@ void() QuadCheat =
 
 void() WetsuitCheat =
 {
-	if (deathmatch || coop)
+	if (deathmatch)
 		return;
 	self.items2 = self.items2 | HIP_IT_WETSUIT;
 	self.wetsuit_time = 1;
@@ -1735,7 +1744,7 @@ void() WetsuitCheat =
 
 void() EmpathyShieldsCheat =
 {
-	if (deathmatch || coop)
+	if (deathmatch)
 		return;
 	self.items2 = self.items2 | HIP_IT_EMPATHY_SHIELDS;
 	self.empathy_time = 1;
@@ -1788,7 +1797,7 @@ void() Genocide =
 {
 	local entity head;
 
-	if (deathmatch || coop)
+	if (deathmatch)
 		return;
 	bprint ("Genocide!\n");
 	head = nextent (world);

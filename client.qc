@@ -90,15 +90,15 @@ void() SetNewParms =
 
 void() DecodeLevelParms =
 {
-	if (world.model == "maps/hip1m1.bsp")
-		SetNewParms (); // take away all stuff on starting new episode
-	else if (world.model == "maps/hip2m1.bsp")
-		SetNewParms (); // take away all stuff on starting new episode
-	else if (world.model == "maps/hip3m1.bsp")
-		SetNewParms (); // take away all stuff on starting new episode
-	else if (serverflags & SFL_EPISODES)
+	if (!deathmatch)
 	{
 		if (world.model == "maps/start.bsp")
+			SetNewParms (); // take away all stuff on starting new episode
+		else if (world.model == "maps/hip1m1.bsp")
+			SetNewParms (); // take away all stuff on starting new episode
+		else if (world.model == "maps/hip2m1.bsp")
+			SetNewParms (); // take away all stuff on starting new episode
+		else if (world.model == "maps/hip3m1.bsp")
 			SetNewParms (); // take away all stuff on starting new episode
 	}
 
@@ -342,12 +342,15 @@ void() changelevel_touch =
 	if (other.classname != "player")
 		return;
 
-	noexit = cvar ("noexit");
-
-	if ((noexit == 1) || ((noexit == 2) && (mapname != "start")))
+	if (deathmatch)
 	{
-		T_Damage (other, self, self, 50000);
-		return;
+		noexit = cvar ("noexit");
+
+		if ((noexit == 1) || ((noexit == 2) && (mapname != "start")))
+		{
+			T_Damage (other, self, self, 50000);
+			return;
+		}
 	}
 
 	if (coop || deathmatch)
@@ -360,7 +363,7 @@ void() changelevel_touch =
 
 	SUB_UseTargets ();
 
-	if ((self.spawnflags & CHANGE_NO_INTERMISSION) && (deathmatch == 0))
+	if ((self.spawnflags & CHANGE_NO_INTERMISSION) && !deathmatch)
 	{
 		GotoNextMap ();
 		return;
@@ -412,6 +415,9 @@ void() ClientKill =
 {
 	local entity oldother;
 
+	if (intermission_running)
+		return;
+
 	oldother = other;
 	other = self;
 	self.deathtype = "suicide";
@@ -421,7 +427,7 @@ void() ClientKill =
 
 	set_suicide_frame ();
 
-	if (coop || deathmatch)
+	if (deathmatch)
 		respawn ();
 };
 
@@ -523,7 +529,11 @@ void() PutClientInServer =
 	// paustime is set by teleporters to keep the player from moving a while
 	self.pausetime = 0;
 
+	self.healamount = 0;
+	self.healtype = 0;
+
 	self.origin = spot.origin + '0 0 1';
+	self.oldorigin = self.origin;
 	self.angles = spot.angles;
 	self.fixangle = TRUE;
 
@@ -627,9 +637,10 @@ void() NextLevel =
 
 void() CheckRules =
 {
-	local float timelimit;
-	local float fraglimit;
+	local float timelimit, fraglimit;
 
+	if (!deathmatch)
+		return;
 	if (gameover)
 		return;
 
@@ -834,6 +845,28 @@ void() CheckWaterJump =
 	}
 };
 
+void() PlayerHealthThink =
+{
+	if (!self.healamount)
+		return;
+	if (self.healtype > time)
+		return;
+
+	if (self.health > self.max_health)
+	{
+		self.health = self.health - 1;
+		self.healtype = time + 1 / self.healamount;
+
+		if (self.health > self.max_health)
+			return;
+	}
+
+	self.healamount = 0;
+	self.healtype = 0;
+
+	RespawnMegaHealth (self);
+};
+
 void(float num_bubbles) DeathBubbles;
 
 /*
@@ -927,6 +960,8 @@ void() PlayerPreThink =
 
 	if (self.deadflag == DEAD_DYING)
 		return;
+
+	PlayerHealthThink ();
 
 	if (self.button2)
 	{
@@ -1233,6 +1268,8 @@ void() ClientDisconnect =
 	bprint (" frags\n");
 	sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
 	set_suicide_frame ();
+
+	RespawnMegaHealth (self);
 };
 
 void(entity targ, entity attacker) ClientObituary =
