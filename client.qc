@@ -89,7 +89,7 @@ void() SetNewParms =
 
 void() DecodeLevelParms =
 {
-	if (serverflags & SFL_EPISODES)
+	if (!deathmatch)
 	{
 		if (world.model == "maps/start.bsp")
 			SetNewParms (); // take away all stuff on starting new episode
@@ -285,12 +285,15 @@ void() changelevel_touch =
 	if (other.classname != "player")
 		return;
 
-	noexit = cvar ("noexit");
-
-	if ((noexit == 1) || ((noexit == 2) && (mapname != "start")))
+	if (deathmatch)
 	{
-		T_Damage (other, self, self, 50000);
-		return;
+		noexit = cvar ("noexit");
+
+		if ((noexit == 1) || ((noexit == 2) && (mapname != "start")))
+		{
+			T_Damage (other, self, self, 50000);
+			return;
+		}
 	}
 
 	if (coop || deathmatch)
@@ -303,7 +306,7 @@ void() changelevel_touch =
 
 	SUB_UseTargets ();
 
-	if ((self.spawnflags & CHANGE_NO_INTERMISSION) && (deathmatch == 0))
+	if ((self.spawnflags & CHANGE_NO_INTERMISSION) && !deathmatch)
 	{
 		GotoNextMap ();
 		return;
@@ -355,6 +358,9 @@ void() ClientKill =
 {
 	local entity oldother;
 
+	if (intermission_running)
+		return;
+
 	oldother = other;
 	other = self;
 	self.deathtype = "suicide";
@@ -364,7 +370,7 @@ void() ClientKill =
 
 	set_suicide_frame ();
 
-	if (coop || deathmatch)
+	if (deathmatch)
 		respawn ();
 };
 
@@ -466,6 +472,7 @@ void() PutClientInServer =
 	self.healtype = 0;
 
 	self.origin = spot.origin + '0 0 1';
+	self.oldorigin = self.origin;
 	self.angles = spot.angles;
 	self.fixangle = TRUE;
 
@@ -563,9 +570,10 @@ void() NextLevel =
 
 void() CheckRules =
 {
-	local float timelimit;
-	local float fraglimit;
+	local float timelimit, fraglimit;
 
+	if (!deathmatch)
+		return;
 	if (gameover)
 		return;
 

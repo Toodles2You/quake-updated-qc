@@ -290,7 +290,7 @@ float(float w) RankForWeapon =
 		return 5;
 	if (w == IT_NAILGUN)
 		return 6;
-	return 7;
+	return 666;
 };
 
 void(float old, float new) Deathmatch_Weapon =

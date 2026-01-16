@@ -37,6 +37,12 @@ void() W_Precache =
 	precache_sound ("weapons/grenade.wav");
 	precache_sound ("weapons/bounce.wav");
 	precache_sound ("weapons/shotgn2.wav");
+
+	if (!deathmatch)
+	{
+		precache_sound ("items/damage2.wav");
+		precache_sound ("items/damage3.wav");
+	}
 };
 
 float() crandom =
@@ -879,7 +885,7 @@ void() W_ChangeWeapon =
 
 void() CheatCommand =
 {
-	if (deathmatch || coop)
+	if (deathmatch)
 		return;
 
 	self.ammo_rockets = 100;
@@ -1037,6 +1043,9 @@ void() CycleWeaponReverseCommand =
 
 void() ServerflagsCommand =
 {
+	if (deathmatch)
+		return;
+
 	if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		serverflags = serverflags - SFL_EPISODES;
 	else
@@ -1049,7 +1058,7 @@ void() ServerflagsCommand =
 
 void() QuadCheat =
 {
-	if (deathmatch || coop)
+	if (deathmatch)
 		return;
 	self.super_time = 1;
 	self.super_damage_finished = time + 30;
@@ -1060,7 +1069,7 @@ void() ImpulseCommands =
 {
 	if (self.impulse >= 1 && self.impulse <= 8)
 		W_ChangeWeapon ();
-	if (self.impulse == 9)
+	else if (self.impulse == 9)
 		CheatCommand ();
 	else if (self.impulse == 10)
 		CycleWeaponCommand ();
