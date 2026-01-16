@@ -435,6 +435,7 @@ void() PlayerDead =
 	self.think = SUB_Null;
 	// allow respawn after a certain time
 	self.deadflag = DEAD_DEAD;
+	self.pain_finished = time + 1;
 };
 
 vector(float dm) VelocityForDamage =
@@ -501,6 +502,7 @@ void() GibPlayer =
 	ThrowGib ("progs/gib3.mdl", self.health);
 
 	self.deadflag = DEAD_DEAD;
+	self.pain_finished = time + 1;
 
 	if (other.classname == "teledeath")
 	{
@@ -563,6 +565,8 @@ void() PlayerDie =
 		return;
 	}
 
+	self.pain_finished = time;
+
 	DeathSound ();
 
 	if (weap == IT_AXE)
@@ -595,6 +599,7 @@ void() set_suicide_frame =
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_TOSS;
 	self.deadflag = DEAD_DEAD;
+	self.pain_finished = time + 1;
 	self.nextthink = -1;
 	self.think = SUB_Null;
 };
