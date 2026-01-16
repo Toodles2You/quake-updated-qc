@@ -133,7 +133,7 @@ void() health_touch =
 	self.model = "";
 	self.solid = SOLID_NOT;
 
-	if (self.healtype == 2 && (other.items & IT_SUPERHEALTH))
+	if (self.healtype == 2 && other.healamount)
 	{
 		self.nextthink = time + 5;
 		self.think = SUB_Null;
@@ -164,14 +164,14 @@ void() item_megahealth_rot =
 	}
 };
 
-void(entity client) RespawnMegaHealth =
+void() RespawnMegaHealth =
 {
 	local entity ent;
 
 	ent = find (world, classname, "item_health");
 	while (ent)
 	{
-		if (ent.owner == client)
+		if (ent.owner == self)
 		{
 			ent.owner = world;
 			ent.think = item_megahealth_rot;

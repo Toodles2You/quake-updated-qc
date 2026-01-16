@@ -535,7 +535,7 @@ void() PlayerDie =
 	if (deathmatch || coop)
 		DropBackpack ();
 
-	RespawnMegaHealth (self);
+	RespawnMegaHealth ();
 
 	self.weaponmodel = "";
 	self.view_ofs = '0 0 -8';

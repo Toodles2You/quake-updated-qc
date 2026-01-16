@@ -275,14 +275,12 @@ float(entity ent, float heal, float mega) T_Heal =
 		if (ent.health > ent.max_health)
 		{
 			// rot down the player's super health
-			if (!(ent.items & IT_SUPERHEALTH))
+			if (!ent.healamount)
 			{
-				ent.healamount = 1;
 				ent.healtype = time + 5;
 				ent.items = ent.items | IT_SUPERHEALTH;
 			}
-			else
-				ent.healamount = ent.healamount + 1;
+			ent.healamount = ent.healamount + 1;
 		}
 
 	return TRUE;

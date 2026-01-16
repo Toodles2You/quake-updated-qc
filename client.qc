@@ -798,7 +798,7 @@ void() PlayerHealthThink =
 	self.healtype = 0;
 	self.items = self.items - (self.items & IT_SUPERHEALTH);
 
-	RespawnMegaHealth (self);
+	RespawnMegaHealth ();
 };
 
 /*
@@ -1059,8 +1059,7 @@ void() ClientDisconnect =
 	bprint (" frags\n");
 	sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
 	set_suicide_frame ();
-
-	RespawnMegaHealth (self);
+	RespawnMegaHealth ();
 };
 
 void(entity targ, entity attacker) ClientObituary =
