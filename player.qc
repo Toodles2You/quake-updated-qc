@@ -522,9 +522,8 @@ void() GibPlayer =
 
 void() PlayerDie =
 {
-	local float i;
+	local float weap, i;
 
-	self.items = self.items - (self.items & IT_ARTS);
 	self.invisible_finished = 0;
 	self.invincible_finished = 0;
 	self.super_damage_finished = 0;
@@ -532,12 +531,21 @@ void() PlayerDie =
 	self.effects = 0;
 	self.modelindex = modelindex_player;
 
+	weap = self.weapon;
+
 	if (deathmatch || coop)
 		DropBackpack ();
 
 	RespawnMegaHealth ();
 
+	self.items = 0;
+	self.weapon = 0;
 	self.weaponmodel = "";
+	self.currentammo = 0;
+	self.ammo_shells = 0;
+	self.ammo_nails = 0;
+	self.ammo_rockets = 0;
+	self.ammo_cells = 0;
 	self.view_ofs = '0 0 -8';
 	self.deadflag = DEAD_DYING;
 	self.solid = SOLID_NOT;
@@ -545,6 +553,9 @@ void() PlayerDie =
 	self.movetype = MOVETYPE_TOSS;
 	if (self.velocity_z < 10)
 		self.velocity_z = self.velocity_z + random () * 300;
+
+	self.angles_x = 0;
+	self.angles_z = 0;
 
 	if (self.health < -40)
 	{
@@ -554,10 +565,7 @@ void() PlayerDie =
 
 	DeathSound ();
 
-	self.angles_x = 0;
-	self.angles_z = 0;
-
-	if (self.weapon == IT_AXE)
+	if (weap == IT_AXE)
 	{
 		player_die_ax1 ();
 		return;
@@ -581,6 +589,8 @@ void() set_suicide_frame =
 {
 	if (self.model != "progs/player.mdl")
 		return;
+	self.angles_x = 0;
+	self.angles_z = 0;
 	self.frame = $deatha11;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_TOSS;

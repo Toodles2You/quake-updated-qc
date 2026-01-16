@@ -102,7 +102,7 @@ void() DecodeLevelParms =
 	self.ammo_nails = parm5;
 	self.ammo_rockets = parm6;
 	self.ammo_cells = parm7;
-	self.weapon = 0;
+	self.weapon = -1;
 	W_SetWeapon (parm8);
 	self.armortype = parm9 * 0.01;
 };
@@ -1050,16 +1050,39 @@ void() ClientConnect =
 
 void() ClientDisconnect =
 {
-	if (gameover)
-		return;
+	if (!intermission_running)
+	{
+		bprint (self.netname);
+		bprint (" left the game");
+		if (deathmatch)
+		{
+			bprint (" with ");
+			bprint (ftos (self.frags));
+			bprint (" frags");
+		}
+		bprint ("\n");
+		sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
 
-	bprint (self.netname);
-	bprint (" left the game with ");
-	bprint (ftos (self.frags));
-	bprint (" frags\n");
-	sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
-	set_suicide_frame ();
-	RespawnMegaHealth ();
+		if (self.health > 0)
+		{
+			if (coop || deathmatch)
+				DropBackpack ();
+
+			RespawnMegaHealth ();
+
+			set_suicide_frame ();
+		}
+
+		CopyToBodyQue (self);
+	}
+
+	self.classname = "";
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NONE;
+	self.takedamage = DAMAGE_NO;
+	self.model = "";
+	self.modelindex = 0;
+	self.flags = self.flags - (self.flags & FL_CLIENT);
 };
 
 void(entity targ, entity attacker) ClientObituary =
