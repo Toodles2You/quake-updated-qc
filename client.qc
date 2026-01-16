@@ -465,8 +465,6 @@ void() PutClientInServer =
 	self.th_die = PlayerDie;
 
 	self.deadflag = DEAD_NO;
-	// paustime is set by teleporters to keep the player from moving a while
-	self.pausetime = 0;
 
 	self.healamount = 0;
 	self.healtype = 0;
@@ -488,6 +486,7 @@ void() PutClientInServer =
 	self.view_ofs = '0 0 22';
 
 	self.velocity = '0 0 0';
+	self.jump_flag = 0;
 
 	PlayerStand ();
 
@@ -536,11 +535,10 @@ void() NextLevel =
 			mapname = "e3m1";
 			serverflags = serverflags | SFL_EPISODE_3;
 		}
-		else if (!(serverflags & SFL_EPISODE_4))
+		else
 		{
 			mapname = "e4m1";
-			serverflags = serverflags - (serverflags &
-					(SFL_EPISODE_1 | SFL_EPISODE_2 | SFL_EPISODE_3));
+			serverflags = serverflags - (serverflags & SFL_EPISODES);
 		}
 
 		o = spawn ();
@@ -600,7 +598,7 @@ void() PlayerDeathThink =
 	if (self.flags & FL_ONGROUND)
 	{
 		forward = vlen (self.velocity);
-		forward = forward - 20;
+		forward = forward - 1200 * frametime;
 		if (forward <= 0)
 			self.velocity = '0 0 0';
 		else
@@ -608,7 +606,7 @@ void() PlayerDeathThink =
 	}
 
 	// wait for all buttons released
-	if (self.deadflag == DEAD_DEAD)
+	if (self.deadflag != DEAD_RESPAWNABLE)
 	{
 		if (self.button2 || self.button1 || self.button0)
 			return;
@@ -668,14 +666,43 @@ void() PlayerJump =
 
 .float dmgtime;
 
+void() CheckWaterJump =
+{
+	local vector start, end;
+
+	// check for a jump-out-of-water
+	start = self.origin;
+	start_z = start_z + 8;
+	v_forward_z = 0;
+	normalize (v_forward);
+	end = start + v_forward * 24;
+	traceline (start, end, TRUE, self);
+	if (trace_fraction == 1)
+		return;
+
+	// solid at waist
+
+	start_z = start_z + self.maxs_z - 8;
+	end = start + v_forward * 24;
+	self.movedir = trace_plane_normal * -50;
+	traceline (start, end, TRUE, self);
+	if (trace_fraction != 1)
+		return;
+
+	// open at eye level
+
+	self.flags = self.flags | FL_WATERJUMP;
+	self.velocity_z = 225;
+	self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
+	self.teleport_time = time + 2; // safety net
+};
+
 void() WaterMove =
 {
 	local float waterfriction;
 
 	if (self.movetype == MOVETYPE_NOCLIP)
-		return;
-	if (self.health <= 0)
-		return;
+		self.waterlevel = 0;
 
 	if (self.waterlevel != 3)
 	{
@@ -742,39 +769,13 @@ void() WaterMove =
 		self.dmgtime = 0;
 	}
 
+	if (self.waterlevel == 2)
+		CheckWaterJump ();
+
 	if (!(self.flags & FL_WATERJUMP))
 	{
 		waterfriction = 0.8 * self.waterlevel * frametime;
 		self.velocity = self.velocity - waterfriction * self.velocity;
-	}
-};
-
-void() CheckWaterJump =
-{
-	local vector start, end;
-
-	// check for a jump-out-of-water
-	makevectors (self.angles);
-	start = self.origin;
-	start_z = start_z + 8;
-	v_forward_z = 0;
-	normalize (v_forward);
-	end = start + v_forward * 24;
-	traceline (start, end, TRUE, self);
-	if (trace_fraction < 1)
-	{ // solid at waist
-		start_z = start_z + self.maxs_z - 8;
-		end = start + v_forward * 24;
-		self.movedir = trace_plane_normal * -50;
-		traceline (start, end, TRUE, self);
-		if (trace_fraction == 1)
-		{ // open at eye level
-			self.flags = self.flags | FL_WATERJUMP;
-			self.velocity_z = 225;
-			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
-			self.teleport_time = time + 2; // safety net
-			return;
-		}
 	}
 };
 
@@ -816,51 +817,56 @@ void() PlayerPreThink =
 		return;
 	}
 
-	if (self.view_ofs == '0 0 0')
-		return; // intermission or finale
+	CheckRules ();
 
 	makevectors (self.v_angle);
 
-	CheckRules ();
-	WaterMove ();
-
-	if (self.waterlevel == 2)
-		CheckWaterJump ();
-
-	if (self.deadflag >= DEAD_DEAD)
+	if (self.health <= 0)
 	{
-		PlayerDeathThink ();
+		if (self.deadflag >= DEAD_DEAD)
+			PlayerDeathThink ();
 		return;
 	}
-
-	if (self.deadflag == DEAD_DYING)
-		return;
 
 	PlayerHealthThink ();
 
+	WaterMove ();
+
 	if (self.button2)
-	{
 		PlayerJump ();
-	}
 	else
 		self.flags = self.flags | FL_JUMPRELEASED;
+};
 
-	// teleporters can force a non-moving pause time
-	if (time < self.pausetime)
-		self.velocity = '0 0 0';
-
-	if (time > self.attack_finished && self.currentammo == 0 &&
-		self.weapon != IT_AXE)
+void() CheckLanding =
+{
+	// check to see if player landed and play landing sound
+	if (!(self.flags & FL_ONGROUND))
 	{
-		W_SetWeapon (W_BestWeapon ());
+		self.jump_flag = self.velocity_z;
+		return;
 	}
+
+	if (self.jump_flag < -300)
+	{
+		if (self.watertype == CONTENT_WATER)
+			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
+		else if (self.jump_flag < -650)
+		{
+			self.deathtype = "falling";
+			T_Damage (self, world, world, 5);
+			self.deathtype = "";
+
+			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
+		}
+		else
+			sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+	}
+	self.jump_flag = 0;
 };
 
 void() CheckPowerups =
 {
-	if (self.health <= 0)
-		return;
-
 	// sound and screen flash when items start to run out
 
 	// invisibility
@@ -1006,34 +1012,20 @@ Called every frame after physics are run
 */
 void() PlayerPostThink =
 {
-	if (self.view_ofs == '0 0 0')
-		return; // intermission or finale
-	if (self.deadflag)
+	if (intermission_running)
+		return;
+	if (self.health <= 0)
 		return;
 
 	W_WeaponFrame ();
 
-	// check to see if player landed and play landing sound
-	if ((self.jump_flag < -300) && (self.flags & FL_ONGROUND) &&
-		(self.health > 0))
-	{
-		if (self.watertype == CONTENT_WATER)
-			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
-		else if (self.jump_flag < -650)
-		{
-			self.deathtype = "falling";
-			T_Damage (self, world, world, 5);
-			self.deathtype = "";
-			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
-		}
-		else
-			sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+	if (self.health <= 0)
+		return;
 
-		self.jump_flag = 0;
-	}
+	CheckLanding ();
 
-	if (!(self.flags & FL_ONGROUND))
-		self.jump_flag = self.velocity_z;
+	if (self.health <= 0)
+		return;
 
 	CheckPowerups ();
 };
