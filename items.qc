@@ -49,13 +49,7 @@ void() PlaceItem =
 	self.origin_z = self.origin_z + 6;
 	oldz = self.origin_z;
 	if (!droptofloor ())
-	{
-		dprint ("Bonus item fell out of level at ");
-		dprint (vtos (self.origin));
-		dprint ("\n");
-		remove (self);
-		return;
-	}
+		entwarn ("fell out of level");
 };
 
 void() StartItem =
@@ -322,7 +316,6 @@ void() weapon_touch =
 	else
 		leave = 0;
 
-	new = 0;
 	if (self.classname == "weapon_supershotgun")
 		new = IT_SUPER_SHOTGUN;
 	else if (self.classname == "weapon_nailgun")
@@ -336,7 +329,7 @@ void() weapon_touch =
 	else if (self.classname == "weapon_lightning")
 		new = IT_LIGHTNING;
 	else
-		objerror ("weapon_touch: unknown classname");
+		new = 0;
 
 	if (other.items & new)
 	{
@@ -815,30 +808,30 @@ void() sigil_touch =
 void() item_sigil =
 {
 	if (!(self.spawnflags & SFL_EPISODES))
-		objerror ("no spawnflags");
+		entwarn ("no spawnflags");
 
 	precache_sound ("misc/runekey.wav");
 	self.noise = "misc/runekey.wav";
 
-	if (self.spawnflags & SFL_EPISODE_1)
-	{
-		precache_model ("progs/end1.mdl");
-		setmodel (self, "progs/end1.mdl");
-	}
-	if (self.spawnflags & SFL_EPISODE_2)
-	{
-		precache_model2 ("progs/end2.mdl");
-		setmodel (self, "progs/end2.mdl");
-	}
-	if (self.spawnflags & SFL_EPISODE_3)
-	{
-		precache_model2 ("progs/end3.mdl");
-		setmodel (self, "progs/end3.mdl");
-	}
 	if (self.spawnflags & SFL_EPISODE_4)
 	{
 		precache_model2 ("progs/end4.mdl");
 		setmodel (self, "progs/end4.mdl");
+	}
+	else if (self.spawnflags & SFL_EPISODE_3)
+	{
+		precache_model2 ("progs/end3.mdl");
+		setmodel (self, "progs/end3.mdl");
+	}
+	else if (self.spawnflags & SFL_EPISODE_2)
+	{
+		precache_model2 ("progs/end2.mdl");
+		setmodel (self, "progs/end2.mdl");
+	}
+	else
+	{
+		precache_model ("progs/end1.mdl");
+		setmodel (self, "progs/end1.mdl");
 	}
 
 	self.touch = sigil_touch;

@@ -188,8 +188,6 @@ void() barrel_explode =
 
 void() misc_explobox =
 {
-	local float oldz;
-
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
 	precache_model ("maps/b_explob.bsp");
@@ -199,21 +197,12 @@ void() misc_explobox =
 	self.takedamage = DAMAGE_AIM;
 
 	self.origin_z = self.origin_z + 2;
-	oldz = self.origin_z;
-	droptofloor ();
-	if (oldz - self.origin_z > 250)
-	{
-		dprint ("item fell out of level at ");
-		dprint (vtos (self.origin));
-		dprint ("\n");
-		remove (self);
-	}
+	if (!droptofloor ())
+		entwarn ("fell out of level");
 };
 
 void() misc_explobox2 =
 {
-	local float oldz;
-
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
 	precache_model2 ("maps/b_exbox2.bsp");
@@ -223,15 +212,8 @@ void() misc_explobox2 =
 	self.takedamage = DAMAGE_AIM;
 
 	self.origin_z = self.origin_z + 2;
-	oldz = self.origin_z;
-	droptofloor ();
-	if (oldz - self.origin_z > 250)
-	{
-		dprint ("item fell out of level at ");
-		dprint (vtos (self.origin));
-		dprint ("\n");
-		remove (self);
-	}
+	if (!droptofloor ())
+		entwarn ("fell out of level");
 };
 
 float SPAWNFLAG_SUPERSPIKE = 1;

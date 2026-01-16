@@ -25,6 +25,29 @@ void(entity attacker, float damage) SUB_NullPain = {};
 
 void() SUB_Remove = { remove (self); };
 
+void(string s) entwarn =
+{
+	local vector org;
+
+	org = self.origin + (self.mins + self.maxs) * 0.5;
+	org_x = rint (org_x);
+	org_y = rint (org_y);
+	org_z = rint (org_z);
+
+	dprint (self.classname);
+	dprint (" near ");
+	dprint (vtos (org));
+	dprint (": ");
+	dprint (s);
+	dprint ("\n");
+};
+
+void(string s) enterror =
+{
+	entwarn (s);
+	remove (self);
+};
+
 /*
 QuakeEd only writes a single float for angles (bad idea), so up and down are
 just constant angles.
@@ -118,7 +141,10 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove =
 	local float len, traveltime;
 
 	if (!tspeed)
-		objerror ("No speed is defined!");
+	{
+		entwarn ("No speed is defined!");
+		return;
+	}
 
 	self.think1 = func;
 	self.finaldest = tdest;
@@ -189,7 +215,10 @@ void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove =
 	local float len, traveltime;
 
 	if (!tspeed)
-		objerror ("No speed is defined!");
+	{
+		entwarn ("No speed is defined!");
+		return;
+	}
 
 	// set destdelta to the vector needed to move
 	destdelta = destangle - self.angles;

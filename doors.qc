@@ -104,7 +104,10 @@ void() door_fire =
 	local entity door;
 
 	if (self.owner != self)
-		objerror ("door_fire: self.owner != self");
+	{
+		entwarn ("door_fire: self.owner != self");
+		return;
+	}
 
 	if (self.items)
 		sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
@@ -323,23 +326,25 @@ void() LinkDoors =
 		if (EntitiesTouching (self, t))
 		{
 			if (t.enemy)
-				objerror ("cross connected doors");
+				entwarn ("cross connected doors");
+			else
+			{
+				self.enemy = t;
+				self = t;
 
-			self.enemy = t;
-			self = t;
-
-			if (t.mins_x < cmins_x)
-				cmins_x = t.mins_x;
-			if (t.mins_y < cmins_y)
-				cmins_y = t.mins_y;
-			if (t.mins_z < cmins_z)
-				cmins_z = t.mins_z;
-			if (t.maxs_x > cmaxs_x)
-				cmaxs_x = t.maxs_x;
-			if (t.maxs_y > cmaxs_y)
-				cmaxs_y = t.maxs_y;
-			if (t.maxs_z > cmaxs_z)
-				cmaxs_z = t.maxs_z;
+				if (t.mins_x < cmins_x)
+					cmins_x = t.mins_x;
+				if (t.mins_y < cmins_y)
+					cmins_y = t.mins_y;
+				if (t.mins_z < cmins_z)
+					cmins_z = t.mins_z;
+				if (t.maxs_x > cmaxs_x)
+					cmaxs_x = t.maxs_x;
+				if (t.maxs_y > cmaxs_y)
+					cmaxs_y = t.maxs_y;
+				if (t.maxs_z > cmaxs_z)
+					cmaxs_z = t.maxs_z;
+			}
 		}
 	} while (1);
 };
@@ -368,10 +373,6 @@ void() func_door =
 		precache_sound ("doors/baseuse.wav");
 		self.noise3 = "doors/basetry.wav";
 		self.noise4 = "doors/baseuse.wav";
-	}
-	else
-	{
-		dprint ("no worldtype set!\n");
 	}
 	if (self.sounds == 0)
 	{

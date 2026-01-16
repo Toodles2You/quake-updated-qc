@@ -138,7 +138,7 @@ entity() FindIntermission =
 	if (spot)
 		return spot;
 
-	objerror ("FindIntermission: no spot");
+	dprint ("FindIntermission: no spot\n");
 	return spot;
 };
 
@@ -342,7 +342,10 @@ void() changelevel_touch =
 void() trigger_changelevel =
 {
 	if (self.map == "")
-		objerror ("chagnelevel trigger doesn't have map");
+	{
+		enterror ("no map");
+		return;
+	}
 
 	InitTrigger ();
 	self.touch = changelevel_touch;
@@ -447,7 +450,7 @@ entity() SelectSpawnPoint =
 
 	spot = find (world, classname, "info_player_start");
 	if (!spot)
-		error ("PutClientInServer: no info_player_start on level");
+		dprint ("PutClientInServer: no info_player_start on level\n");
 
 	return spot;
 };

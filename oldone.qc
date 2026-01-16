@@ -116,11 +116,10 @@ void() finale_1 =
 
 	pos = find (world, classname, "info_intermission");
 	if (!pos)
-		error ("no info_intermission");
+		entwarn ("no info_intermission");
 	pl = find (world, classname, "misc_teleporttrain");
-	if (!pl)
-		error ("no teleporttrain");
-	remove (pl);
+	if (pl)
+		remove (pl);
 
 	WriteByte (MSG_ALL, SVC_FINALE);
 	WriteString (MSG_ALL, "");

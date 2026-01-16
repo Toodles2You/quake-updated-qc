@@ -350,7 +350,7 @@ void() lightning_use =
 
 	if (!le1 || !le2)
 	{
-		dprint ("missing lightning targets\n");
+		entwarn ("missing lightning targets");
 		return;
 	}
 
