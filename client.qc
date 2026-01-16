@@ -27,6 +27,7 @@ float CHANGE_NO_INTERMISSION = 1;
 
 float modelindex_eyes, modelindex_player;
 
+string nextmap;
 float intermission_running;
 float intermission_exittime;
 float restarting;
@@ -62,11 +63,14 @@ void() SetChangeParms =
 		parm2 = 50;
 	else
 		parm2 = self.health;
+
 	parm3 = self.armorvalue;
+
 	if (self.ammo_shells < 25)
 		parm4 = 25;
 	else
 		parm4 = self.ammo_shells;
+
 	parm5 = self.ammo_nails;
 	parm6 = self.ammo_rockets;
 	parm7 = self.ammo_cells;
@@ -91,7 +95,7 @@ void() DecodeLevelParms =
 {
 	if (!deathmatch)
 	{
-		if (world.model == "maps/start.bsp")
+		if (mapname == "start")
 			SetNewParms (); // take away all stuff on starting new episode
 	}
 
@@ -138,17 +142,39 @@ entity() FindIntermission =
 	return spot;
 };
 
-string nextmap;
+void() SetServerFlags =
+{
+	if (mapname == "e1m7")
+		serverflags = serverflags | SFL_EPISODE_1;
+	else if (mapname == "e2m6")
+		serverflags = serverflags | SFL_EPISODE_2;
+	else if (mapname == "e3m6")
+		serverflags = serverflags | SFL_EPISODE_3;
+	else if (mapname == "e4m7")
+		serverflags = serverflags | SFL_EPISODE_4;
+	else if (mapname == "end")
+		serverflags = serverflags - (serverflags & SFL_EPISODES);
+};
+
 void() GotoNextMap =
 {
-	if (cvar ("samelevel"))
-		changelevel (mapname);
-	else
-		changelevel (nextmap);
+	restarting = FALSE;
+	if (deathmatch)
+	{
+		SetServerFlags ();
+		if (cvar ("samelevel"))
+		{
+			changelevel (mapname);
+			return;
+		}
+	}
+	changelevel (nextmap);
 };
 
 void() ExitIntermission =
 {
+	local float finale;
+
 	if (deathmatch)
 	{
 		GotoNextMap ();
@@ -161,69 +187,61 @@ void() ExitIntermission =
 	// run some text if at the end of an episode
 	if (intermission_running == 2)
 	{
-		if (world.model == "maps/e1m7.bsp")
+		finale = FALSE;
+
+		if (mapname == "e1m7")
 		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 2);
-			WriteByte (MSG_ALL, 3);
+			finale = TRUE;
 			if (!cvar ("registered"))
 			{
 				WriteByte (MSG_ALL, SVC_FINALE);
-				WriteString (MSG_ALL, "As the corpse of the monstrous entity\nChthon sinks back into the lava whence\nit rose, you grip the Rune of Earth\nMagic tightly. Now that you have\nconquered the Dimension of the Doomed,\nrealm of Earth Magic, you are ready to\ncomplete your task in the other three\nhaunted lands of Quake. Or are you? If\nyou don't register Quake, you'll never\nknow what awaits you in the Realm of\nBlack Magic, the Netherworld, and the\nElder World!");
+				WriteString (MSG_ALL, FINALE_SHAREWARE);
 			}
 			else
 			{
 				WriteByte (MSG_ALL, SVC_FINALE);
-				WriteString (MSG_ALL, "As the corpse of the monstrous entity\nChthon sinks back into the lava whence\nit rose, you grip the Rune of Earth\nMagic tightly. Now that you have\nconquered the Dimension of the Doomed,\nrealm of Earth Magic, you are ready to\ncomplete your task. A Rune of magic\npower lies at the end of each haunted\nland of Quake. Go forth, seek the\ntotality of the four Runes!");
+				WriteString (MSG_ALL, FINALE_EPISODE_1);
 			}
-			return;
 		}
-		else if (world.model == "maps/e2m6.bsp")
+		else if (mapname == "e2m6")
+		{
+			finale = TRUE;
+			WriteByte (MSG_ALL, SVC_FINALE);
+			WriteString (MSG_ALL, FINALE_EPISODE_2);
+		}
+		else if (mapname == "e3m6")
+		{
+			finale = TRUE;
+			WriteByte (MSG_ALL, SVC_FINALE);
+			WriteString (MSG_ALL, FINALE_EPISODE_3);
+		}
+		else if (mapname == "e4m7")
+		{
+			finale = TRUE;
+			WriteByte (MSG_ALL, SVC_FINALE);
+			WriteString (MSG_ALL, FINALE_EPISODE_4);
+		}
+
+		if (finale)
 		{
 			WriteByte (MSG_ALL, SVC_CDTRACK);
 			WriteByte (MSG_ALL, 2);
 			WriteByte (MSG_ALL, 3);
-
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "The Rune of Black Magic throbs evilly in\nyour hand and whispers dark thoughts\ninto your brain. You learn the inmost\nlore of the Hell-Mother; Shub-Niggurath!\nYou now know that she is behind all the\nterrible plotting which has led to so\nmuch death and horror. But she is not\ninviolate! Armed with this Rune, you\nrealize that once all four Runes are\ncombined, the gate to Shub-Niggurath's\nPit will open, and you can face the\nWitch-Goddess herself in her frightful\notherworld cathedral.");
 			return;
 		}
-		else if (world.model == "maps/e3m6.bsp")
-		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 2);
-			WriteByte (MSG_ALL, 3);
-
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "The charred viscera of diabolic horrors\nbubble viscously as you seize the Rune\nof Hell Magic. Its heat scorches your\nhand, and its terrible secrets blight\nyour mind. Gathering the shreds of your\ncourage, you shake the devil's shackles\nfrom your soul, and become ever more\nhard and determined to destroy the\nhideous creatures whose mere existence\nthreatens the souls and psyches of all\nthe population of Earth.");
-			return;
-		}
-		else if (world.model == "maps/e4m7.bsp")
-		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 2);
-			WriteByte (MSG_ALL, 3);
-
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "Despite the awful might of the Elder\nWorld, you have achieved the Rune of\nElder Magic, capstone of all types of\narcane wisdom. Beyond good and evil,\nbeyond life and death, the Rune\npulsates, heavy with import. Patient and\npotent, the Elder Being Shub-Niggurath\nweaves her dire plans to clear off all\nlife from the Earth, and bring her own\nfoul offspring to our world! For all the\ndwellers in these nightmare dimensions\nare her descendants! Once all Runes of\nmagic power are united, the energy\nbehind them will blast open the Gateway\nto Shub-Niggurath, and you can travel\nthere to foil the Hell-Mother's plots\nin person.");
-			return;
-		}
-
-		GotoNextMap ();
 	}
-
-	if (intermission_running == 3)
+	else if (intermission_running == 3)
 	{
 		if (!cvar ("registered"))
-		{ // shareware episode has been completed, go to sell screen
+		{
+			// shareware episode has been completed, go to sell screen
 			WriteByte (MSG_ALL, SVC_SELLSCREEN);
 			return;
 		}
-
-		if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
+		else if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		{
 			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "Now, you have all four Runes. You sense\ntremendous invisible forces moving to\nunseal ancient barriers. Shub-Niggurath\nhad hoped to use the Runes Herself to\nclear off the Earth, but now instead,\nyou will use them to enter her home and\nconfront her as an avatar of avenging\nEarth-life. If you defeat her, you will\nbe remembered forever as the savior of\nthe planet. If she conquers, it will be\nas if you had never been born.");
+			WriteString (MSG_ALL, FINALE_EPISODES);
 			return;
 		}
 	}
@@ -517,33 +535,18 @@ void() NextLevel =
 
 	if (mapname == "start")
 	{
-		if (!cvar ("registered"))
-		{
-			mapname = "e1m1";
-		}
-		else if (!(serverflags & SFL_EPISODE_1))
-		{
-			mapname = "e1m1";
-			serverflags = serverflags | SFL_EPISODE_1;
-		}
-		else if (!(serverflags & SFL_EPISODE_2))
-		{
-			mapname = "e2m1";
-			serverflags = serverflags | SFL_EPISODE_2;
-		}
-		else if (!(serverflags & SFL_EPISODE_3))
-		{
-			mapname = "e3m1";
-			serverflags = serverflags | SFL_EPISODE_3;
-		}
-		else
-		{
-			mapname = "e4m1";
-			serverflags = serverflags - (serverflags & SFL_EPISODES);
-		}
-
 		o = spawn ();
-		o.map = mapname;
+
+		if (!cvar ("registered") || !(serverflags & SFL_EPISODE_1))
+			o.map = "e1m1";
+		else if (!(serverflags & SFL_EPISODE_2))
+			o.map = "e2m1";
+		else if (!(serverflags & SFL_EPISODE_3))
+			o.map = "e3m1";
+		else if (!(serverflags & SFL_EPISODE_4))
+			o.map = "e4m1";
+		else if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
+			o.map = "end";
 	}
 	else
 	{
@@ -551,9 +554,8 @@ void() NextLevel =
 
 		if (!o)
 		{
-			mapname = "start";
 			o = spawn ();
-			o.map = mapname;
+			o.map = "start";
 		}
 	}
 

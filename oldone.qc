@@ -220,7 +220,7 @@ void() finale_4 =
 	}
 
 	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, "Congratulations and well done! You have\nbeaten the hideous Shub-Niggurath, and\nher hundreds of ugly changelings and\nmonsters. You have proven that your\nskill and your cunning are greater than\nall the powers of Quake. You are the\nmaster now. Id Software salutes you.");
+	WriteString (MSG_ALL, FINALE_END);
 
 	n = spawn ();
 	setmodel (n, "progs/player.mdl");

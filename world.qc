@@ -30,7 +30,7 @@ void() worldspawn =
 	lastspawn = world;
 	InitBodyQue ();
 
-	if (self.model == "maps/e1m8.bsp")
+	if (mapname == "e1m8")
 		cvar_set ("sv_gravity", "100");
 	else
 		cvar_set ("sv_gravity", "800");

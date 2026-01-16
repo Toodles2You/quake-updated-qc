@@ -1,6 +1,7 @@
 ../progs.dat
 
 defs.qc
+strings.qc
 subs.qc
 fight.qc
 ai.qc
