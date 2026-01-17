@@ -1,7 +1,6 @@
 ../progs.dat
 
 defs.qc
-strings.qc
 subs.qc
 fight.qc
 ai.qc
@@ -9,6 +8,7 @@ combat.qc
 items.qc
 weapons.qc
 world.qc
+finale.qc
 client.qc
 player.qc
 monsters.qc
