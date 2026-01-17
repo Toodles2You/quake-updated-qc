@@ -198,7 +198,7 @@ void() worldspawn =
 
 	StopEarthQuake ();
 
-	if ((cvar ("scratch1") & 2))
+	if ((cvar ("crosshair") & 2))
 		footsteps = TRUE;
 	else
 		footsteps = FALSE;
