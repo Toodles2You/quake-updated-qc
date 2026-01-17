@@ -59,7 +59,7 @@ void() spawn_use =
 		spawnentity.charmed = 1;
 	}
 	// check to see if it is a monster
-	if (spawnentity.flags & FL_MONSTER)
+	if ((spawnentity.flags & FL_MONSTER))
 	{
 		if ((self.spawnmulti != 0) && (horn_active == 0))
 		{
@@ -262,7 +262,8 @@ void() func_spawn =
 		temptotal_monsters = total_monsters;
 		if (self.spawnclassname == "")
 		{
-			objerror ("No spawnclassname defined");
+			enterror ("No spawnclassname defined");
+			return;
 		}
 		self.classname = self.spawnclassname;
 		// call the named spawn function

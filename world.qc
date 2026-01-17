@@ -33,7 +33,7 @@ void() worldspawn =
 
 	InitBulletHoles ();
 
-	if (self.model == "maps/e1m8.bsp")
+	if (mapname == "e1m8")
 		cvar_set ("sv_gravity", "100");
 	else
 		cvar_set ("sv_gravity", "800");
@@ -198,7 +198,7 @@ void() worldspawn =
 
 	StopEarthQuake ();
 
-	if (cvar ("scratch1") & 2)
+	if ((cvar ("scratch1") & 2))
 		footsteps = TRUE;
 	else
 		footsteps = FALSE;
@@ -231,7 +231,7 @@ void() InitBodyQue =
 // make a body que entry for the given ent so the ent can be respawned elsewhere
 void(entity ent) CopyToBodyQue =
 {
-	bodyque_head.angles = ent.angles;
+	bodyque_head.angles_y = ent.angles_y;
 	bodyque_head.model = ent.model;
 	bodyque_head.modelindex = ent.modelindex;
 	bodyque_head.frame = ent.frame;

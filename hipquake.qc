@@ -45,7 +45,7 @@ void() earthquake_postthink =
 			sound (self, CHAN_VOICE, "misc/quake.wav", 1, ATTN_NONE);
 			quakeactive = 1;
 		}
-		if (self.flags & FL_ONGROUND)
+		if ((self.flags & FL_ONGROUND))
 		{
 			self.velocity = self.velocity + (random () * '0 0 150');
 		}

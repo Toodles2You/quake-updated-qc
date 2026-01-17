@@ -72,8 +72,7 @@ void() HIP_LaserTouch =
 		self.velocity = normalize (self.velocity);
 		self.velocity = self.speed * self.velocity;
 		self.old_velocity = self.velocity;
-		if (self.flags & FL_ONGROUND)
-			self.flags = self.flags - FL_ONGROUND;
+		self.flags = self.flags - (self.flags & FL_ONGROUND);
 		r = random ();
 		sound (self, CHAN_WEAPON, "hipweap/laserric.wav", 1, ATTN_STATIC);
 		return;
@@ -1292,7 +1291,7 @@ float() W_BestWeapon =
 		return IT_NAILGUN;
 	if (self.ammo_shells >= 1 && (it & IT_SHOTGUN))
 		return IT_SHOTGUN;
-	if (it & IT_MJOLNIR)
+	if ((it & IT_MJOLNIR))
 		return IT_MJOLNIR;
 
 	return IT_AXE;
@@ -1711,16 +1710,17 @@ void() CycleWeaponReverseCommand =
 
 void() ServerflagsCommand =
 {
+	local float fl;
+
 	if (deathmatch)
 		return;
 
-	if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
-		serverflags = serverflags - SFL_EPISODES;
-	else
+	fl = serverflags & SFL_EPISODES;
+	serverflags = serverflags - fl;
+	if (fl != SFL_EPISODES)
 	{
-		serverflags = serverflags -
-			(serverflags & SFL_EPISODES) +
-			(serverflags & SFL_EPISODES) * 2 + 1;
+		fl = SFL_EPISODE_1 | (fl * 2);
+		serverflags = serverflags | fl;
 	}
 };
 

@@ -467,7 +467,7 @@ void() ScourgeTriggerTouch =
 	local entity tempent;
 	local vector dir;
 
-	if (other.flags & (FL_MONSTER | FL_CLIENT))
+	if ((other.flags & (FL_MONSTER | FL_CLIENT)))
 		return;
 	if (other.movetype != MOVETYPE_FLYMISSILE)
 		return;

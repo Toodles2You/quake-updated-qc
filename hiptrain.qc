@@ -66,7 +66,10 @@ void() hip_train_next =
 	self.cnt = targ.speed;
 	self.target = targ.target;
 	if (self.target == "")
-		objerror ("hip_train_next: no next target");
+	{
+		enterror ("hip_train_next: no next target");
+		return;
+	}
 
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 
@@ -137,7 +140,10 @@ void() func_train2 =
 	if (!self.speed)
 		self.speed = 100;
 	if (self.target == "")
-		objerror ("func_train without a target");
+	{
+		enterror ("func_train without a target");
+		return;
+	}
 	if (!self.dmg)
 		self.dmg = 2;
 

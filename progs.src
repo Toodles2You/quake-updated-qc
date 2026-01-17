@@ -2,6 +2,7 @@
 
 defs.qc
 hipdefs.qc
+strings.qc
 subs.qc
 fight.qc
 ai.qc

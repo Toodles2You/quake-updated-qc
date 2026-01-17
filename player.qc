@@ -146,7 +146,7 @@ void() player_run = [$rockrun1, player_run]
 		dist = vlen (self.origin - self.old_velocity);
 		self.spawnsilent = self.spawnsilent + dist;
 		self.old_velocity = self.origin;
-		if (self.flags & FL_ONGROUND)
+		if ((self.flags & FL_ONGROUND))
 		{
 			if (self.spawnsilent > 95)
 			{
@@ -520,7 +520,8 @@ void() DeathSound =
 	// water death sounds
 	if (self.waterlevel == 3)
 	{
-		DeathBubbles (20);
+		if (self.watertype == CONTENT_WATER)
+			DeathBubbles (20);
 		sound (self, CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
 		return;
 	}
@@ -546,6 +547,7 @@ void() PlayerDead =
 	self.think = SUB_Null;
 	// allow respawn after a certain time
 	self.deadflag = DEAD_DEAD;
+	self.pain_finished = time + 1;
 };
 
 vector(float dm) VelocityForDamage =
@@ -634,6 +636,7 @@ void() GibPlayer =
 	ThrowGib ("progs/gib3.mdl", self.health);
 
 	self.deadflag = DEAD_DEAD;
+	self.pain_finished = time + 1;
 
 	if (other.classname == "teledeath")
 	{
@@ -655,7 +658,7 @@ void() GibPlayer =
 
 void() PlayerDie =
 {
-	local float i;
+	local float weap, i;
 
 	self.items = self.items - (self.items & IT_ARTS);
 	self.items2 = self.items2 - (self.items2 & HIP_IT_ARTS);
@@ -668,12 +671,22 @@ void() PlayerDie =
 	self.effects = 0;
 	self.modelindex = modelindex_player;
 
+	weap = self.weapon;
+
 	if (deathmatch || coop)
 		DropBackpack ();
 
-	RespawnMegaHealth (self);
+	RespawnMegaHealth ();
 
+	self.items = 0;
+	self.items2 = 0;
+	self.weapon = 0;
 	self.weaponmodel = "";
+	self.currentammo = 0;
+	self.ammo_shells = 0;
+	self.ammo_nails = 0;
+	self.ammo_rockets = 0;
+	self.ammo_cells = 0;
 	self.view_ofs = '0 0 -8';
 	self.deadflag = DEAD_DYING;
 	self.solid = SOLID_NOT;
@@ -682,23 +695,25 @@ void() PlayerDie =
 	if (self.velocity_z < 10)
 		self.velocity_z = self.velocity_z + random () * 300;
 
+	self.angles_x = 0;
+	self.angles_z = 0;
+
 	if (self.health < -40)
 	{
 		GibPlayer ();
 		return;
 	}
 
+	self.pain_finished = time;
+
 	DeathSound ();
 
-	self.angles_x = 0;
-	self.angles_z = 0;
-
-	if (self.weapon == IT_AXE)
+	if (weap == IT_AXE)
 	{
 		player_die_ax1 ();
 		return;
 	}
-	else if (self.weapon == IT_MJOLNIR)
+	else if (weap == IT_MJOLNIR)
 	{
 		self.modelindex = modelindex_hammer;
 		player_die_ham1 ();
@@ -723,10 +738,13 @@ void() set_suicide_frame =
 {
 	if (self.model != "progs/player.mdl")
 		return;
+	self.angles_x = 0;
+	self.angles_z = 0;
 	self.frame = $deatha11;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_TOSS;
 	self.deadflag = DEAD_DEAD;
+	self.pain_finished = time + 1;
 	self.nextthink = -1;
 	self.think = SUB_Null;
 };

@@ -115,12 +115,8 @@ void() trigger_usekey =
 		self.noise3 = "doors/basetry.wav";
 		self.noise4 = "doors/baseuse.wav";
 	}
-	else
-	{
-		dprint ("no worldtype set!\n");
-	}
 
-	if (self.spawnflags & USE_GOLD_KEY)
+	if ((self.spawnflags & USE_GOLD_KEY))
 		self.items = IT_KEY2;
 	else
 		self.items = IT_KEY1;
@@ -133,7 +129,7 @@ void() trigger_usekey =
 
 void() remove_touch =
 {
-	if (other.flags & self.cnt)
+	if ((other.flags & self.cnt))
 		return;
 	other.touch = SUB_Null;
 	other.model = "";
@@ -143,9 +139,9 @@ void() remove_touch =
 void() trigger_remove =
 {
 	self.cnt = FL_CLIENT | FL_MONSTER;
-	if (self.spawnflags & 1)
+	if ((self.spawnflags & 1))
 		self.cnt = self.cnt - FL_MONSTER;
-	if (self.spawnflags & 2)
+	if ((self.spawnflags & 2))
 		self.cnt = self.cnt - FL_CLIENT;
 	InitTrigger ();
 	self.touch = remove_touch;

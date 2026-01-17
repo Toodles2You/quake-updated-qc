@@ -248,7 +248,7 @@ void() rotate_entity_use =
 
 	if (self.state == STATE_ACTIVE)
 	{
-		if (self.spawnflags & TOGGLE)
+		if ((self.spawnflags & TOGGLE))
 		{
 			if (self.speed)
 			{
@@ -279,7 +279,7 @@ void() rotate_entity_use =
 	}
 	else if (self.state == STATE_SPEEDINGUP)
 	{
-		if (self.spawnflags & TOGGLE)
+		if ((self.spawnflags & TOGGLE))
 		{
 			self.state = STATE_SLOWINGDOWN;
 		}
@@ -293,7 +293,7 @@ void() rotate_entity_use =
 void() rotate_entity_firstthink =
 {
 	LinkRotateTargets ();
-	if (self.spawnflags & START_ON)
+	if ((self.spawnflags & START_ON))
 	{
 		self.state = STATE_ACTIVE;
 		self.think = rotate_entity_think;
@@ -402,12 +402,12 @@ void() rotate_train_wait =
 	{
 		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	}
-	if (self.goalentity.spawnflags & ANGLES)
+	if ((self.goalentity.spawnflags & ANGLES))
 	{
 		self.rotate = '0 0 0';
 		self.angles = self.finalangle;
 	}
-	if (self.goalentity.spawnflags & NO_ROTATE)
+	if ((self.goalentity.spawnflags & NO_ROTATE))
 	{
 		self.rotate = '0 0 0';
 	}
@@ -427,12 +427,12 @@ void() rotate_train_stop =
 	{
 		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	}
-	if (self.goalentity.spawnflags & ANGLES)
+	if ((self.goalentity.spawnflags & ANGLES))
 	{
 		self.rotate = '0 0 0';
 		self.angles = self.finalangle;
 	}
-	if (self.goalentity.spawnflags & NO_ROTATE)
+	if ((self.goalentity.spawnflags & NO_ROTATE))
 	{
 		self.rotate = '0 0 0';
 	}
@@ -454,7 +454,10 @@ void() rotate_train_next =
 	current = self.goalentity;
 	targ = find (world, targetname, self.path);
 	if (targ.classname != "path_rotate")
-		objerror ("Next target is not path_rotate");
+	{
+		enterror ("Next target is not path_rotate");
+		return;
+	}
 
 	if (self.goalentity.noise1 != "")
 	{
@@ -465,9 +468,12 @@ void() rotate_train_next =
 	self.goalentity = targ;
 	self.path = targ.target;
 	if (self.path == "")
-		objerror ("rotate_train_next: no next target");
+	{
+		enterror ("rotate_train_next: no next target");
+		return;
+	}
 
-	if (targ.spawnflags & STOP)
+	if ((targ.spawnflags & STOP))
 	{
 		self.think1 = rotate_train_stop;
 	}
@@ -491,23 +497,23 @@ void() rotate_train_next =
 		self.message = "";
 	}
 
-	if (current.spawnflags & ANGLES)
+	if ((current.spawnflags & ANGLES))
 	{
 		self.rotate = '0 0 0';
 		self.angles = self.finalangle;
 	}
 
-	if (current.spawnflags & ROTATION)
+	if ((current.spawnflags & ROTATION))
 	{
 		self.rotate = current.rotate;
 	}
 
-	if (current.spawnflags & DAMAGE)
+	if ((current.spawnflags & DAMAGE))
 	{
 		self.dmg = current.dmg;
 	}
 
-	if (current.spawnflags & SET_DAMAGE)
+	if ((current.spawnflags & SET_DAMAGE))
 	{
 		SetDamageOnTargets (current.dmg);
 	}
@@ -519,7 +525,7 @@ void() rotate_train_next =
 		self.endtime = self.ltime + 0.01;
 		SetTargetOrigin ();
 
-		if (targ.spawnflags & ANGLES)
+		if ((targ.spawnflags & ANGLES))
 		{
 			self.angles = targ.angles;
 		}
@@ -553,7 +559,7 @@ void() rotate_train_next =
 		// calculate length of vector
 		len = vlen (vdestdelta);
 
-		if (current.spawnflags & MOVETIME)
+		if ((current.spawnflags & MOVETIME))
 		{
 			traveltime = current.speed;
 		}
@@ -564,7 +570,10 @@ void() rotate_train_next =
 				self.speed = current.speed;
 
 			if (!self.speed)
-				objerror ("No speed is defined!");
+			{
+				enterror ("No speed is defined!");
+				return;
+			}
 
 			// divide by speed to get time to reach dest
 			traveltime = len / self.speed;
@@ -574,7 +583,7 @@ void() rotate_train_next =
 		{
 			self.velocity = '0 0 0';
 			self.endtime = self.ltime + 0.1;
-			if (targ.spawnflags & ANGLES)
+			if ((targ.spawnflags & ANGLES))
 			{
 				self.angles = targ.angles;
 			}
@@ -584,7 +593,7 @@ void() rotate_train_next =
 		// qcc won't take vec/float
 		div = 1 / traveltime;
 
-		if (targ.spawnflags & ANGLES)
+		if ((targ.spawnflags & ANGLES))
 		{
 			self.finalangle = SUB_NormalizeAngles (targ.angles);
 			self.rotate = (targ.angles - self.angles) * div;
@@ -616,12 +625,15 @@ void() rotate_train_find =
 	// the second target is the path.
 	targ = find (world, targetname, self.path);
 	if (targ.classname != "path_rotate")
-		objerror ("Next target is not path_rotate");
+	{
+		enterror ("Next target is not path_rotate");
+		return;
+	}
 
 	// Save the current entity
 	self.goalentity = targ;
 
-	if (targ.spawnflags & ANGLES)
+	if ((targ.spawnflags & ANGLES))
 	{
 		self.angles = targ.angles;
 		self.finalangle = SUB_NormalizeAngles (targ.angles);
@@ -650,7 +662,7 @@ void() rotate_train_find =
 
 void() rotate_train =
 {
-	objerror ("rotate_train entities should be changed to rotate_object with\nfunc_rotate_train controllers\n");
+	enterror ("rotate_train entities should be changed to rotate_object with\nfunc_rotate_train controllers");
 };
 
 void() func_rotate_train =
@@ -658,7 +670,10 @@ void() func_rotate_train =
 	if (!self.speed)
 		self.speed = 100;
 	if (self.target == "")
-		objerror ("rotate_train without a target");
+	{
+		enterror ("rotate_train without a target");
+		return;
+	}
 
 	if (self.noise == "")
 	{
@@ -772,7 +787,7 @@ void() func_movewall =
 {
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
-	if (self.spawnflags & NONBLOCKING)
+	if ((self.spawnflags & NONBLOCKING))
 	{
 		self.solid = SOLID_NOT;
 	}
@@ -781,7 +796,7 @@ void() func_movewall =
 		self.solid = SOLID_BSP;
 		self.blocked = movewall_blocked;
 	}
-	if (self.spawnflags & TOUCH)
+	if ((self.spawnflags & TOUCH))
 	{
 		self.touch = movewall_touch;
 	}
@@ -823,7 +838,7 @@ void() rotate_door_think2 =
 	}
 	else
 	{
-		if (self.spawnflags & STAYOPEN)
+		if ((self.spawnflags & STAYOPEN))
 		{
 			rotate_door_group_reversedirection ();
 			return;
@@ -951,7 +966,8 @@ void() func_rotate_door =
 {
 	if (self.target == "")
 	{
-		objerror ("rotate_door without target.");
+		enterror ("rotate_door without target.");
+		return;
 	}
 
 	self.dest1 = '0 0 0';

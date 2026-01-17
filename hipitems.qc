@@ -331,7 +331,7 @@ void() trap_lightning_use =
 
 	if (time >= self.pausetime)
 	{
-		if (self.spawnflags & LIGHTNING_BOOM)
+		if ((self.spawnflags & LIGHTNING_BOOM))
 			sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
 		else
 			sound (self, CHAN_AUTO, "weapons/lhit.wav", 1, ATTN_NORM);
@@ -404,7 +404,7 @@ void() lightning_think =
 	}
 	if (self.cnt == 0)
 	{
-		if (self.spawnflags & LIGHTNING_RANDOM)
+		if ((self.spawnflags & LIGHTNING_RANDOM))
 		{
 			timedelay = self.wait * random ();
 		}
@@ -649,7 +649,7 @@ void() trap_tesla_coil =
 		self.duration = -1;
 	if (self.distance == 0)
 		self.distance = 600;
-	if (self.spawnflags & 1)
+	if ((self.spawnflags & 1))
 		self.cnt = FL_CLIENT | FL_MONSTER;
 	else
 		self.cnt = FL_CLIENT;
@@ -715,7 +715,7 @@ void() trap_gravity_think =
 		vel = dir * self.speed;
 		if ((tesla_target.wetsuit_finished > time) &&
 			(self.spawnflags & UNDERWATER))
-			{
+		{
 			vel = vel * 0.6;
 		}
 
@@ -739,7 +739,7 @@ void() trap_gravity_well =
 		self.speed = 210;
 	if (self.distance == 0)
 		self.distance = 600;
-	if (self.spawnflags & 1)
+	if ((self.spawnflags & 1))
 		self.cnt = FL_CLIENT | FL_MONSTER;
 	else
 		self.cnt = FL_CLIENT;

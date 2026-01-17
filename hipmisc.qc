@@ -19,7 +19,7 @@
 
 void() play_sound_use =
 {
-	if (self.spawnflags & 1)
+	if ((self.spawnflags & 1))
 	{
 		if (self.state == 0)
 		{
@@ -58,7 +58,7 @@ void() play_sound_triggered =
 		self.speed = 1;
 	if (self.speed == -1)
 		self.speed = 0;
-	if (self.spawnflags & 1)
+	if ((self.spawnflags & 1))
 		if (self.impulse == 0)
 			self.impulse = 7;
 	self.use = play_sound_use;
@@ -190,7 +190,7 @@ void() effect_finale_use =
 	// find the intermission spot
 	pos = find (world, targetname, self.target);
 	if (!pos)
-		error ("no target in finale");
+		entwarn ("no target in finale");
 
 	WriteByte (MSG_ALL, SVC_CUTSCENE);
 	WriteString (MSG_ALL, "");
@@ -198,7 +198,7 @@ void() effect_finale_use =
 	// setup decoy
 	if (!(self.spawnflags & 2))
 	{
-		if (self.spawnflags & 1)
+		if ((self.spawnflags & 1))
 		{
 			pl = find (world, classname, "player");
 			targ = find (world, targetname, self.mdl);
@@ -219,7 +219,8 @@ void() effect_finale_use =
 		pl.mangle = pos.mangle;
 		pl.fixangle = TRUE; // turn this way immediately
 		pl.trigger_field = self;
-		pl.nextthink = time + 0.5;
+		pl.think = SUB_Null;
+		pl.nextthink = 0;
 		pl.takedamage = DAMAGE_NO;
 		pl.solid = SOLID_NOT;
 		pl.movetype = MOVETYPE_NONE;

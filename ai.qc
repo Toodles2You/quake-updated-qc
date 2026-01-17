@@ -89,7 +89,10 @@ The number of seconds to spend standing or bowing for path_stand or path_bow
 void() movetarget_f =
 {
 	if (self.targetname == "")
-		objerror ("monster_movetarget: no targetname");
+	{
+		enterror ("no targetname");
+		return;
+	}
 
 	self.solid = SOLID_TRIGGER;
 	self.touch = t_movetarget;
@@ -434,7 +437,7 @@ float(entity client, float method) CanFindTarget =
 		return FALSE;
 	if (!(client.flags & (FL_CLIENT | FL_MONSTER)))
 		return FALSE;
-	if (client.flags & FL_NOTARGET)
+	if ((client.flags & FL_NOTARGET))
 		return FALSE;
 	if (self.charmed)
 	{
@@ -456,10 +459,8 @@ float(entity client, float method) CanFindTarget =
 	else
 	{
 		if (method == FIND_DIRECT)
-		{
-			if (client.items & IT_INVISIBILITY)
+			if (client.invisible_finished > time)
 				return FALSE;
-		}
 		if (client.classname != "player")
 			return FALSE;
 	}

@@ -90,9 +90,7 @@ void() monster_start_moving =
 
 	if (!self.movetarget)
 	{
-		dprint ("Monster can't find target at ");
-		dprint (vtos (self.origin));
-		dprint ("\n");
+		entwarn ("can't find target");
 
 		self.pausetime = 0;
 		self.th_stand ();
@@ -118,11 +116,7 @@ void() walkmonster_start_go =
 	droptofloor ();
 
 	if (!walkmove (0, 0))
-	{
-		dprint ("walkmonster in wall at: ");
-		dprint (vtos (self.origin));
-		dprint ("\n");
-	}
+		entwarn ("in wall");
 
 	self.takedamage = DAMAGE_AIM;
 
@@ -160,11 +154,7 @@ void() flymonster_start_go =
 	self.flags = self.flags | FL_MONSTER | FL_FLY;
 
 	if (!walkmove (0, 0))
-	{
-		dprint ("flymonster in wall at: ");
-		dprint (vtos (self.origin));
-		dprint ("\n");
-	}
+		entwarn ("in wall");
 
 	monster_start_moving ();
 };

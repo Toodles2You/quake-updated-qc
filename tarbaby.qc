@@ -107,8 +107,9 @@ void() Tar_JumpTouch =
 
 	if (!checkbottom (self))
 	{
-		if (self.flags & FL_ONGROUND)
-		{ // jump randomly to not get hung up
+		if ((self.flags & FL_ONGROUND))
+		{
+			// jump randomly to not get hung up
 			self.touch = SUB_Null;
 			self.think = tbaby_run1;
 			self.movetype = MOVETYPE_STEP;
@@ -148,8 +149,7 @@ void() tbaby_jump5 = [$jump5, tbaby_jump6]
 	self.origin_z = self.origin_z + 1;
 	self.velocity = v_forward * 600 + '0 0 200';
 	self.velocity_z = self.velocity_z + random () * 150;
-	if (self.flags & FL_ONGROUND)
-		self.flags = self.flags - FL_ONGROUND;
+	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.cnt = 0;
 };
 void() tbaby_jump6 = [$jump6, tbaby_fly1] {};

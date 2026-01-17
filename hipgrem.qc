@@ -574,7 +574,7 @@ void() gremlin_jump5 = [$jump5, gremlin_jump6]
 {
 	ai_face ();
 
-	if (self.flags & FL_ONGROUND)
+	if ((self.flags & FL_ONGROUND))
 	{
 		self.touch = Gremlin_JumpTouch;
 		makevectors (self.angles);
@@ -985,27 +985,27 @@ void() GremlinDropBackpack =
 	self.items = self.items - (self.items & IT_AMMO);
 	item.items = self.items;
 
-	if (item.items & IT_AXE)
+	if ((item.items & IT_AXE))
 		item.netname = "Axe";
-	else if (item.items & IT_SHOTGUN)
+	else if ((item.items & IT_SHOTGUN))
 		item.netname = "Shotgun";
-	else if (item.items & IT_SUPER_SHOTGUN)
+	else if ((item.items & IT_SUPER_SHOTGUN))
 		item.netname = "Double-barrelled Shotgun";
-	else if (item.items & IT_NAILGUN)
+	else if ((item.items & IT_NAILGUN))
 		item.netname = "Nailgun";
-	else if (item.items & IT_SUPER_NAILGUN)
+	else if ((item.items & IT_SUPER_NAILGUN))
 		item.netname = "Super Nailgun";
-	else if (item.items & IT_GRENADE_LAUNCHER)
+	else if ((item.items & IT_GRENADE_LAUNCHER))
 		item.netname = "Grenade Launcher";
-	else if (item.items & IT_ROCKET_LAUNCHER)
+	else if ((item.items & IT_ROCKET_LAUNCHER))
 		item.netname = "Rocket Launcher";
-	else if (item.items & IT_LIGHTNING)
+	else if ((item.items & IT_LIGHTNING))
 		item.netname = "Thunderbolt";
-	else if (item.items & IT_LASER_CANNON)
+	else if ((item.items & IT_LASER_CANNON))
 		item.netname = "Laser Cannon";
-	else if (item.items & IT_PROXIMITY_GUN)
+	else if ((item.items & IT_PROXIMITY_GUN))
 		item.netname = "Proximity Gun";
-	else if (item.items & IT_MJOLNIR)
+	else if ((item.items & IT_MJOLNIR))
 		item.netname = "Mjolnir";
 	else
 		item.netname = "";
@@ -1043,7 +1043,7 @@ void() gremlin_die =
 	local vector vec;
 	local float dot;
 
-	if (self.items & IT_WEAPONS)
+	if ((self.items & IT_WEAPONS))
 	{
 		GremlinDropBackpack ();
 		self.stoleweapon = FALSE;
@@ -1083,7 +1083,7 @@ void() Gremlin_MeleeAttack =
 	{
 		if (self.stoleweapon == 1)
 		{
-			objerror ("gremlin meleeing with stolen weapon");
+			enterror ("gremlin meleeing with stolen weapon");
 		}
 		else if ((self.enemy.flags & FL_CLIENT) && random () < 0.4)
 		{
@@ -1431,7 +1431,7 @@ void() Gremlin_MissileAttack =
 			return;
 		}
 	}
-	if (self.flags & FL_ONGROUND)
+	if ((self.flags & FL_ONGROUND))
 		gremlin_jump1 ();
 };
 
@@ -1577,7 +1577,7 @@ void(float dm) Gremlin_ThrowHead =
 void(entity targ, entity inflictor, entity attacker, float damage) Gremlin_Damage =
 {
 	// check for godmode or invincibility
-	if (targ.flags & FL_GODMODE)
+	if ((targ.flags & FL_GODMODE))
 		return;
 	if (targ.invincible_finished >= time)
 	{
@@ -1725,7 +1725,7 @@ void() Gremlin_JumpTouch =
 
 	if (!checkbottom (self))
 	{
-		if (self.flags & FL_ONGROUND)
+		if ((self.flags & FL_ONGROUND))
 		{
 			self.touch = SUB_Null;
 			self.think = gremlin_jump1;
@@ -1743,7 +1743,7 @@ void() Gremlin_FlipTouch =
 {
 	if (!checkbottom (self))
 	{
-		if (self.flags & FL_ONGROUND)
+		if ((self.flags & FL_ONGROUND))
 		{
 			self.touch = SUB_Null;
 			self.think = gremlin_flip1;

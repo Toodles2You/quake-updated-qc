@@ -128,8 +128,11 @@ void() trigger_multiple =
 
 	if (self.health)
 	{
-		if (self.spawnflags & SPAWNFLAG_NOTOUCH)
-			objerror ("health and notouch don't make sense\n");
+		if ((self.spawnflags & SPAWNFLAG_NOTOUCH))
+		{
+			enterror ("health and notouch don't make sense");
+			return;
+		}
 		self.max_health = self.health;
 		self.th_die = multi_killed;
 		self.takedamage = DAMAGE_YES;
@@ -309,31 +312,25 @@ void() teleport_touch =
 	local vector org;
 
 	if (self.targetname != "")
-	{
 		if (self.nextthink < time)
-		{
 			return; // not fired yet
-		}
-	}
 
-	if (self.spawnflags & PLAYER_ONLY)
-	{
+	if ((self.spawnflags & PLAYER_ONLY))
 		if (other.classname != "player")
 			return;
-	}
 
 	// only teleport living creatures
 	if (other.health <= 0 || other.solid != SOLID_SLIDEBOX)
+		return;
+
+	t = find (world, targetname, self.target);
+	if (!t)
 		return;
 
 	SUB_UseTargets ();
 
 	// put a tfog where the player was
 	spawn_tfog (other.origin);
-
-	t = find (world, targetname, self.target);
-	if (!t)
-		objerror ("couldn't find target");
 
 	// spawn a tfog flash in front of the destination
 	makevectors (t.mangle);
@@ -343,13 +340,6 @@ void() teleport_touch =
 	spawn_tdeath (t.origin, other);
 
 	// move the player and lock him down for a little while
-	if (!other.health)
-	{
-		other.origin = t.origin;
-		other.velocity = (v_forward * other.velocity_x)
-					   + (v_forward * other.velocity_y);
-		return;
-	}
 
 	setorigin (other, t.origin);
 	other.angles = t.mangle;
@@ -357,22 +347,23 @@ void() teleport_touch =
 	{
 		other.fixangle = TRUE;
 		other.teleport_time = time + 0.7;
-		if (other.flags & FL_ONGROUND)
-			other.flags = other.flags - FL_ONGROUND;
 		other.velocity = v_forward * 300;
 	}
-	other.flags = other.flags - other.flags & FL_ONGROUND;
+	other.flags = other.flags - (other.flags & FL_ONGROUND);
 };
 
 void() info_teleport_destination =
 {
+	if (self.targetname == "")
+	{
+		enterror ("no targetname");
+		return;
+	}
 	// this does nothing, just serves as a target spot
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
 	self.model = "";
 	self.origin = self.origin + '0 0 27';
-	if (self.targetname == "")
-		objerror ("no targetname");
 };
 
 void() teleport_use =
@@ -387,11 +378,6 @@ void() trigger_teleport =
 	local vector o;
 
 	InitTrigger ();
-	self.touch = teleport_touch;
-	// find the destination
-	if (self.target == "")
-		objerror ("no target");
-	self.use = teleport_use;
 
 	if (!(self.spawnflags & SILENT))
 	{
@@ -399,6 +385,15 @@ void() trigger_teleport =
 		o = (self.mins + self.maxs) * 0.5;
 		ambientsound (o, "ambience/hum1.wav", 0.5, ATTN_STATIC);
 	}
+
+	if (self.target == "")
+	{
+		enterror ("no target");
+		return;
+	}
+
+	self.touch = teleport_touch;
+	self.use = teleport_use;
 };
 
 void() trigger_skill_touch =
@@ -519,7 +514,7 @@ void() trigger_push_touch =
 			}
 		}
 	}
-	if (self.spawnflags & PUSH_ONCE)
+	if ((self.spawnflags & PUSH_ONCE))
 		remove (self);
 };
 
@@ -534,7 +529,7 @@ void() trigger_push =
 
 void() trigger_monsterjump_touch =
 {
-	if (other.flags & (FL_MONSTER | FL_FLY | FL_SWIM) != FL_MONSTER)
+	if ((other.flags & (FL_MONSTER | FL_FLY | FL_SWIM)) != FL_MONSTER)
 		return;
 
 	// set XY even if not on ground, so the jump will clear lips

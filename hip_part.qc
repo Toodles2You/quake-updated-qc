@@ -263,7 +263,7 @@ void() func_togglewall =
 
 	self.solid = SOLID_BSP;
 	self.model = "";
-	if (self.spawnflags & START_OFF)
+	if ((self.spawnflags & START_OFF))
 	{
 		self.state = 0;
 		setorigin (self, self.origin + '8000 8000 8000');

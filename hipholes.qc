@@ -59,13 +59,15 @@ void() remove_bullethole =
 	// we don't remove the world!
 	if (bulletholes == nullentity)
 	{
-		objerror ("remove_bullethole: bulletholes == nullentity! ");
+		dprint ("remove_bullethole: bulletholes == nullentity!\n");
+		return;
 	}
 
 	ent = bulletholes;
 	if (ent.classname != "bullethole")
 	{
-		objerror ("remove_bullethole: Tried to remove non-bullethole!");
+		dprint ("remove_bullethole: Tried to remove non-bullethole!\n");
+		return;
 	}
 
 	bulletholes = bulletholes.lastvictim;

@@ -28,7 +28,7 @@ float START_OFF = 1;
 
 void() light_use =
 {
-	if (self.spawnflags & START_OFF)
+	if ((self.spawnflags & START_OFF))
 	{
 		lightstyle (self.style, "m");
 		self.spawnflags = self.spawnflags - START_OFF;
@@ -36,7 +36,7 @@ void() light_use =
 	else
 	{
 		lightstyle (self.style, "a");
-		self.spawnflags = self.spawnflags + START_OFF;
+		self.spawnflags = self.spawnflags | START_OFF;
 	}
 };
 
@@ -51,7 +51,7 @@ void() light =
 	if (self.style >= 32)
 	{
 		self.use = light_use;
-		if (self.spawnflags & START_OFF)
+		if ((self.spawnflags & START_OFF))
 			lightstyle (self.style, "a");
 		else
 			lightstyle (self.style, "m");
@@ -63,7 +63,7 @@ void() light_fluoro =
 	if (self.style >= 32)
 	{
 		self.use = light_use;
-		if (self.spawnflags & START_OFF)
+		if ((self.spawnflags & START_OFF))
 			lightstyle (self.style, "a");
 		else
 			lightstyle (self.style, "m");
@@ -175,18 +175,19 @@ void() fire_touch =
 
 void() barrel_explode =
 {
+	local vector org;
 	self.takedamage = DAMAGE_NO;
 	self.classname = "explo_box";
-	self.origin = self.origin + (self.mins + self.maxs) * 0.5;
-	particle (self.origin, '0 0 0', 75, 255);
+	org = self.origin + (self.mins + self.maxs) * 0.5;
+	org_z = self.origin_z + 32;
+	self.origin = org;
+	particle (org, '0 0 0', 75, 255);
 	T_RadiusDamage (self, self, 160, world);
 	BecomeExplosion (TE_EXPLOSION);
 };
 
 void() misc_explobox =
 {
-	local float oldz;
-
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
 	precache_model ("maps/b_explob.bsp");
@@ -196,21 +197,12 @@ void() misc_explobox =
 	self.takedamage = DAMAGE_AIM;
 
 	self.origin_z = self.origin_z + 2;
-	oldz = self.origin_z;
-	droptofloor ();
-	if (oldz - self.origin_z > 250)
-	{
-		dprint ("item fell out of level at ");
-		dprint (vtos (self.origin));
-		dprint ("\n");
-		remove (self);
-	}
+	if (!droptofloor ())
+		entwarn ("fell out of level");
 };
 
 void() misc_explobox2 =
 {
-	local float oldz;
-
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
 	precache_model2 ("maps/b_exbox2.bsp");
@@ -220,15 +212,8 @@ void() misc_explobox2 =
 	self.takedamage = DAMAGE_AIM;
 
 	self.origin_z = self.origin_z + 2;
-	oldz = self.origin_z;
-	droptofloor ();
-	if (oldz - self.origin_z > 250)
-	{
-		dprint ("item fell out of level at ");
-		dprint (vtos (self.origin));
-		dprint ("\n");
-		remove (self);
-	}
+	if (!droptofloor ())
+		entwarn ("fell out of level");
 };
 
 float SPAWNFLAG_SUPERSPIKE = 1;
@@ -240,14 +225,14 @@ entity() spikeshooter_launch =
 {
 	local entity newmis;
 
-	if (self.spawnflags & SPAWNFLAG_LASER)
+	if ((self.spawnflags & SPAWNFLAG_LASER))
 	{
 		if (!(self.spawnflags & SPAWNFLAG_SILENT))
 			sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
 		newmis = LaunchLaser (self.origin, self.movedir);
 		newmis.spawnflags = self.spawnflags;
 	}
-	else if (self.spawnflags & SPAWNFLAG_LAVABALL)
+	else if ((self.spawnflags & SPAWNFLAG_LAVABALL))
 	{
 		if (!(self.spawnflags & SPAWNFLAG_SILENT))
 			sound (self, CHAN_VOICE, "misc/spike.wav", 1, ATTN_NORM);
@@ -267,7 +252,7 @@ entity() spikeshooter_launch =
 		newmis.nextthink = time + 5;
 		newmis.think = SUB_Remove;
 	}
-	else if (self.spawnflags & SPAWNFLAG_ROCKET)
+	else if ((self.spawnflags & SPAWNFLAG_ROCKET))
 	{
 		if (!(self.spawnflags & SPAWNFLAG_SILENT))
 			sound (self, CHAN_VOICE, "weapons/sgun1.wav", 1, ATTN_NORM);
@@ -297,7 +282,7 @@ entity() spikeshooter_launch =
 			sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
 		newmis = launch_spike (self.origin, self.movedir);
 		newmis.velocity = self.movedir * 500;
-		if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
+		if ((self.spawnflags & SPAWNFLAG_SUPERSPIKE))
 			newmis.touch = superspike_touch;
 	}
 
@@ -322,20 +307,19 @@ void() trap_spikeshooter =
 {
 	SetMovedir ();
 	self.use = spikeshooter_use;
-	if (self.spawnflags & SPAWNFLAG_LASER)
+	if ((self.spawnflags & SPAWNFLAG_LASER))
 	{
 		precache_model2 ("progs/laser.mdl");
 
 		precache_sound2 ("enforcer/enfire.wav");
 		precache_sound2 ("enforcer/enfstop.wav");
 	}
-	else if (self.spawnflags & SPAWNFLAG_LAVABALL)
+	else if ((self.spawnflags & SPAWNFLAG_LAVABALL))
 	{
 		precache_model ("progs/lavarock.mdl");
-//		self.classname = "fireball";
 		precache_sound2 ("misc/spike.wav");
 	}
-	else if (self.spawnflags & SPAWNFLAG_ROCKET)
+	else if ((self.spawnflags & SPAWNFLAG_ROCKET))
 	{
 		precache_model ("progs/missile.mdl");
 		precache_sound ("weapons/sgun1.wav");
@@ -509,8 +493,13 @@ void() func_illusionary =
 
 void() func_episodegate =
 {
-	if (!((serverflags & SFL_EPISODES) & self.spawnflags))
+	local float fl;
+
+	fl = self.spawnflags & SFL_EPISODES;
+
+	if ((serverflags & fl) != fl)
 		return;
+
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
@@ -522,6 +511,7 @@ void() func_bossgate =
 {
 	if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		return;
+
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;

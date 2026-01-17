@@ -22,11 +22,13 @@ void(entity attacker, float damage) player_pain;
 void() PlayerStand;
 void(vector org) spawn_tfog;
 void(vector org, entity death_owner) spawn_tdeath;
+void(float num_bubbles) DeathBubbles;
 
 float CHANGE_NO_INTERMISSION = 1;
 
 float modelindex_eyes, modelindex_player, modelindex_hammer;
 
+string nextmap;
 float intermission_running;
 float intermission_exittime;
 float restarting;
@@ -55,7 +57,6 @@ void() SetChangeParms =
 	}
 
 	parm1 = self.items - (self.items & (IT_KEYS | IT_ARTS));
-	// parm10 = self.items2 - (self.items2 & HIP_IT_ARTS);
 
 	if (self.health > 100)
 		parm2 = 100;
@@ -63,11 +64,14 @@ void() SetChangeParms =
 		parm2 = 50;
 	else
 		parm2 = self.health;
+
 	parm3 = self.armorvalue;
+
 	if (self.ammo_shells < 25)
 		parm4 = 25;
 	else
 		parm4 = self.ammo_shells;
+
 	parm5 = self.ammo_nails;
 	parm6 = self.ammo_rockets;
 	parm7 = self.ammo_cells;
@@ -92,13 +96,13 @@ void() DecodeLevelParms =
 {
 	if (!deathmatch)
 	{
-		if (world.model == "maps/start.bsp")
+		if (mapname == "start")
 			SetNewParms (); // take away all stuff on starting new episode
-		else if (world.model == "maps/hip1m1.bsp")
+		else if (mapname == "hip1m1")
 			SetNewParms (); // take away all stuff on starting new episode
-		else if (world.model == "maps/hip2m1.bsp")
+		else if (mapname == "hip2m1")
 			SetNewParms (); // take away all stuff on starting new episode
-		else if (world.model == "maps/hip3m1.bsp")
+		else if (mapname == "hip3m1")
 			SetNewParms (); // take away all stuff on starting new episode
 	}
 
@@ -109,7 +113,7 @@ void() DecodeLevelParms =
 	self.ammo_nails = parm5;
 	self.ammo_rockets = parm6;
 	self.ammo_cells = parm7;
-	self.weapon = 0;
+	self.weapon = -1;
 	W_SetWeapon (parm8);
 	self.armortype = parm9 * 0.01;
 };
@@ -141,21 +145,43 @@ entity() FindIntermission =
 	if (spot)
 		return spot;
 
-	objerror ("FindIntermission: no spot");
+	dprint ("FindIntermission: no spot\n");
 	return spot;
 };
 
-string nextmap;
+void() SetServerFlags =
+{
+	if (mapname == "e1m7")
+		serverflags = serverflags | SFL_EPISODE_1;
+	else if (mapname == "e2m6")
+		serverflags = serverflags | SFL_EPISODE_2;
+	else if (mapname == "e3m6")
+		serverflags = serverflags | SFL_EPISODE_3;
+	else if (mapname == "e4m7")
+		serverflags = serverflags | SFL_EPISODE_4;
+	else if (mapname == "end")
+		serverflags = serverflags - (serverflags & SFL_EPISODES);
+};
+
 void() GotoNextMap =
 {
-	if (cvar ("samelevel"))
-		changelevel (mapname);
-	else
-		changelevel (nextmap);
+	restarting = FALSE;
+	if (deathmatch)
+	{
+		SetServerFlags ();
+		if (cvar ("samelevel"))
+		{
+			changelevel (mapname);
+			return;
+		}
+	}
+	changelevel (nextmap);
 };
 
 void() ExitIntermission =
 {
+	local float finale;
+
 	if (deathmatch)
 	{
 		GotoNextMap ();
@@ -168,118 +194,97 @@ void() ExitIntermission =
 	// run some text if at the end of an episode
 	if (intermission_running == 2)
 	{
-		if (world.model == "maps/e1m7.bsp")
+		finale = 0;
+
+		if (mapname == "e1m7")
 		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 2);
-			WriteByte (MSG_ALL, 3);
+			finale = 2;
 			if (!cvar ("registered"))
 			{
 				WriteByte (MSG_ALL, SVC_FINALE);
-				WriteString (MSG_ALL, "As the corpse of the monstrous entity\nChthon sinks back into the lava whence\nit rose, you grip the Rune of Earth\nMagic tightly. Now that you have\nconquered the Dimension of the Doomed,\nrealm of Earth Magic, you are ready to\ncomplete your task in the other three\nhaunted lands of Quake. Or are you? If\nyou don't register Quake, you'll never\nknow what awaits you in the Realm of\nBlack Magic, the Netherworld, and the\nElder World!");
+				WriteString (MSG_ALL, FINALE_SHAREWARE);
 			}
 			else
 			{
 				WriteByte (MSG_ALL, SVC_FINALE);
-				WriteString (MSG_ALL, "As the corpse of the monstrous entity\nChthon sinks back into the lava whence\nit rose, you grip the Rune of Earth\nMagic tightly. Now that you have\nconquered the Dimension of the Doomed,\nrealm of Earth Magic, you are ready to\ncomplete your task. A Rune of magic\npower lies at the end of each haunted\nland of Quake. Go forth, seek the\ntotality of the four Runes!");
+				WriteString (MSG_ALL, FINALE_EPISODE_1);
 			}
-			return;
 		}
-		else if (world.model == "maps/e2m6.bsp")
+		else if (mapname == "e2m6")
+		{
+			finale = 2;
+			WriteByte (MSG_ALL, SVC_FINALE);
+			WriteString (MSG_ALL, FINALE_EPISODE_2);
+		}
+		else if (mapname == "e3m6")
+		{
+			finale = 2;
+			WriteByte (MSG_ALL, SVC_FINALE);
+			WriteString (MSG_ALL, FINALE_EPISODE_3);
+		}
+		else if (mapname == "e4m7")
+		{
+			finale = 2;
+			WriteByte (MSG_ALL, SVC_FINALE);
+			WriteString (MSG_ALL, FINALE_EPISODE_4);
+		}
+		else if (mapname == "hip1m4")
+		{
+			finale = 6;
+			WriteByte (MSG_ALL, SVC_FINALE);
+			WriteString (MSG_ALL, FINALE_HIP_1);
+		}
+		else if (mapname == "hip2m5")
+		{
+			finale = 6;
+			WriteByte (MSG_ALL, SVC_FINALE);
+			WriteString (MSG_ALL, FINALE_HIP_2);
+		}
+		else if (mapname == "hipend")
+		{
+			finale = 2;
+			WriteByte (MSG_ALL, SVC_FINALE);
+			WriteString (MSG_ALL, FINALE_HIP_END);
+		}
+
+		if (finale)
 		{
 			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 2);
+			WriteByte (MSG_ALL, finale);
 			WriteByte (MSG_ALL, 3);
-
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "The Rune of Black Magic throbs evilly in\nyour hand and whispers dark thoughts\ninto your brain. You learn the inmost\nlore of the Hell-Mother; Shub-Niggurath!\nYou now know that she is behind all the\nterrible plotting which has led to so\nmuch death and horror. But she is not\ninviolate! Armed with this Rune, you\nrealize that once all four Runes are\ncombined, the gate to Shub-Niggurath's\nPit will open, and you can face the\nWitch-Goddess herself in her frightful\notherworld cathedral.");
 			return;
 		}
-		else if (world.model == "maps/e3m6.bsp")
-		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 2);
-			WriteByte (MSG_ALL, 3);
-
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "The charred viscera of diabolic horrors\nbubble viscously as you seize the Rune\nof Hell Magic. Its heat scorches your\nhand, and its terrible secrets blight\nyour mind. Gathering the shreds of your\ncourage, you shake the devil's shackles\nfrom your soul, and become ever more\nhard and determined to destroy the\nhideous creatures whose mere existence\nthreatens the souls and psyches of all\nthe population of Earth.");
-			return;
-		}
-		else if (world.model == "maps/e4m7.bsp")
-		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 2);
-			WriteByte (MSG_ALL, 3);
-
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "Despite the awful might of the Elder\nWorld, you have achieved the Rune of\nElder Magic, capstone of all types of\narcane wisdom. Beyond good and evil,\nbeyond life and death, the Rune\npulsates, heavy with import. Patient and\npotent, the Elder Being Shub-Niggurath\nweaves her dire plans to clear off all\nlife from the Earth, and bring her own\nfoul offspring to our world! For all the\ndwellers in these nightmare dimensions\nare her descendants! Once all Runes of\nmagic power are united, the energy\nbehind them will blast open the Gateway\nto Shub-Niggurath, and you can travel\nthere to foil the Hell-Mother's plots\nin person.");
-			return;
-		}
-
-		if (world.model == "maps/hip1m4.bsp")
-		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 6);
-			WriteByte (MSG_ALL, 3);
-
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "Deep within the bowels of the\nResearch Facility, you discover the\npassage that the followers of Quake\nhave used to enter our world.\nThe bastards used some type of\ngigantic teleporter to overload\none of our own slipgates!  As long as\nthis portal exists, Earth will never\nbe safe from Quake's cruel minions.");
-			return;
-		}
-		else if (world.model == "maps/hip2m5.bsp")
-		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 6);
-			WriteByte (MSG_ALL, 3);
-
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "After destroying the power generator,\nyou pass beyond the gate of Mortum's\nKeep.  A wave of nausea suddenly flows\nover you and you find yourself cast\nout into a liquid void.  You float\nlifelessly, yet aware, in a lavender\nsea of energy.");
-			return;
-		}
-		else if (world.model == "maps/hipend.bsp")
-		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 2);
-			WriteByte (MSG_ALL, 3);
-
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "After the last echoes of Armagon's\ndeath yell fade away, you breathe a\nheavy sigh of relief.  With the loss\nof his magic, Armagon's fortress\nbegins to collapse.  The rift he\ncreated to send his grisly troops\nthrough time slowly closes and seals\nitself forever.  In the chaos that\nensues, a wall collapses, revealing\none remaining time portal.  With your\nchances to escape rapidly growing\nslim, you race for the portal,\nmindless of your destination.  In a\nflash of light, you find yourself\nback at Command HQ, safe and sound.");
-			return;
-		}
-		GotoNextMap ();
 	}
-
-	if (intermission_running == 3)
+	else if (intermission_running == 3)
 	{
 		if (!cvar ("registered"))
-		{ // shareware episode has been completed, go to sell screen
+		{
+			// shareware episode has been completed, go to sell screen
 			WriteByte (MSG_ALL, SVC_SELLSCREEN);
 			return;
 		}
-
-		if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
+		else if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		{
 			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "Now, you have all four Runes. You sense\ntremendous invisible forces moving to\nunseal ancient barriers. Shub-Niggurath\nhad hoped to use the Runes Herself to\nclear off the Earth, but now instead,\nyou will use them to enter her home and\nconfront her as an avatar of avenging\nEarth-life. If you defeat her, you will\nbe remembered forever as the savior of\nthe planet. If she conquers, it will be\nas if you had never been born.");
+			WriteString (MSG_ALL, FINALE_EPISODES);
 			return;
 		}
-
-		if (world.model == "maps/hip1m4.bsp")
+		else if (mapname == "hip1m4")
 		{
 			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "If you can find the source of the\nportal's power, you can shut it\ndown--possibly forever!  With only a\nmoment's consideration for your own\nsafety, you re-enter the dark domain,\nknowing Hell would be a better fate\nthan experiencing the reign of Quake.");
+			WriteString (MSG_ALL, FINALE_HIP_1_2);
 			return;
 		}
-		else if (world.model == "maps/hip2m5.bsp")
+		else if (mapname == "hip2m5")
 		{
 			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "After what seems like an eternity,\nyou feel the presence of a diabolical\nintelligence.  You are held helpless\nfor a moment as your mind is open to\nthat of Armagon--Quake's General and\nmaster of this realm.  Recognizing\nyou as the one who foiled his\nattempt to conquer Earth, a hellish\nhowl fills your mind and blots out\nall consciousness.  When you awake,\nyou find yourself on the shores of\nreality, but in a time and place\nunknown to you.");
+			WriteString (MSG_ALL, FINALE_HIP_2_2);
 			return;
 		}
-		else if (world.model == "maps/hipend.bsp")
+		else if (mapname == "hipend")
 		{
 			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, "Congratulations!  You are victorious!\nThe minions of Quake have once again\nfallen before your mighty hand.\nIs this the last you will see of\nQuake's hellions?\n\nOnly time will tell...");
+			WriteString (MSG_ALL, FINALE_HIP_END_2);
 			intermission_exittime = time + 10000000;
 			return;
 		}
@@ -323,7 +328,8 @@ void() execute_changelevel =
 		other.view_ofs = '0 0 0';
 		other.angles = pos.mangle;
 		other.fixangle = TRUE;
-		other.nextthink = time + 0.5;
+		other.think = SUB_Null;
+		other.nextthink = 0;
 		other.takedamage = DAMAGE_NO;
 		other.solid = SOLID_NOT;
 		other.movetype = MOVETYPE_NONE;
@@ -380,7 +386,10 @@ void() changelevel_touch =
 void() trigger_changelevel =
 {
 	if (self.map == "")
-		objerror ("chagnelevel trigger doesn't have map");
+	{
+		enterror ("no map");
+		return;
+	}
 
 	InitTrigger ();
 	self.touch = changelevel_touch;
@@ -476,8 +485,9 @@ entity() SelectSpawnPoint =
 		}
 	}
 
-	if (serverflags & SFL_EPISODES)
-	{ // return with a rune to start
+	if ((serverflags & SFL_EPISODES))
+	{
+		// return with a rune to start
 		spot = find (world, classname, "info_player_start2");
 		if (spot)
 			return spot;
@@ -485,7 +495,7 @@ entity() SelectSpawnPoint =
 
 	spot = find (world, classname, "info_player_start");
 	if (!spot)
-		error ("PutClientInServer: no info_player_start on level");
+		dprint ("PutClientInServer: no info_player_start on level\n");
 
 	return spot;
 };
@@ -526,8 +536,6 @@ void() PutClientInServer =
 	self.th_die = PlayerDie;
 
 	self.deadflag = DEAD_NO;
-	// paustime is set by teleporters to keep the player from moving a while
-	self.pausetime = 0;
 
 	self.healamount = 0;
 	self.healtype = 0;
@@ -555,6 +563,7 @@ void() PutClientInServer =
 	self.view_ofs = '0 0 22';
 
 	self.velocity = '0 0 0';
+	self.jump_flag = 0;
 
 	PlayerStand ();
 
@@ -584,34 +593,18 @@ void() NextLevel =
 
 	if (mapname == "start")
 	{
-		if (!cvar ("registered"))
-		{
-			mapname = "e1m1";
-		}
-		else if (!(serverflags & SFL_EPISODE_1))
-		{
-			mapname = "e1m1";
-			serverflags = serverflags | SFL_EPISODE_1;
-		}
-		else if (!(serverflags & SFL_EPISODE_2))
-		{
-			mapname = "e2m1";
-			serverflags = serverflags | SFL_EPISODE_2;
-		}
-		else if (!(serverflags & SFL_EPISODE_3))
-		{
-			mapname = "e3m1";
-			serverflags = serverflags | SFL_EPISODE_3;
-		}
-		else if (!(serverflags & SFL_EPISODE_4))
-		{
-			mapname = "e4m1";
-			serverflags = serverflags - (serverflags &
-					(SFL_EPISODE_1 | SFL_EPISODE_2 | SFL_EPISODE_3));
-		}
-
 		o = spawn ();
-		o.map = mapname;
+
+		if (!cvar ("registered") || !(serverflags & SFL_EPISODE_1))
+			o.map = "e1m1";
+		else if (!(serverflags & SFL_EPISODE_2))
+			o.map = "e2m1";
+		else if (!(serverflags & SFL_EPISODE_3))
+			o.map = "e3m1";
+		else if (!(serverflags & SFL_EPISODE_4))
+			o.map = "e4m1";
+		else if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
+			o.map = "end";
 	}
 	else
 	{
@@ -619,9 +612,8 @@ void() NextLevel =
 
 		if (!o)
 		{
-			mapname = "start";
 			o = spawn ();
-			o.map = mapname;
+			o.map = "start";
 		}
 	}
 
@@ -664,10 +656,10 @@ void() PlayerDeathThink =
 {
 	local float forward;
 
-	if (self.flags & FL_ONGROUND)
+	if ((self.flags & FL_ONGROUND))
 	{
 		forward = vlen (self.velocity);
-		forward = forward - 20;
+		forward = forward - 1200 * frametime;
 		if (forward <= 0)
 			self.velocity = '0 0 0';
 		else
@@ -675,8 +667,10 @@ void() PlayerDeathThink =
 	}
 
 	// wait for all buttons released
-	if (self.deadflag == DEAD_DEAD)
+	if (self.deadflag != DEAD_RESPAWNABLE)
 	{
+		if (self.pain_finished > time)
+			return;
 		if (self.button2 || self.button1 || self.button0)
 			return;
 		self.deadflag = DEAD_RESPAWNABLE;
@@ -694,7 +688,7 @@ void() PlayerDeathThink =
 
 void() PlayerJump =
 {
-	if (self.flags & FL_WATERJUMP)
+	if ((self.flags & FL_WATERJUMP))
 		return;
 
 	if (self.waterlevel >= 2)
@@ -720,13 +714,10 @@ void() PlayerJump =
 
 	if (!(self.flags & FL_ONGROUND))
 		return;
-
 	if (!(self.flags & FL_JUMPRELEASED))
 		return;
 
-	self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
-
-	self.flags = self.flags - FL_ONGROUND;
+	self.flags = self.flags - (FL_ONGROUND | FL_JUMPRELEASED);
 
 	self.button2 = 0;
 	sound (self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM);
@@ -735,14 +726,83 @@ void() PlayerJump =
 
 .float dmgtime;
 
+void() CheckWaterJump =
+{
+	local vector start, end;
+
+	// check for a jump-out-of-water
+	start = self.origin;
+	start_z = start_z + 8;
+	v_forward_z = 0;
+	normalize (v_forward);
+	end = start + v_forward * 24;
+	traceline (start, end, TRUE, self);
+	if (trace_fraction == 1)
+		return;
+
+	// solid at waist
+
+	start_z = start_z + self.maxs_z - 8;
+	end = start + v_forward * 24;
+	self.movedir = trace_plane_normal * -50;
+	traceline (start, end, TRUE, self);
+	if (trace_fraction != 1)
+		return;
+
+	// open at eye level
+
+	self.flags = self.flags | FL_WATERJUMP;
+	self.velocity_z = 225;
+	self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
+	self.teleport_time = time + 2; // safety net
+};
+
+void() PlayerWetsuitThink =
+{
+	// WETSUIT
+	if (self.wetsuit_finished <= time)
+		return;
+
+	if (self.waterlevel == 2)
+	{
+		self.velocity = self.velocity * 1.25;
+	}
+	if (self.waterlevel == 3)
+	{
+		self.velocity = self.velocity * 1.5;
+	}
+	if (self.waterlevel >= 2)
+	{
+		// play scuba sound
+		if (self.swim_flag < time)
+		{
+			self.swim_flag = time + 7;
+			sound (self, CHAN_BODY, "misc/wetsuit.wav", 1, ATTN_NORM);
+		}
+		else
+		{
+			if (fabs (self.swim_flag - time - 6) < 0.04)
+			{
+				DeathBubbles (1);
+			}
+			else if (fabs (self.swim_flag - time - 5.5) < 0.04)
+			{
+				DeathBubbles (1);
+			}
+			else if (fabs (self.swim_flag - time - 5) < 0.04)
+			{
+				DeathBubbles (1);
+			}
+		}
+	}
+};
+
 void() WaterMove =
 {
 	local float waterfriction;
 
 	if (self.movetype == MOVETYPE_NOCLIP)
-		return;
-	if (self.health <= 0)
-		return;
+		self.waterlevel = 0;
 
 	if (self.waterlevel != 3)
 	{
@@ -767,7 +827,7 @@ void() WaterMove =
 
 	if (!self.waterlevel)
 	{
-		if (self.flags & FL_INWATER)
+		if ((self.flags & FL_INWATER))
 		{
 			sound (self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM);
 			self.flags = self.flags - FL_INWATER;
@@ -805,44 +865,20 @@ void() WaterMove =
 		if (self.watertype == CONTENT_SLIME)
 			sound (self, CHAN_BODY, "player/slimbrn2.wav", 1, ATTN_NORM);
 
-		self.flags = self.flags + FL_INWATER;
+		self.flags = self.flags | FL_INWATER;
 		self.dmgtime = 0;
 	}
+
+	if (self.waterlevel == 2)
+		CheckWaterJump ();
 
 	if (!(self.flags & FL_WATERJUMP))
 	{
 		waterfriction = 0.8 * self.waterlevel * frametime;
 		self.velocity = self.velocity - waterfriction * self.velocity;
 	}
-};
 
-void() CheckWaterJump =
-{
-	local vector start, end;
-
-	// check for a jump-out-of-water
-	makevectors (self.angles);
-	start = self.origin;
-	start_z = start_z + 8;
-	v_forward_z = 0;
-	normalize (v_forward);
-	end = start + v_forward * 24;
-	traceline (start, end, TRUE, self);
-	if (trace_fraction < 1)
-	{ // solid at waist
-		start_z = start_z + self.maxs_z - 8;
-		end = start + v_forward * 24;
-		self.movedir = trace_plane_normal * -50;
-		traceline (start, end, TRUE, self);
-		if (trace_fraction == 1)
-		{ // open at eye level
-			self.flags = self.flags | FL_WATERJUMP;
-			self.velocity_z = 225;
-			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
-			self.teleport_time = time + 2; // safety net
-			return;
-		}
-	}
+	PlayerWetsuitThink ();
 };
 
 void() PlayerHealthThink =
@@ -864,10 +900,29 @@ void() PlayerHealthThink =
 	self.healamount = 0;
 	self.healtype = 0;
 
-	RespawnMegaHealth (self);
+	RespawnMegaHealth ();
 };
 
-void(float num_bubbles) DeathBubbles;
+void() CheckOblivionPlane =
+{
+	if (self.origin_z >= -1300)
+		return;
+	if (mapname != "hipdm1")
+		return;
+
+	if (self.invincible_finished >= time)
+	{
+		self.invincible_finished = 0;
+		self.items = self.items - (self.items & IT_INVULNERABILITY);
+		self.invincible_time = 0;
+		self.invincible_finished = 0;
+		self.effects = self.effects - (self.effects & EF_DIMLIGHT);
+	}
+
+	self.deathtype = "falling";
+	T_Damage (self, self, world, self.health + 1000);
+	self.deathtype = "";
+};
 
 /*
 ==============================================================================
@@ -880,112 +935,65 @@ void() PlayerPreThink =
 {
 	if (intermission_running)
 	{
-		earthquake_prethink ();
 		IntermissionThink ();
 		return;
 	}
 
-	if (self.view_ofs == '0 0 0')
-		return; // intermission or finale
-
-	// Kill player on Edge of Oblivion
-	if ((self.origin_z < -1300) && (world.model == "maps/hipdm1.bsp") &&
-		(self.health > 0))
-	{
-		self.deathtype = "falling";
-		if (self.invincible_finished >= time)
-		{
-			self.invincible_finished = 0;
-			self.items = self.items - (self.items & IT_INVULNERABILITY);
-			self.invincible_time = 0;
-			self.invincible_finished = 0;
-			self.effects = self.effects - (self.effects & EF_DIMLIGHT);
-		}
-		T_Damage (self, self, world, self.health + 1000);
-		self.deathtype = "";
-	}
-
-	earthquake_prethink ();
+	CheckRules ();
 
 	makevectors (self.v_angle);
 
-	CheckRules ();
-	WaterMove ();
+	earthquake_prethink ();
 
-	// WETSUIT
-	if (self.wetsuit_finished > time)
+	if (self.health <= 0)
 	{
-		if (self.waterlevel == 2)
-		{
-			self.velocity = self.velocity * 1.25;
-		}
-		if (self.waterlevel == 3)
-		{
-			self.velocity = self.velocity * 1.5;
-		}
-		if (self.waterlevel >= 2)
-		{
-			// play scuba sound
-			if (self.swim_flag < time)
-			{
-				self.swim_flag = time + 7;
-				sound (self, CHAN_BODY, "misc/wetsuit.wav", 1, ATTN_NORM);
-			}
-			else
-			{
-				if (fabs (self.swim_flag - time - 6) < 0.04)
-				{
-					DeathBubbles (1);
-				}
-				else if (fabs (self.swim_flag - time - 5.5) < 0.04)
-				{
-					DeathBubbles (1);
-				}
-				else if (fabs (self.swim_flag - time - 5) < 0.04)
-				{
-					DeathBubbles (1);
-				}
-			}
-		}
-	}
-
-	if (self.waterlevel == 2)
-		CheckWaterJump ();
-
-	if (self.deadflag >= DEAD_DEAD)
-	{
-		PlayerDeathThink ();
+		if (self.deadflag >= DEAD_DEAD)
+			PlayerDeathThink ();
 		return;
 	}
 
-	if (self.deadflag == DEAD_DYING)
-		return;
+	// Kill player on Edge of Oblivion
+	CheckOblivionPlane ();
 
 	PlayerHealthThink ();
 
+	WaterMove ();
+
 	if (self.button2)
-	{
 		PlayerJump ();
-	}
 	else
 		self.flags = self.flags | FL_JUMPRELEASED;
+};
 
-	// teleporters can force a non-moving pause time
-	if (time < self.pausetime)
-		self.velocity = '0 0 0';
-
-	if (time > self.attack_finished && self.currentammo == 0 &&
-		self.weapon != IT_AXE && self.weapon != IT_MJOLNIR)
+void() CheckLanding =
+{
+	// check to see if player landed and play landing sound
+	if (!(self.flags & FL_ONGROUND))
 	{
-		W_SetWeapon (W_BestWeapon ());
+		self.jump_flag = self.velocity_z;
+		return;
 	}
+
+	if (self.jump_flag < -300)
+	{
+		if (self.watertype == CONTENT_WATER)
+			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
+		else if (self.jump_flag < -650)
+		{
+			self.deathtype = "falling";
+			T_Damage (self, world, world, 5);
+			self.deathtype = "";
+
+			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
+		}
+		else
+			sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+	}
+	self.jump_flag = 0;
 };
 
 void() CheckPowerups =
 {
-	if (self.health <= 0)
-		return;
-
 	// sound and screen flash when items start to run out
 
 	// invisibility
@@ -1016,7 +1024,7 @@ void() CheckPowerups =
 
 		if (self.invisible_finished < time)
 		{
-			self.items = self.items - IT_INVISIBILITY;
+			self.items = self.items - (self.items & IT_INVISIBILITY);
 			self.invisible_finished = 0;
 			self.invisible_time = 0;
 		}
@@ -1051,7 +1059,7 @@ void() CheckPowerups =
 
 		if (self.invincible_finished < time)
 		{
-			self.items = self.items - IT_INVULNERABILITY;
+			self.items = self.items - (self.items & IT_INVULNERABILITY);
 			self.invincible_time = 0;
 			self.invincible_finished = 0;
 		}
@@ -1083,7 +1091,7 @@ void() CheckPowerups =
 
 		if (self.super_damage_finished < time)
 		{
-			self.items = self.items - IT_QUAD;
+			self.items = self.items - (self.items & IT_QUAD);
 			self.super_damage_finished = 0;
 			self.super_time = 0;
 		}
@@ -1117,7 +1125,7 @@ void() CheckPowerups =
 
 		if (self.radsuit_finished < time)
 		{
-			self.items = self.items - IT_SUIT;
+			self.items = self.items - (self.items & IT_SUIT);
 			self.rad_time = 0;
 			self.radsuit_finished = 0;
 		}
@@ -1148,7 +1156,7 @@ void() CheckPowerups =
 
 		if (self.wetsuit_finished < time)
 		{ // just stopped
-			self.items2 = self.items2 - HIP_IT_WETSUIT;
+			self.items2 = self.items2 - (self.items2 & HIP_IT_WETSUIT);
 			self.wetsuit_time = 0;
 			self.wetsuit_finished = 0;
 		}
@@ -1177,7 +1185,7 @@ void() CheckPowerups =
 
 		if (self.empathy_finished < time)
 		{ // just stopped
-			self.items2 = self.items2 - HIP_IT_EMPATHY_SHIELDS;
+			self.items2 = self.items2 - (self.items2 & HIP_IT_EMPATHY_SHIELDS);
 			self.empathy_time = 0;
 			self.empathy_finished = 0;
 		}
@@ -1197,11 +1205,12 @@ Called every frame after physics are run
 */
 void() PlayerPostThink =
 {
-	if (self.view_ofs == '0 0 0')
-	{
-		earthquake_postthink ();
-		return; // intermission or finale
-	}
+	earthquake_postthink ();
+
+	if (intermission_running)
+		return;
+	if (self.health <= 0)
+		return;
 
 	if (self.wetsuit_finished > time)
 	{
@@ -1215,34 +1224,15 @@ void() PlayerPostThink =
 		}
 	}
 
-	earthquake_postthink ();
-
-	if (self.deadflag)
-		return;
-
 	W_WeaponFrame ();
 
-	// check to see if player landed and play landing sound
-	if ((self.jump_flag < -300) && (self.flags & FL_ONGROUND) &&
-		(self.health > 0))
-	{
-		if (self.watertype == CONTENT_WATER)
-			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
-		else if (self.jump_flag < -650)
-		{
-			self.deathtype = "falling";
-			T_Damage (self, world, world, 5);
-			self.deathtype = "";
-			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
-		}
-		else
-			sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+	if (self.health <= 0)
+		return;
 
-		self.jump_flag = 0;
-	}
+	CheckLanding ();
 
-	if (!(self.flags & FL_ONGROUND))
-		self.jump_flag = self.velocity_z;
+	if (self.health <= 0)
+		return;
 
 	CheckPowerups ();
 };
@@ -1259,17 +1249,39 @@ void() ClientConnect =
 
 void() ClientDisconnect =
 {
-	if (gameover)
-		return;
+	if (!intermission_running)
+	{
+		bprint (self.netname);
+		bprint (" left the game");
+		if (deathmatch)
+		{
+			bprint (" with ");
+			bprint (ftos (self.frags));
+			bprint (" frags");
+		}
+		bprint ("\n");
+		sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
 
-	bprint (self.netname);
-	bprint (" left the game with ");
-	bprint (ftos (self.frags));
-	bprint (" frags\n");
-	sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
-	set_suicide_frame ();
+		if (self.health > 0)
+		{
+			if (coop || deathmatch)
+				DropBackpack ();
 
-	RespawnMegaHealth (self);
+			RespawnMegaHealth ();
+
+			set_suicide_frame ();
+		}
+
+		CopyToBodyQue (self);
+	}
+
+	self.classname = "";
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NONE;
+	self.takedamage = DAMAGE_NO;
+	self.model = "";
+	self.modelindex = 0;
+	self.flags = self.flags - (self.flags & FL_CLIENT);
 };
 
 void(entity targ, entity attacker) ClientObituary =
@@ -1459,7 +1471,7 @@ void(entity targ, entity attacker) ClientObituary =
 				return;
 			}
 
-			if (attacker.flags & FL_MONSTER)
+			if ((attacker.flags & FL_MONSTER))
 			{
 				if (attacker.classname == "monster_army")
 					bprint (" was shot by a Grunt\n");

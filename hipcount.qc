@@ -31,7 +31,7 @@ void() counter_off_use;
 void() counter_think =
 {
 	self.cnt = self.cnt + 1;
-	if (self.spawnflags & COUNTER_RANDOM)
+	if ((self.spawnflags & COUNTER_RANDOM))
 	{
 		self.state = random () * self.count;
 		self.state = floor (self.state) + 1;
@@ -44,7 +44,7 @@ void() counter_think =
 	SUB_UseTargets ();
 	self.nextthink = time + self.wait;
 
-	if (self.spawnflags & COUNTER_STEP)
+	if ((self.spawnflags & COUNTER_STEP))
 	{
 		counter_on_use ();
 	}
@@ -54,7 +54,7 @@ void() counter_think =
 		self.cnt = 0;
 		if ((self.aflag) || !(self.spawnflags & COUNTER_LOOP))
 		{
-			if (self.spawnflags & COUNTER_TOGGLE)
+			if ((self.spawnflags & COUNTER_TOGGLE))
 			{
 				counter_on_use ();
 			}
@@ -82,7 +82,7 @@ void() counter_on_use =
 void() counter_off_use =
 {
 	self.aflag = FALSE;
-	if (self.spawnflags & COUNTER_TOGGLE)
+	if ((self.spawnflags & COUNTER_TOGGLE))
 	{
 		self.use = counter_on_use;
 	}
@@ -91,7 +91,7 @@ void() counter_off_use =
 		self.use = SUB_Null;
 	}
 
-	if (self.spawnflags & COUNTER_RESET)
+	if ((self.spawnflags & COUNTER_RESET))
 	{
 		self.cnt = 0;
 		self.state = 0;
@@ -134,7 +134,7 @@ void() func_counter =
 	self.classname = "counter";
 	self.use = counter_off_use;
 	self.think = SUB_Null;
-	if (self.spawnflags & COUNTER_START_ON)
+	if ((self.spawnflags & COUNTER_START_ON))
 	{
 		self.think = counter_off_use;
 		self.nextthink = time + 0.1;
