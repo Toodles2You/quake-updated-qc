@@ -255,6 +255,48 @@ void() DelayThink =
 	remove (self);
 };
 
+float(entity t) IsCounterTarget =
+{
+	if (t.classname == "particlefield")
+		return TRUE;
+	if (t.classname == "oncount")
+		return TRUE;
+	if (t.classname == "trigger_command")
+		return TRUE;
+	return FALSE;
+};
+
+void(entity ent, entity activator) UseTargetsCounter =
+{
+	local entity t;
+
+	t = find (world, targetname, ent.target);
+	while (t)
+	{
+		if (t.use)
+			if (t.use != SUB_Null)
+			{
+				if (t.delay > 0) // won't work anyway
+					SUB_Interact (t, activator, t.use);
+				else if (IsCounterTarget (t))
+				{
+					// print the message here
+					if (activator.classname == "player" && t.message != "")
+					{
+						centerprint (activator, t.message);
+						if (t.noise == "")
+							sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+					}
+
+					SUB_Interact (t, ent, t.use);
+				}
+				else
+					SUB_Interact (t, activator, t.use);
+			}
+		t = find (t, targetname, ent.target);
+	}
+};
+
 /*
 ==============================================================================
 SUB_UseTargetsEnt
@@ -315,6 +357,12 @@ void(entity ent, entity activator) SUB_UseTargetsEnt =
 	// fire targets
 	if (ent.target != "")
 	{
+		if (ent.classname == "counter")
+		{
+			UseTargetsCounter (ent, activator);
+			return;
+		}
+
 		t = find (world, targetname, ent.target);
 		while (t)
 		{
