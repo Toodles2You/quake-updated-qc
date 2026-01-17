@@ -218,6 +218,9 @@ void() misc_explobox2 =
 
 float SPAWNFLAG_SUPERSPIKE = 1;
 float SPAWNFLAG_LASER = 2;
+float SPAWNFLAG_LAVABALL = 4;
+float SPAWNFLAG_ROCKET = 8;
+float SPAWNFLAG_SILENT = 16;
 
 entity(vector org, vector vec) LaunchLaser;
 

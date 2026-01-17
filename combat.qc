@@ -145,12 +145,13 @@ void(entity inflictor, float damage) TakeDamage =
 		self.dmg_inflictor = inflictor;
 	}
 
-	if (inflictor && (self.movetype == MOVETYPE_WALK))
-	{
-		dir = self.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
-		dir = normalize (dir);
-		self.velocity = self.velocity + dir * damage * 8;
-	}
+	if (self.movetype == MOVETYPE_WALK)
+		if (inflictor)
+		{
+			dir = self.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
+			dir = normalize (dir);
+			self.velocity = self.velocity + dir * damage * 8;
+		}
 
 	if ((self.flags & FL_GODMODE))
 		return;

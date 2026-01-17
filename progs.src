@@ -2,7 +2,6 @@
 
 defs.qc
 hipdefs.qc
-strings.qc
 subs.qc
 fight.qc
 ai.qc
@@ -10,6 +9,7 @@ combat.qc
 items.qc
 weapons.qc
 world.qc
+finale.qc
 client.qc
 player.qc
 monsters.qc
@@ -58,4 +58,3 @@ hiptrig.qc
 hipmisc.qc
 hipwater.qc
 hipdecoy.qc
-

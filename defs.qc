@@ -375,6 +375,21 @@ float MSG_ONE = 1; // reliable to one (msg_entity)
 float MSG_ALL = 2; // reliable to all
 float MSG_INIT = 3; // write to the init string
 
+float FINALE_EMPTY = 0;
+float FINALE_SHAREWARE = 1;
+float FINALE_EPISODE_1 = 2;
+float FINALE_EPISODE_2 = 3;
+float FINALE_EPISODE_3 = 4;
+float FINALE_EPISODE_4 = 5;
+float FINALE_EPISODES = 6;
+float FINALE_END = 7;
+float FINALE_HIP_1 = 8;
+float FINALE_HIP_1_2 = 9;
+float FINALE_HIP_2 = 10;
+float FINALE_HIP_2_2 = 11;
+float FINALE_HIP_END = 12;
+float FINALE_HIP_END_2 = 13;
+
 // globals
 
 float gameover; // set when a rule exits

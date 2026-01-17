@@ -50,12 +50,6 @@ float visible_distance;
 entity damage_inflictor;
 float footsteps;
 
-float SPAWNFLAG_SUPERSPIKE = 1;
-float SPAWNFLAG_LASER = 2;
-float SPAWNFLAG_LAVABALL = 4;
-float SPAWNFLAG_ROCKET = 8;
-float SPAWNFLAG_SILENT = 16;
-
 float MIN_ANGLE_DELTA = 10;
 
 .float wetsuit_finished;

@@ -121,8 +121,7 @@ void() finale_1 =
 	if (pl)
 		remove (pl);
 
-	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, "");
+	SetFinale (FINALE_EMPTY, 0);
 
 	pl = find (world, classname, "player");
 	while (pl)
@@ -218,8 +217,7 @@ void() finale_4 =
 		z = z + 96;
 	}
 
-	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, FINALE_END);
+	SetFinale (FINALE_END, 3);
 
 	n = spawn ();
 	setmodel (n, "progs/player.mdl");
@@ -230,9 +228,6 @@ void() finale_4 =
 
 	remove (self);
 
-	WriteByte (MSG_ALL, SVC_CDTRACK);
-	WriteByte (MSG_ALL, 3);
-	WriteByte (MSG_ALL, 3);
 	lightstyle (0, "m");
 };
 

@@ -124,14 +124,14 @@ void() door_fire =
 			do {
 				SUB_Think (door, door_go_down);
 				door = door.enemy;
-			} while (door != self && door);
+			} while (door != self && door != world);
 			return;
 		}
 
 	do {
 		SUB_Think (door, door_go_up);
 		door = door.enemy;
-	} while (door != self && door);
+	} while (door != self && door != world);
 };
 
 void() door_use =
