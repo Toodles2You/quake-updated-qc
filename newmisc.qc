@@ -33,7 +33,7 @@ void() light_candle =
 
 void() rubble_touch =
 {
-	if (other.classname == "player" || other.flags & FL_MONSTER)
+	if (other.classname == "player" || (other.flags & FL_MONSTER))
 	{
 		if (vlen (self.velocity) > 0)
 		{
@@ -67,7 +67,7 @@ void() rubble_throw =
 	rubble.think = SUB_Remove;
 	rubble.nextthink = time + 30;
 
-	if (self.spawnflags & 1)
+	if ((self.spawnflags & 1))
 		rubble.skin = 1;
 	else
 		rubble.skin = 0;
@@ -93,10 +93,13 @@ void() rubble_use =
 
 void() rubble_generator =
 {
-	precache_model ("progs/rubble.mdl");
-
 	if (self.target == "")
-		objerror ("rubble_generator has no target!");
+	{
+		enterror ("rubble_generator has no target!");
+		return;
+	}
+
+	precache_model ("progs/rubble.mdl");
 
 	if (!self.delay)
 		self.delay = 5;
@@ -104,7 +107,7 @@ void() rubble_generator =
 	self.solid = SOLID_NOT;
 	self.use = rubble_use;
 
-	if (self.spawnflags & 2)
+	if ((self.spawnflags & 2))
 		rubble_use ();
 };
 

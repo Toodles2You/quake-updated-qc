@@ -49,15 +49,7 @@ void() PlaceItem =
 	self.origin_z = self.origin_z + 6;
 	oldz = self.origin_z;
 	if (!droptofloor ())
-	{
-		dprint ("Bonus item fell out of level!\n");
-		dprint (self.classname);
-		dprint (" at ");
-		dprint (vtos (self.origin));
-		dprint ("\n");
-		remove (self);
-		return;
-	}
+		entwarn ("fell out of level");
 };
 
 void() StartItem =
@@ -75,7 +67,7 @@ void() item_health =
 {
 	self.touch = health_touch;
 
-	if (self.spawnflags & H_ROTTEN)
+	if ((self.spawnflags & H_ROTTEN))
 	{
 		precache_model ("maps/b_bh10.bsp");
 
@@ -85,7 +77,7 @@ void() item_health =
 		self.healamount = 15;
 		self.healtype = 0;
 	}
-	else if (self.spawnflags & H_MEGA)
+	else if ((self.spawnflags & H_MEGA))
 	{
 		precache_model ("maps/b_bh100.bsp");
 		precache_sound ("items/r_item2.wav");
@@ -135,7 +127,7 @@ void() health_touch =
 	self.model = "";
 	self.solid = SOLID_NOT;
 
-	if (self.healtype == 2 && (other.items2 & IT2_SUPERHEALTH) && !RuneHasElder (other))
+	if (self.healtype == 2 && other.healamount && !RuneHasElder (other))
 	{
 		self.nextthink = time + 5;
 		self.think = SUB_Null;
@@ -166,14 +158,14 @@ void() item_megahealth_rot =
 	}
 };
 
-void(entity client) RespawnMegaHealth =
+void() RespawnMegaHealth =
 {
 	local entity ent;
 
 	ent = find (world, classname, "item_health");
 	while (ent)
 	{
-		if (ent.owner == client)
+		if (ent.owner == self)
 		{
 			ent.owner = world;
 			ent.think = item_megahealth_rot;
@@ -221,7 +213,7 @@ void() armor_touch =
 
 	other.armortype = type;
 	other.armorvalue = value;
-	other.items2 = other.items2 - (other.items2 & IT2_ARMOR) + bit;
+	other.items2 = (other.items2 - (other.items2 & IT2_ARMOR)) | bit;
 
 	self.solid = SOLID_NOT;
 	self.model = "";
@@ -346,7 +338,7 @@ void(entity comboOwner) EnableComboWeapons =
 	{
 		if (comboOwner.ammo_lava_nails > 0 &&
 			(comboOwner.items & IT_SUPER_NAILGUN))
-			{
+		{
 			sprint (comboOwner, "Super Lava Enabled\n");
 			comboOwner.items = comboOwner.items | IT_LAVA_SUPER_NAILGUN;
 		}
@@ -356,7 +348,7 @@ void(entity comboOwner) EnableComboWeapons =
 	{
 		if (comboOwner.ammo_multi_rockets > 0 &&
 			(comboOwner.items & IT_GRENADE_LAUNCHER))
-			{
+		{
 			sprint (comboOwner, "Multi Grenades Enabled\n");
 			comboOwner.items = comboOwner.items | IT_MULTI_GRENADE;
 		}
@@ -366,7 +358,7 @@ void(entity comboOwner) EnableComboWeapons =
 	{
 		if (comboOwner.ammo_multi_rockets > 0 &&
 			(comboOwner.items & IT_ROCKET_LAUNCHER))
-			{
+		{
 			sprint (comboOwner, "Multi Rockets Enabled\n");
 			comboOwner.items = comboOwner.items | IT_MULTI_ROCKET;
 		}
@@ -398,7 +390,6 @@ void() weapon_touch =
 	else
 		leave = 0;
 
-	new = 0;
 	if (self.classname == "weapon_supershotgun")
 		new = IT_SUPER_SHOTGUN;
 	else if (self.classname == "weapon_nailgun")
@@ -412,51 +403,51 @@ void() weapon_touch =
 	else if (self.classname == "weapon_lightning")
 		new = IT_LIGHTNING;
 	else
-		objerror ("weapon_touch: unknown classname");
+		new = 0;
 
-	if (other.items & new)
+	if ((other.items & new) == new)
 	{
 		if (leave)
 			return;
-		if (new & IT_SUPER_SHOTGUN)
+		if ((new & IT_SUPER_SHOTGUN))
 		{
 			if (other.ammo_shells1 >= 100)
 				return;
 		}
-		else if (new & (IT_NAILGUN | IT_SUPER_NAILGUN))
+		else if ((new & (IT_NAILGUN | IT_SUPER_NAILGUN)))
 		{
 			if (other.ammo_nails1 >= 200)
 				return;
 		}
-		else if (new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER))
+		else if ((new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
 		{
 			if (other.ammo_rockets1 >= 100)
 				return;
 		}
-		else if (new & IT_LIGHTNING)
+		else if ((new & IT_LIGHTNING))
 		{
 			if (other.ammo_cells1 >= 100)
 				return;
 		}
 	}
 
-	if (new & IT_SUPER_SHOTGUN)
+	if ((new & IT_SUPER_SHOTGUN))
 	{
 		other.ammo_shells1 = other.ammo_shells1 + 5;
 	}
-	else if (new & (IT_NAILGUN | IT_SUPER_NAILGUN))
+	else if ((new & (IT_NAILGUN | IT_SUPER_NAILGUN)))
 	{
 		if (leave)
 			other.ammo_lava_nails = other.ammo_lava_nails + 20;
 		other.ammo_nails1 = other.ammo_nails1 + 30;
 	}
-	else if (new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER))
+	else if ((new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
 	{
 		if (leave)
 			other.ammo_multi_rockets = other.ammo_multi_rockets + 3;
 		other.ammo_rockets1 = other.ammo_rockets1 + 5;
 	}
-	else if (new & IT_LIGHTNING)
+	else if ((new & IT_LIGHTNING))
 	{
 		if (leave)
 			other.ammo_plasma = other.ammo_plasma + 5;
@@ -681,7 +672,7 @@ void() item_shells =
 {
 	self.touch = ammo_touch;
 
-	if (self.spawnflags & WEAPON_BIG2)
+	if ((self.spawnflags & WEAPON_BIG2))
 	{
 		precache_model ("maps/b_shell1.bsp");
 		setmodel (self, "maps/b_shell1.bsp");
@@ -703,7 +694,7 @@ void() item_spikes =
 {
 	self.touch = ammo_touch;
 
-	if (self.spawnflags & WEAPON_BIG2)
+	if ((self.spawnflags & WEAPON_BIG2))
 	{
 		precache_model ("maps/b_nail1.bsp");
 		setmodel (self, "maps/b_nail1.bsp");
@@ -747,7 +738,7 @@ void() item_rockets =
 {
 	self.touch = ammo_touch;
 
-	if (self.spawnflags & WEAPON_BIG2)
+	if ((self.spawnflags & WEAPON_BIG2))
 	{
 		precache_model ("maps/b_rock1.bsp");
 		setmodel (self, "maps/b_rock1.bsp");
@@ -791,7 +782,7 @@ void() item_cells =
 {
 	self.touch = ammo_touch;
 
-	if (self.spawnflags & WEAPON_BIG2)
+	if ((self.spawnflags & WEAPON_BIG2))
 	{
 		precache_model ("maps/b_batt1.bsp");
 		setmodel (self, "maps/b_batt1.bsp");
@@ -840,9 +831,43 @@ void() item_weapon =
 {
 	self.touch = ammo_touch;
 
-	if (self.spawnflags & WEAPON_SHOTGUN)
+	if ((self.spawnflags & WEAPON_ROCKET))
 	{
-		if (self.spawnflags & WEAPON_BIG)
+		if ((self.spawnflags & WEAPON_BIG))
+		{
+			precache_model ("maps/b_rock1.bsp");
+			setmodel (self, "maps/b_rock1.bsp");
+			self.aflag = 10;
+		}
+		else
+		{
+			precache_model ("maps/b_rock0.bsp");
+			setmodel (self, "maps/b_rock0.bsp");
+			self.aflag = 5;
+		}
+		self.weapon = 3;
+		self.netname = "rockets";
+	}
+	else if ((self.spawnflags & WEAPON_SPIKES))
+	{
+		if ((self.spawnflags & WEAPON_BIG))
+		{
+			precache_model ("maps/b_nail1.bsp");
+			setmodel (self, "maps/b_nail1.bsp");
+			self.aflag = 40;
+		}
+		else
+		{
+			precache_model ("maps/b_nail0.bsp");
+			setmodel (self, "maps/b_nail0.bsp");
+			self.aflag = 20;
+		}
+		self.weapon = 2;
+		self.netname = "nails";
+	}
+	else if ((self.spawnflags & WEAPON_SHOTGUN))
+	{
+		if ((self.spawnflags & WEAPON_BIG))
 		{
 			precache_model ("maps/b_shell1.bsp");
 			setmodel (self, "maps/b_shell1.bsp");
@@ -858,42 +883,6 @@ void() item_weapon =
 		self.netname = "shells";
 	}
 
-	if (self.spawnflags & WEAPON_SPIKES)
-	{
-		if (self.spawnflags & WEAPON_BIG)
-		{
-			precache_model ("maps/b_nail1.bsp");
-			setmodel (self, "maps/b_nail1.bsp");
-			self.aflag = 40;
-		}
-		else
-		{
-			precache_model ("maps/b_nail0.bsp");
-			setmodel (self, "maps/b_nail0.bsp");
-			self.aflag = 20;
-		}
-		self.weapon = 2;
-		self.netname = "nails";
-	}
-
-	if (self.spawnflags & WEAPON_ROCKET)
-	{
-		if (self.spawnflags & WEAPON_BIG)
-		{
-			precache_model ("maps/b_rock1.bsp");
-			setmodel (self, "maps/b_rock1.bsp");
-			self.aflag = 10;
-		}
-		else
-		{
-			precache_model ("maps/b_rock0.bsp");
-			setmodel (self, "maps/b_rock0.bsp");
-			self.aflag = 5;
-		}
-		self.weapon = 3;
-		self.netname = "rockets";
-	}
-
 	setsize (self, '0 0 0', '32 32 56');
 	StartItem ();
 };
@@ -904,7 +893,7 @@ void() key_touch =
 		return;
 	if (other.health <= 0)
 		return;
-	if (other.items & self.items)
+	if ((other.items & self.items) == self.items)
 		return;
 
 	sprint (other, "You got the ");
@@ -1019,30 +1008,30 @@ void() sigil_touch =
 void() item_sigil =
 {
 	if (!(self.spawnflags & SFL_EPISODES))
-		objerror ("no spawnflags");
+		entwarn ("no spawnflags");
 
 	precache_sound ("misc/runekey.wav");
 	self.noise = "misc/runekey.wav";
 
-	if (self.spawnflags & SFL_EPISODE_1)
+	if ((self.spawnflags & SFL_EPISODE_4))
 	{
-		precache_model ("progs/end1.mdl");
-		setmodel (self, "progs/end1.mdl");
+		precache_model2 ("progs/end4.mdl");
+		setmodel (self, "progs/end4.mdl");
 	}
-	if (self.spawnflags & SFL_EPISODE_2)
-	{
-		precache_model2 ("progs/end2.mdl");
-		setmodel (self, "progs/end2.mdl");
-	}
-	if (self.spawnflags & SFL_EPISODE_3)
+	else if ((self.spawnflags & SFL_EPISODE_3))
 	{
 		precache_model2 ("progs/end3.mdl");
 		setmodel (self, "progs/end3.mdl");
 	}
-	if (self.spawnflags & SFL_EPISODE_4)
+	else if ((self.spawnflags & SFL_EPISODE_2))
 	{
-		precache_model2 ("progs/end4.mdl");
-		setmodel (self, "progs/end4.mdl");
+		precache_model2 ("progs/end2.mdl");
+		setmodel (self, "progs/end2.mdl");
+	}
+	else
+	{
+		precache_model ("progs/end1.mdl");
+		setmodel (self, "progs/end1.mdl");
 	}
 
 	self.touch = sigil_touch;
@@ -1214,7 +1203,7 @@ void() BackpackTouch =
 	sprint (other, "You get ");
 
 	if (self.items)
-		if ((other.items & self.items) == 0)
+		if ((other.items & self.items) != self.items)
 		{
 			acount = 1;
 			sprint (other, "the ");
@@ -1365,7 +1354,8 @@ void() DropBackpack =
 	}
 
 	if (!self.ammo_shells1 && !self.ammo_nails1 && !self.ammo_rockets1 &&
-		!self.ammo_cells1 && !self.ammo_lava_nails && !self.ammo_multi_rockets)
+		!self.ammo_cells1 && !self.ammo_lava_nails &&
+		!self.ammo_multi_rockets && !self.weapon)
 	{
 		return;
 	}

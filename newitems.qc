@@ -46,7 +46,7 @@ void() newitems_touch =
 
 	// only one per person, please.
 	if (self.classname == "item_sphere")
-		if (other.items2 & IT2_V_SPHERE)
+		if ((other.items2 & IT2_V_SPHERE))
 			return;
 
 	sprint (other, "You got the ");

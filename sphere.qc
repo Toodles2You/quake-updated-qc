@@ -79,7 +79,7 @@ void() sphere_think =
 
 	if (time > self.delay)
 	{
-		if (self.owner.items2 & IT2_V_SPHERE)
+		if ((self.owner.items2 & IT2_V_SPHERE))
 			self.owner.items2 = self.owner.items2 - IT2_V_SPHERE;
 		sprint (self.owner, "Vengeance Sphere lost\n");
 		remove (self);
@@ -88,7 +88,7 @@ void() sphere_think =
 
 	if (!SUB_IsAlive (self.owner))
 	{
-		if (self.owner.items2 & IT2_V_SPHERE)
+		if ((self.owner.items2 & IT2_V_SPHERE))
 			self.owner.items2 = self.owner.items2 - IT2_V_SPHERE;
 		if (self.owner.enemy.classname == "player")
 		{

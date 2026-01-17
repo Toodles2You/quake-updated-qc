@@ -246,7 +246,7 @@ void() eel_death9 = [$eeldth3, eel_death10] {};
 void() eel_death10 = [$eeldth4, eel_death11] {};
 void() eel_death11 = [$eeldth5, eel_death12]
 {
-	self.flags = self.flags - FL_SWIM;
+	self.flags = self.flags - (self.flags & FL_SWIM);
 };
 void() eel_death12 = [$eeldth6, eel_death13] {};
 void() eel_death13 = [$eeldth7, eel_death14] {};
@@ -256,7 +256,7 @@ void() eel_death16 = [$eeldth10, eel_death16] { self.solid = SOLID_NOT; };
 
 void() eel_death =
 {
-	self.flags = self.flags + FL_SWIM;
+	self.flags = self.flags | FL_SWIM;
 	setsize (self, '0 0 0', '0 0 0');
 
 	if (self.health < -12)

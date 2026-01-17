@@ -78,7 +78,7 @@ void() ending_for_coop =
 	setorigin (self, self.origin + '0 0 48');
 
 	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, "You have destroyed Quake's\nTemporal Teleporter. His assault\non Time has been defeated.");
+	WriteString (MSG_ALL, FINALE_ROGUE_END_COOP);
 
 	ending_remove_stuff ();
 
@@ -135,7 +135,10 @@ void(entity playerEnt) move_camera =
 
 	cameraPoint = find (world, targetname, "cameraview");
 	if (cameraPoint == world)
-		objerror ("Could not find camerapoint!");
+	{
+		enterror ("Could not find camerapoint!");
+		return;
+	}
 
 	self.model = "";
 	self.yaw_speed = 20;
@@ -236,7 +239,7 @@ void() actor_fire1 = [$rockatt1, actor_fire2]
 
 	// start the end text
 	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, "\nFinally, Quake's Temporal Teleporter\nyields to your assault. A high\npitched scream emits from the\ndevastated device as stressed steel\nblasts outward to rock the cavern.\nThe machine is devoured by molten lava.\n\nThe ground shudders as reality shifts\nback to its predestined path.\n\nYou run to enter the charged time pod,\nscrambling in as the chamber closes.\nYour consciousness fades as you realize\nyou have halted Quake's plans for...\n\nThe Dissolution of Eternity.");
+	WriteString (MSG_ALL, FINALE_ROGUE_END);
 };
 void() actor_fire2 = [$rockatt2, actor_fire3]
 {
@@ -297,7 +300,10 @@ void() actor_control =
 		self.movetarget = find (world, targetname, self.target);
 		self.goalentity = self.movetarget;
 		if (self.goalentity == world)
-			objerror ("End Sequence point1 placing screwed up!");
+		{
+			enterror ("End Sequence point1 placing screwed up!");
+			return;
+		}
 		self.frame = 6;
 		self.think = actor_run;
 		self.nextthink = time + 0.1;
@@ -309,7 +315,10 @@ void() actor_control =
 		self.movetarget = find (world, targetname, self.target);
 		self.goalentity = self.movetarget;
 		if (self.goalentity == world)
-			objerror ("End Sequence machine placing screwed up!");
+		{
+			enterror ("End Sequence machine placing screwed up!");
+			return;
+		}
 		actorStage = STAGE_FIRING;
 		self.think = actor_fire1;
 		self.nextthink = time + 0.1;
@@ -329,7 +338,10 @@ void() actor_control =
 		self.movetarget = find (world, targetname, self.target);
 		self.goalentity = self.movetarget;
 		if (self.goalentity == world)
-			objerror ("End Sequence point2 placing screwed up!");
+		{
+			enterror ("End Sequence point2 placing screwed up!");
+			return;
+		}
 		self.frame = 6;
 		self.think = actor_run;
 		self.nextthink = time + 0.1;

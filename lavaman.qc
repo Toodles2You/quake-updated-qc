@@ -464,7 +464,7 @@ void() monster_lava_man =
 	total_monsters = total_monsters + 1;
 
 	// cause the lavaman to rise from the lava when triggered.
-	if (self.spawnflags & 2)
+	if ((self.spawnflags & 2))
 	{
 		self.use = lavaman_awake;
 		return;

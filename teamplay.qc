@@ -502,7 +502,7 @@ void() TeamCheckLock =
 		return;
 	}
 
-	if (self.ctf_flags & CTF_FLAG_STUFF_COLOR)
+	if ((self.ctf_flags & CTF_FLAG_STUFF_COLOR))
 	{
 		self.ctf_flags = self.ctf_flags - CTF_FLAG_STUFF_COLOR;
 		stuffcmd (self, "color ");
@@ -824,7 +824,6 @@ void() Team_weapon_touch =
 	if ((other == self.owner) && ((self.nextthink - time) > 119))
 		return;
 
-	new = 0;
 	if (self.classname == "weapon_nailgun")
 		new = IT_NAILGUN;
 	else if (self.classname == "weapon_supernailgun")
@@ -838,7 +837,7 @@ void() Team_weapon_touch =
 	else if (self.classname == "weapon_lightning")
 		new = IT_LIGHTNING;
 	else
-		objerror ("Team_weapon_touch: unknown classname");
+		new = 0;
 
 	sprint (other, "You got the ");
 	sprint (other, self.netname);
@@ -925,7 +924,7 @@ void() TossWeapon =
 		item.weapon = IT_SUPER_SHOTGUN;
 		item.netname = "Double-barrelled Shotgun";
 		item.classname = "weapon_supershotgun";
-		self.items = self.items - IT_SUPER_SHOTGUN;
+		self.items = self.items - (self.items & IT_SUPER_SHOTGUN);
 	}
 
 	if (self.weapon == IT_NAILGUN || self.weapon == IT_LAVA_NAILGUN)
@@ -937,9 +936,8 @@ void() TossWeapon =
 		self.items = self.items - (self.items & (IT_NAILGUN | IT_LAVA_NAILGUN));
 	}
 
-	if (self.weapon == IT_SUPER_NAILGUN ||
-		self.weapon == IT_LAVA_SUPER_NAILGUN)
-		{
+	if (self.weapon == IT_SUPER_NAILGUN || self.weapon == IT_LAVA_SUPER_NAILGUN)
+	{
 		setmodel (item, "progs/g_nail2.mdl");
 		item.weapon = IT_SUPER_NAILGUN;
 		item.netname = "Super Nailgun";
@@ -1087,9 +1085,9 @@ void(entity player) TeamDropFlagOfPlayer =
 
 	if (teamplay == TEAM_CTF_ONEFLAG && (player.ctf_flags & CTF_FLAG_FLAG))
 		kn = "item_flag";
-	else if (player.ctf_flags & CTF_FLAG_TEAM1)
+	else if ((player.ctf_flags & CTF_FLAG_TEAM1))
 		kn = "item_flag_team1";
-	else if (player.ctf_flags & CTF_FLAG_TEAM2)
+	else if ((player.ctf_flags & CTF_FLAG_TEAM2))
 		kn = "item_flag_team2";
 	else
 		return; // doesn't have a flg
@@ -1253,7 +1251,7 @@ void() TeamFlagTouch =
 	}
 
 	// if we have any flags, leave now
-	if (other.ctf_flags & (CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2))
+	if ((other.ctf_flags & (CTF_FLAG_TEAM1 | CTF_FLAG_TEAM2)))
 		return;
 
 	// hey, its not our flag, pick it up
@@ -1433,7 +1431,7 @@ void() TeamFlagBaseTouch =
 			p = find (p, classname, "player");
 		}
 		// respawn flags
-		if (other.ctf_flags & CTF_FLAG_TEAM1)
+		if ((other.ctf_flags & CTF_FLAG_TEAM1))
 		{
 			f = find (world, classname, "item_flag_team1");
 			if (f != world)
@@ -1470,7 +1468,10 @@ void() TeamFlagThink =
 	}
 
 	if (self.cnt != FLAG_CARRIED)
-		objerror ("Flag in invalid state\n");
+	{
+		entwarn ("Flag in invalid state");
+		return;
+	}
 
 	e = self.owner;
 	if (e.classname != "player" || e.deadflag)

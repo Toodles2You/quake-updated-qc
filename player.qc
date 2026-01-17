@@ -503,7 +503,8 @@ void() DeathSound =
 	// water death sounds
 	if (self.waterlevel == 3)
 	{
-		DeathBubbles (20);
+		if (self.watertype == CONTENT_WATER)
+			DeathBubbles (20);
 		sound (self, CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
 		return;
 	}
@@ -529,6 +530,7 @@ void() PlayerDead =
 	self.think = SUB_Null;
 	// allow respawn after a certain time
 	self.deadflag = DEAD_DEAD;
+	self.pain_finished = time + 1;
 };
 
 vector(float dm) VelocityForDamage =
@@ -595,6 +597,7 @@ void() GibPlayer =
 	ThrowGib ("progs/gib3.mdl", self.health);
 
 	self.deadflag = DEAD_DEAD;
+	self.pain_finished = time + 1;
 
 	if (other.classname == "teledeath")
 	{
@@ -616,9 +619,8 @@ void() GibPlayer =
 
 void() PlayerDie =
 {
-	local float i;
+	local float weap, i;
 
-	self.items = self.items - (self.items & IT_ARTS);
 	self.invisible_finished = 0;
 	self.invincible_finished = 0;
 	self.super_damage_finished = 0;
@@ -629,6 +631,8 @@ void() PlayerDie =
 	self.gravity = 1.0;
 	self.shield_finished = 0;
 	self.antigrav_finished = 0;
+
+	weap = self.weapon;
 
 	if (deathmatch || coop)
 	{
@@ -642,9 +646,17 @@ void() PlayerDie =
 	else
 		self.ctf_killed = 1;
 
-	RespawnMegaHealth (self);
+	RespawnMegaHealth ();
 
+	self.items = 0;
+	self.items2 = 0;
+	self.weapon = 0;
 	self.weaponmodel = "";
+	self.currentammo = 0;
+	self.ammo_shells = 0;
+	self.ammo_nails = 0;
+	self.ammo_rockets = 0;
+	self.ammo_cells = 0;
 	self.view_ofs = '0 0 -8';
 	self.deadflag = DEAD_DYING;
 	self.solid = SOLID_NOT;
@@ -653,18 +665,20 @@ void() PlayerDie =
 	if (self.velocity_z < 10)
 		self.velocity_z = self.velocity_z + random () * 300;
 
+	self.angles_x = 0;
+	self.angles_z = 0;
+
 	if (self.health < -40)
 	{
 		GibPlayer ();
 		return;
 	}
 
+	self.pain_finished = time;
+
 	DeathSound ();
 
-	self.angles_x = 0;
-	self.angles_z = 0;
-
-	if (self.weapon == IT_AXE)
+	if (weap == IT_AXE)
 	{
 		player_die_ax1 ();
 		return;
@@ -688,10 +702,13 @@ void() set_suicide_frame =
 {
 	if (self.model != "progs/player.mdl")
 		return;
+	self.angles_x = 0;
+	self.angles_z = 0;
 	self.frame = $deatha11;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_TOSS;
 	self.deadflag = DEAD_DEAD;
+	self.pain_finished = time + 1;
 	self.nextthink = -1;
 	self.think = SUB_Null;
 };
@@ -772,7 +789,7 @@ void() player_touch =
 	local float dot;
 	local float doDamage;
 
-	if (self.items2 & IT2_SHIELD)
+	if ((self.items2 & IT2_SHIELD))
 	{
 		if (other.classname == "player")
 		{

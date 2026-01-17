@@ -95,7 +95,7 @@ void() dragon_check_attack =
 		return;
 	if (!SUB_IsAlive (self.enemy))
 		self.enemy = world;
-	if (self.enemy.flags & FL_NOTARGET)
+	if ((self.enemy.flags & FL_NOTARGET))
 		return;
 
 	if (self.enemy == world)
@@ -612,7 +612,7 @@ void() dragon_explode =
 	if (self.dragonDeathState > DDIE_FALLING)
 		return;
 
-	if (vlen (self.velocity) < 100 || self.flags & FL_INWATER)
+	if (vlen (self.velocity) < 100 || (self.flags & FL_INWATER))
 	{
 		self.dragonDeathState = DDIE_STOPPED;
 		dragon_boom1 ();
@@ -802,13 +802,16 @@ void() dragon_corner_touch =
 	if (other.movetarget)
 		other.goalentity = other.movetarget;
 	else
-		objerror ("dragon_corner: no target found");
+		enterror ("dragon_corner: no target found");
 };
 
 void() dragon_corner =
 {
 	if (self.targetname == "")
-		objerror ("dragon_corner: no targetname");
+	{
+		enterror ("dragon_corner: no targetname");
+		return;
+	}
 
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;

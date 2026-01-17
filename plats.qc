@@ -41,7 +41,7 @@ void() plat_spawn_inside_trigger =
 	tmin = self.mins + '25 25 0';
 	tmax = self.maxs - '25 25 -8';
 	tmin_z = tmax_z - (self.pos1_z - self.pos2_z + 8);
-	if (self.spawnflags & PLAT_LOW_TRIGGER)
+	if ((self.spawnflags & PLAT_LOW_TRIGGER))
 		tmax_z = tmin_z + 8;
 
 	if (self.size_x <= 50)
@@ -130,14 +130,14 @@ void() plat_crush =
 	else if (self.state == STATE_DOWN)
 		plat_go_up ();
 	else
-		objerror ("plat_crush: bad self.state\n");
+		entwarn ("plat_crush: bad self.state");
 };
 
 void() plat_use =
 {
 	self.use = SUB_Null;
 	if (self.state != STATE_UP)
-		objerror ("plat_use: not in up state");
+		entwarn ("plat_use: not in up state");
 	plat_go_down ();
 };
 
@@ -239,10 +239,14 @@ void() train_next =
 {
 	local entity targ;
 
+	if (self.target == "")
+	{
+		entwarn ("train_next: no next target");
+		return;
+	}
+
 	targ = find (world, targetname, self.target);
 	self.target = targ.target;
-	if (self.target == "")
-		objerror ("train_next: no next target");
 	if (targ.wait)
 		self.wait = targ.wait;
 	else
@@ -254,6 +258,12 @@ void() train_next =
 void() func_train_find =
 {
 	local entity targ;
+
+	if (self.target == "")
+	{
+		entwarn ("no target");
+		return;
+	}
 
 	targ = find (world, targetname, self.target);
 	self.target = targ.target;
@@ -269,8 +279,6 @@ void() func_train =
 {
 	if (!self.speed)
 		self.speed = 100;
-	if (self.target == "")
-		objerror ("func_train without a target");
 	if (!self.dmg)
 		self.dmg = 2;
 
@@ -310,8 +318,6 @@ void() misc_teleporttrain =
 {
 	if (!self.speed)
 		self.speed = 100;
-	if (self.target == "")
-		objerror ("func_train without a target");
 
 	self.cnt = 1;
 	self.solid = SOLID_NOT;

@@ -63,12 +63,12 @@ void() ltrail_start_fire =
 {
 	// if it's a toggle ltrail, we ignore triggers from ltrail_end's
 	// when toggled off.
-	if (self.spawnflags & LT_TOGGLE)
+	if ((self.spawnflags & LT_TOGGLE))
 	{
 		// user is not a lightning trail - change activity state.
 		if (other.classname != "ltrail_end")
 		{
-			if (self.spawnflags & LT_ACTIVE)
+			if ((self.spawnflags & LT_ACTIVE))
 			// currently active
 			{
 				self.spawnflags = self.spawnflags - LT_ACTIVE;
@@ -77,7 +77,7 @@ void() ltrail_start_fire =
 			else
 			// not active
 			{
-				self.spawnflags = self.spawnflags + LT_ACTIVE;
+				self.spawnflags = self.spawnflags | LT_ACTIVE;
 			}
 		}
 		// user is lightning trail, but trail has been turned off.
@@ -122,7 +122,7 @@ void() ltrail_start =
 	if (self.frags == 0)
 		self.frags = 0.3;
 
-	if (self.spawnflags & LT_ACTIVE)
+	if ((self.spawnflags & LT_ACTIVE))
 	{
 		self.items = time + 99999999;
 		self.think = ltrail_fire;

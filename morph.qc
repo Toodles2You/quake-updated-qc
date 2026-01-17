@@ -492,23 +492,24 @@ void() monster_morph =
 		return;
 	}
 
-	if (self.spawnflags & MORPH_AZTEC) // Aztec
+	if (!(self.spawnflags & (MORPH_AZTEC | MORPH_EGYPT | MORPH_GREEK)))
+		entwarn ("monster_morph: no skin selection!");
+
+	if ((self.spawnflags & MORPH_AZTEC)) // Aztec
 	{
 		precache_model ("progs/morph_az.mdl");
 		self.model = "progs/morph_az.mdl";
 	}
-	else if (self.spawnflags & MORPH_EGYPT) // Egyptian
+	else if ((self.spawnflags & MORPH_EGYPT)) // Egyptian
 	{
 		precache_model ("progs/morph_eg.mdl");
 		self.model = "progs/morph_eg.mdl";
 	}
-	else if (self.spawnflags & MORPH_GREEK) // greek
+	else // Greek
 	{
 		precache_model ("progs/morph_gr.mdl");
 		self.model = "progs/morph_gr.mdl";
 	}
-	else
-		objerror ("monster_morph: no skin selection!");
 
 	precache_model2 ("progs/laser.mdl");
 	precache_sound2 ("enforcer/enfire.wav");

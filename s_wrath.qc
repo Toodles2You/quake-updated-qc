@@ -71,7 +71,7 @@ float(entity thePoint) isSpawnPointEmpty =
 	{
 		if (neighbors != thePoint)
 		{
-			if (neighbors.flags & FL_MONSTER)
+			if ((neighbors.flags & FL_MONSTER))
 			{
 				return 0;
 			}
@@ -210,7 +210,7 @@ void() overlord_teleport =
 	spawn_tdeath (theDest.origin, self);
 
 	setorigin (self, theDest.origin);
-	self.flags = self.flags - self.flags & FL_ONGROUND;
+	self.flags = self.flags - (self.flags & FL_ONGROUND);
 };
 
 void() overlord_stand1 = [$s_wtwk01, overlord_stand1] { ai_stand (); };

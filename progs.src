@@ -1,10 +1,11 @@
 ../progs.dat
 
 defs.qc
+strings.qc
+subs.qc
 teamplay.qc
 runes.qc
 motd.qc
-subs.qc
 fight.qc
 ai.qc
 combat.qc

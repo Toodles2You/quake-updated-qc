@@ -484,7 +484,7 @@ void() monster_mummy =
 	setmodel (self, "progs/mummy.mdl");
 
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
-	if (self.spawnflags & MUMMY_STRONG)
+	if ((self.spawnflags & MUMMY_STRONG))
 		self.health = 1000;
 	else
 		self.health = 500;
@@ -496,7 +496,7 @@ void() monster_mummy =
 	self.th_die = mummy_die;
 	self.th_missile = mummy_missile;
 
-	if (self.spawnflags & ZOMBIE_LYING)
+	if ((self.spawnflags & ZOMBIE_LYING))
 	{
 		setsize (self, '-16 -16 -24', '16 16 -16');
 		self.solid = SOLID_NOT;

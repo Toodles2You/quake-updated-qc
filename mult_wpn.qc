@@ -209,7 +209,7 @@ void() HomingMissileAcquire =
 	traceline (self.origin, aimangle, FALSE, self);
 	if (trace_fraction < 1)
 	{
-		if (trace_ent.flags & FL_MONSTER)
+		if ((trace_ent.flags & FL_MONSTER))
 		{
 			self.enemy = trace_ent;
 			HomingMissileThink ();
@@ -331,7 +331,7 @@ void() PlasmaGroundOut =
 	start = current;
 	while (monstersHit < 5)
 	{
-		if (current.flags & FL_MONSTER || current.classname == "player")
+		if ((current.flags & FL_MONSTER) || current.classname == "player")
 		{
 			if (current != self.owner)
 			{

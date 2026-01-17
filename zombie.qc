@@ -85,7 +85,7 @@ void() zombie_stand15 = [$stand15, zombie_stand1] { ai_stand (); };
 // with an added check for enemies if they're sneaky types...
 void() zombie_lurk =
 {
-	if (self.spawnflags & ZOMBIE_SNEAKY)
+	if ((self.spawnflags & ZOMBIE_SNEAKY))
 	{
 		// not pausing before attack, but looking for player.
 		if (!self.pain_finished)
@@ -685,13 +685,14 @@ void() monster_zombie =
 	self.th_missile = zombie_missile;
 	self.th_sight = zombie_sight;
 
-	if (self.spawnflags & ZOMBIE_CRUCIFIED)
+	if ((self.spawnflags & ZOMBIE_CRUCIFIED))
 	{
 		self.spawnflags = self.spawnflags - ZOMBIE_CRUCIFIED;
 		self.movetype = MOVETYPE_NONE;
 		zombie_cruc1 ();
+		return;
 	}
-	else if (self.spawnflags & ZOMBIE_LYING)
+	else if ((self.spawnflags & ZOMBIE_LYING))
 	{
 		self.solid = SOLID_NOT;
 		self.th_stand = zombie_sleep;
@@ -702,16 +703,17 @@ void() monster_zombie =
 		setsize (self, '-16 -16 -24', '16 16 -16');
 
 		// HOLY HACK, BATMAN! - Don't blame me. Check out FindTarget in ai.qc!
-		if (self.spawnflags & ZOMBIE_AMBUSH)
-			self.spawnflags = self.spawnflags - ZOMBIE_AMBUSH + MONSTER_AMBUSH;
+		if ((self.spawnflags & ZOMBIE_AMBUSH))
+			self.spawnflags = (self.spawnflags - ZOMBIE_AMBUSH) | MONSTER_AMBUSH;
 
 		walkmonster_start ();
+		return;
 	}
-	else if (self.spawnflags & ZOMBIE_SNEAKY)
+	else if ((self.spawnflags & ZOMBIE_SNEAKY))
 	{
 		// HOLY HACK, BATMAN! - Don't blame me. Check out FindTarget in ai.qc!
-		if (self.spawnflags & ZOMBIE_AMBUSH)
-			self.spawnflags = self.spawnflags - ZOMBIE_AMBUSH + MONSTER_AMBUSH;
+		if ((self.spawnflags & ZOMBIE_AMBUSH))
+			self.spawnflags = (self.spawnflags - ZOMBIE_AMBUSH) | MONSTER_AMBUSH;
 
 		self.movetype = MOVETYPE_NONE;
 		self.solid = SOLID_NOT;
@@ -732,14 +734,14 @@ void() monster_zombie =
 		self.th_stand ();
 		self.nextthink = self.nextthink + random () * 0.5;
 		total_monsters = total_monsters + 1;
+		return;
 	}
-	else
-	{
-		// spawnflags & 3 is a big hack, because zombie crucified used the first
-		// spawn flag prior to the ambush flag, and I forgot about it, so the
-		// second spawn flag works as well
-		if (self.spawnflags & ZOMBIE_AMBUSH)
-			self.spawnflags = self.spawnflags - ZOMBIE_AMBUSH + MONSTER_AMBUSH;
-		walkmonster_start ();
-	}
+
+	// spawnflags & 3 is a big hack, because zombie crucified used the first
+	// spawn flag prior to the ambush flag, and I forgot about it, so the
+	// second spawn flag works as well
+	if ((self.spawnflags & ZOMBIE_AMBUSH))
+		self.spawnflags = (self.spawnflags - ZOMBIE_AMBUSH) | MONSTER_AMBUSH;
+
+	walkmonster_start ();
 };

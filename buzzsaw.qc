@@ -56,7 +56,7 @@ void() buzzsaw_touch =
 {
 	local vector sprayDir;
 
-	if (other.classname == "player" || other.flags & FL_MONSTER)
+	if (other.classname == "player" || (other.flags & FL_MONSTER))
 	{
 		if (self.attack_finished < time)
 		{
@@ -113,7 +113,10 @@ void() buzzsaw =
 	else if (self.angles_y == 90 || self.angles_y == 270)
 		setsize (self, '0 -18 -18', '0 18 18');
 	else
-		objerror ("Buzzsaw: Not at 90 degree angle!");
+	{
+		enterror ("Buzzsaw: Not at 90 degree angle!");
+		return;
+	}
 
 	setorigin (self, self.origin);
 

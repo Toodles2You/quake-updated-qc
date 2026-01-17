@@ -67,7 +67,7 @@ void() dn_and_wait_crush =
 	else if (self.state == STATE_DOWN)
 		dn_and_wait_go_up ();
 	else
-		objerror ("plat_new_crush: bad self.state\n");
+		entwarn ("plat_new_crush: bad self.state");
 };
 
 void() dn_and_wait_use =
@@ -117,7 +117,7 @@ void() toggle_crush =
 	else if (self.state == STATE_DOWN)
 		toggle_go_up ();
 	else
-		objerror ("plat_new_crush: bad self.state\n");
+		entwarn ("plat_new_crush: bad self.state");
 };
 
 void() toggle_use =
@@ -232,7 +232,7 @@ void() plat2_spawn_inside_trigger =
 	tmax = self.maxs - '25 25 -8';
 	tmin_z = tmax_z - (self.pos1_z - self.pos2_z + 8);
 
-	if (self.spawnflags & PLAT_LOW_TRIGGER)
+	if ((self.spawnflags & PLAT_LOW_TRIGGER))
 		tmax_z = tmin_z + 8;
 
 	if (self.size_x <= 50)
@@ -283,7 +283,7 @@ void() plat2_hit_bottom =
 		self.plat2Called = 0;
 		self.plat2LastMove = 0; // allow immediate move
 	}
-	else if (self.spawnflags & START_AT_TOP)
+	else if ((self.spawnflags & START_AT_TOP))
 	{
 		self.think = plat2_go_up;
 		self.nextthink = self.ltime + self.delay;
@@ -392,7 +392,7 @@ void() plat2_crush =
 	else if (self.state == STATE_DOWN)
 		plat2_go_up ();
 	else
-		objerror ("plat2_crush: bad self.state\n");
+		entwarn ("plat2_crush: bad self.state");
 };
 
 void() func_new_plat =
@@ -457,7 +457,7 @@ void() func_new_plat =
 		self.pos2_z = self.origin_z - self.height;
 	}
 
-	if (self.spawnflags & DN_N_WAIT)
+	if ((self.spawnflags & DN_N_WAIT))
 	{
 		self.use = dn_and_wait_use;
 		self.blocked = dn_and_wait_crush;
@@ -473,7 +473,7 @@ void() func_new_plat =
 		if (!self.health)
 			self.health = 5;
 	}
-	else if (self.spawnflags & PLT_TOGGLE)
+	else if ((self.spawnflags & PLT_TOGGLE))
 	{
 		self.use = toggle_use;
 		self.blocked = toggle_crush;
@@ -487,13 +487,13 @@ void() func_new_plat =
 			self.state = STATE_TOP;
 		}
 	}
-	else if (self.spawnflags & ELEVATOR)
+	else if ((self.spawnflags & ELEVATOR))
 	{
 		self.elevatorOnFloor = 0;
 		self.elevatorToFloor = 0;
 		self.elevatorLastUse = 0;
 
-		if (self.spawnflags & START_AT_TOP)
+		if ((self.spawnflags & START_AT_TOP))
 		{
 			self.pos1 = self.origin;
 			self.pos2 = self.origin;
@@ -511,7 +511,7 @@ void() func_new_plat =
 		self.use = elvtr_use;
 		self.blocked = elvtr_crush;
 	}
-	else if (self.spawnflags & PLAT2)
+	else if ((self.spawnflags & PLAT2))
 	{
 		plat2_spawn_inside_trigger (); // the "start moving" trigger
 		self.plat2Called = 0;

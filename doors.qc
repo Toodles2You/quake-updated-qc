@@ -57,7 +57,7 @@ void() door_hit_top =
 {
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.state = STATE_TOP;
-	if (self.spawnflags & DOOR_TOGGLE)
+	if ((self.spawnflags & DOOR_TOGGLE))
 		return;
 	self.think = door_go_down;
 	self.nextthink = self.ltime + self.wait;
@@ -105,7 +105,10 @@ void() door_fire =
 	local entity door;
 
 	if (self.owner != self)
-		objerror ("door_fire: self.owner != self");
+	{
+		entwarn ("door_fire: self.owner != self");
+		return;
+	}
 
 	if (self.items)
 		sound (self, CHAN_ITEM, self.noise4, 1, ATTN_NORM);
@@ -116,8 +119,7 @@ void() door_fire =
 
 	door = self;
 
-	if (self.spawnflags & DOOR_TOGGLE)
-	{
+	if ((self.spawnflags & DOOR_TOGGLE))
 		if (self.state == STATE_UP || self.state == STATE_TOP)
 		{
 			do {
@@ -126,7 +128,6 @@ void() door_fire =
 			} while (door != self && door);
 			return;
 		}
-	}
 
 	do {
 		SUB_Think (door, door_go_up);
@@ -188,7 +189,7 @@ void() door_touch =
 		return;
 
 	// FIXME: blink key on player's status bar
-	if ((self.items & other.items) != self.items)
+	if ((other.items & self.items) != self.items)
 	{
 		if (self.owner.items == IT_KEY1)
 		{
@@ -277,7 +278,7 @@ void() LinkDoors =
 
 	if (self.enemy)
 		return; // already linked by another door
-	if (self.spawnflags & DOOR_DONT_LINK)
+	if ((self.spawnflags & DOOR_DONT_LINK))
 	{
 		self.owner = self.enemy = self;
 		return; // don't want to link this door
@@ -324,23 +325,25 @@ void() LinkDoors =
 		if (EntitiesTouching (self, t))
 		{
 			if (t.enemy)
-				objerror ("cross connected doors");
+				entwarn ("cross connected doors");
+			else
+			{
+				self.enemy = t;
+				self = t;
 
-			self.enemy = t;
-			self = t;
-
-			if (t.mins_x < cmins_x)
-				cmins_x = t.mins_x;
-			if (t.mins_y < cmins_y)
-				cmins_y = t.mins_y;
-			if (t.mins_z < cmins_z)
-				cmins_z = t.mins_z;
-			if (t.maxs_x > cmaxs_x)
-				cmaxs_x = t.maxs_x;
-			if (t.maxs_y > cmaxs_y)
-				cmaxs_y = t.maxs_y;
-			if (t.maxs_z > cmaxs_z)
-				cmaxs_z = t.maxs_z;
+				if (t.mins_x < cmins_x)
+					cmins_x = t.mins_x;
+				if (t.mins_y < cmins_y)
+					cmins_y = t.mins_y;
+				if (t.mins_z < cmins_z)
+					cmins_z = t.mins_z;
+				if (t.maxs_x > cmaxs_x)
+					cmaxs_x = t.maxs_x;
+				if (t.maxs_y > cmaxs_y)
+					cmaxs_y = t.maxs_y;
+				if (t.maxs_z > cmaxs_z)
+					cmaxs_z = t.maxs_z;
+			}
 		}
 	} while (1);
 };
@@ -371,10 +374,6 @@ local vector tempVect;
 		precache_sound ("doors/baseuse.wav");
 		self.noise3 = "doors/basetry.wav";
 		self.noise4 = "doors/baseuse.wav";
-	}
-	else
-	{
-		dprint ("no worldtype set!\n");
 	}
 	if (self.sounds == 0)
 	{
@@ -424,10 +423,10 @@ local vector tempVect;
 	self.blocked = door_blocked;
 	self.use = door_use;
 
-	if (self.spawnflags & DOOR_SILVER_KEY)
-		self.items = IT_KEY1;
-	if (self.spawnflags & DOOR_GOLD_KEY)
+	if ((self.spawnflags & DOOR_GOLD_KEY))
 		self.items = IT_KEY2;
+	else if ((self.spawnflags & DOOR_SILVER_KEY))
+		self.items = IT_KEY1;
 
 	if (!self.speed)
 		self.speed = 100;
@@ -452,7 +451,7 @@ local vector tempVect;
 
 	// DOOR_START_OPEN is to allow an entity to be lighted in the closed
 	// position but spawn in the open position
-	if (self.spawnflags & DOOR_START_OPEN)
+	if ((self.spawnflags & DOOR_START_OPEN))
 	{
 		setorigin (self, self.pos2);
 		self.pos2 = self.pos1;
@@ -518,12 +517,15 @@ void() fd_secret_use =
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.nextthink = self.ltime + 0.1;
 
-	temp = 1 - (self.spawnflags & SECRET_1ST_LEFT); // 1 or -1
+	if ((self.spawnflags & SECRET_1ST_LEFT))
+		temp = -1;
+	else
+		temp = 1;
 	makevectors (self.mangle);
 
 	if (!self.t_width)
 	{
-		if (self.spawnflags & SECRET_1ST_DOWN)
+		if ((self.spawnflags & SECRET_1ST_DOWN))
 			self.t_width = fabs (v_up * self.size);
 		else
 			self.t_width = fabs (v_right * self.size);
@@ -532,7 +534,7 @@ void() fd_secret_use =
 	if (!self.t_length)
 		self.t_length = fabs (v_forward * self.size);
 
-	if (self.spawnflags & SECRET_1ST_DOWN)
+	if ((self.spawnflags & SECRET_1ST_DOWN))
 		self.dest1 = self.origin - v_up * self.t_width;
 	else
 		self.dest1 = self.origin + v_right * (self.t_width * temp);
@@ -596,7 +598,7 @@ void() fd_secret_move6 =
 
 void() fd_secret_done =
 {
-	if (self.targetname == "" || self.spawnflags & SECRET_YES_SHOOT)
+	if (self.targetname == "" || (self.spawnflags & SECRET_YES_SHOOT))
 	{
 		self.health = 10000;
 		self.takedamage = DAMAGE_YES;
@@ -674,7 +676,7 @@ void() func_door_secret =
 	self.blocked = secret_blocked;
 	self.speed = 50;
 	self.use = fd_secret_use;
-	if (self.targetname == "" || self.spawnflags & SECRET_YES_SHOOT)
+	if (self.targetname == "" || (self.spawnflags & SECRET_YES_SHOOT))
 	{
 		self.health = 10000;
 		self.takedamage = DAMAGE_YES;

@@ -85,8 +85,7 @@ void() demon1_jump4 = [$leap4, demon1_jump5]
 	makevectors (self.angles);
 	self.origin_z = self.origin_z + 1;
 	self.velocity = v_forward * 600 + '0 0 250';
-	if (self.flags & FL_ONGROUND)
-		self.flags = self.flags - FL_ONGROUND;
+	self.flags = self.flags - (self.flags & FL_ONGROUND);
 };
 void() demon1_jump5 = [$leap5, demon1_jump6] {};
 void() demon1_jump6 = [$leap6, demon1_jump7] {};
@@ -327,8 +326,9 @@ void() Demon_JumpTouch =
 
 	if (!checkbottom (self))
 	{
-		if (self.flags & FL_ONGROUND)
-		{ // jump randomly to not get hung up
+		if ((self.flags & FL_ONGROUND))
+		{
+			// jump randomly to not get hung up
 			self.touch = SUB_Null;
 			self.think = demon1_jump1;
 			self.nextthink = time + 0.1;

@@ -36,7 +36,7 @@ void() earthquake_rumble =
 void() start_earthquake =
 {
 	earthquake_active = 1;
-	if (self.spawnflags & EQ_RANDOM)
+	if ((self.spawnflags & EQ_RANDOM))
 		self.attack_finished = time + random () * self.delay;
 	else
 		self.attack_finished = time + self.delay;
@@ -47,7 +47,7 @@ void() stop_earthquake =
 {
 	earthquake_active = 0;
 	self.think = start_earthquake;
-	if (self.spawnflags & EQ_RANDOM)
+	if ((self.spawnflags & EQ_RANDOM))
 	{
 		self.nextthink = time + random () * self.wait;
 		if (self.nextthink < time + 0.1)
@@ -87,7 +87,7 @@ void() earthquake_touch =
 
 		if (other.classname == "player")
 		{
-			if (other.flags & FL_ONGROUND)
+			if ((other.flags & FL_ONGROUND))
 			{
 				other.velocity_x = other.velocity_x
 					+ (random () * self.weapon * 2) - self.weapon;

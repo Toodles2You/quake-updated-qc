@@ -25,7 +25,7 @@ void() elvtr_button_return;
 void() elvtr_button_wait =
 {
 	ELV_BUTN_DIR = 0;
-	if (self.spawnflags & ELVTR_DOWN)
+	if ((self.spawnflags & ELVTR_DOWN))
 		ELV_BUTN_DIR = -1;
 	else
 		ELV_BUTN_DIR = 1;

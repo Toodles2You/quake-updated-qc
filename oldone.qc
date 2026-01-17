@@ -116,11 +116,10 @@ void() finale_1 =
 
 	pos = find (world, classname, "info_intermission");
 	if (!pos)
-		error ("no info_intermission");
+		entwarn ("no info_intermission");
 	pl = find (world, classname, "misc_teleporttrain");
-	if (!pl)
-		error ("no teleporttrain");
-	remove (pl);
+	if (pl)
+		remove (pl);
 
 	WriteByte (MSG_ALL, SVC_FINALE);
 	WriteString (MSG_ALL, "");
@@ -132,7 +131,8 @@ void() finale_1 =
 		pl.angles = pos.mangle;
 		pl.fixangle = TRUE;
 		pl.map = self.map;
-		pl.nextthink = time + 0.5;
+		pl.think = SUB_Null;
+		pl.nextthink = 0;
 		pl.takedamage = DAMAGE_NO;
 		pl.solid = SOLID_NOT;
 		pl.movetype = MOVETYPE_NONE;
@@ -219,7 +219,7 @@ void() finale_4 =
 	}
 
 	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, "Congratulations and well done! You have\nbeaten the hideous Shub-Niggurath, and\nher hundreds of ugly changelings and\nmonsters. You have proven that your\nskill and your cunning are greater than\nall the powers of Quake. You are the\nmaster now. Id Software salutes you.");
+	WriteString (MSG_ALL, FINALE_END);
 
 	n = spawn ();
 	setmodel (n, "progs/player.mdl");

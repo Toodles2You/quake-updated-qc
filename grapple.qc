@@ -146,8 +146,7 @@ void() GrappleAnchor =
 	}
 
 	self.owner.on_hook = TRUE;
-	if (self.owner.flags & FL_ONGROUND)
-		self.owner.flags = self.owner.flags - FL_ONGROUND;
+	self.owner.flags = self.owner.flags - (self.owner.flags & FL_ONGROUND);
 
 	// CHAIN2 is a looping sample. Use LEFTY as a flag so that client.qc
 	// will know to only play the tink sound ONCE to clear the weapons
