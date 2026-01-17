@@ -77,8 +77,7 @@ void() ending_for_coop =
 	self.modelindex = 0;
 	setorigin (self, self.origin + '0 0 48');
 
-	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, FINALE_ROGUE_END_COOP);
+	SetFinale (FINALE_ROGUE_END_COOP, 0);
 
 	ending_remove_stuff ();
 
@@ -238,8 +237,7 @@ void() actor_fire1 = [$rockatt1, actor_fire2]
 	W_FireRocket ();
 
 	// start the end text
-	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, FINALE_ROGUE_END);
+	SetFinale (FINALE_ROGUE_END, 0);
 };
 void() actor_fire2 = [$rockatt2, actor_fire3]
 {
@@ -364,7 +362,7 @@ void(entity thePlayer) spawn_actor =
 	setsize (theActor, VEC_HULL_MIN, VEC_HULL_MAX);
 	theActor.view_ofs = '0 0 22';
 	theActor.angles = self.angles;
-	theActor.ideal_yaw = theActor.angles * '0 1 0';
+	theActor.ideal_yaw = theActor.angles_y;
 	if (!theActor.yaw_speed)
 		theActor.yaw_speed = 20;
 	theActor.view_ofs = '0 0 25';

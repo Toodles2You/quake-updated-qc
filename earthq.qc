@@ -48,11 +48,7 @@ void() stop_earthquake =
 	earthquake_active = 0;
 	self.think = start_earthquake;
 	if ((self.spawnflags & EQ_RANDOM))
-	{
 		self.nextthink = time + random () * self.wait;
-		if (self.nextthink < time + 0.1)
-			self.nextthink = time + 0.1;
-	}
 	else
 		self.nextthink = time + self.wait;
 };
@@ -89,12 +85,12 @@ void() earthquake_touch =
 		{
 			if ((other.flags & FL_ONGROUND))
 			{
-				other.velocity_x = other.velocity_x
-					+ (random () * self.weapon * 2) - self.weapon;
-				other.velocity_y = other.velocity_y
-					+ (random () * self.weapon * 2) - self.weapon;
-				other.velocity_z = other.velocity_z
-					+ (random () * self.weapon * 2) - self.weapon;
+				other.velocity_x = other.velocity_x +
+									(random() * self.weapon * 2) - self.weapon;
+				other.velocity_y = other.velocity_y +
+									(random() * self.weapon * 2) - self.weapon;
+				other.velocity_z = other.velocity_z +
+									(random() * self.weapon * 2) - self.weapon;
 			}
 		}
 	}

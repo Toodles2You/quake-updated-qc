@@ -405,7 +405,7 @@ void() lavaman_awake =
 	self.movetype = MOVETYPE_STEP;
 	self.takedamage = DAMAGE_AIM;
 	self.flags = self.flags | FL_MONSTER;
-	self.ideal_yaw = self.angles * '0 1 0';
+	self.ideal_yaw = self.angles_y;
 	if (!self.yaw_speed)
 		self.yaw_speed = 20;
 

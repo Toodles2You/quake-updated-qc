@@ -217,8 +217,6 @@ void() GotoNextMap =
 
 void() ExitIntermission =
 {
-	local float finale;
-
 	if (deathmatch)
 	{
 		GotoNextMap ();
@@ -231,52 +229,32 @@ void() ExitIntermission =
 	// run some text if at the end of an episode
 	if (intermission_running == 2)
 	{
-		finale = FALSE;
-
 		if (mapname == "e1m7")
 		{
-			finale = TRUE;
 			if (!cvar ("registered"))
-			{
-				WriteByte (MSG_ALL, SVC_FINALE);
-				WriteString (MSG_ALL, FINALE_SHAREWARE);
-			}
+				SetFinale (FINALE_SHAREWARE, 2);
 			else
-			{
-				WriteByte (MSG_ALL, SVC_FINALE);
-				WriteString (MSG_ALL, FINALE_EPISODE_1);
-			}
+				SetFinale (FINALE_EPISODE_1, 2);
+			return;
 		}
 		else if (mapname == "e2m6")
 		{
-			finale = TRUE;
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, FINALE_EPISODE_2);
+			SetFinale (FINALE_EPISODE_2, 2);
+			return;
 		}
 		else if (mapname == "e3m6")
 		{
-			finale = TRUE;
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, FINALE_EPISODE_3);
+			SetFinale (FINALE_EPISODE_3, 2);
+			return;
 		}
 		else if (mapname == "e4m7")
 		{
-			finale = TRUE;
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, FINALE_EPISODE_4);
+			SetFinale (FINALE_EPISODE_4, 2);
+			return;
 		}
 		else if (mapname == "r1m7")
 		{
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, FINALE_ROGUE_EPISODE_1);
-			return;
-		}
-
-		if (finale)
-		{
-			WriteByte (MSG_ALL, SVC_CDTRACK);
-			WriteByte (MSG_ALL, 2);
-			WriteByte (MSG_ALL, 3);
+			SetFinale (FINALE_ROGUE_EPISODE_1, 0);
 			return;
 		}
 	}
@@ -290,8 +268,7 @@ void() ExitIntermission =
 		}
 		else if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		{
-			WriteByte (MSG_ALL, SVC_FINALE);
-			WriteString (MSG_ALL, FINALE_EPISODES);
+			SetFinale (FINALE_EPISODES, 2);
 			return;
 		}
 	}
@@ -1557,11 +1534,12 @@ void(entity targ, entity attacker) ClientObituary =
 				bprint (" blew up\n");
 				return;
 			}
-			if (attacker && attacker.solid == SOLID_BSP)
-			{
-				bprint (" was squished\n");
-				return;
-			}
+			if (attacker.solid == SOLID_BSP)
+				if (attacker)
+				{
+					bprint (" was squished\n");
+					return;
+				}
 			if (attacker.classname == "trap_shooter" ||
 				attacker.classname == "trap_spikeshooter")
 			{

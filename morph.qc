@@ -389,7 +389,7 @@ void(entity theMorph) morph_setup =
 	theMorph.movetype = MOVETYPE_STEP;
 	theMorph.takedamage = DAMAGE_NO;
 	theMorph.flags = theMorph.flags | FL_MONSTER;
-	theMorph.ideal_yaw = theMorph.angles * '0 1 0';
+	theMorph.ideal_yaw = theMorph.angles_y;
 	if (!theMorph.yaw_speed)
 		theMorph.yaw_speed = 20;
 	theMorph.view_ofs = '0 0 25';

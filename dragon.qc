@@ -699,7 +699,7 @@ void() dragon_use =
 void() dragon_activate =
 {
 	self.takedamage = DAMAGE_AIM;
-	self.ideal_yaw = self.angles * '0 1 0';
+	self.ideal_yaw = self.angles_y;
 	if (!self.yaw_speed)
 		self.yaw_speed = 10;
 	self.view_ofs = '0 0 25';

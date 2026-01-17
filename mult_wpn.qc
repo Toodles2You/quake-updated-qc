@@ -324,7 +324,7 @@ void() PlasmaGroundOut =
 	local entity current, start;
 	local float monstersHit;
 	local vector org;
-	local float distance;
+	local float dist;
 
 	monstersHit = 0;
 	current = nextent (world);
@@ -336,8 +336,8 @@ void() PlasmaGroundOut =
 			if (current != self.owner)
 			{
 				org = current.origin + (current.mins + current.maxs) * 0.5;
-				distance = vlen (self.origin - org);
-				if (distance <= 320)
+				dist = vlen (self.origin - org);
+				if (dist <= 320)
 				{
 					traceline (self.origin, current.origin, TRUE, world);
 					if (trace_fraction == 1)
