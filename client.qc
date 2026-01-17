@@ -241,7 +241,7 @@ void() ExitIntermission =
 		}
 		else if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		{
-			SetFinale (FINALE_EPISODES, 2);
+			SetFinale (FINALE_EPISODES, 0);
 			return;
 		}
 		else if (mapname == "hip1m4")
