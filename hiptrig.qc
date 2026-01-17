@@ -171,12 +171,6 @@ void() trigger_setgravity =
 	}
 };
 
-void() trigger_command_use =
-{
-	if (self.message != "")
-		localcmd (self.message);
-};
-
 void() trigger_command =
 {
 	self.use = oncount_use;
