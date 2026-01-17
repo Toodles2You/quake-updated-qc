@@ -124,7 +124,7 @@ void() trigger_multiple =
 
 	if (self.health)
 	{
-		if (self.spawnflags & SPAWNFLAG_NOTOUCH)
+		if ((self.spawnflags & SPAWNFLAG_NOTOUCH))
 		{
 			enterror ("health and notouch don't make sense");
 			return;
@@ -306,18 +306,12 @@ void() teleport_touch =
 	local vector org;
 
 	if (self.targetname != "")
-	{
 		if (self.nextthink < time)
-		{
 			return; // not fired yet
-		}
-	}
 
-	if (self.spawnflags & PLAYER_ONLY)
-	{
+	if ((self.spawnflags & PLAYER_ONLY))
 		if (other.classname != "player")
 			return;
-	}
 
 	// only teleport living creatures
 	if (other.health <= 0 || other.solid != SOLID_SLIDEBOX)
@@ -340,13 +334,6 @@ void() teleport_touch =
 	spawn_tdeath (t.origin, other);
 
 	// move the player and lock him down for a little while
-	if (!other.health)
-	{
-		other.origin = t.origin;
-		other.velocity = (v_forward * other.velocity_x)
-					   + (v_forward * other.velocity_y);
-		return;
-	}
 
 	setorigin (other, t.origin);
 	other.angles = t.mangle;
@@ -354,11 +341,9 @@ void() teleport_touch =
 	{
 		other.fixangle = TRUE;
 		other.teleport_time = time + 0.7;
-		if (other.flags & FL_ONGROUND)
-			other.flags = other.flags - FL_ONGROUND;
 		other.velocity = v_forward * 300;
 	}
-	other.flags = other.flags - other.flags & FL_ONGROUND;
+	other.flags = other.flags - (other.flags & FL_ONGROUND);
 };
 
 void() info_teleport_destination =
@@ -498,7 +483,7 @@ void() trigger_push_touch =
 			}
 		}
 	}
-	if (self.spawnflags & PUSH_ONCE)
+	if ((self.spawnflags & PUSH_ONCE))
 		remove (self);
 };
 
@@ -513,7 +498,7 @@ void() trigger_push =
 
 void() trigger_monsterjump_touch =
 {
-	if (other.flags & (FL_MONSTER | FL_FLY | FL_SWIM) != FL_MONSTER)
+	if ((other.flags & (FL_MONSTER | FL_FLY | FL_SWIM)) != FL_MONSTER)
 		return;
 
 	// set XY even if not on ground, so the jump will clear lips

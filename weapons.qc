@@ -1043,16 +1043,17 @@ void() CycleWeaponReverseCommand =
 
 void() ServerflagsCommand =
 {
+	local float fl;
+
 	if (deathmatch)
 		return;
 
-	if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
-		serverflags = serverflags - SFL_EPISODES;
-	else
+	fl = serverflags & SFL_EPISODES;
+	serverflags = serverflags - fl;
+	if (fl != SFL_EPISODES)
 	{
-		serverflags = serverflags -
-			(serverflags & SFL_EPISODES) +
-			(serverflags & SFL_EPISODES) * 2 + 1;
+		fl = SFL_EPISODE_1 | (fl * 2);
+		serverflags = serverflags | fl;
 	}
 };
 

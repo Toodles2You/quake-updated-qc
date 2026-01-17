@@ -253,7 +253,7 @@ float(entity client, float method) CanFindTarget =
 		return FALSE;
 	if (!(client.flags & (FL_CLIENT | FL_MONSTER)))
 		return FALSE;
-	if (client.flags & FL_NOTARGET)
+	if ((client.flags & FL_NOTARGET))
 		return FALSE;
 	if (method == FIND_DAMAGE)
 	{
@@ -264,10 +264,8 @@ float(entity client, float method) CanFindTarget =
 	else
 	{
 		if (method == FIND_DIRECT)
-		{
-			if (client.items & IT_INVISIBILITY)
+			if (client.invisible_finished > time)
 				return FALSE;
-		}
 		if (client.classname != "player")
 			return FALSE;
 	}

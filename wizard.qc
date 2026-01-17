@@ -336,7 +336,6 @@ void() wiz_death1 = [$death1, wiz_death2]
 	self.velocity_x = -200 + 400 * random ();
 	self.velocity_y = -200 + 400 * random ();
 	self.velocity_z = 100 + 100 * random ();
-	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	sound (self, CHAN_VOICE, "wizard/wdeath.wav", 1, ATTN_NORM);
 };
 void() wiz_death2 = [$death2, wiz_death3] {};

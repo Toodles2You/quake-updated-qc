@@ -41,7 +41,7 @@ void() plat_spawn_inside_trigger =
 	tmin = self.mins + '25 25 0';
 	tmax = self.maxs - '25 25 -8';
 	tmin_z = tmax_z - (self.pos1_z - self.pos2_z + 8);
-	if (self.spawnflags & PLAT_LOW_TRIGGER)
+	if ((self.spawnflags & PLAT_LOW_TRIGGER))
 		tmax_z = tmin_z + 8;
 
 	if (self.size_x <= 50)

@@ -374,7 +374,7 @@ float(entity targ) SUB_ShouldBleed =
 {
 	if (targ.takedamage)
 		return TRUE;
-	if (targ.flags & (FL_CLIENT | FL_MONSTER))
+	if ((targ.flags & (FL_CLIENT | FL_MONSTER)))
 		return TRUE;
 	return FALSE;
 };

@@ -551,19 +551,19 @@ void() monster_zombie =
 	self.th_missile = zombie_missile;
 	self.th_sight = zombie_sight;
 
-	if (self.spawnflags & ZOMBIE_CRUCIFIED)
+	if ((self.spawnflags & ZOMBIE_CRUCIFIED))
 	{
 		self.spawnflags = self.spawnflags - ZOMBIE_CRUCIFIED;
 		self.movetype = MOVETYPE_NONE;
 		zombie_cruc1 ();
+		return;
 	}
-	else
-	{
-		// spawnflags & 3 is a big hack, because zombie crucified used the first
-		// spawn flag prior to the ambush flag, and I forgot about it, so the
-		// second spawn flag works as well
-		if (self.spawnflags & ZOMBIE_AMBUSH)
-			self.spawnflags = self.spawnflags - ZOMBIE_AMBUSH + MONSTER_AMBUSH;
-		walkmonster_start ();
-	}
+
+	// spawnflags & 3 is a big hack, because zombie crucified used the first
+	// spawn flag prior to the ambush flag, and I forgot about it, so the
+	// second spawn flag works as well
+	if ((self.spawnflags & ZOMBIE_AMBUSH))
+		self.spawnflags = (self.spawnflags - ZOMBIE_AMBUSH) | MONSTER_AMBUSH;
+
+	walkmonster_start ();
 };

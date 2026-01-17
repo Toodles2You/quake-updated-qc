@@ -441,8 +441,9 @@ entity() SelectSpawnPoint =
 		}
 	}
 
-	if (serverflags & SFL_EPISODES)
-	{ // return with a rune to start
+	if ((serverflags & SFL_EPISODES))
+	{
+		// return with a rune to start
 		spot = find (world, classname, "info_player_start2");
 		if (spot)
 			return spot;
@@ -601,7 +602,7 @@ void() PlayerDeathThink =
 {
 	local float forward;
 
-	if (self.flags & FL_ONGROUND)
+	if ((self.flags & FL_ONGROUND))
 	{
 		forward = vlen (self.velocity);
 		forward = forward - 1200 * frametime;
@@ -633,7 +634,7 @@ void() PlayerDeathThink =
 
 void() PlayerJump =
 {
-	if (self.flags & FL_WATERJUMP)
+	if ((self.flags & FL_WATERJUMP))
 		return;
 
 	if (self.waterlevel >= 2)
@@ -659,13 +660,10 @@ void() PlayerJump =
 
 	if (!(self.flags & FL_ONGROUND))
 		return;
-
 	if (!(self.flags & FL_JUMPRELEASED))
 		return;
 
-	self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
-
-	self.flags = self.flags - FL_ONGROUND;
+	self.flags = self.flags - (FL_ONGROUND | FL_JUMPRELEASED);
 
 	self.button2 = 0;
 	sound (self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM);
@@ -735,7 +733,7 @@ void() WaterMove =
 
 	if (!self.waterlevel)
 	{
-		if (self.flags & FL_INWATER)
+		if ((self.flags & FL_INWATER))
 		{
 			sound (self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM);
 			self.flags = self.flags - FL_INWATER;
@@ -773,7 +771,7 @@ void() WaterMove =
 		if (self.watertype == CONTENT_SLIME)
 			sound (self, CHAN_BODY, "player/slimbrn2.wav", 1, ATTN_NORM);
 
-		self.flags = self.flags + FL_INWATER;
+		self.flags = self.flags | FL_INWATER;
 		self.dmgtime = 0;
 	}
 
@@ -905,7 +903,7 @@ void() CheckPowerups =
 
 		if (self.invisible_finished < time)
 		{
-			self.items = self.items - IT_INVISIBILITY;
+			self.items = self.items - (self.items & IT_INVISIBILITY);
 			self.invisible_finished = 0;
 			self.invisible_time = 0;
 		}
@@ -938,7 +936,7 @@ void() CheckPowerups =
 
 		if (self.invincible_finished < time)
 		{
-			self.items = self.items - IT_INVULNERABILITY;
+			self.items = self.items - (self.items & IT_INVULNERABILITY);
 			self.invincible_time = 0;
 			self.invincible_finished = 0;
 		}
@@ -970,7 +968,7 @@ void() CheckPowerups =
 
 		if (self.super_damage_finished < time)
 		{
-			self.items = self.items - IT_QUAD;
+			self.items = self.items - (self.items & IT_QUAD);
 			self.super_damage_finished = 0;
 			self.super_time = 0;
 		}
@@ -1004,7 +1002,7 @@ void() CheckPowerups =
 
 		if (self.radsuit_finished < time)
 		{
-			self.items = self.items - IT_SUIT;
+			self.items = self.items - (self.items & IT_SUIT);
 			self.rad_time = 0;
 			self.radsuit_finished = 0;
 		}
@@ -1224,7 +1222,7 @@ void(entity targ, entity attacker) ClientObituary =
 			targ.frags = targ.frags - 1;
 			bprint (targ.netname);
 
-			if (attacker.flags & FL_MONSTER)
+			if ((attacker.flags & FL_MONSTER))
 			{
 				if (attacker.classname == "monster_army")
 					bprint (" was shot by a Grunt\n");

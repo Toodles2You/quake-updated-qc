@@ -74,7 +74,7 @@ void() Killed =
 		return;
 	}
 
-	if (self.flags & FL_MONSTER)
+	if ((self.flags & FL_MONSTER))
 	{
 		self.enemy = other;
 		self.oldenemy = world;
@@ -119,7 +119,7 @@ void(entity inflictor, float damage) TakeDamage =
 
 	// add to the damage total for clients, which will be sent as a single
 	// message at the end of the frame
-	if (self.flags & FL_CLIENT)
+	if ((self.flags & FL_CLIENT))
 	{
 		self.dmg_take = self.dmg_take + take;
 		self.dmg_save = self.dmg_save + save;
@@ -133,7 +133,7 @@ void(entity inflictor, float damage) TakeDamage =
 		self.velocity = self.velocity + dir * damage * 8;
 	}
 
-	if (self.flags & FL_GODMODE)
+	if ((self.flags & FL_GODMODE))
 		return;
 	if (self.invincible_finished >= time)
 	{

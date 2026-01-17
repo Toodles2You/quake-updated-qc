@@ -28,7 +28,7 @@ float START_OFF = 1;
 
 void() light_use =
 {
-	if (self.spawnflags & START_OFF)
+	if ((self.spawnflags & START_OFF))
 	{
 		lightstyle (self.style, "m");
 		self.spawnflags = self.spawnflags - START_OFF;
@@ -36,7 +36,7 @@ void() light_use =
 	else
 	{
 		lightstyle (self.style, "a");
-		self.spawnflags = self.spawnflags + START_OFF;
+		self.spawnflags = self.spawnflags | START_OFF;
 	}
 };
 
@@ -51,7 +51,7 @@ void() light =
 	if (self.style >= 32)
 	{
 		self.use = light_use;
-		if (self.spawnflags & START_OFF)
+		if ((self.spawnflags & START_OFF))
 			lightstyle (self.style, "a");
 		else
 			lightstyle (self.style, "m");
@@ -63,7 +63,7 @@ void() light_fluoro =
 	if (self.style >= 32)
 	{
 		self.use = light_use;
-		if (self.spawnflags & START_OFF)
+		if ((self.spawnflags & START_OFF))
 			lightstyle (self.style, "a");
 		else
 			lightstyle (self.style, "m");
@@ -225,7 +225,7 @@ entity() spikeshooter_launch =
 {
 	local entity newmis;
 
-	if (self.spawnflags & SPAWNFLAG_LASER)
+	if ((self.spawnflags & SPAWNFLAG_LASER))
 	{
 		sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
 		newmis = LaunchLaser (self.origin, self.movedir);
@@ -235,7 +235,7 @@ entity() spikeshooter_launch =
 		sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
 		newmis = launch_spike (self.origin, self.movedir);
 		newmis.velocity = self.movedir * 500;
-		if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
+		if ((self.spawnflags & SPAWNFLAG_SUPERSPIKE))
 			newmis.touch = superspike_touch;
 	}
 
@@ -261,7 +261,7 @@ void() trap_spikeshooter =
 {
 	SetMovedir ();
 	self.use = spikeshooter_use;
-	if (self.spawnflags & SPAWNFLAG_LASER)
+	if ((self.spawnflags & SPAWNFLAG_LASER))
 	{
 		precache_model2 ("progs/laser.mdl");
 
@@ -420,8 +420,13 @@ void() func_illusionary =
 
 void() func_episodegate =
 {
-	if (!((serverflags & SFL_EPISODES) & self.spawnflags))
+	local float fl;
+
+	fl = self.spawnflags & SFL_EPISODES;
+
+	if ((serverflags & fl) != fl)
 		return;
+
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
@@ -433,6 +438,7 @@ void() func_bossgate =
 {
 	if ((serverflags & SFL_EPISODES) == SFL_EPISODES)
 		return;
+
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
