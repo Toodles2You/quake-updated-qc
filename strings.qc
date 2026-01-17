@@ -36,3 +36,19 @@ string FINALE_ROGUE_EPISODE_1 = "Victory! The Overlord's mangled\nremains are th
 string FINALE_ROGUE_END = "\nFinally, Quake's Temporal Teleporter\nyields to your assault. A high\npitched scream emits from the\ndevastated device as stressed steel\nblasts outward to rock the cavern.\nThe machine is devoured by molten lava.\n\nThe ground shudders as reality shifts\nback to its predestined path.\n\nYou run to enter the charged time pod,\nscrambling in as the chamber closes.\nYour consciousness fades as you realize\nyou have halted Quake's plans for...\n\nThe Dissolution of Eternity.";
 
 string FINALE_ROGUE_END_COOP = "You have destroyed Quake's\nTemporal Teleporter. His assault\non Time has been defeated.";
+
+string MOTD_TAG = "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nDeathmatch Tag!\n";
+
+string MOTD_CTF_TEAM1 = "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n\nYou are ÒÅÄ team!\n";
+
+string MOTD_CTF_TEAM2 = "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n\nYou are ÂÌÕÅ team!\n";
+
+string MOTD_CTF_ONEFLAG_TEAM1 = "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(One Flag Mode)\n\nYou are ÒÅÄ team!\n";
+
+string MOTD_CTF_ONEFLAG_TEAM2 = "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(One Flag Mode)\n\nYou are ÂÌÕÅ team!\n";
+
+string MOTD_CTF_ALT_TEAM1 = "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(Three Team Mode)\n\nYou are ÒÅÄ team!\n";
+
+string MOTD_CTF_ALT_TEAM2 = "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(Three Team Mode)\n\nYou are ÂÌÕÅ team!\n";
+
+string MOTD_CTF_ALT_TEAM3 = "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(Three Team Mode)\n\nYou are ÇÒÅÙ team!\n";

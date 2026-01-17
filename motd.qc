@@ -40,24 +40,24 @@ void() MOTD =
 		self.motd_time = time + 1;
 		self.motd_count = self.motd_count + 1;
 		if (teamplay == TEAM_DMATCH_TAG)
-			centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nDeathmatch Tag!\n");
+			centerprint (self, MOTD_TAG);
 		else if (teamplay == TEAM_CTF)
 			if (self.steam == TEAM1)
-				centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n\nYou are ��� team!\n");
+				centerprint (self, MOTD_CTF_TEAM1);
 			else
-				centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n\nYou are ���� team!\n");
+				centerprint (self, MOTD_CTF_TEAM2);
 		else if (teamplay == TEAM_CTF_ONEFLAG)
 			if (self.steam == TEAM1)
-				centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(One Flag Mode)\n\nYou are ��� team!\n");
+				centerprint (self, MOTD_CTF_ONEFLAG_TEAM1);
 			else
-				centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(One Flag Mode)\n\nYou are ���� team!\n");
+				centerprint (self, MOTD_CTF_ONEFLAG_TEAM2);
 		else if (teamplay == TEAM_CTF_ALT)
 			if (self.steam == TEAM1)
-				centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(Three Team Mode)\n\nYou are ��� team!\n");
+				centerprint (self, MOTD_CTF_ALT_TEAM1);
 			else if (self.steam == TEAM2)
-				centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(Three Team Mode)\n\nYou are ���� team!\n");
+				centerprint (self, MOTD_CTF_ALT_TEAM2);
 			else
-				centerprint (self, "Welcome to\nThe Dissolution of Eternity!\nBy Rogue Entertainment\n\nCAPTURE THE FLAG!\n(Three Team Mode)\n\nYou are ���� team!\n");
+				centerprint (self, MOTD_CTF_ALT_TEAM3);
 		return;
 	}
 	self.motd_time = 0;
