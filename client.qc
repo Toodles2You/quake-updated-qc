@@ -1147,7 +1147,7 @@ void() CheckPowerups =
 
 	if (self.shield_finished)
 	{
-		if (self.shield_finished < time + 3)
+		if (self.shield_finished < time + 1.75)
 		{
 			if (self.shield_time == 1)
 			{
@@ -1157,7 +1157,7 @@ void() CheckPowerups =
 			}
 			if (self.shield_time < time)
 			{
-				self.shield_time = time + 1;
+				self.shield_time = time + 0.59;
 				stuffcmd (self, "bf\n");
 			}
 		}
@@ -1172,7 +1172,7 @@ void() CheckPowerups =
 
 	if (self.antigrav_finished)
 	{
-		if (self.antigrav_finished < time + 3)
+		if (self.antigrav_finished < time + 1.75)
 		{
 			if (self.antigrav_time == 1)
 			{
@@ -1182,7 +1182,7 @@ void() CheckPowerups =
 			}
 			if (self.antigrav_time < time)
 			{
-				self.antigrav_time = time + 1;
+				self.antigrav_time = time + 0.666;
 				stuffcmd (self, "bf\n");
 			}
 		}
