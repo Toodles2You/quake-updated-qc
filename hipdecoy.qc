@@ -35,8 +35,9 @@ void() decoy_stand1 = [$axstnd1, decoy_stand1]
 		self.walkframe = 0;
 	self.frame = $stand1 + self.walkframe;
 	self.walkframe = self.walkframe + 1;
-	if (time > self.pausetime)
-		self.th_walk ();
+	if (self.pausetime)
+		if (time > self.pausetime)
+			self.th_walk ();
 };
 
 void() decoy_walk1 = [$rockrun1, decoy_walk1]
@@ -152,18 +153,25 @@ void(string targ, vector orig) become_decoy =
 		}
 		// this used to be an objerror
 		if (decoy.movetarget.classname == "path_corner")
+		{
+			decoy.pausetime = 0;
 			decoy.th_walk ();
+		}
 		else
-			decoy.pausetime = 99999999;
-		decoy.th_stand ();
+		{
+			decoy.pausetime = 0;
+			decoy.th_stand ();
+		}
 	}
 	else
 	{
-		decoy.pausetime = 99999999;
+		decoy.pausetime = 0;
 		decoy.th_stand ();
 	}
 
 	// spread think times so they don't all happen at same time
 	decoy.nextthink = decoy.nextthink + random () * 0.5;
+	if (decoy.nextthink < time + 0.1)
+		decoy.nextthink = time + 0.1;
 	self = temp;
 };

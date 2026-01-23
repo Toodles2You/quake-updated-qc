@@ -218,7 +218,7 @@ void() t_followtarget =
 				FoundTarget ();
 				return;
 			}
-			self.pausetime = time + 999999;
+			self.pausetime = 0;
 			self.th_stand ();
 		}
 	}

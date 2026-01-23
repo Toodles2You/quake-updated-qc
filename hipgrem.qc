@@ -286,11 +286,12 @@ void() gremlin_stand =
 	if (FindTarget ())
 		return;
 
-	if (time > self.pausetime)
-	{
-		self.th_walk ();
-		return;
-	}
+	if (self.pausetime)
+		if (time > self.pausetime)
+		{
+			self.th_walk ();
+			return;
+		}
 };
 
 float() GremlinCheckNoAmmo;
