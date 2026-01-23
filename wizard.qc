@@ -176,7 +176,7 @@ void() WizardAttackFinished =
 void() Wiz_FastFire =
 {
 	local vector dst, vec;
-	local entity newmis;
+	local entity missile;
 
 	if (self.owner.health > 0)
 	{
@@ -187,12 +187,12 @@ void() Wiz_FastFire =
 
 		vec = normalize (dst - self.origin);
 		sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
-		newmis = launch_spike (self.origin, vec);
-		newmis.velocity = vec * 600;
-		newmis.owner = self.owner;
-		newmis.classname = "wizspike";
-		setmodel (newmis, "progs/w_spike.mdl");
-		setsize (newmis, '0 0 0', '0 0 0');
+		missile = launch_spike (self.origin, vec);
+		missile.velocity = vec * 600;
+		missile.owner = self.owner;
+		missile.classname = "wizspike";
+		setmodel (missile, "progs/w_spike.mdl");
+		setsize (missile, '0 0 0', '0 0 0');
 	}
 
 	remove (self);

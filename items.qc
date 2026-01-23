@@ -287,15 +287,15 @@ float(float w) RankForWeapon =
 	return 666;
 };
 
-void(float old, float new) Deathmatch_Weapon =
+void(float old, float weap) Deathmatch_Weapon =
 {
-	local float or, nr;
+	local float oldrank, rank;
 
-	// change self.weapon if desired
-	or = RankForWeapon (self.weapon);
-	nr = RankForWeapon (new);
-	if (nr < or)
-		W_SetWeapon (new);
+	// change weapon if desired
+	oldrank = RankForWeapon (self.weapon);
+	rank = RankForWeapon (weap);
+	if (rank < oldrank)
+		W_SetWeapon (weap);
 	else
 		W_SetCurrentAmmo ();
 };
@@ -304,8 +304,8 @@ float() W_BestWeapon;
 
 void() weapon_touch =
 {
-	local float new, old;
-	local entity stemp;
+	local float weap, old;
+	local entity oldself;
 	local float leave;
 
 	if (!(other.flags & FL_CLIENT))
@@ -317,53 +317,53 @@ void() weapon_touch =
 		leave = 0;
 
 	if (self.classname == "weapon_supershotgun")
-		new = IT_SUPER_SHOTGUN;
+		weap = IT_SUPER_SHOTGUN;
 	else if (self.classname == "weapon_nailgun")
-		new = IT_NAILGUN;
+		weap = IT_NAILGUN;
 	else if (self.classname == "weapon_supernailgun")
-		new = IT_SUPER_NAILGUN;
+		weap = IT_SUPER_NAILGUN;
 	else if (self.classname == "weapon_rocketlauncher")
-		new = IT_ROCKET_LAUNCHER;
+		weap = IT_ROCKET_LAUNCHER;
 	else if (self.classname == "weapon_grenadelauncher")
-		new = IT_GRENADE_LAUNCHER;
+		weap = IT_GRENADE_LAUNCHER;
 	else if (self.classname == "weapon_lightning")
-		new = IT_LIGHTNING;
+		weap = IT_LIGHTNING;
 	else
-		new = 0;
+		weap = 0;
 
-	if ((other.items & new) == new)
+	if ((other.items & weap) == weap)
 	{
 		if (leave)
 			return;
-		if ((new & IT_SUPER_SHOTGUN))
+		if ((weap & IT_SUPER_SHOTGUN))
 		{
 			if (other.ammo_shells >= 100)
 				return;
 		}
-		else if ((new & (IT_NAILGUN | IT_SUPER_NAILGUN)))
+		else if ((weap & (IT_NAILGUN | IT_SUPER_NAILGUN)))
 		{
 			if (other.ammo_nails >= 200)
 				return;
 		}
-		else if ((new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
+		else if ((weap & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
 		{
 			if (other.ammo_rockets >= 100)
 				return;
 		}
-		else if ((new & IT_LIGHTNING))
+		else if ((weap & IT_LIGHTNING))
 		{
 			if (other.ammo_cells >= 100)
 				return;
 		}
 	}
 
-	if ((new & IT_SUPER_SHOTGUN))
+	if ((weap & IT_SUPER_SHOTGUN))
 		other.ammo_shells = other.ammo_shells + 5;
-	else if ((new & (IT_NAILGUN | IT_SUPER_NAILGUN)))
+	else if ((weap & (IT_NAILGUN | IT_SUPER_NAILGUN)))
 		other.ammo_nails = other.ammo_nails + 30;
-	else if ((new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
+	else if ((weap & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
 		other.ammo_rockets = other.ammo_rockets + 5;
-	else if ((new & IT_LIGHTNING))
+	else if ((weap & IT_LIGHTNING))
 		other.ammo_cells = other.ammo_cells + 15;
 
 	sprint (other, "You got the ");
@@ -376,22 +376,22 @@ void() weapon_touch =
 
 	// change to the weapon
 	old = other.items;
-	other.items = other.items | new;
+	other.items = other.items | weap;
 
-	stemp = self;
+	oldself = self;
 	self = other;
 
-	if ((old & new) == 0)
+	if ((old & weap) != weap)
 	{
 		if (!deathmatch)
-			W_SetWeapon (new);
+			W_SetWeapon (weap);
 		else
-			Deathmatch_Weapon (old, new);
+			Deathmatch_Weapon (old, weap);
 	}
 	else
 		W_SetCurrentAmmo ();
 
-	self = stemp;
+	self = oldself;
 
 	if (leave)
 		return;
@@ -474,7 +474,7 @@ void() weapon_lightning =
 
 void() ammo_touch =
 {
-	local entity stemp;
+	local entity oldself;
 
 	if (other.classname != "player")
 		return;
@@ -515,10 +515,10 @@ void() ammo_touch =
 	stuffcmd (other, "bf\n");
 
 	// if changed current ammo, update it
-	stemp = self;
+	oldself = self;
 	self = other;
 	W_SetCurrentAmmo ();
-	self = stemp;
+	self = oldself;
 
 	// remove it in single player, or setup for respawning in deathmatch
 	self.model = "";
@@ -963,8 +963,7 @@ void() item_artifact_super_damage =
 void() BackpackTouch =
 {
 	local string s;
-	local float old, new;
-	local float acount;
+	local float old, weap, acount;
 
 	if (other.classname != "player")
 		return;
@@ -980,17 +979,17 @@ void() BackpackTouch =
 		return;
 	}
 
-	acount = 0;
-	new = 0;
+	acount = FALSE;
+	weap = 0;
 	sprint (other, "You get ");
 
 	if (self.items)
 		if ((other.items & self.items) != self.items)
 		{
-			acount = 1;
+			acount = TRUE;
 			sprint (other, "the ");
 			sprint (other, self.netname);
-			new = self.items;
+			weap = self.items;
 		}
 
 	// change weapons
@@ -1008,7 +1007,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_shells);
 		sprint (other, s);
 		sprint (other, " shells");
@@ -1017,7 +1016,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_nails);
 		sprint (other, s);
 		sprint (other, " nails");
@@ -1026,7 +1025,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_rockets);
 		sprint (other, s);
 		sprint (other, " rockets");
@@ -1035,7 +1034,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_cells);
 		sprint (other, s);
 		sprint (other, " cells");
@@ -1049,7 +1048,7 @@ void() BackpackTouch =
 	remove (self);
 	self = other;
 
-	if (!new)
+	if (!weap)
 	{
 		W_SetCurrentAmmo ();
 		return;
@@ -1057,9 +1056,9 @@ void() BackpackTouch =
 
 	// change to the weapon
 	if (!deathmatch)
-		W_SetWeapon (new);
+		W_SetWeapon (weap);
 	else
-		Deathmatch_Weapon (old, new);
+		Deathmatch_Weapon (old, weap);
 };
 
 void() DropBackpack =
