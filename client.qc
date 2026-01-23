@@ -142,26 +142,21 @@ entity() FindIntermission =
 	return spot;
 };
 
-void() SetServerFlags =
-{
-	if (mapname == "e1m7")
-		serverflags = serverflags | SFL_EPISODE_1;
-	else if (mapname == "e2m6")
-		serverflags = serverflags | SFL_EPISODE_2;
-	else if (mapname == "e3m6")
-		serverflags = serverflags | SFL_EPISODE_3;
-	else if (mapname == "e4m7")
-		serverflags = serverflags | SFL_EPISODE_4;
-	else if (mapname == "end")
-		serverflags = serverflags - (serverflags & SFL_EPISODES);
-};
-
 void() GotoNextMap =
 {
 	restarting = FALSE;
 	if (deathmatch)
 	{
-		SetServerFlags ();
+		if (mapname == "e1m7")
+			serverflags = serverflags | SFL_EPISODE_1;
+		else if (mapname == "e2m6")
+			serverflags = serverflags | SFL_EPISODE_2;
+		else if (mapname == "e3m6")
+			serverflags = serverflags | SFL_EPISODE_3;
+		else if (mapname == "e4m7")
+			serverflags = serverflags | SFL_EPISODE_4;
+		else if (mapname == "end")
+			serverflags = serverflags - (serverflags & SFL_EPISODES);
 		if (cvar ("samelevel"))
 		{
 			changelevel (mapname);
