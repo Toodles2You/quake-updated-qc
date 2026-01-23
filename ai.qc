@@ -57,6 +57,8 @@ entity sight_entity;
 float sight_entity_time;
 void() FoundTarget;
 
+void(string t, float p, float paused) SUB_SetNextGoal;
+
 float(float v) anglemod =
 {
 	while (v >= 360)
@@ -114,7 +116,7 @@ moving towards it, change the next destination and continue.
 */
 void() t_movetarget =
 {
-	local entity temp;
+	local entity oldself, oldother;
 
 	if (other.movetarget != self)
 		return;
@@ -122,31 +124,18 @@ void() t_movetarget =
 	if (other.enemy)
 		return; // fighting, not following a path
 
-	temp = self;
+	oldself = self;
+	oldother = other;
 	self = other;
-	other = temp;
+	other = oldself;
 
 	if (self.classname == "monster_ogre")
 		sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 
-	self.movetarget = find (world, targetname, other.target);
+	SUB_SetNextGoal (other.target, other.delay, FALSE);
 
-	if (self.movetarget)
-	{
-		self.goalentity = self.movetarget;
-		self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
-
-		if (other.delay)
-		{
-			self.pausetime = time + other.delay;
-			self.th_stand ();
-		}
-	}
-	else
-	{
-		self.pausetime = 0;
-		self.th_stand ();
-	}
+	self = oldself;
+	other = oldother;
 };
 
 /*

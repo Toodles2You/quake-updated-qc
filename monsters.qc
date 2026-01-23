@@ -68,7 +68,7 @@ void() monster_death_use =
 	SUB_UseTargetsEnt (self, self.enemy);
 };
 
-void() monster_start_spread =
+void() SUB_SpreadThink =
 {
 	// spread think times so they don't all happen at same time
 	self.nextthink = self.nextthink + random () * 0.5;
@@ -77,16 +77,16 @@ void() monster_start_spread =
 		self.nextthink = time + 0.1;
 };
 
-void() monster_start_moving =
+void(string t, float p, float paused) SUB_SetNextGoal =
 {
-	if (self.target == "")
+	if (t == "")
 	{
 		self.pausetime = 0;
 		self.th_stand ();
 		return;
 	}
 
-	self.movetarget = find (world, targetname, self.target);
+	self.movetarget = find (world, targetname, t);
 
 	if (!self.movetarget)
 	{
@@ -107,7 +107,14 @@ void() monster_start_moving =
 
 	self.goalentity = self.movetarget;
 	self.ideal_yaw = vectoyaw (self.goalentity.origin - self.origin);
-	self.th_walk ();
+
+	if (p)
+	{
+		self.pausetime = time + p;
+		self.th_stand ();
+	}
+	else if (paused)
+		self.th_walk ();
 };
 
 void() walkmonster_start_go =
@@ -128,8 +135,8 @@ void() walkmonster_start_go =
 
 	self.flags = self.flags | FL_MONSTER;
 
-	monster_start_moving ();
-	monster_start_spread ();
+	SUB_SetNextGoal (self.target, 0, TRUE);
+	SUB_SpreadThink ();
 };
 
 void() walkmonster_start =
@@ -138,7 +145,7 @@ void() walkmonster_start =
 	self.flags = self.flags | FL_MONSTER;
 	self.think = walkmonster_start_go;
 	total_monsters = total_monsters + 1;
-	monster_start_spread ();
+	SUB_SpreadThink ();
 };
 
 void() flymonster_start_go =
@@ -156,7 +163,7 @@ void() flymonster_start_go =
 	if (!walkmove (0, 0))
 		entwarn ("in wall");
 
-	monster_start_moving ();
+	SUB_SetNextGoal (self.target, 0, TRUE);
 };
 
 void() flymonster_start =
@@ -164,7 +171,7 @@ void() flymonster_start =
 	self.flags = self.flags | FL_MONSTER;
 	self.think = flymonster_start_go;
 	total_monsters = total_monsters + 1;
-	monster_start_spread ();
+	SUB_SpreadThink ();
 };
 
 void() swimmonster_start_go =
@@ -179,8 +186,8 @@ void() swimmonster_start_go =
 
 	self.flags = self.flags | FL_MONSTER | FL_SWIM;
 
-	monster_start_moving ();
-	monster_start_spread ();
+	SUB_SetNextGoal (self.target, 0, TRUE);
+	SUB_SpreadThink ();
 };
 
 void() swimmonster_start =
@@ -188,5 +195,5 @@ void() swimmonster_start =
 	self.flags = self.flags | FL_MONSTER;
 	self.think = swimmonster_start_go;
 	total_monsters = total_monsters + 1;
-	monster_start_spread ();
+	SUB_SpreadThink ();
 };
