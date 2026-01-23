@@ -206,7 +206,7 @@ void() tbaby_checknew =
 	self.view_ofs = '0 0 25';
 	self.use = monster_use;
 	self.flags = self.flags | FL_MONSTER;
-	self.pausetime = 99999999;
+	self.pausetime = 0;
 	self.th_stand ();
 	self.nextthink = self.nextthink + random () * 0.5;
 
