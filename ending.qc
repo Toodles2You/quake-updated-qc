@@ -65,7 +65,7 @@ void() ending_remove_stuff;
 
 void() ending_for_coop =
 {
-	intermission_exittime = time + 10000000;
+	intermission_exittime = 0;
 	intermission_running = 1;
 
 	self.model = "";
@@ -95,7 +95,7 @@ void() xpackEnding =
 		return;
 	}
 
-	intermission_exittime = time + 10000000;
+	intermission_exittime = 0;
 	intermission_running = 1;
 
 	WriteByte (MSG_ALL, SVC_CUTSCENE);

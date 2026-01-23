@@ -101,32 +101,32 @@ void(entity destEnt, float trackSpeed) ai_track =
 
 void(string gibname, float dm) AccelerateGib =
 {
-	local entity new;
+	local entity gib;
 
 	local float offset1;
 
-	new = spawn ();
-	new.origin = self.origin;
-	setmodel (new, gibname);
-	setsize (new, '-8 -8 -8', '8 8 8');
+	gib = spawn ();
+	gib.origin = self.origin;
+	setmodel (gib, gibname);
+	setsize (gib, '-8 -8 -8', '8 8 8');
 
-	new.velocity = -1.25 * self.velocity;
-	makevectors (new.velocity);
+	gib.velocity = -1.25 * self.velocity;
+	makevectors (gib.velocity);
 	offset1 = random () * 300 - 150;
-	new.velocity = new.velocity + v_right* offset1;
+	gib.velocity = gib.velocity + v_right* offset1;
 	offset1 = random () * 300 - 150;
-	new.velocity = new.velocity + v_up* offset1;
+	gib.velocity = gib.velocity + v_up* offset1;
 
-	new.movetype = MOVETYPE_BOUNCE;
-	new.solid = SOLID_NOT;
-	new.avelocity_x = random () * 600;
-	new.avelocity_y = random () * 600;
-	new.avelocity_z = random () * 600;
-	new.think = SUB_Remove;
-	new.ltime = time;
-	new.nextthink = time + 10 + random () * 10;
-	new.frame = 0;
-	new.flags = 0;
+	gib.movetype = MOVETYPE_BOUNCE;
+	gib.solid = SOLID_NOT;
+	gib.avelocity_x = random () * 600;
+	gib.avelocity_y = random () * 600;
+	gib.avelocity_z = random () * 600;
+	gib.think = SUB_Remove;
+	gib.ltime = time;
+	gib.nextthink = time + 10 + random () * 10;
+	gib.frame = 0;
+	gib.flags = 0;
 };
 
 void(float gibCount) ViolentDeath =
@@ -142,20 +142,20 @@ void(float gibCount) ViolentDeath =
 
 entity(string gibname) StartGib =
 {
-	local entity new;
+	local entity gib;
 
-	new = spawn ();
-	new.origin = self.origin;
-	setmodel (new, gibname);
-	setsize (new, '0 0 0', '0 0 0');
+	gib = spawn ();
+	gib.origin = self.origin;
+	setmodel (gib, gibname);
+	setsize (gib, '0 0 0', '0 0 0');
 
-	new.movetype = MOVETYPE_BOUNCE;
-	new.solid = SOLID_NOT;
-	new.think = SUB_Remove;
-	new.ltime = time;
-	new.nextthink = time + 10 + random () * 10;
-	new.frame = 0;
-	new.flags = 0;
+	gib.movetype = MOVETYPE_BOUNCE;
+	gib.solid = SOLID_NOT;
+	gib.think = SUB_Remove;
+	gib.ltime = time;
+	gib.nextthink = time + 10 + random () * 10;
+	gib.frame = 0;
+	gib.flags = 0;
 
-	return new;
+	return gib;
 };

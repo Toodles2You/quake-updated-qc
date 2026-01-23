@@ -111,7 +111,7 @@ void() finale_1 =
 	local entity pos, pl;
 	local entity timer;
 
-	intermission_exittime = time + 10000000;
+	intermission_exittime = 0;
 	intermission_running = 1;
 
 	pos = find (world, classname, "info_intermission");

@@ -163,7 +163,7 @@ void() GrappleAnchor =
 
 void() W_FireGrapple =
 {
-	local entity newmis;
+	local entity missile;
 
 	if (self.hook_out) // reject subsequent calls from player.qc
 		return;
@@ -173,26 +173,26 @@ void() W_FireGrapple =
 	// chain out sound (loops)
 	sound (self, CHAN_WEAPON, "weapons/chain1.wav", 1, ATTN_NORM);
 
-	newmis = spawn ();
-	newmis.movetype = MOVETYPE_FLYMISSILE;
-	newmis.solid = SOLID_BBOX;
-	newmis.owner = self; // newmis belongs to me
-	self.hook = newmis; // This is my newmis
-	newmis.classname = "hook";
+	missile = spawn ();
+	missile.movetype = MOVETYPE_FLYMISSILE;
+	missile.solid = SOLID_BBOX;
+	missile.owner = self; // newmis belongs to me
+	self.hook = missile; // This is my newmis
+	missile.classname = "hook";
 
 	makevectors (self.v_angle);
-	newmis.velocity = v_forward * 800;
-	newmis.angles = vectoangles (v_forward);
+	missile.velocity = v_forward * 800;
+	missile.angles = vectoangles (v_forward);
 
-	newmis.touch = GrappleAnchor;
-	newmis.think = GrappleReset;
+	missile.touch = GrappleAnchor;
+	missile.think = GrappleReset;
 	// grapple only lives for two seconds, this gives max range on it
-	newmis.nextthink = time + 2;
-	newmis.frame = 1; // hook spread
+	missile.nextthink = time + 2;
+	missile.frame = 1; // hook spread
 
-	setmodel (newmis, "progs/hook.mdl");
-	setorigin (newmis, self.origin + v_forward * 16 + '0 0 16');
-	setsize (newmis, '0 0 0', '0 0 0 ');
+	setmodel (missile, "progs/hook.mdl");
+	setorigin (missile, self.origin + v_forward * 16 + '0 0 16');
+	setsize (missile, '0 0 0', '0 0 0 ');
 
 	self.hook_out = TRUE;
 };

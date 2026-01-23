@@ -553,23 +553,23 @@ vector(float dm) VelocityForDamage =
 
 void(string gibname, float dm) ThrowGib =
 {
-	local entity new;
+	local entity gib;
 
-	new = spawn ();
-	new.origin = self.origin;
-	setmodel (new, gibname);
-	setsize (new, '0 0 0', '0 0 0');
-	new.velocity = VelocityForDamage (dm);
-	new.movetype = MOVETYPE_BOUNCE;
-	new.solid = SOLID_NOT;
-	new.avelocity_x = random () * 600;
-	new.avelocity_y = random () * 600;
-	new.avelocity_z = random () * 600;
-	new.think = SUB_Remove;
-	new.ltime = time;
-	new.nextthink = time + 10 + random () * 10;
-	new.frame = 0;
-	new.flags = 0;
+	gib = spawn ();
+	gib.origin = self.origin;
+	setmodel (gib, gibname);
+	setsize (gib, '0 0 0', '0 0 0');
+	gib.velocity = VelocityForDamage (dm);
+	gib.movetype = MOVETYPE_BOUNCE;
+	gib.solid = SOLID_NOT;
+	gib.avelocity_x = random () * 600;
+	gib.avelocity_y = random () * 600;
+	gib.avelocity_z = random () * 600;
+	gib.think = SUB_Remove;
+	gib.ltime = time;
+	gib.nextthink = time + 10 + random () * 10;
+	gib.frame = 0;
+	gib.flags = 0;
 };
 
 void(string gibname, float dm) ThrowHead =

@@ -304,18 +304,18 @@ float(float w) RankForWeapon =
 	return 666;
 };
 
-void(float old, float new) Deathmatch_Weapon =
+void(float old, float weap) Deathmatch_Weapon =
 {
-	local float or, nr;
+	local float oldrank, rank;
 
 	if (self.weapon == IT_GRAPPLE && self.button0)
 		return;
 
-	// change self.weapon if desired
-	or = RankForWeapon (self.weapon);
-	nr = RankForWeapon (new);
-	if (nr < or)
-		W_SetWeapon (new);
+	// change weapon if desired
+	oldrank = RankForWeapon (self.weapon);
+	rank = RankForWeapon (weap);
+	if (rank < oldrank)
+		W_SetWeapon (weap);
 	else
 		W_SetCurrentAmmo ();
 };
@@ -378,8 +378,8 @@ float() W_BestWeapon;
 
 void() weapon_touch =
 {
-	local float new, old;
-	local entity stemp;
+	local float weap, old;
+	local entity oldself;
 	local float leave;
 
 	if (!(other.flags & FL_CLIENT))
@@ -391,63 +391,63 @@ void() weapon_touch =
 		leave = 0;
 
 	if (self.classname == "weapon_supershotgun")
-		new = IT_SUPER_SHOTGUN;
+		weap = IT_SUPER_SHOTGUN;
 	else if (self.classname == "weapon_nailgun")
-		new = IT_NAILGUN;
+		weap = IT_NAILGUN;
 	else if (self.classname == "weapon_supernailgun")
-		new = IT_SUPER_NAILGUN;
+		weap = IT_SUPER_NAILGUN;
 	else if (self.classname == "weapon_rocketlauncher")
-		new = IT_ROCKET_LAUNCHER;
+		weap = IT_ROCKET_LAUNCHER;
 	else if (self.classname == "weapon_grenadelauncher")
-		new = IT_GRENADE_LAUNCHER;
+		weap = IT_GRENADE_LAUNCHER;
 	else if (self.classname == "weapon_lightning")
-		new = IT_LIGHTNING;
+		weap = IT_LIGHTNING;
 	else
-		new = 0;
+		weap = 0;
 
-	if ((other.items & new) == new)
+	if ((other.items & weap) == weap)
 	{
 		if (leave)
 			return;
-		if ((new & IT_SUPER_SHOTGUN))
+		if ((weap & IT_SUPER_SHOTGUN))
 		{
 			if (other.ammo_shells1 >= 100)
 				return;
 		}
-		else if ((new & (IT_NAILGUN | IT_SUPER_NAILGUN)))
+		else if ((weap & (IT_NAILGUN | IT_SUPER_NAILGUN)))
 		{
 			if (other.ammo_nails1 >= 200)
 				return;
 		}
-		else if ((new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
+		else if ((weap & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
 		{
 			if (other.ammo_rockets1 >= 100)
 				return;
 		}
-		else if ((new & IT_LIGHTNING))
+		else if ((weap & IT_LIGHTNING))
 		{
 			if (other.ammo_cells1 >= 100)
 				return;
 		}
 	}
 
-	if ((new & IT_SUPER_SHOTGUN))
+	if ((weap & IT_SUPER_SHOTGUN))
 	{
 		other.ammo_shells1 = other.ammo_shells1 + 5;
 	}
-	else if ((new & (IT_NAILGUN | IT_SUPER_NAILGUN)))
+	else if ((weap & (IT_NAILGUN | IT_SUPER_NAILGUN)))
 	{
 		if (leave)
 			other.ammo_lava_nails = other.ammo_lava_nails + 20;
 		other.ammo_nails1 = other.ammo_nails1 + 30;
 	}
-	else if ((new & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
+	else if ((weap & (IT_ROCKET_LAUNCHER | IT_GRENADE_LAUNCHER)))
 	{
 		if (leave)
 			other.ammo_multi_rockets = other.ammo_multi_rockets + 3;
 		other.ammo_rockets1 = other.ammo_rockets1 + 5;
 	}
-	else if ((new & IT_LIGHTNING))
+	else if ((weap & IT_LIGHTNING))
 	{
 		if (leave)
 			other.ammo_plasma = other.ammo_plasma + 5;
@@ -466,48 +466,48 @@ void() weapon_touch =
 
 	// change to the weapon
 	old = other.items;
-	other.items = other.items | new;
+	other.items = other.items | weap;
 
-	if (new == IT_LIGHTNING)
+	if (weap == IT_LIGHTNING)
 	{
 		if (other.ammo_plasma > 0)
-			new = IT_PLASMA_GUN;
+			weap = IT_PLASMA_GUN;
 	}
-	else if (new == IT_ROCKET_LAUNCHER)
+	else if (weap == IT_ROCKET_LAUNCHER)
 	{
 		if (other.ammo_multi_rockets > 0)
-			new = IT_MULTI_ROCKET;
+			weap = IT_MULTI_ROCKET;
 	}
-	else if (new == IT_GRENADE_LAUNCHER)
+	else if (weap == IT_GRENADE_LAUNCHER)
 	{
 		if (other.ammo_multi_rockets > 0)
-			new = IT_MULTI_GRENADE;
+			weap = IT_MULTI_GRENADE;
 	}
-	else if (new == IT_SUPER_NAILGUN)
+	else if (weap == IT_SUPER_NAILGUN)
 	{
 		if (other.ammo_lava_nails > 1)
-			new = IT_LAVA_SUPER_NAILGUN;
+			weap = IT_LAVA_SUPER_NAILGUN;
 	}
-	else if (new == IT_NAILGUN)
+	else if (weap == IT_NAILGUN)
 	{
 		if (other.ammo_lava_nails > 0)
-			new = IT_LAVA_NAILGUN;
+			weap = IT_LAVA_NAILGUN;
 	}
 
-	stemp = self;
+	oldself = self;
 	self = other;
 
-	if ((old & new) == 0)
+	if ((old & weap) != weap)
 	{
 		if (!deathmatch)
-			W_SetWeapon (new);
+			W_SetWeapon (weap);
 		else
-			Deathmatch_Weapon (old, new);
+			Deathmatch_Weapon (old, weap);
 	}
 	else
 		W_SetCurrentAmmo ();
 
-	self = stemp;
+	self = oldself;
 
 	if (leave)
 		return;
@@ -590,7 +590,7 @@ void() weapon_lightning =
 
 void() ammo_touch =
 {
-	local entity stemp;
+	local entity oldself;
 
 	if (other.classname != "player")
 		return;
@@ -651,10 +651,10 @@ void() ammo_touch =
 	EnableComboWeapons (other);
 
 	// if changed current ammo, update it
-	stemp = self;
+	oldself = self;
 	self = other;
 	W_SetCurrentAmmo ();
-	self = stemp;
+	self = oldself;
 
 	// remove it in single player, or setup for respawning in deathmatch
 	self.model = "";
@@ -1174,8 +1174,7 @@ void() item_artifact_super_damage =
 void() BackpackTouch =
 {
 	local string s;
-	local float old, new;
-	local float acount;
+	local float old, weap, acount;
 
 	if (other.classname != "player")
 		return;
@@ -1198,17 +1197,17 @@ void() BackpackTouch =
 		return;
 	}
 
-	acount = 0;
-	new = 0;
+	acount = FALSE;
+	weap = 0;
 	sprint (other, "You get ");
 
 	if (self.items)
 		if ((other.items & self.items) != self.items)
 		{
-			acount = 1;
+			acount = TRUE;
 			sprint (other, "the ");
 			sprint (other, self.netname);
-			new = self.items;
+			weap = self.items;
 		}
 
 	// change weapons
@@ -1230,7 +1229,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_shells1);
 		sprint (other, s);
 		sprint (other, " shells");
@@ -1239,7 +1238,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_nails1);
 		sprint (other, s);
 		sprint (other, " nails");
@@ -1248,7 +1247,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_rockets1);
 		sprint (other, s);
 		sprint (other, " rockets");
@@ -1257,7 +1256,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_cells1);
 		sprint (other, s);
 		sprint (other, " cells");
@@ -1266,7 +1265,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_lava_nails);
 		sprint (other, s);
 		sprint (other, " lava nails");
@@ -1275,7 +1274,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_multi_rockets);
 		sprint (other, s);
 		sprint (other, " multi rockets");
@@ -1284,7 +1283,7 @@ void() BackpackTouch =
 	{
 		if (acount)
 			sprint (other, ", ");
-		acount = 1;
+		acount = TRUE;
 		s = ftos (self.ammo_plasma);
 		sprint (other, s);
 		sprint (other, " plasma balls");
@@ -1300,33 +1299,33 @@ void() BackpackTouch =
 
 	EnableComboWeapons (self);
 
-	if (new == IT_LIGHTNING)
+	if (weap == IT_LIGHTNING)
 	{
 		if (self.ammo_plasma > 0)
-			new = IT_PLASMA_GUN;
+			weap = IT_PLASMA_GUN;
 	}
-	else if (new == IT_ROCKET_LAUNCHER)
+	else if (weap == IT_ROCKET_LAUNCHER)
 	{
 		if (self.ammo_multi_rockets > 0)
-			new = IT_MULTI_ROCKET;
+			weap = IT_MULTI_ROCKET;
 	}
-	else if (new == IT_GRENADE_LAUNCHER)
+	else if (weap == IT_GRENADE_LAUNCHER)
 	{
 		if (self.ammo_multi_rockets > 0)
-			new = IT_MULTI_GRENADE;
+			weap = IT_MULTI_GRENADE;
 	}
-	else if (new == IT_SUPER_NAILGUN)
+	else if (weap == IT_SUPER_NAILGUN)
 	{
 		if (self.ammo_lava_nails > 1)
-			new = IT_LAVA_SUPER_NAILGUN;
+			weap = IT_LAVA_SUPER_NAILGUN;
 	}
-	else if (new == IT_NAILGUN)
+	else if (weap == IT_NAILGUN)
 	{
 		if (self.ammo_lava_nails > 0)
-			new = IT_LAVA_NAILGUN;
+			weap = IT_LAVA_NAILGUN;
 	}
 
-	if (!new)
+	if (!weap)
 	{
 		W_SetCurrentAmmo ();
 		return;
@@ -1334,9 +1333,9 @@ void() BackpackTouch =
 
 	// change to the weapon
 	if (!deathmatch)
-		W_SetWeapon (new);
+		W_SetWeapon (weap);
 	else
-		Deathmatch_Weapon (old, new);
+		Deathmatch_Weapon (old, weap);
 };
 
 void() DropBackpack =

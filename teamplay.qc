@@ -816,7 +816,7 @@ void() TossBackpack =
 
 void() Team_weapon_touch =
 {
-	local float new, old;
+	local float weap, old;
 
 	if (!(other.flags & FL_CLIENT))
 		return;
@@ -825,19 +825,19 @@ void() Team_weapon_touch =
 		return;
 
 	if (self.classname == "weapon_nailgun")
-		new = IT_NAILGUN;
+		weap = IT_NAILGUN;
 	else if (self.classname == "weapon_supernailgun")
-		new = IT_SUPER_NAILGUN;
+		weap = IT_SUPER_NAILGUN;
 	else if (self.classname == "weapon_supershotgun")
-		new = IT_SUPER_SHOTGUN;
+		weap = IT_SUPER_SHOTGUN;
 	else if (self.classname == "weapon_rocketlauncher")
-		new = IT_ROCKET_LAUNCHER;
+		weap = IT_ROCKET_LAUNCHER;
 	else if (self.classname == "weapon_grenadelauncher")
-		new = IT_GRENADE_LAUNCHER;
+		weap = IT_GRENADE_LAUNCHER;
 	else if (self.classname == "weapon_lightning")
-		new = IT_LIGHTNING;
+		weap = IT_LIGHTNING;
 	else
-		new = 0;
+		weap = 0;
 
 	sprint (other, "You got the ");
 	sprint (other, self.netname);
@@ -850,43 +850,43 @@ void() Team_weapon_touch =
 
 	// change to the weapon
 	old = other.items;
-	other.items = other.items | new;
+	other.items = other.items | weap;
 
 	remove (self);
 	self = other;
 
 	EnableComboWeapons (self);
 
-	if (new == IT_LIGHTNING)
+	if (weap == IT_LIGHTNING)
 	{
 		if (self.ammo_plasma > 0)
-			new = IT_PLASMA_GUN;
+			weap = IT_PLASMA_GUN;
 	}
-	else if (new == IT_ROCKET_LAUNCHER)
+	else if (weap == IT_ROCKET_LAUNCHER)
 	{
 		if (self.ammo_multi_rockets > 0)
-			new = IT_MULTI_ROCKET;
+			weap = IT_MULTI_ROCKET;
 	}
-	else if (new == IT_GRENADE_LAUNCHER)
+	else if (weap == IT_GRENADE_LAUNCHER)
 	{
 		if (self.ammo_multi_rockets > 0)
-			new = IT_MULTI_GRENADE;
+			weap = IT_MULTI_GRENADE;
 	}
-	else if (new == IT_SUPER_NAILGUN)
+	else if (weap == IT_SUPER_NAILGUN)
 	{
 		if (self.ammo_lava_nails > 1)
-			new = IT_LAVA_SUPER_NAILGUN;
+			weap = IT_LAVA_SUPER_NAILGUN;
 	}
-	else if (new == IT_NAILGUN)
+	else if (weap == IT_NAILGUN)
 	{
 		if (self.ammo_lava_nails > 0)
-			new = IT_LAVA_NAILGUN;
+			weap = IT_LAVA_NAILGUN;
 	}
 
 	if (!deathmatch)
-		W_SetWeapon (new);
+		W_SetWeapon (weap);
 	else
-		Deathmatch_Weapon (old, new);
+		Deathmatch_Weapon (old, weap);
 
 	// dropped weapon doesn't target, so no need to call UseTargets
 };

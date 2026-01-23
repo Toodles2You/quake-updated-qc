@@ -19,32 +19,32 @@
 
 entity(vector org, vector dir) launch_lava_spike =
 {
-	local entity newmis;
+	local entity missile;
 
-	newmis = spawn ();
-	newmis.owner = self;
-	newmis.movetype = MOVETYPE_FLYMISSILE;
-	newmis.solid = SOLID_BBOX;
+	missile = spawn ();
+	missile.owner = self;
+	missile.movetype = MOVETYPE_FLYMISSILE;
+	missile.solid = SOLID_BBOX;
 
-	newmis.angles = vectoangles (dir);
+	missile.angles = vectoangles (dir);
 
-	newmis.touch = lavaspike_touch;
-	newmis.classname = "lava_spike";
-	newmis.think = SUB_Remove;
-	newmis.nextthink = time + 6;
-	setmodel (newmis, "progs/lspike.mdl");
-	setsize (newmis, '0 0 0', '0 0 0');
-	setorigin (newmis, org);
+	missile.touch = lavaspike_touch;
+	missile.classname = "lava_spike";
+	missile.think = SUB_Remove;
+	missile.nextthink = time + 6;
+	setmodel (missile, "progs/lspike.mdl");
+	setsize (missile, '0 0 0', '0 0 0');
+	setorigin (missile, org);
 
-	newmis.velocity = dir * 1000;
+	missile.velocity = dir * 1000;
 
-	return newmis;
+	return missile;
 };
 
 void() W_FireSuperLavaSpikes =
 {
 	local vector dir;
-	local entity newmis;
+	local entity missile;
 
 	sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 	self.attack_finished = time + 0.2;
@@ -52,10 +52,10 @@ void() W_FireSuperLavaSpikes =
 	UpdateAmmoCounts (self);
 
 	dir = aim (self, 1000);
-	newmis = launch_lava_spike (self.origin + '0 0 16', dir);
-	newmis.touch = superlavaspike_touch;
+	missile = launch_lava_spike (self.origin + '0 0 16', dir);
+	missile.touch = superlavaspike_touch;
 
-	setsize (newmis, '0 0 0', '0 0 0');
+	setsize (missile, '0 0 0', '0 0 0');
 	self.punchangle_x = -2;
 };
 

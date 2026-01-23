@@ -75,34 +75,34 @@ void() Laser_Touch =
 
 entity(vector org, vector dir) LaunchLaser =
 {
-	local entity newmis;
+	local entity missile;
 
-	newmis = spawn ();
-	newmis.owner = self;
-	newmis.movetype = MOVETYPE_FLY;
-	newmis.solid = SOLID_BBOX;
-	newmis.effects = EF_DIMLIGHT;
-	newmis.classname = "enforcer_laser";
+	missile = spawn ();
+	missile.owner = self;
+	missile.movetype = MOVETYPE_FLY;
+	missile.solid = SOLID_BBOX;
+	missile.effects = EF_DIMLIGHT;
+	missile.classname = "enforcer_laser";
 
-	setmodel (newmis, "progs/laser.mdl");
-	setsize (newmis, '0 0 0', '0 0 0');
+	setmodel (missile, "progs/laser.mdl");
+	setsize (missile, '0 0 0', '0 0 0');
 
 	if (self.classname == "monster_morph")
 	{
 		if (!self.owner)
-			newmis.skin = 1;
+			missile.skin = 1;
 	}
 	
-	setorigin (newmis, org);
+	setorigin (missile, org);
 
-	newmis.velocity = dir * 600;
-	newmis.angles = vectoangles (newmis.velocity);
+	missile.velocity = dir * 600;
+	missile.angles = vectoangles (missile.velocity);
 
-	newmis.nextthink = time + 5;
-	newmis.think = SUB_Remove;
-	newmis.touch = Laser_Touch;
+	missile.nextthink = time + 5;
+	missile.think = SUB_Remove;
+	missile.touch = Laser_Touch;
 
-	return newmis;
+	return missile;
 };
 
 void() enforcer_fire =

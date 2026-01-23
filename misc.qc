@@ -230,37 +230,37 @@ entity(vector org, vector dir) launch_fireball;
 
 entity() spikeshooter_launch =
 {
-	local entity newmis;
+	local entity missile;
 
 	if ((self.spawnflags & SPAWNFLAG_SUPERSPIKE) || !(self.spawnflags))
 	{
 		sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
-		newmis = launch_spike (self.origin, self.movedir);
-		newmis.velocity = self.movedir * 500;
+		missile = launch_spike (self.origin, self.movedir);
+		missile.velocity = self.movedir * 500;
 		if ((self.spawnflags & SPAWNFLAG_SUPERSPIKE))
-			newmis.touch = superspike_touch;
+			missile.touch = superspike_touch;
 	}
 	else if ((self.spawnflags & SPAWNFLAG_LASER))
 	{
 		sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
-		newmis = LaunchLaser (self.origin, self.movedir);
+		missile = LaunchLaser (self.origin, self.movedir);
 	}
 	else if ((self.spawnflags & SPAWNFLAG_FIREBALL))
 	{
-		newmis = launch_fireball (self.origin, self.movedir);
+		missile = launch_fireball (self.origin, self.movedir);
 	}
 	else
 	{
 		sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
-		newmis = launch_lava_spike (self.origin, self.movedir);
-		newmis.velocity = self.movedir * 500;
+		missile = launch_lava_spike (self.origin, self.movedir);
+		missile.velocity = self.movedir * 500;
 		if ((self.spawnflags & SPAWNFLAG_SUPERLAVA))
-			newmis.touch = superlavaspike_touch;
+			missile.touch = superlavaspike_touch;
 		else if ((self.spawnflags & SPAWNFLAG_LAVASKILL) && (skill > 1))
-			newmis.touch = superlavaspike_touch;
+			missile.touch = superlavaspike_touch;
 	}
 
-	return newmis;
+	return missile;
 };
 
 void() spikeshooter_use =
@@ -270,10 +270,10 @@ void() spikeshooter_use =
 
 void() shooter_think =
 {
-	local entity newmis;
+	local entity missile;
 
-	newmis = spikeshooter_launch ();
-	newmis.velocity = self.movedir * 500;
+	missile = spikeshooter_launch ();
+	missile.velocity = self.movedir * 500;
 
 	self.nextthink = time + self.wait;
 };

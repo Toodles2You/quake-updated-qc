@@ -210,7 +210,7 @@ void(vector p) boss_missile =
 	local vector offang;
 	local vector org, vec, d;
 	local float t;
-	local entity newmis;
+	local entity missile;
 
 	offang = vectoangles (self.enemy.origin - self.origin);
 	makevectors (offang);
@@ -232,12 +232,12 @@ void(vector p) boss_missile =
 
 	vec = normalize (d - org);
 
-	newmis = launch_spike (org, vec);
-	setmodel (newmis, "progs/lavaball.mdl");
-	newmis.avelocity = '200 100 300';
-	setsize (newmis, '0 0 0', '0 0 0');
-	newmis.velocity = vec * 300;
-	newmis.touch = T_MissileTouch; // rocket explosion
+	missile = launch_spike (org, vec);
+	setmodel (missile, "progs/lavaball.mdl");
+	missile.avelocity = '200 100 300';
+	setsize (missile, '0 0 0', '0 0 0');
+	missile.velocity = vec * 300;
+	missile.touch = T_MissileTouch; // rocket explosion
 	sound (self, CHAN_WEAPON, "boss1/throw.wav", 1, ATTN_NORM);
 
 	// check for dead enemy
