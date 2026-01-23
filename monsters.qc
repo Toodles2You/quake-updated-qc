@@ -77,7 +77,7 @@ void() SUB_SpreadThink =
 		self.nextthink = time + 0.1;
 };
 
-void(string t, float p) SUB_SetNextGoal =
+void(string t, float p, float paused) SUB_SetNextGoal =
 {
 	if (t == "")
 	{
@@ -113,7 +113,7 @@ void(string t, float p) SUB_SetNextGoal =
 		self.pausetime = time + p;
 		self.th_stand ();
 	}
-	else
+	else if (paused)
 		self.th_walk ();
 };
 
@@ -135,7 +135,7 @@ void() walkmonster_start_go =
 
 	self.flags = self.flags | FL_MONSTER;
 
-	SUB_SetNextGoal (self.target, 0);
+	SUB_SetNextGoal (self.target, 0, TRUE);
 	SUB_SpreadThink ();
 };
 
@@ -162,7 +162,7 @@ void() flymonster_start_go =
 	if (!walkmove (0, 0))
 		entwarn ("in wall");
 
-	SUB_SetNextGoal (self.target, 0);
+	SUB_SetNextGoal (self.target, 0, TRUE);
 };
 
 void() flymonster_start =
@@ -184,7 +184,7 @@ void() swimmonster_start_go =
 
 	self.flags = self.flags | FL_MONSTER | FL_SWIM;
 
-	SUB_SetNextGoal (self.target, 0);
+	SUB_SetNextGoal (self.target, 0, TRUE);
 	SUB_SpreadThink ();
 };
 

@@ -56,7 +56,7 @@ walkmove (angle, speed) primitive is all or nothing
 entity sight_entity;
 float sight_entity_time;
 
-void(string t, float p) SUB_SetNextGoal;
+void(string t, float p, float paused) SUB_SetNextGoal;
 
 float(float v) anglemod =
 {
@@ -131,7 +131,7 @@ void() t_movetarget =
 	if (self.classname == "monster_ogre")
 		sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 
-	SUB_SetNextGoal (other.target, 0);
+	SUB_SetNextGoal (other.target, 0, FALSE);
 
 	self = oldself;
 	other = oldother;
