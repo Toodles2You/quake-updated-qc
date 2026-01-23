@@ -61,7 +61,7 @@ void() push_use =
 
 void() func_pushable =
 {
-	local entity new;
+	local entity proxy;
 	local vector newsize;
 
 	self.mangle = self.angles;
@@ -75,20 +75,20 @@ void() func_pushable =
 	setsize (self, self.mins, self.maxs);
 	self.oldorigin = self.origin;
 
-	new = spawn ();
-	new.owner = self;
-	new.mangle = self.mangle;
-	new.angles = self.angles;
+	proxy = spawn ();
+	proxy.owner = self;
+	proxy.mangle = self.mangle;
+	proxy.angles = self.angles;
 
-	new.classname = "pushablewallproxy";
-	new.solid = SOLID_BBOX;
-	new.movetype = MOVETYPE_STEP;
-	new.origin = (self.mins + self.maxs) * 0.5 + '0 0 1';
+	proxy.classname = "pushablewallproxy";
+	proxy.solid = SOLID_BBOX;
+	proxy.movetype = MOVETYPE_STEP;
+	proxy.origin = (self.mins + self.maxs) * 0.5 + '0 0 1';
 	newsize = (self.maxs - self.mins) * 0.5;
-	new.mins = '-1 -1 0' - newsize;
-	new.maxs = '1 1 -2' + newsize;
-	setsize (new, new.mins, new.maxs);
-	setorigin (new, new.origin);
-	new.oldorigin = new.origin;
-	new.touch = push_use;
+	proxy.mins = '-1 -1 0' - newsize;
+	proxy.maxs = '1 1 -2' + newsize;
+	setsize (proxy, proxy.mins, proxy.maxs);
+	setorigin (proxy, proxy.origin);
+	proxy.oldorigin = proxy.origin;
+	proxy.touch = push_use;
 };

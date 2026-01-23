@@ -226,70 +226,70 @@ entity(vector org, vector vec) LaunchLaser;
 
 entity() spikeshooter_launch =
 {
-	local entity newmis;
+	local entity missile;
 
 	if ((self.spawnflags & SPAWNFLAG_LASER))
 	{
 		if (!(self.spawnflags & SPAWNFLAG_SILENT))
 			sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
-		newmis = LaunchLaser (self.origin, self.movedir);
-		newmis.spawnflags = self.spawnflags;
+		missile = LaunchLaser (self.origin, self.movedir);
+		missile.spawnflags = self.spawnflags;
 	}
 	else if ((self.spawnflags & SPAWNFLAG_LAVABALL))
 	{
 		if (!(self.spawnflags & SPAWNFLAG_SILENT))
 			sound (self, CHAN_VOICE, "misc/spike.wav", 1, ATTN_NORM);
-		newmis = spawn ();
-		newmis.movetype = MOVETYPE_FLYMISSILE;
-		newmis.solid = SOLID_BBOX;
-		newmis.classname = "lavaball";
+		missile = spawn ();
+		missile.movetype = MOVETYPE_FLYMISSILE;
+		missile.solid = SOLID_BBOX;
+		missile.classname = "lavaball";
 		// set lavaball speed
-		newmis.velocity = self.movedir * 300;
-		newmis.angles = vectoangles (newmis.velocity);
-		newmis.owner = self;
-		newmis.touch = T_MissileTouch;
-		setmodel (newmis, "progs/lavarock.mdl");
-		setsize (newmis, '-4 -4 -4', '4 4 4');
-		setorigin (newmis, self.origin);
-		newmis.avelocity = '0 0 400';
-		newmis.nextthink = time + 5;
-		newmis.think = SUB_Remove;
+		missile.velocity = self.movedir * 300;
+		missile.angles = vectoangles (missile.velocity);
+		missile.owner = self;
+		missile.touch = T_MissileTouch;
+		setmodel (missile, "progs/lavarock.mdl");
+		setsize (missile, '-4 -4 -4', '4 4 4');
+		setorigin (missile, self.origin);
+		missile.avelocity = '0 0 400';
+		missile.nextthink = time + 5;
+		missile.think = SUB_Remove;
 	}
 	else if ((self.spawnflags & SPAWNFLAG_ROCKET))
 	{
 		if (!(self.spawnflags & SPAWNFLAG_SILENT))
 			sound (self, CHAN_VOICE, "weapons/sgun1.wav", 1, ATTN_NORM);
 
-		newmis = spawn ();
-		newmis.owner = self;
-		newmis.movetype = MOVETYPE_FLYMISSILE;
-		newmis.solid = SOLID_BBOX;
-		newmis.classname = "missile";
+		missile = spawn ();
+		missile.owner = self;
+		missile.movetype = MOVETYPE_FLYMISSILE;
+		missile.solid = SOLID_BBOX;
+		missile.classname = "missile";
 
-		newmis.velocity = self.movedir * 1000;
-		newmis.angles = vectoangles (newmis.velocity);
+		missile.velocity = self.movedir * 1000;
+		missile.angles = vectoangles (missile.velocity);
 
-		newmis.touch = T_MissileTouch;
+		missile.touch = T_MissileTouch;
 
-		newmis.nextthink = time + 5;
-		newmis.think = SUB_Remove;
+		missile.nextthink = time + 5;
+		missile.think = SUB_Remove;
 
-		setmodel (newmis, "progs/missile.mdl");
-		setsize (newmis, '0 0 0', '0 0 0');
+		setmodel (missile, "progs/missile.mdl");
+		setsize (missile, '0 0 0', '0 0 0');
 
-		setorigin (newmis, self.origin + self.movedir * 8);
+		setorigin (missile, self.origin + self.movedir * 8);
 	}
 	else
 	{
 		if (!(self.spawnflags & SPAWNFLAG_SILENT))
 			sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
-		newmis = launch_spike (self.origin, self.movedir);
-		newmis.velocity = self.movedir * 500;
+		missile = launch_spike (self.origin, self.movedir);
+		missile.velocity = self.movedir * 500;
 		if ((self.spawnflags & SPAWNFLAG_SUPERSPIKE))
-			newmis.touch = superspike_touch;
+			missile.touch = superspike_touch;
 	}
 
-	return newmis;
+	return missile;
 };
 
 void() spikeshooter_use =

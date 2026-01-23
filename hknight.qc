@@ -64,7 +64,7 @@ void(float offset) hknight_shot =
 {
 	local vector offang;
 	local vector org, vec;
-	local entity newmis;
+	local entity missile;
 
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + offset * 6;
@@ -76,11 +76,11 @@ void(float offset) hknight_shot =
 	vec = normalize (v_forward);
 	vec_z = 0 - vec_z + (random () - 0.5) * 0.1;
 
-	newmis = launch_spike (org, vec);
-	newmis.classname = "knightspike";
-	setmodel (newmis, "progs/k_spike.mdl");
-	setsize (newmis, '0 0 0', '0 0 0');
-	newmis.velocity = vec * 300;
+	missile = launch_spike (org, vec);
+	missile.classname = "knightspike";
+	setmodel (missile, "progs/k_spike.mdl");
+	setsize (missile, '0 0 0', '0 0 0');
+	missile.velocity = vec * 300;
 	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 };
 

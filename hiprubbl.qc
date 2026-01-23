@@ -32,27 +32,27 @@ void() hipRubbleTouch =
 
 void(string rubblename) hipThrowRubble =
 {
-	local entity new;
+	local entity rubble;
 
-	new = spawn ();
-	new.origin = self.origin;
-	setmodel (new, rubblename);
-	setsize (new, '0 0 0', '0 0 0');
-	new.velocity_x = 70 * crandom ();
-	new.velocity_y = 70 * crandom ();
-	new.velocity_z = 140 + 70 * random ();
-	new.movetype = MOVETYPE_BOUNCE;
-	new.solid = SOLID_BBOX;
-	new.avelocity_x = random () * 600;
-	new.avelocity_y = random () * 600;
-	new.avelocity_z = random () * 600;
-	new.think = SUB_Remove;
-	new.touch = hipRubbleTouch;
-	new.ltime = time;
-	new.nextthink = time + 13 + random () * 10;
+	rubble = spawn ();
+	rubble.origin = self.origin;
+	setmodel (rubble, rubblename);
+	setsize (rubble, '0 0 0', '0 0 0');
+	rubble.velocity_x = 70 * crandom ();
+	rubble.velocity_y = 70 * crandom ();
+	rubble.velocity_z = 140 + 70 * random ();
+	rubble.movetype = MOVETYPE_BOUNCE;
+	rubble.solid = SOLID_BBOX;
+	rubble.avelocity_x = random () * 600;
+	rubble.avelocity_y = random () * 600;
+	rubble.avelocity_z = random () * 600;
+	rubble.think = SUB_Remove;
+	rubble.touch = hipRubbleTouch;
+	rubble.ltime = time;
+	rubble.nextthink = time + 13 + random () * 10;
 	self.pausetime = time;
-	new.frame = 0;
-	new.flags = 0;
+	rubble.frame = 0;
+	rubble.flags = 0;
 };
 
 void() rubble_use =

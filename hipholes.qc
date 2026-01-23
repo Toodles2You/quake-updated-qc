@@ -81,26 +81,26 @@ void() remove_bullethole =
 
 void(vector pos) placebullethole =
 {
-	local entity new;
+	local entity hole;
 	local vector norm;
 
-	new = spawn ();
-	new.owner = new;
-	new.movetype = MOVETYPE_NONE;
-	new.solid = SOLID_NOT;
-	new.classname = "bullethole";
-	setmodel (new, "progs/s_bullet.spr");
-	setsize (new, '0 0 0', '0 0 0');
+	hole = spawn ();
+	hole.owner = hole;
+	hole.movetype = MOVETYPE_NONE;
+	hole.solid = SOLID_NOT;
+	hole.classname = "bullethole";
+	setmodel (hole, "progs/s_bullet.spr");
+	setsize (hole, '0 0 0', '0 0 0');
 
 	norm = trace_plane_normal;
 	norm_x = 0 - norm_x;
 	norm_y = 0 - norm_y;
-	new.angles = vectoangles (norm);
+	hole.angles = vectoangles (norm);
 	makevectors (self.angles);
-	setorigin (new, pos - (v_forward * 0.2));
+	setorigin (hole, pos - (v_forward * 0.2));
 
-	new.think = remove_bullethole;
-	new.nextthink = time + 300;
+	hole.think = remove_bullethole;
+	hole.nextthink = time + 300;
 
 	numbulletholes = numbulletholes + 1;
 	if (numbulletholes > 10)
@@ -110,12 +110,12 @@ void(vector pos) placebullethole =
 
 	if (lastbullet != nullentity)
 	{
-		lastbullet.lastvictim = new;
+		lastbullet.lastvictim = hole;
 	}
 	else
 	{
-		bulletholes = new;
+		bulletholes = hole;
 	}
-	new.lastvictim = nullentity;
-	lastbullet = new;
+	hole.lastvictim = nullentity;
+	lastbullet = hole;
 };

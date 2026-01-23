@@ -382,12 +382,6 @@ void(entity client) HuntTarget =
 	SUB_AttackFinished (1); // wait a while before first attack
 };
 
-void() SightSound =
-{
-	if (self.th_sight)
-		self.th_sight ();
-};
-
 void(entity client) HuntFoundTarget =
 {
 	if (client.classname == "player")
@@ -417,7 +411,9 @@ void(entity client) HuntFoundTarget =
 	self.show_hostile = time + 1; // wake up other monsters
 
 	HuntTarget (client);
-	SightSound ();
+
+	if (self.th_sight)
+		self.th_sight ();
 };
 
 void() FoundTarget =
@@ -702,15 +698,6 @@ float() FacingIdeal =
 	return TRUE;
 };
 
-float() CheckAnyAttack =
-{
-	if (!enemy_vis)
-		return FALSE;
-	if (self.th_checkattack)
-		return self.th_checkattack ();
-	return CheckAttack ();
-};
-
 void() ai_run_melee =
 {
 	self.ideal_yaw = enemy_yaw;
@@ -872,9 +859,15 @@ void(float dist) ai_run =
 		return;
 	}
 
-	if (CheckAnyAttack ())
+	if (enemy_vis)
 	{
-		return;
+		if (self.th_checkattack)
+		{
+			if (self.th_checkattack ())
+				return;
+		}
+		else if (CheckAttack ())
+			return;
 	}
 
 	if (self.attack_state == AS_SLIDING)
