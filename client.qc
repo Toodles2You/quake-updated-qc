@@ -229,6 +229,8 @@ void() ExitIntermission =
 
 void() IntermissionThink =
 {
+	if (!intermission_exittime)
+		return;
 	if (time < intermission_exittime)
 		return;
 
