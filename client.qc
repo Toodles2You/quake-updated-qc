@@ -360,6 +360,8 @@ void() ClientKill =
 
 	if (intermission_running)
 		return;
+	if (!self.view_ofs_z)
+		return;
 
 	oldother = other;
 	other = self;
@@ -800,6 +802,8 @@ void() PlayerPreThink =
 		IntermissionThink ();
 		return;
 	}
+	if (!self.view_ofs_z)
+		return;
 
 	CheckRules ();
 
@@ -997,6 +1001,8 @@ Called every frame after physics are run
 void() PlayerPostThink =
 {
 	if (intermission_running)
+		return;
+	if (!self.view_ofs_z)
 		return;
 	if (self.health <= 0)
 		return;
