@@ -87,6 +87,7 @@ void() Killed =
 
 	self.takedamage = DAMAGE_NO;
 	self.touch = SUB_Null;
+	self.effects = 0;
 
 	monster_death_use ();
 	self.th_die ();
@@ -109,7 +110,8 @@ void(entity inflictor, float damage) TakeDamage =
 		return;
 
 	if (other.super_damage_finished > time)
-		damage = damage * 4;
+		if (inflictor.classname != "door")
+			damage = damage * 4;
 
 	save = ceil (self.armortype * damage);
 	if (save > self.armorvalue)
@@ -146,7 +148,15 @@ void(entity inflictor, float damage) TakeDamage =
 		return;
 	}
 
-	if ((teamplay == 1) && (self.team > 0) && (self.team == other.team))
+// team play damage avoidance
+	if ((teamplay == 1) && (self.team == other.team) &&
+		(other.classname == "player") && (other.team != 0) &&
+		inflictor.classname != "door")
+		return;
+
+	if ((teamplay == 3) && (self.team == other.team) &&
+		(other.classname == "player") && (other.team != 0) &&
+		(self != other) && inflictor.classname != "door")
 		return;
 
 	self.armorvalue = self.armorvalue - save;
@@ -191,7 +201,7 @@ void(entity ent, entity inflictor, entity attacker, float damage) T_Damage =
 	other = oldother;
 };
 
-void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDamage =
+void(entity inflictor, entity attacker, float damage, entity ignore, string dtype) T_RadiusDamage =
 {
 	local entity oldself, oldother;
 	local float points, radius, attacker_points;
@@ -227,7 +237,10 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 								if (self == attacker)
 									attacker_points = points;
 								else
+								{
+									self.deathtype = dtype;
 									TakeDamage (inflictor, points);
+								}
 							}
 					}
 				}
@@ -238,6 +251,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 	{
 		points = attacker_points * 0.5;
 		self = attacker;
+		self.deathtype = dtype;
 		TakeDamage (inflictor, points);
 	}
 

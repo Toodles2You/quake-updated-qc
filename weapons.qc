@@ -18,7 +18,7 @@
 */
 void(entity targ, entity inflictor, entity attacker, float damage) T_Damage;
 void() PlayerRun;
-void(entity bomb, entity attacker, float rad, entity ignore) T_RadiusDamage;
+void(entity bomb, entity attacker, float rad, entity ignore, string dtype) T_RadiusDamage;
 void(vector org, vector vel, float damage) SpawnBlood;
 void() SuperDamageSound;
 
@@ -302,6 +302,7 @@ void() T_MissileTouch =
 
 	if (other.health)
 	{
+		other.deathtype = "rocket";
 		if (other.classname == "monster_shambler")
 			damg = damg * 0.5;
 		T_Damage (other, self, self.owner, damg);
@@ -309,7 +310,7 @@ void() T_MissileTouch =
 
 	// don't do radius damage to the other, because all the damage
 	// was done in the impact
-	T_RadiusDamage (self, self.owner, 120, other);
+	T_RadiusDamage (self, self.owner, 120, other, "rocket");
 
 	self.origin = self.origin - 8 * normalize (self.velocity);
 
@@ -410,7 +411,7 @@ void() W_FireLightning =
 		cells = self.ammo_cells;
 		self.ammo_cells = 0;
 		W_SetWeapon (W_BestWeapon ());
-		T_RadiusDamage (self, self, 35 * cells, world);
+		T_RadiusDamage (self, self, 35 * cells, world, "discharge");
 		return;
 	}
 
@@ -442,7 +443,7 @@ void() W_FireLightning =
 
 void() GrenadeExplode =
 {
-	T_RadiusDamage (self, self.owner, 120, world);
+	T_RadiusDamage (self, self.owner, 120, world, "grenade");
 	BecomeExplosion (TE_EXPLOSION);
 };
 
@@ -582,6 +583,7 @@ void() spike_touch =
 	if (SUB_ShouldBleed (other))
 	{
 		spawn_touchblood (9);
+		other.deathtype = "nail";
 		T_Damage (other, self, self.owner, 9);
 	}
 	else
@@ -614,6 +616,7 @@ void() superspike_touch =
 	if (SUB_ShouldBleed (other))
 	{
 		spawn_touchblood (18);
+		other.deathtype = "supernail";
 		T_Damage (other, self, self.owner, 18);
 	}
 	else
@@ -756,6 +759,7 @@ void() W_Attack =
 
 	if (self.weapon == IT_AXE)
 	{
+		self.attack_finished = time + 0.5;
 		sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);
 		r = random ();
 		if (r < 0.25)
@@ -766,19 +770,18 @@ void() W_Attack =
 			player_axec1 ();
 		else
 			player_axed1 ();
-		self.attack_finished = time + 0.5;
 	}
 	else if (self.weapon == IT_SHOTGUN)
 	{
 		player_shot1 ();
-		W_FireShotgun ();
 		self.attack_finished = time + 0.5;
+		W_FireShotgun ();
 	}
 	else if (self.weapon == IT_SUPER_SHOTGUN)
 	{
 		player_shot1 ();
-		W_FireSuperShotgun ();
 		self.attack_finished = time + 0.7;
+		W_FireSuperShotgun ();
 	}
 	else if (self.weapon == IT_NAILGUN)
 	{
@@ -791,20 +794,20 @@ void() W_Attack =
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
 	{
 		player_rocket1 ();
-		W_FireGrenade ();
 		self.attack_finished = time + 0.6;
+		W_FireGrenade ();
 	}
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
 	{
 		player_rocket1 ();
-		W_FireRocket ();
 		self.attack_finished = time + 0.8;
+		W_FireRocket ();
 	}
 	else if (self.weapon == IT_LIGHTNING)
 	{
-		player_light1 ();
 		self.attack_finished = time + 0.1;
 		sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+		player_light1 ();
 	}
 };
 

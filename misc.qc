@@ -182,7 +182,7 @@ void() barrel_explode =
 	org_z = self.origin_z + 32;
 	self.origin = org;
 	particle (org, '0 0 0', 75, 255);
-	T_RadiusDamage (self, self, 160, world);
+	T_RadiusDamage (self, self, 160, world, "");
 	BecomeExplosion (TE_EXPLOSION);
 };
 
@@ -192,6 +192,7 @@ void() misc_explobox =
 	self.movetype = MOVETYPE_NONE;
 	precache_model ("maps/b_explob.bsp");
 	setmodel (self, "maps/b_explob.bsp");
+	setsize (self, '0 0 0', '32 32 64');
 	self.health = 20;
 	self.th_die = barrel_explode;
 	self.takedamage = DAMAGE_AIM;
@@ -207,6 +208,7 @@ void() misc_explobox2 =
 	self.movetype = MOVETYPE_NONE;
 	precache_model2 ("maps/b_exbox2.bsp");
 	setmodel (self, "maps/b_exbox2.bsp");
+	setsize (self, '0 0 0', '32 32 32');
 	self.health = 20;
 	self.th_die = barrel_explode;
 	self.takedamage = DAMAGE_AIM;

@@ -392,6 +392,8 @@ float gameover; // set when a rule exits
 
 float skill;
 
+float timelimit, fraglimit;
+
 // world (FIXME: make globals)
 .string wad;
 .string map;
