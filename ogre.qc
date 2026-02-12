@@ -58,7 +58,7 @@ float OGRE_NORMAL = 4;
 
 void() OgreGrenadeExplode =
 {
-	T_RadiusDamage (self, self.owner, 40, world);
+	T_RadiusDamage (self, self.owner, 40, world, "");
 	BecomeExplosion (TE_EXPLOSION);
 };
 

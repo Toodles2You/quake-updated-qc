@@ -425,6 +425,8 @@ float gameover; // set when a rule exits
 
 float skill;
 
+float timelimit, fraglimit;
+
 float earthquake_active;
 float earthquake_intensity;
 float cutscene_running;

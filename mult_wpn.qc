@@ -22,9 +22,9 @@ void() MultiGrenadeTouch;
 void() MiniGrenadeExplode =
 {
 	if (self.owner.classname == "player")
-		T_RadiusDamage (self, self.owner, 90, world);
+		T_RadiusDamage (self, self.owner, 90, world, "multigrenade");
 	else
-		T_RadiusDamage (self, self.owner, 60, world);
+		T_RadiusDamage (self, self.owner, 60, world, "multigrenade");
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
@@ -152,10 +152,11 @@ void() MultiRocketExplode =
 			damg = damg * 0.5;
 		if (other.classname == "monster_dragon")
 			damg = damg * 0.5;
+		other.deathtype = "multirocket";
 		T_Damage (other, self, self.owner, damg);
 	}
 
-	T_RadiusDamage (self, self.owner, 75, other);
+	T_RadiusDamage (self, self.owner, 75, other, "multirocket");
 
 	self.origin = self.origin - 8 * normalize (self.velocity);
 
@@ -371,12 +372,13 @@ void() PlasmaTouch =
 	{
 		if (other.classname == "monster_shambler")
 			damg = damg * 0.5;
+		other.deathtype = "plasma";
 		T_Damage (other, self, self.owner, damg);
 	}
 
 	// don't do radius damage to the other, because all the damage
 	// was done in the impact
-	T_RadiusDamage (self, self.owner, 70, other);
+	T_RadiusDamage (self, self.owner, 70, other, "plasma");
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
@@ -443,7 +445,7 @@ void() W_FirePlasma =
 		cells = self.ammo_plasma;
 		self.ammo_plasma = 0;
 		W_SetWeapon (W_BestWeapon ());
-		T_RadiusDamage (self, self, 35 * cells, world);
+		T_RadiusDamage (self, self, 35 * cells, world, "discharge");
 		return;
 	}
 	self.currentammo = self.ammo_plasma = self.ammo_plasma - 1;

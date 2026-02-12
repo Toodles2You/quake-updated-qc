@@ -166,12 +166,8 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove =
 	// divide by speed to get time to reach dest
 	traveltime = len / tspeed;
 
-	if (traveltime < 0.1)
-	{
-		self.velocity = '0 0 0';
-		self.nextthink = self.ltime + 0.1;
-		return;
-	}
+	if (traveltime < 0.03)
+		traveltime = 0.03;
 
 	// set nextthink to trigger a think when dest is reached
 	self.nextthink = self.ltime + traveltime;

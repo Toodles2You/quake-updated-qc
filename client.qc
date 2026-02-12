@@ -445,7 +445,6 @@ void() ClientKill =
 	other = self;
 	self.deathtype = "suicide";
 	Killed ();
-	self.deathtype = "";
 	other = oldother;
 
 	set_suicide_frame ();
@@ -454,13 +453,79 @@ void() ClientKill =
 		respawn ();
 };
 
+entity(string c) SelectRandomSpawnPoint =
+{
+	local entity spot, thing;
+	local float numspots, totalspots;
+	local float pcount;
+	local entity spots;
+
+	numspots = 0;
+	totalspots = 0;
+
+	// choose a info_player_deathmatch point
+
+	// ok, find all spots that don't have players nearby
+
+	spots = world;
+	spot = find (world, classname, c);
+	while (spot)
+	{
+		totalspots = totalspots + 1;
+
+		thing = findradius (spot.origin, 84);
+		pcount = 0;
+		while (thing)
+		{
+			if (thing.classname == "player")
+				pcount = pcount + 1;
+			thing = thing.chain;
+		}
+		if (pcount == 0)
+		{
+			spot.goalentity = spots;
+			spots = spot;
+			numspots = numspots + 1;
+		}
+
+		// Get the next spot in the chain
+		spot = find (spot, classname, c);
+	}
+	totalspots = totalspots - 1;
+	if (!numspots)
+	{
+		// ack, they are all full, just pick one at random
+		// bprint ("Ackk! All spots are full. Selecting random spawn spot\n");
+		totalspots = rint ((random () * totalspots));
+		spot = find (world, classname, c);
+		while (totalspots > 0)
+		{
+			totalspots = totalspots - 1;
+			spot = find (spot, classname, c);
+		}
+		return spot;
+	}
+
+	// We now have the number of spots available on the map in numspots
+
+	// Generate a random number between 1 and numspots
+
+	numspots = numspots - 1;
+
+	numspots = rint ((random () * numspots));
+
+	spot = spots;
+	while (numspots > 0)
+	{
+		spot = spot.goalentity;
+		numspots = numspots - 1;
+	}
+	return spot;
+};
+
 entity() SelectSpawnPoint =
 {
 	local entity spot;
-	local entity thing;
-	local float pcount;
-	local entity startspot;
-	local float t;
 
 	spot = find (world, classname, "testplayerstart");
 	if (spot)
@@ -476,58 +541,25 @@ entity() SelectSpawnPoint =
 	}
 	else if (deathmatch)
 	{
-		startspot = spot = lastspawn;
-		t = 0;
 		if (!self.ctf_killed && teamplay >= TEAM_CTF)
 		{
 			if (self.steam == TEAM1)
 			{
-				startspot = spot = team1_lastspawn;
-				t = TEAM1;
+				spot = SelectRandomSpawnPoint ("info_player_team1");
+				team1_lastspawn = spot;
 			}
 			else if (self.steam == TEAM2)
 			{
-				startspot = spot = team2_lastspawn;
-				t = TEAM2;
-			}
-		}
-
-		while (1)
-		{
-			if (t == TEAM1)
-				spot = find (spot, classname, "info_player_team1");
-			else if (t == TEAM2)
-				spot = find (spot, classname, "info_player_team2");
-			else
-				spot = find (spot, classname, "info_player_deathmatch");
-
-			if (spot)
-			{
-				if (spot == startspot)
-					return startspot;
-				pcount = 0;
-				thing = findradius (spot.origin, 32);
-				while (thing)
-				{
-					if (thing.classname == "player")
-						pcount = pcount + 1;
-					thing = thing.chain;
-				}
-				if (pcount == 0)
-				{
-					if (t == TEAM1)
-						team1_lastspawn = spot;
-					else if (t == TEAM2)
-						team2_lastspawn = spot;
-					else
-						lastspawn = spot;
-					return spot;
-				}
+				spot = SelectRandomSpawnPoint ("info_player_team2");
+				team2_lastspawn = spot;
 			}
 			else
-				t = 0;
-			// pgm fix for ctf in levels w/o ctf support
+				spot = SelectRandomSpawnPoint ("info_player_deathmatch");
 		}
+		else
+			spot = SelectRandomSpawnPoint ("info_player_deathmatch");
+		if (spot)
+			return spot;
 	}
 
 	if ((serverflags & SFL_EPISODES))
@@ -591,6 +623,8 @@ void() PutClientInServer =
 
 	self.healamount = 0;
 	self.healtype = 0;
+	
+	spot = SelectSpawnPoint ();
 
 	self.origin = spot.origin + '0 0 1';
 	self.oldorigin = self.origin;
@@ -646,6 +680,9 @@ void() NextLevel =
 {
 	local entity o;
 
+	if (nextmap != "")
+		return;
+
 	if (mapname == "start")
 	{
 		o = spawn ();
@@ -658,7 +695,7 @@ void() NextLevel =
 		if (!o)
 		{
 			o = spawn ();
-			o.map = "start";
+			o.map = mapname;
 		}
 	}
 
@@ -674,15 +711,10 @@ void() NextLevel =
 
 void() CheckRules =
 {
-	local float timelimit, fraglimit;
-
 	if (!deathmatch)
 		return;
 	if (gameover)
 		return;
-
-	timelimit = cvar ("timelimit") * 60;
-	fraglimit = cvar ("fraglimit");
 
 	if (timelimit && time >= timelimit)
 	{
@@ -926,6 +958,8 @@ void() PlayerPreThink =
 	if (!self.view_ofs_z)
 		return;
 
+	self.deathtype = "";
+
 	TeamCheckLock ();
 	CheckMOTD ();
 	CheckRules ();
@@ -999,7 +1033,6 @@ void() CheckLanding =
 		{
 			self.deathtype = "falling";
 			T_Damage (self, world, world, 5);
-			self.deathtype = "";
 
 			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
 		}
@@ -1307,6 +1340,7 @@ void(entity targ, entity attacker) ClientObituary =
 {
 	local float rnum;
 	local string deathstring, deathstring2;
+
 	rnum = random ();
 	deathstring = "";
 	deathstring2 = "";
@@ -1336,6 +1370,43 @@ void(entity targ, entity attacker) ClientObituary =
 			return;
 		}
 
+		if (attacker.classname == "teledeath3") 
+		{
+			bprint (targ.netname);
+			bprint (" was telefragged by ");
+			bprint (attacker.owner.netname);
+			bprint ("'s Satan's power\n");
+			targ.frags = targ.frags - 1;
+			return;
+		}
+	
+		if (targ.deathtype == "squish")
+		{
+			if (teamplay && targ.team == attacker.team && attacker.team != 0 && targ != attacker)
+			{
+				attacker.frags = attacker.frags - 1; 
+				bprint (attacker.netname);
+				bprint (" squished a teammate\n");
+				return;
+			}
+			else if (attacker.classname == "player" && attacker != targ)
+			{
+				bprint (attacker.netname);
+				bprint (" squishes ");
+				bprint (targ.netname);
+				bprint ("\n");
+				attacker.frags = attacker.frags + 1;
+				return;
+			}
+			else
+			{
+				targ.frags = targ.frags - 1; // killed self
+				bprint (targ.netname);
+				bprint (" was squished\n");
+				return;
+			}
+		}
+
 		if (attacker.classname == "player")
 		{
 			if (targ == attacker)
@@ -1343,15 +1414,19 @@ void(entity targ, entity attacker) ClientObituary =
 				attacker.frags = attacker.frags - 1;
 				bprint (targ.netname);
 
-				if (targ.deathtype == "suicide")
-				{
-					targ.frags = targ.frags - 1;
-					bprint (" suicides\n");
-				}
-				else if (targ.weapon == IT_LIGHTNING && targ.waterlevel > 1)
-					bprint (" discharges into the water\n");
-				else if (targ.weapon == IT_GRENADE_LAUNCHER)
+				if (targ.deathtype == "grenade")
 					bprint (" tries to put the pin back in\n");
+				else if (targ.deathtype == "rocket")
+					bprint (" becomes bored with life\n");
+				else if (targ.deathtype == "discharge")
+				{
+					if (targ.watertype == CONTENT_SLIME)
+						bprint (" discharges into the slime\n");
+					else if (targ.watertype == CONTENT_LAVA)
+						bprint (" discharges into the lava\n");
+					else
+						bprint (" discharges into the water\n");
+				}
 				else if (teamplay && (targ.team != targ.steam))
 				{
 					if ((cvar ("gamecfg") & GAMECFG_ALLOW_CHG))
@@ -1365,8 +1440,7 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" checks if his weapon is loaded\n");
 				return;
 			}
-			else if ((teamplay == 2) && (targ.team > 0) &&
-					 (targ.team == attacker.team))
+			else if ((teamplay == 2) && (targ.team == attacker.team) && (attacker.team != 0))
 			{
 				if (rnum < 0.25)
 					deathstring = " mows down a teammate\n";
@@ -1392,7 +1466,52 @@ void(entity targ, entity attacker) ClientObituary =
 				}
 
 				rnum = attacker.weapon;
-				if (rnum == IT_AXE)
+				if (targ.deathtype == "nail")
+				{
+					deathstring = " was nailed by ";
+					deathstring2 = "\n";
+				}
+				else if (targ.deathtype == "supernail")
+				{
+					deathstring = " was punctured by ";
+					deathstring2 = "\n";
+				}
+				else if (targ.deathtype == "grenade")
+				{
+					deathstring = " eats ";
+					deathstring2 = "'s pineapple\n";
+					if (targ.health < -40)
+					{
+						deathstring = " was gibbed by ";
+						deathstring2 = "'s grenade\n";
+					}
+				}
+				else if (targ.deathtype == "rocket")
+				{
+					deathstring = " rides ";
+					deathstring2 = "'s rocket\n";
+					if (targ.health < -40)
+					{
+						deathstring = " was gibbed by ";
+						deathstring2 = "'s rocket\n";
+					}
+				}
+				else if (targ.deathtype == "lavanail" || targ.deathtype == "superlavanail")
+				{
+					deathstring = " was burned by ";
+					deathstring2 = "\n";
+				}
+				else if (targ.deathtype == "plasma")
+				{
+					deathstring = " was fused by ";
+					deathstring2 = "\n";
+				}
+				else if (targ.deathtype == "multigrenade" || targ.deathtype == "multirocket")
+				{
+					deathstring = " was blasted to bits by ";
+					deathstring2 = "\n";
+				}
+				else if (rnum == IT_AXE)
 				{
 					deathstring = " was ax-murdered by ";
 					deathstring2 = "\n";
@@ -1412,36 +1531,6 @@ void(entity targ, entity attacker) ClientObituary =
 					deathstring = " ate 2 loads of ";
 					deathstring2 = "'s buckshot\n";
 				}
-				else if (rnum == IT_NAILGUN)
-				{
-					deathstring = " was nailed by ";
-					deathstring2 = "\n";
-				}
-				else if (rnum == IT_SUPER_NAILGUN)
-				{
-					deathstring = " was punctured by ";
-					deathstring2 = "\n";
-				}
-				else if (rnum == IT_GRENADE_LAUNCHER)
-				{
-					deathstring = " eats ";
-					deathstring2 = "'s pineapple\n";
-					if (targ.health < -40)
-					{
-						deathstring = " was gibbed by ";
-						deathstring2 = "'s grenade\n";
-					}
-				}
-				else if (rnum == IT_ROCKET_LAUNCHER)
-				{
-					deathstring = " rides ";
-					deathstring2 = "'s rocket\n";
-					if (targ.health < -40)
-					{
-						deathstring = " was gibbed by ";
-						deathstring2 = "'s rocket\n";
-					}
-				}
 				else if (rnum == IT_LIGHTNING)
 				{
 					deathstring = " accepts ";
@@ -1449,22 +1538,6 @@ void(entity targ, entity attacker) ClientObituary =
 						deathstring2 = "'s discharge\n";
 					else
 						deathstring2 = "'s shaft\n";
-				}
-
-				if (rnum == IT_LAVA_NAILGUN || rnum == IT_LAVA_SUPER_NAILGUN)
-				{
-					deathstring = " was burned by ";
-					deathstring2 = "\n";
-				}
-				else if (rnum == IT_PLASMA_GUN)
-				{
-					deathstring = " was fused by ";
-					deathstring2 = "\n";
-				}
-				else if (rnum == IT_MULTI_GRENADE || rnum == IT_MULTI_ROCKET)
-				{
-					deathstring = " was blasted to bits by ";
-					deathstring2 = "\n";
 				}
 
 				bprint (targ.netname);
@@ -1531,22 +1604,24 @@ void(entity targ, entity attacker) ClientObituary =
 				return;
 			}
 
-			// tricks and traps
 			if (attacker.classname == "explo_box")
 			{
 				bprint (" blew up\n");
 				return;
 			}
-			if (attacker.solid == SOLID_BSP)
-				if (attacker)
-				{
-					bprint (" was squished\n");
-					return;
-				}
-			if (attacker.classname == "trap_shooter" ||
-				attacker.classname == "trap_spikeshooter")
+			if (targ.deathtype == "falling")
+			{
+				bprint (" fell to his death\n");
+				return;
+			}
+			if (targ.deathtype == "nail" || targ.deathtype == "supernail")
 			{
 				bprint (" was spiked\n");
+				return;
+			}
+			if (targ.deathtype == "laser")
+			{
+				bprint (" was zapped\n");
 				return;
 			}
 			if (attacker.classname == "fireball")
@@ -1631,12 +1706,6 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" turned into hot slag\n");
 				else
 					bprint (" visits the Volcano God\n");
-				return;
-			}
-
-			if (targ.deathtype == "falling")
-			{
-				bprint (" fell to his death\n");
 				return;
 			}
 

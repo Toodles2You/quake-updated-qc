@@ -227,7 +227,7 @@ void() player_grapple5 = [$axattd4, PlayerRun] { self.weaponframe = 1; };
 
 void() player_nail1 = [$nailatt1, player_nail2]
 {
-	if (!self.button0)
+	if (!self.button0 || intermission_running || self.impulse)
 	{
 		PlayerRun ();
 		return;
@@ -243,7 +243,7 @@ void() player_nail1 = [$nailatt1, player_nail2]
 };
 void() player_nail2 = [$nailatt2, player_nail1]
 {
-	if (!self.button0)
+	if (!self.button0 || intermission_running || self.impulse)
 	{
 		PlayerRun ();
 		return;
@@ -297,7 +297,7 @@ void() W_FirePlasma;
 
 void() player_light1 = [$light1, player_light2]
 {
-	if (!self.button0)
+	if (!self.button0 || intermission_running)
 	{
 		PlayerRun ();
 		return;
@@ -323,7 +323,7 @@ void() player_light1 = [$light1, player_light2]
 };
 void() player_light2 = [$light2, player_light1]
 {
-	if (!self.button0)
+	if (!self.button0 || intermission_running)
 	{
 		PlayerRun ();
 		return;
@@ -599,13 +599,7 @@ void() GibPlayer =
 	self.deadflag = DEAD_DEAD;
 	self.pain_finished = time + 1;
 
-	if (other.classname == "teledeath")
-	{
-		sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
-		return;
-	}
-
-	if (other.classname == "teledeath2")
+	if (other.classname == "teledeath" || other.classname == "teledeath2" || other.classname == "teledeath3")
 	{
 		sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
 		return;

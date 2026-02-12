@@ -1335,7 +1335,15 @@ void() BackpackTouch =
 	if (!deathmatch)
 		W_SetWeapon (weap);
 	else
-		Deathmatch_Weapon (old, weap);
+	{
+		if ((self.flags & FL_INWATER))
+		{
+			if (weap != IT_LIGHTNING)
+				Deathmatch_Weapon (old, weap);
+		}
+		else
+			Deathmatch_Weapon (old, weap);
+	}
 };
 
 void() DropBackpack =

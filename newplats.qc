@@ -60,6 +60,7 @@ void() dn_and_wait_go_up =
 
 void() dn_and_wait_crush =
 {
+	other.deathtype = "squish";
 	T_Damage (other, self, self, 1);
 
 	if (self.state == STATE_UP)
@@ -110,6 +111,7 @@ void() toggle_go_up =
 
 void() toggle_crush =
 {
+	other.deathtype = "squish";
 	T_Damage (other, self, self, 1);
 
 	if (self.state == STATE_UP)
@@ -151,7 +153,8 @@ void() elvtr_go =
 
 void() elvtr_crush =
 {
-	//	T_Damage (other, self, self, 1);
+	// other.deathtype = "squish";
+	// T_Damage (other, self, self, 1);
 	self.elevatorToFloor = self.elevatorOnFloor;
 
 	elvtr_go ();
@@ -385,6 +388,7 @@ void() plat2_center_touch =
 
 void() plat2_crush =
 {
+	other.deathtype = "squish";
 	T_Damage (other, self, self, 1);
 
 	if (self.state == STATE_UP)

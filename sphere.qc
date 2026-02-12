@@ -26,7 +26,7 @@ void() sphere_impact =
 
 	// don't do radius damage to the other, because all the damage
 	// was done in the impact
-	T_RadiusDamage (self, self, 300, other);
+	T_RadiusDamage (self, self, 300, other, "");
 
 	self.origin = self.origin - 8 * normalize (self.velocity);
 

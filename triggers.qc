@@ -261,17 +261,43 @@ void(vector org) spawn_tfog =
 
 void() tdeath_touch =
 {
+	entity oldowner;
+
 	if (other == self.owner)
 		return;
 
-	// frag anyone who teleports in on top of an invincible player
 	if (other.classname == "player")
 	{
-		if (other.invincible_finished > time)
-			self.classname = "teledeath2";
 		if (self.owner.classname != "player")
-		{ // other monsters explode themselves
+		{
+			// monsters explode
 			T_Damage (self.owner, self, self, 50000);
+			return;
+		}
+
+		if (other.invincible_finished > time)
+		{
+			// frag anyone who teleports in on top of an invincible player
+			if (self.owner.invincible_finished > time)
+			{
+				self.classname = "teledeath3";
+
+				other.invincible_finished = 0;
+				self.owner.invincible_finished = 0;
+
+				T_Damage (other, self, self, 50000);
+			}
+			else
+				self.classname = "teledeath2";
+
+			oldowner = self.owner;
+			self.owner = other;
+
+			T_Damage (oldowner, self, self, 50000);
+
+			self.classname = "teledeath";
+			self.owner = oldowner;
+
 			return;
 		}
 	}

@@ -162,7 +162,8 @@ float(entity targ, entity inflictor, entity attacker, float damage) TeamArmorDam
 	// teamplay modes 4,5,6 protect armor
 	if ((teamplay == TEAM_CTF || teamplay == TEAM_CTF_ONEFLAG ||
 		teamplay == TEAM_CTF_ALT) && attacker.steam == targ.steam &&
-		attacker != targ && !(cvar ("gamecfg") & GAMECFG_TEAM_ARMOR_DMG))
+		attacker != targ && !(cvar ("gamecfg") & GAMECFG_TEAM_ARMOR_DMG) &&
+		inflictor.classname != "door")
 	{
 		// Armor is protected
 		return FALSE;
@@ -188,7 +189,8 @@ float(entity targ, entity inflictor, entity attacker, float damage) TeamHealthDa
 	// teamplay modes 4,5,6 protect health
 	if ((teamplay == TEAM_CTF || teamplay == TEAM_CTF_ONEFLAG ||
 		teamplay == TEAM_CTF_ALT) && attacker.steam == targ.steam &&
-		attacker != targ && !(cvar ("gamecfg") & GAMECFG_TEAM_HEALTH_DMG))
+		attacker != targ && !(cvar ("gamecfg") & GAMECFG_TEAM_HEALTH_DMG) &&
+		inflictor.classname != "door")
 	{
 		// Health is protected
 		return FALSE;

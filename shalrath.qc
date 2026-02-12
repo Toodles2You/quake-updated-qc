@@ -182,7 +182,7 @@ void() ShalMissileTouch =
 {
 	if (other.classname == "monster_zombie")
 		T_Damage (other, self, self, 110);
-	T_RadiusDamage (self, self.owner, 40, world);
+	T_RadiusDamage (self, self.owner, 40, world, "");
 
 	BecomeExplosion (TE_EXPLOSION);
 };

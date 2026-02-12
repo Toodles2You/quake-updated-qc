@@ -128,6 +128,7 @@ void() lavaspike_touch =
 			old_armormask = other.items2 & IT2_ARMOR;
 			other.armortype = 0;
 			other.armorvalue = 0;
+			other.deathtype = "lavanail";
 			T_Damage (other, self, self.owner, 9);
 			other.armortype = old_armortype;
 			other.armorvalue = old_armorvalue;
@@ -137,6 +138,7 @@ void() lavaspike_touch =
 		{
 			if (other.classname != "monster_lava_man")
 			{
+				other.deathtype = "lavanail";
 				T_Damage (other, self, self.owner, 15);
 			}
 		}
@@ -176,6 +178,7 @@ void() superlavaspike_touch =
 			// save the old armor values...
 			old_armortype = other.armortype;
 			other.armortype = other.armortype * 0.5;
+			other.deathtype = "superlavanail";
 			T_Damage (other, self, self.owner, 18);
 
 			// if the damage didn't wipe out the armor, armortype
@@ -188,6 +191,7 @@ void() superlavaspike_touch =
 		{
 			if (other.classname != "monster_lava_man")
 			{
+				other.deathtype = "superlavanail";
 				T_Damage (other, self, self.owner, 30);
 			}
 		}

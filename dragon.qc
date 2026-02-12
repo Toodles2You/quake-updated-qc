@@ -381,9 +381,9 @@ void() dragon_walk13 = [$drgfly13, dragon_walk1]
 void() FireballTouch =
 {
 	if (self.owner.classname == "monster_dragon")
-		T_RadiusDamage (self, self.owner, 90, self.owner);
+		T_RadiusDamage (self, self.owner, 90, self.owner, "");
 	else
-		T_RadiusDamage (self, self.owner, 30, world);
+		T_RadiusDamage (self, self.owner, 30, world, "");
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION2);

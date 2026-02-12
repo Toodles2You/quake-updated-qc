@@ -95,6 +95,7 @@ void() Killed =
 
 	self.takedamage = DAMAGE_NO;
 	self.touch = SUB_Null;
+	self.effects = 0;
 
 	monster_death_use ();
 	self.th_die ();
@@ -134,10 +135,12 @@ void(entity inflictor, float damage) TakeDamage =
 	}
 
 	if (other.super_damage_finished > time)
-		damage = damage * 4;
+		if (inflictor.classname != "door")
+			damage = damage * 4;
 	// rune power up (Black Magic)
 	if (deathmatch)
-		damage = RuneApplyBlack (damage, other);
+		if (inflictor.classname != "door")
+			damage = RuneApplyBlack (damage, other);
 
 	// save damage based on the target's armor level
 	if (TeamArmorDam (self, inflictor, other, damage))
@@ -179,7 +182,7 @@ void(entity inflictor, float damage) TakeDamage =
 		return;
 	}
 
-	// team play damage avoidance
+// team play damage avoidance
 	if (!TeamHealthDam (self, inflictor, other, damage))
 		return;
 
@@ -264,7 +267,10 @@ void(entity inflictor, entity attacker, float damage) T_EELZap =
 								if (self == attacker)
 									attacker_points = points;
 								else
+								{
+									self.deathtype = "";
 									TakeDamage (inflictor, points);
+								}
 							}
 						}
 				}
@@ -276,6 +282,7 @@ void(entity inflictor, entity attacker, float damage) T_EELZap =
 	{
 		points = attacker_points * 0.5;
 		self = attacker;
+		self.deathtype = "";
 		TakeDamage (inflictor, points);
 	}
 
@@ -283,7 +290,7 @@ void(entity inflictor, entity attacker, float damage) T_EELZap =
 	other = oldother;
 };
 
-void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDamage =
+void(entity inflictor, entity attacker, float damage, entity ignore, string dtype) T_RadiusDamage =
 {
 	local entity oldself, oldother;
 	local float points, radius, attacker_points;
@@ -321,7 +328,10 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 								if (self == attacker)
 									attacker_points = points;
 								else
+								{
+									self.deathtype = dtype;
 									TakeDamage (inflictor, points);
+								}
 							}
 					}
 				}
@@ -332,6 +342,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 	{
 		points = attacker_points * 0.5;
 		self = attacker;
+		self.deathtype = dtype;
 		TakeDamage (inflictor, points);
 	}
 

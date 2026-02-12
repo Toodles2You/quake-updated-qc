@@ -198,7 +198,7 @@ void() wrath_die15 = [$wrthdt15, wrath_die15]
 	ThrowGib ("progs/wrthgib1.mdl", self.health);
 	ThrowGib ("progs/wrthgib2.mdl", self.health);
 	ThrowGib ("progs/wrthgib3.mdl", self.health);
-	T_RadiusDamage (self, self, 80, world);
+	T_RadiusDamage (self, self, 80, world, "");
 
 	self.origin = self.origin + '0 0 24';
 
@@ -347,7 +347,7 @@ void() WrathMissileTouch =
 	if (other.classname == "monster_zombie")
 		T_Damage (other, self, self, 110);
 
-	T_RadiusDamage (self, self.owner, 20, world);
+	T_RadiusDamage (self, self.owner, 20, world, "");
 
 	BecomeExplosion (TE_EXPLOSION);
 };
