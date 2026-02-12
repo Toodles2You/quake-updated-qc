@@ -738,11 +738,13 @@ void() movewall_touch =
 
 	if (self.dmg)
 	{
+		other.deathtype = "squish";
 		T_Damage (other, self, self.owner, self.dmg);
 		self.owner.attack_finished = time + 0.5;
 	}
 	else if (self.owner.dmg)
 	{
+		other.deathtype = "squish";
 		T_Damage (other, self, self.owner, self.owner.dmg);
 		self.owner.attack_finished = time + 0.5;
 	}
@@ -767,11 +769,13 @@ void() movewall_blocked =
 
 	if (self.dmg)
 	{
+		other.deathtype = "squish";
 		T_Damage (other, self, self.owner, self.dmg);
 		self.owner.attack_finished = time + 0.5;
 	}
 	else if (self.owner.dmg)
 	{
+		other.deathtype = "squish";
 		T_Damage (other, self, self.owner, self.owner.dmg);
 		self.owner.attack_finished = time + 0.5;
 	}

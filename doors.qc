@@ -39,7 +39,8 @@ void() door_go_up;
 
 void() door_blocked =
 {
-	T_Damage (other, self, self, self.dmg);
+	other.deathtype = "squish";
+	T_Damage (other, self, self.goalentity, self.dmg);
 
 	// if a door has a negative wait, it would never come back if blocked, so
 	// let it just squash the object to death real fast
@@ -129,6 +130,7 @@ void() door_fire =
 		}
 
 	do {
+		door.goalentity = other; // Who fired us
 		SUB_Think (door, door_go_up);
 		door = door.enemy;
 	} while (door != self && door != world);
@@ -150,8 +152,6 @@ void() door_trigger_touch =
 	if (time < self.attack_finished)
 		return;
 	self.attack_finished = time + 1;
-
-	// activator = other;
 
 	SUB_Think (self.owner, door_use);
 };
@@ -594,6 +594,7 @@ void() fd_secret_done =
 		self.health = 10000;
 		self.takedamage = DAMAGE_YES;
 		self.th_pain = fd_secret_pain;
+		self.th_die = fd_secret_use;
 	}
 	sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 };
@@ -603,6 +604,7 @@ void() secret_blocked =
 	if (time < self.attack_finished)
 		return;
 	self.attack_finished = time + 0.5;
+	other.deathtype = "squish";
 	T_Damage (other, self, self, self.dmg);
 };
 
@@ -672,7 +674,6 @@ void() func_door_secret =
 		self.health = 10000;
 		self.takedamage = DAMAGE_YES;
 		self.th_pain = fd_secret_pain;
-		self.th_die = fd_secret_use;
 	}
 	self.oldorigin = self.origin;
 	if (!self.wait)

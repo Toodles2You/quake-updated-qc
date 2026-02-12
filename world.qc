@@ -208,6 +208,12 @@ void() StartFrame =
 {
 	teamplay = cvar ("teamplay");
 	skill = cvar ("skill");
+
+	if (deathmatch)
+	{
+		timelimit = cvar ("timelimit") * 60;
+		fraglimit = cvar ("fraglimit");
+	}
 };
 
 entity bodyque_head;

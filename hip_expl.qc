@@ -37,7 +37,7 @@ void() exploder_fire =
 	{
 		sound (self, CHAN_AUTO, "misc/longexpl.wav", self.volume, self.speed);
 	}
-	T_RadiusDamage (self, self.owner, self.dmg, other);
+	T_RadiusDamage (self, self.owner, self.dmg, other, "");
 	if ((self.spawnflags & USE_PARTICLES))
 		BecomeExplosion (TE_EXPLOSION);
 	else
@@ -112,7 +112,7 @@ void() multi_exploder_fire =
 	expl.origin_z =
 		self.absmin_z + (random () * (self.absmax_z - self.absmin_z));
 	sound (expl, CHAN_VOICE, "misc/shortexp.wav", self.volume, self.speed);
-	T_RadiusDamage (expl, self.owner, self.dmg, other);
+	T_RadiusDamage (expl, self.owner, self.dmg, other, "");
 	temp = self;
 	self = expl;
 	if ((self.spawnflags & USE_PARTICLES))

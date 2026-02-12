@@ -60,6 +60,7 @@ void() Laser_Touch =
 	if (SUB_ShouldBleed (other))
 	{
 		SpawnBlood (org, self.velocity * 0.2, 15);
+		other.deathtype = "laser";
 		T_Damage (other, self, self.owner, 15);
 	}
 	else

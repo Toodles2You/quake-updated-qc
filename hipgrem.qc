@@ -1271,7 +1271,7 @@ void() Gremlin_FireLightningGun =
 		cells = self.ammo_cells;
 		self.ammo_cells = 0;
 		discharged = TRUE;
-		T_RadiusDamage (self, self, 35 * cells, world);
+		T_RadiusDamage (self, self, 35 * cells, world, "");
 		discharged = FALSE;
 		return;
 	}

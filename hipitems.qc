@@ -244,7 +244,7 @@ void() spikemine_Touch =
 	}
 
 	self.takedamage = DAMAGE_NO;
-	T_RadiusDamage (self, self, 110, world);
+	T_RadiusDamage (self, self, 110, world, "");
 
 	sound (self, CHAN_VOICE, "misc/null.wav", 1, ATTN_NORM);
 	BecomeExplosion (TE_EXPLOSION);
