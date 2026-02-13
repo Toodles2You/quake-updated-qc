@@ -23,6 +23,7 @@ void() PlayerRun;
 void(entity bomb, entity attacker, float rad, entity ignore, string dtype) T_RadiusDamage;
 void(vector org, vector vel, float damage) SpawnBlood;
 void() SuperDamageSound;
+float() CheckEndAttack;
 
 void(float damage) spawn_touchblood;
 
@@ -146,11 +147,8 @@ void(float stat) HIP_FireLaser =
 	local float aofs;
 	local entity newmis;
 
-	if (!self.button0)
-	{
-		PlayerRun ();
+	if (CheckEndAttack ())
 		return;
-	}
 	if (self.ammo_cells < 1)
 	{
 		W_SetWeapon (W_BestWeapon ());
