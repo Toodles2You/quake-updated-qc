@@ -615,7 +615,7 @@ void() PlayerDie =
 
 	self.items = 0;
 	self.items2 = 0;
-	self.weapon = 0;
+	self.weapon = IT_AXE;
 	self.weaponmodel = "";
 	self.currentammo = 0;
 	self.ammo_shells = 0;
