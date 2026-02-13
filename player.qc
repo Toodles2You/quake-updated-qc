@@ -182,71 +182,62 @@ void() player_axed3 = [$axattd3, player_axed4]
 };
 void() player_axed4 = [$axattd4, PlayerRun] { self.weaponframe = 8; };
 
-void() player_nail1 = [$nailatt1, player_nail2]
+float() CheckEndAttack =
 {
-	if (!self.button0 || intermission_running || self.impulse)
+	local float weap;
+
+	if (self.impulse)
 	{
-		PlayerRun ();
-		return;
+		weap = self.weapon;
+		ImpulseCommands ();
+		if (weap != self.weapon)
+			return TRUE;
 	}
-	self.effects = self.effects | EF_MUZZLEFLASH;
 
-	self.weaponframe = self.weaponframe + 1;
-	if (self.weaponframe == 9)
-		self.weaponframe = 1;
-	SuperDamageSound ();
-	W_FireSpikes (4);
-	self.attack_finished = time + 0.2;
-};
-void() player_nail2 = [$nailatt2, player_nail1]
-{
-	if (!self.button0 || intermission_running || self.impulse)
-	{
-		PlayerRun ();
-		return;
-	}
-	self.effects = self.effects | EF_MUZZLEFLASH;
-
-	self.weaponframe = self.weaponframe + 1;
-	if (self.weaponframe == 9)
-		self.weaponframe = 1;
-	SuperDamageSound ();
-	W_FireSpikes (-4);
-	self.attack_finished = time + 0.2;
-};
-
-void() player_light1 = [$light1, player_light2]
-{
 	if (!self.button0 || intermission_running)
 	{
 		PlayerRun ();
-		return;
+		return TRUE;
 	}
+
+	return FALSE;
+};
+
+void(float ox) PlayerNail =
+{
+	if (CheckEndAttack ())
+		return;
+
 	self.effects = self.effects | EF_MUZZLEFLASH;
 
 	self.weaponframe = self.weaponframe + 1;
-	if (self.weaponframe == 5)
+	if (self.weaponframe >= 9)
+		self.weaponframe = 1;
+	SuperDamageSound ();
+	W_FireSpikes (ox);
+	self.attack_finished = time + 0.2;
+};
+
+void() player_nail1 = [$nailatt1, player_nail2] { PlayerNail (4); };
+void() player_nail2 = [$nailatt2, player_nail1] { PlayerNail (-4); };
+
+void() PlayerLight =
+{
+	if (CheckEndAttack ())
+		return;
+
+	self.effects = self.effects | EF_MUZZLEFLASH;
+
+	self.weaponframe = self.weaponframe + 1;
+	if (self.weaponframe >= 5)
 		self.weaponframe = 1;
 	SuperDamageSound ();
 	W_FireLightning ();
 	self.attack_finished = time + 0.2;
 };
-void() player_light2 = [$light2, player_light1]
-{
-	if (!self.button0 || intermission_running)
-	{
-		PlayerRun ();
-		return;
-	}
-	self.effects = self.effects | EF_MUZZLEFLASH;
 
-	self.weaponframe = self.weaponframe + 1;
-	if (self.weaponframe == 5)
-		self.weaponframe = 1;
-	SuperDamageSound ();
-	W_FireLightning ();
-	self.attack_finished = time + 0.2;
-};
+void() player_light1 = [$light1, player_light2] { PlayerLight (); };
+void() player_light2 = [$light2, player_light1] { PlayerLight (); };
 
 void() player_rocket1 = [$rockatt1, player_rocket2]
 {
