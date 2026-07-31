@@ -100,6 +100,9 @@ void() Tar_JumpTouch =
 			ldmg = 10 + 10 * random ();
 			T_Damage (other, self, self, ldmg);
 			sound (self, CHAN_WEAPON, "blob/hit1.wav", 1, ATTN_NORM);
+
+			if (self.health <= 0)
+				return;
 		}
 	}
 	else

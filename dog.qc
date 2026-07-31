@@ -75,6 +75,9 @@ void() Dog_JumpTouch =
 		{
 			ldmg = 10 + 10 * random ();
 			T_Damage (other, self, self, ldmg);
+
+			if (self.health <= 0)
+				return;
 		}
 	}
 
