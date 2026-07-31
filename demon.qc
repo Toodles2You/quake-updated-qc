@@ -321,6 +321,9 @@ void() Demon_JumpTouch =
 		{
 			ldmg = 40 + 10 * random ();
 			T_Damage (other, self, self, ldmg);
+
+			if (self.health <= 0)
+				return;
 		}
 	}
 
